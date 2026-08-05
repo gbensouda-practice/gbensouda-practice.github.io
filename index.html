@@ -320,9 +320,8 @@
 <!-- ── LIGHTBOX ── -->
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
   <button class="lightbox-close" id="lb-close" aria-label="Fermer">×</button>
-  <button class="lb-nav lb-prev" id="lb-prev" aria-label="Précédent">‹</button>
   <img id="lb-img" src="" alt="">
-  <button class="lb-nav lb-next" id="lb-next" aria-label="Suivant">›</button>
+  <div class="lb-counter" id="lb-counter"></div>
 </div>
 
 <header class="hero">
@@ -768,16 +767,14 @@ document.querySelectorAll('.slider').forEach(function(slider) {
   var lb      = document.getElementById('lightbox');
   var lbImg   = document.getElementById('lb-img');
   var lbClose = document.getElementById('lb-close');
-  var lbPrev  = document.getElementById('lb-prev');
-  var lbNext  = document.getElementById('lb-next');
-  var gallery = []; // toutes les images de la page
-  var lbIndex = 0;
+  var lbCount = document.getElementById('lb-counter');
+  var gallery = [], lbIndex = 0, savedY = 0;
 
   function open(img) {
-    // galerie limitée au projet cliqué
     var container = img.closest('.thumb, .ff-nassij');
     gallery = container ? Array.from(container.querySelectorAll('img')) : [img];
     lbIndex = Math.max(0, gallery.indexOf(img));
+    savedY = window.scrollY;
     show(lbIndex);
     lb.classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -787,35 +784,35 @@ document.querySelectorAll('.slider').forEach(function(slider) {
     lb.classList.remove('open');
     document.body.style.overflow = '';
     lbImg.src = '';
+    window.scrollTo(0, savedY);
   }
 
   function show(n) {
-    lbIndex = ((n % gallery.length) + gallery.length) % gallery.length;
+    lbIndex = n;
     lbImg.src = gallery[lbIndex].src;
     lbImg.alt = gallery[lbIndex].alt;
-    lbPrev.style.display = gallery.length <= 1 ? 'none' : '';
-    lbNext.style.display = gallery.length <= 1 ? 'none' : '';
+    lbCount.textContent = gallery.length > 1 ? (lbIndex + 1) + ' / ' + gallery.length : '';
   }
 
-  // Clic sur image → ouvrir
+  function next() {
+    if (lbIndex < gallery.length - 1) { show(lbIndex + 1); }
+    else { close(); }
+  }
+
   document.addEventListener('click', function(e) {
     var img = e.target.closest('.thumb img, .ff-nassij-slider img');
     if (img) { e.stopPropagation(); open(img); }
   });
 
+  lbImg.addEventListener('click', function(e) { e.stopPropagation(); next(); });
   lbClose.addEventListener('click', close);
-  lbPrev.addEventListener('click', function(e){ e.stopPropagation(); show(lbIndex - 1); });
-  lbNext.addEventListener('click', function(e){ e.stopPropagation(); show(lbIndex + 1); });
+  lb.addEventListener('click', function(e) { if (e.target === lb) close(); });
 
-  // Clic fond → fermer
-  lb.addEventListener('click', function(e){ if (e.target === lb) close(); });
-
-  // Clavier
   document.addEventListener('keydown', function(e) {
     if (!lb.classList.contains('open')) return;
-    if (e.key === 'Escape')     close();
-    if (e.key === 'ArrowLeft')  show(lbIndex - 1);
-    if (e.key === 'ArrowRight') show(lbIndex + 1);
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft' && lbIndex > 0) show(lbIndex - 1);
   });
 })();
 

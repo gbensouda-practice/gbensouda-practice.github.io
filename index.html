@@ -113,8 +113,8 @@
   .category { margin-bottom: 88px; }
   .category:last-child { margin-bottom: 0; }
   .cat-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 36px; }
-  .cat-code { font-size: 12px; color: var(--blue); min-width: 70px; }
-  .cat-title { font-size: 20px; font-weight: 500; }
+  .cat-code { display: none; }
+  .cat-title { font-size: 13px; color: var(--grey); text-transform: uppercase; letter-spacing: .1em; font-weight: 400; }
 
   /* ── PROJECT ROW ── */
   .project {
@@ -311,6 +311,11 @@
   .thumb img, .ff-nassij-slider img { cursor: zoom-in; }
 
 
+
+  /* ── LIAISON ── */
+  .liaison { padding: 36px 0; border-bottom: 1px solid var(--line); }
+  .liaison p { font-size: 14px; color: var(--grey); font-style: italic; max-width: 60ch; }
+
   /* ── MINI NAV ── */
   .mini-nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 150;
@@ -365,9 +370,9 @@
 
 
 <nav class="mini-nav mono" id="miniNav">
-  <a href="#projets">Projets</a>
+  <a href="#projets">Commandes</a>
   <span class="sep"></span>
-  <a href="#fenfutures">FenFutures</a>
+  <a href="#fenfutures">Recherche</a>
   <span class="sep"></span>
   <a href="#contact">Contact</a>
 </nav>
@@ -377,13 +382,7 @@
   <div class="wrap">
     <div class="eyebrow mono">Designer de dispositifs · Fabrication numérique · Scénographie</div>
     <h1 class="name">Ghali<br>Bensouda</h1>
-    <p class="hero-sub">
-      Formé à l'ESA, je couvre l'ensemble du chemin —
-      <span class="accent">de la définition paramétrique à l'objet fabriqué.</span>
-      Décors pour le luxe, mobilier de scène, collections hybrides
-      et environnements immersifs. En atelier comme en remote,
-      entre Marseille et Paris.
-    </p>
+    <p class="hero-sub"><span class="accent">Je conçois des systèmes qui permettent aux idées de devenir matière.</span> Entre design paramétrique, fabrication numérique et savoir-faire artisanaux, je développe des objets, des scénographies et des dispositifs — différentes expressions d'une même pratique de recherche. En atelier comme en remote, entre Marseille et Paris.</p>
     <div class="hero-meta mono">
       <div>
         <strong>Basé à</strong>
@@ -419,18 +418,23 @@
 </div>
 
 <!-- ── PROJETS ATELIER ── -->
+<div class="liaison">
+  <div class="wrap">
+    <p>Tous les projets présentés ici participent d'une même recherche — différentes expressions d'une pratique en constante évolution.</p>
+  </div>
+</div>
+
 <section id="projets">
   <div class="wrap">
     <div class="section-head">
-      <h2>Projets Atelier</h2>
+      <h2>Commandes</h2>
       <div class="tag mono">2016 — 2025</div>
     </div>
 
-    <!-- 01 / FAB -->
+    <!-- LUXE -->
     <div class="category" data-reveal>
       <div class="cat-head">
-        <span class="cat-code mono">01 / FAB</span>
-        <span class="cat-title">Fabrication de décors</span>
+        <span class="cat-title">Luxe &amp; production</span>
       </div>
 
       <div class="project" data-reveal>
@@ -455,7 +459,6 @@
           <div class="p-meta mono"><span>RHINO</span><span>ZBRUSH</span><span>PLA</span><span>CNC</span><span>LASER</span></div>
         </div>
       </div>
-
       <div class="project" data-reveal>
         <div class="thumb bracket slider">
   <div class="slider-track">
@@ -478,15 +481,6 @@
           <div class="p-meta mono"><span>RHINO</span><span>GRASSHOPPER</span><span>SLA</span><span>CNC</span></div>
         </div>
       </div>
-    </div>
-
-    <!-- 02 / MOB -->
-    <div class="category" data-reveal>
-      <div class="cat-head">
-        <span class="cat-code mono">02 / MOB</span>
-        <span class="cat-title">Conception de mobilier</span>
-      </div>
-
       <div class="project" data-reveal>
         <div class="thumb bracket slider">
   <div class="slider-track">
@@ -511,7 +505,6 @@
           <div class="p-meta mono"><span>BOIS CNC</span><span>LED</span><span>STRATIFIÉ</span><span>MIROIR SANS TAIN</span></div>
         </div>
       </div>
-
       <div class="project" data-reveal>
         <div class="thumb bracket slider">
   <div class="slider-track">
@@ -534,13 +527,34 @@
           <div class="p-meta mono"><span>GRASSHOPPER</span><span>RHINO</span><span>MOBILIER</span></div>
         </div>
       </div>
+      <div class="project" data-reveal>
+        <div class="thumb bracket slider">
+  <div class="slider-track">
+    <img src="images/mass_pauze_expo_pompidou_01.jpg" loading="lazy" alt="Mass — exposition Centre Pompidou-Metz" onerror="this.style.opacity='0'">
+    <img src="images/mass_pauze_tournage_decor_01.png" loading="lazy" alt="Mass — tournage décor" onerror="this.style.opacity='0'">
+    <img src="images/mass_pauze_sculpture_resine_01.jpg" loading="lazy" alt="Mass — sculpture résine" onerror="this.style.opacity='0'">
+  </div>
+  <div class="slider-dots">
+    <button class="slider-dot active"></button>
+    <button class="slider-dot"></button>
+    <button class="slider-dot"></button>
+  </div>
+</div>
+        <div>
+          <div class="p-head">
+            <span class="p-title">Set design — <em>Mass</em>, film de Pierre Pauze</span>
+            <span class="p-year mono">2020</span>
+          </div>
+          <p class="p-desc">Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film. Dessins de sculptures en résine, sculptures néon et plans pour les artisans peintres et sculpteurs. Exposé au Centre Pompidou-Metz, 2022. Photo Marc Domage. — Via Atelier 20point12.</p>
+          <div class="p-meta mono"><span>FILM</span><span>RÉSINE</span><span>NÉON</span><span>POMPIDOU-METZ</span></div>
+        </div>
+      </div>
     </div>
 
-    <!-- 03 / DA -->
+    <!-- SPECTACLE -->
     <div class="category" data-reveal>
       <div class="cat-head">
-        <span class="cat-code mono">03 / DA</span>
-        <span class="cat-title">Direction artistique &amp; scénographie</span>
+        <span class="cat-title">Scénographie &amp; spectacle vivant</span>
       </div>
 
       <div class="project" data-reveal>
@@ -565,30 +579,6 @@
           <div class="p-meta mono"><span>SCÉNOGRAPHIE</span><span>SCULPTURE</span><span>INSTALLATION</span></div>
         </div>
       </div>
-
-      <div class="project" data-reveal>
-        <div class="thumb bracket slider">
-  <div class="slider-track">
-    <img src="images/mass_pauze_expo_pompidou_01.jpg" loading="lazy" alt="Mass — exposition Centre Pompidou-Metz" onerror="this.style.opacity='0'">
-    <img src="images/mass_pauze_tournage_decor_01.png" loading="lazy" alt="Mass — tournage décor" onerror="this.style.opacity='0'">
-    <img src="images/mass_pauze_sculpture_resine_01.jpg" loading="lazy" alt="Mass — sculpture résine" onerror="this.style.opacity='0'">
-  </div>
-  <div class="slider-dots">
-    <button class="slider-dot active"></button>
-    <button class="slider-dot"></button>
-    <button class="slider-dot"></button>
-  </div>
-</div>
-        <div>
-          <div class="p-head">
-            <span class="p-title">Set design — <em>Mass</em>, film de Pierre Pauze</span>
-            <span class="p-year mono">2020</span>
-          </div>
-          <p class="p-desc">Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film. Dessins de sculptures en résine, sculptures néon et plans pour les artisans peintres et sculpteurs. Exposé au Centre Pompidou-Metz, 2022. Photo Marc Domage. — Via Atelier 20point12.</p>
-          <div class="p-meta mono"><span>FILM</span><span>RÉSINE</span><span>NÉON</span><span>POMPIDOU-METZ</span></div>
-        </div>
-      </div>
-
       <div class="project" data-reveal>
         <div class="thumb bracket"><img src="images/poidslourd_01.jpg" loading="lazy" alt="L'aire poids lourd — scénographie" onerror="this.style.opacity='0'"></div>
         <div>
@@ -600,7 +590,6 @@
           <div class="p-meta mono"><span>THÉÂTRE</span><span>SCÉNOGRAPHIE</span></div>
         </div>
       </div>
-
       <div class="project" data-reveal>
         <div class="thumb bracket"><img src="images/startinglimbs_01.jpg" loading="lazy" alt="Starting with the Limbs — dispositifs scéniques" onerror="this.style.opacity='0'"></div>
         <div>
@@ -612,7 +601,6 @@
           <div class="p-meta mono"><span>DANSE</span><span>FABRICATION</span><span>BIOMIMÉTISME</span><span>GRASSHOPPER</span></div>
         </div>
       </div>
-
       <div class="project" data-reveal>
         <div class="thumb bracket slider">
   <div class="slider-track">
@@ -645,9 +633,9 @@
   <div class="wrap">
     <div class="section-head">
       <h2>FenFutures</h2>
-      <div class="tag mono">Studio Maroc — en activité</div>
+      <div class="tag mono">Recherche — en activité</div>
     </div>
-    <p class="ff-tagline">Studio basé au Maroc explorant la jonction entre savoir-faire artisanal et fabrication numérique — pour habiter le corps autrement.</p>
+    <p class="ff-tagline">Après plusieurs années passées à développer des dispositifs pour d'autres, FenFutures est devenu l'espace où cette recherche peut évoluer librement. Chaque projet prolonge une même question : comment de nouveaux outils peuvent-ils enrichir les gestes existants plutôt que les remplacer ?</p>
 
     <!-- Nassij — projet de recherche propre -->
     <div class="ff-nassij">

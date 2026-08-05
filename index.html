@@ -348,7 +348,7 @@
       </div>
       <div>
         <strong>Contact</strong>
-        <a href="mailto:synapticgarden@gmail.com">synapticgarden@gmail.com</a>
+        <a href="mailto:gbensouda@gmail.com">gbensouda@gmail.com</a>
       </div>
     </div>
   </div>
@@ -709,7 +709,7 @@
     <div class="contact-row mono">
       <div>
         <strong>Email</strong>
-        <a href="mailto:synapticgarden@gmail.com">synapticgarden@gmail.com</a>
+        <a href="mailto:gbensouda@gmail.com">gbensouda@gmail.com</a>
       </div>
       <div>
         <strong>Studios</strong>
@@ -774,9 +774,10 @@ document.querySelectorAll('.slider').forEach(function(slider) {
   var lbIndex = 0;
 
   function open(img) {
-    // construire la galerie à partir de toutes les images visibles
-    gallery = Array.from(document.querySelectorAll('.thumb img, .ff-nassij-slider img'));
-    lbIndex = gallery.indexOf(img);
+    // galerie limitée au projet cliqué
+    var container = img.closest('.thumb, .ff-nassij');
+    gallery = container ? Array.from(container.querySelectorAll('img')) : [img];
+    lbIndex = Math.max(0, gallery.indexOf(img));
     show(lbIndex);
     lb.classList.add('open');
     document.body.style.overflow = 'hidden';

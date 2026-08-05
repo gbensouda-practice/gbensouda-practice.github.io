@@ -2,6 +2,17 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="description" content="Designer de dispositifs et fabricant numérique — de la définition paramétrique à l'objet fabriqué. Marseille / Paris / remote.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ghalibensouda.com/">
+<meta property="og:title" content="Ghali Bensouda — Designer de dispositifs">
+<meta property="og:description" content="Designer de dispositifs et fabricant numérique — de la définition paramétrique à l'objet fabriqué. Marseille / Paris / remote.">
+<meta property="og:image" content="https://ghalibensouda.com/images/hermes_hw2019_vitrine_finale_01.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ghali Bensouda — Designer de dispositifs">
+<meta name="twitter:image" content="https://ghalibensouda.com/images/hermes_hw2019_vitrine_finale_01.jpg">
 <meta name="google-site-verification" content="HgqpZFQvXOk7zdPx5-Gdnly5u2AavWid60S6rM3E75E">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ghali Bensouda — Designer de dispositifs</title>
@@ -130,16 +141,7 @@
     transition: transform .35s ease;
   }
   .slider-track img { flex: 0 0 100%; width: 100%; object-fit: cover; aspect-ratio: 4/3; }
-  .slider-btn {
-    position: absolute; top: 50%; transform: translateY(-50%);
-    background: rgba(20,24,26,.55); color: #EDEEEB;
-    border: none; width: 26px; height: 26px; cursor: pointer;
-    font-size: 16px; display: flex; align-items: center; justify-content: center;
-    z-index: 2; transition: background .15s; border-radius: 1px; line-height: 1;
-  }
-  .slider-btn:hover { background: rgba(20,24,26,.85); }
-  .slider-btn.prev { left: 6px; }
-  .slider-btn.next { right: 6px; }
+
   .slider-dots {
     position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
     display: flex; gap: 5px; z-index: 2;
@@ -308,6 +310,42 @@
   /* curseur zoom sur les images cliquables */
   .thumb img, .ff-nassij-slider img { cursor: zoom-in; }
 
+
+  /* ── MINI NAV ── */
+  .mini-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 150;
+    background: rgba(237,238,235,.93);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    padding: 12px 40px; display: flex; align-items: center; gap: 16px;
+    font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+    transform: translateY(-100%); transition: transform .3s ease;
+  }
+  .mini-nav.visible { transform: translateY(0); }
+  .mini-nav a { color: var(--grey); text-decoration: none; transition: color .15s; }
+  .mini-nav a:hover { color: var(--ink); }
+  .mini-nav .sep { width: 3px; height: 3px; border-radius: 50%; background: var(--line); }
+
+  /* ── BACK TO TOP ── */
+  .back-top {
+    position: fixed; bottom: 28px; right: 28px; z-index: 150;
+    width: 34px; height: 34px;
+    border: 1px solid var(--line); background: var(--paper);
+    color: var(--grey); font-size: 15px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity .2s, color .15s, border-color .15s;
+  }
+  .back-top.visible { opacity: 1; pointer-events: all; }
+  .back-top:hover { color: var(--ink); border-color: var(--ink); }
+
+  /* ── SCROLL REVEAL ── */
+  [data-reveal] {
+    opacity: 0; transform: translateY(18px);
+    transition: opacity .55s ease, transform .55s ease;
+  }
+  [data-reveal].revealed { opacity: 1; transform: translateY(0); }
+
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     * { transition: none !important; }
@@ -324,6 +362,16 @@
   <img id="lb-img" src="" alt="">
   <div class="lb-counter" id="lb-counter"></div>
 </div>
+
+
+<nav class="mini-nav mono" id="miniNav">
+  <a href="#projets">Projets</a>
+  <span class="sep"></span>
+  <a href="#fenfutures">FenFutures</a>
+  <span class="sep"></span>
+  <a href="#contact">Contact</a>
+</nav>
+<button class="back-top" id="backTop" aria-label="Retour en haut" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <header class="hero">
   <div class="wrap">
@@ -379,21 +427,19 @@
     </div>
 
     <!-- 01 / FAB -->
-    <div class="category">
+    <div class="category" data-reveal>
       <div class="cat-head">
         <span class="cat-code mono">01 / FAB</span>
         <span class="cat-title">Fabrication de décors</span>
       </div>
 
-      <div class="project">
+      <div class="project" data-reveal>
         <div class="thumb bracket slider">
   <div class="slider-track">
-    <img src="images/hermes_hw2019_vitrine_finale_01.jpg" alt="Holiday Windows Hermès 2019 — vitrine finale" onerror="this.style.opacity='0'">
-    <img src="images/hermes_hw2019_atelier_photo_01.jpg" alt="Holiday Windows Hermès 2019 — atelier" onerror="this.style.opacity='0'">
-    <img src="images/hermes_hw2019_modele3d_coquillage_01.jpg" alt="Holiday Windows Hermès 2019 — modèle 3D coquillage" onerror="this.style.opacity='0'">
+    <img src="images/hermes_hw2019_vitrine_finale_01.jpg" loading="lazy" alt="Holiday Windows Hermès 2019 — vitrine finale" onerror="this.style.opacity='0'">
+    <img src="images/hermes_hw2019_atelier_photo_01.jpg" loading="lazy" alt="Holiday Windows Hermès 2019 — atelier" onerror="this.style.opacity='0'">
+    <img src="images/hermes_hw2019_modele3d_coquillage_01.jpg" loading="lazy" alt="Holiday Windows Hermès 2019 — modèle 3D coquillage" onerror="this.style.opacity='0'">
   </div>
-  <button class="slider-btn prev" aria-label="Précédent">‹</button>
-  <button class="slider-btn next" aria-label="Suivant">›</button>
   <div class="slider-dots">
     <button class="slider-dot active"></button>
     <button class="slider-dot"></button>
@@ -410,15 +456,13 @@
         </div>
       </div>
 
-      <div class="project">
+      <div class="project" data-reveal>
         <div class="thumb bracket slider">
   <div class="slider-track">
-    <img src="images/hermes_wwq2021_vitrine_photo_01.jpg" alt="Wild Wild Quest Hermès 2021 — vitrine montée" onerror="this.style.opacity='0'">
-    <img src="images/hermes_wwq2021_atelier_photo_01.jpg" alt="Wild Wild Quest Hermès 2021 — atelier" onerror="this.style.opacity='0'">
-    <img src="images/hermes_wwq2021_modele3d_creature_01.jpg" alt="Wild Wild Quest Hermès 2021 — créature Grasshopper" onerror="this.style.opacity='0'">
+    <img src="images/hermes_wwq2021_vitrine_photo_01.jpg" loading="lazy" alt="Wild Wild Quest Hermès 2021 — vitrine montée" onerror="this.style.opacity='0'">
+    <img src="images/hermes_wwq2021_atelier_photo_01.jpg" loading="lazy" alt="Wild Wild Quest Hermès 2021 — atelier" onerror="this.style.opacity='0'">
+    <img src="images/hermes_wwq2021_modele3d_creature_01.jpg" loading="lazy" alt="Wild Wild Quest Hermès 2021 — créature Grasshopper" onerror="this.style.opacity='0'">
   </div>
-  <button class="slider-btn prev" aria-label="Précédent">‹</button>
-  <button class="slider-btn next" aria-label="Suivant">›</button>
   <div class="slider-dots">
     <button class="slider-dot active"></button>
     <button class="slider-dot"></button>
@@ -437,22 +481,20 @@
     </div>
 
     <!-- 02 / MOB -->
-    <div class="category">
+    <div class="category" data-reveal>
       <div class="cat-head">
         <span class="cat-code mono">02 / MOB</span>
         <span class="cat-title">Conception de mobilier</span>
       </div>
 
-      <div class="project">
+      <div class="project" data-reveal>
         <div class="thumb bracket slider">
   <div class="slider-track">
-    <img src="images/hermes_ww_pauze_vip_eclate3d_01.jpg" alt="Watches & Wonders — mobilier VIP vue éclatée" onerror="this.style.opacity='0'">
-    <img src="images/hermes_ww_pauze_bar_rendu3d_01.jpg" alt="Watches & Wonders — bar rendu 3D" onerror="this.style.opacity='0'">
-    <img src="images/hermes_ww_pauze_vip_atelier_01.jpg" alt="Watches & Wonders — atelier VIP" onerror="this.style.opacity='0'">
-    <img src="images/hermes_ww_pauze_bar_atelier_01.jpg" alt="Watches & Wonders — atelier bar" onerror="this.style.opacity='0'">
+    <img src="images/hermes_ww_pauze_vip_eclate3d_01.jpg" loading="lazy" alt="Watches & Wonders — mobilier VIP vue éclatée" onerror="this.style.opacity='0'">
+    <img src="images/hermes_ww_pauze_bar_rendu3d_01.jpg" loading="lazy" alt="Watches & Wonders — bar rendu 3D" onerror="this.style.opacity='0'">
+    <img src="images/hermes_ww_pauze_vip_atelier_01.jpg" loading="lazy" alt="Watches & Wonders — atelier VIP" onerror="this.style.opacity='0'">
+    <img src="images/hermes_ww_pauze_bar_atelier_01.jpg" loading="lazy" alt="Watches & Wonders — atelier bar" onerror="this.style.opacity='0'">
   </div>
-  <button class="slider-btn prev" aria-label="Précédent">‹</button>
-  <button class="slider-btn next" aria-label="Suivant">›</button>
   <div class="slider-dots">
     <button class="slider-dot active"></button>
     <button class="slider-dot"></button>
@@ -470,15 +512,13 @@
         </div>
       </div>
 
-      <div class="project">
+      <div class="project" data-reveal>
         <div class="thumb bracket slider">
   <div class="slider-track">
-    <img src="images/saketsethi_sofa_rendu_01.jpg" alt="Saket Sethi — sofa rendu paramétrique" onerror="this.style.opacity='0'">
-    <img src="images/saketsethi_twirlsofa_rendu_01.jpg" alt="Saket Sethi — Twirl Sofa" onerror="this.style.opacity='0'">
-    <img src="images/saketsethi_declinaisons_grasshopper_01.jpg" alt="Saket Sethi — déclinaisons Grasshopper" onerror="this.style.opacity='0'">
+    <img src="images/saketsethi_sofa_rendu_01.jpg" loading="lazy" alt="Saket Sethi — sofa rendu paramétrique" onerror="this.style.opacity='0'">
+    <img src="images/saketsethi_twirlsofa_rendu_01.jpg" loading="lazy" alt="Saket Sethi — Twirl Sofa" onerror="this.style.opacity='0'">
+    <img src="images/saketsethi_declinaisons_grasshopper_01.jpg" loading="lazy" alt="Saket Sethi — déclinaisons Grasshopper" onerror="this.style.opacity='0'">
   </div>
-  <button class="slider-btn prev" aria-label="Précédent">‹</button>
-  <button class="slider-btn next" aria-label="Suivant">›</button>
   <div class="slider-dots">
     <button class="slider-dot active"></button>
     <button class="slider-dot"></button>
@@ -497,21 +537,19 @@
     </div>
 
     <!-- 03 / DA -->
-    <div class="category">
+    <div class="category" data-reveal>
       <div class="cat-head">
         <span class="cat-code mono">03 / DA</span>
         <span class="cat-title">Direction artistique &amp; scénographie</span>
       </div>
 
-      <div class="project">
+      <div class="project" data-reveal>
         <div class="thumb bracket slider">
   <div class="slider-track">
-    <img src="images/hermes_ww_ratte_scenographie_rendu_01.jpg" alt="Sabrina Ratté × Watches & Wonders — rendu scénographie" onerror="this.style.opacity='0'">
-    <img src="images/hermes_ww_ratte_sculpture_impression3d_01.jpg" alt="Sabrina Ratté × Watches & Wonders — sculpture impression 3D" onerror="this.style.opacity='0'">
-    <img src="images/hermes_ww_ratte_sculpture_himalaya_plan_01.png" alt="Sabrina Ratté × Watches & Wonders — plan sculpture Himalaya" onerror="this.style.opacity='0'">
+    <img src="images/hermes_ww_ratte_scenographie_rendu_01.jpg" loading="lazy" alt="Sabrina Ratté × Watches & Wonders — rendu scénographie" onerror="this.style.opacity='0'">
+    <img src="images/hermes_ww_ratte_sculpture_impression3d_01.jpg" loading="lazy" alt="Sabrina Ratté × Watches & Wonders — sculpture impression 3D" onerror="this.style.opacity='0'">
+    <img src="images/hermes_ww_ratte_sculpture_himalaya_plan_01.png" loading="lazy" alt="Sabrina Ratté × Watches & Wonders — plan sculpture Himalaya" onerror="this.style.opacity='0'">
   </div>
-  <button class="slider-btn prev" aria-label="Précédent">‹</button>
-  <button class="slider-btn next" aria-label="Suivant">›</button>
   <div class="slider-dots">
     <button class="slider-dot active"></button>
     <button class="slider-dot"></button>
@@ -528,15 +566,13 @@
         </div>
       </div>
 
-      <div class="project">
+      <div class="project" data-reveal>
         <div class="thumb bracket slider">
   <div class="slider-track">
-    <img src="images/mass_pauze_expo_pompidou_01.jpg" alt="Mass — exposition Centre Pompidou-Metz" onerror="this.style.opacity='0'">
-    <img src="images/mass_pauze_tournage_decor_01.png" alt="Mass — tournage décor" onerror="this.style.opacity='0'">
-    <img src="images/mass_pauze_sculpture_resine_01.jpg" alt="Mass — sculpture résine" onerror="this.style.opacity='0'">
+    <img src="images/mass_pauze_expo_pompidou_01.jpg" loading="lazy" alt="Mass — exposition Centre Pompidou-Metz" onerror="this.style.opacity='0'">
+    <img src="images/mass_pauze_tournage_decor_01.png" loading="lazy" alt="Mass — tournage décor" onerror="this.style.opacity='0'">
+    <img src="images/mass_pauze_sculpture_resine_01.jpg" loading="lazy" alt="Mass — sculpture résine" onerror="this.style.opacity='0'">
   </div>
-  <button class="slider-btn prev" aria-label="Précédent">‹</button>
-  <button class="slider-btn next" aria-label="Suivant">›</button>
   <div class="slider-dots">
     <button class="slider-dot active"></button>
     <button class="slider-dot"></button>
@@ -553,8 +589,8 @@
         </div>
       </div>
 
-      <div class="project">
-        <div class="thumb bracket"><img src="images/poidslourd_01.jpg" alt="L'aire poids lourd — scénographie" onerror="this.style.opacity='0'"></div>
+      <div class="project" data-reveal>
+        <div class="thumb bracket"><img src="images/poidslourd_01.jpg" loading="lazy" alt="L'aire poids lourd — scénographie" onerror="this.style.opacity='0'"></div>
         <div>
           <div class="p-head">
             <span class="p-title">Scénographie — <em>L'aire poids lourd</em>, mise en scène Carole Errante</span>
@@ -565,8 +601,8 @@
         </div>
       </div>
 
-      <div class="project">
-        <div class="thumb bracket"><img src="images/startinglimbs_01.jpg" alt="Starting with the Limbs — dispositifs scéniques" onerror="this.style.opacity='0'"></div>
+      <div class="project" data-reveal>
+        <div class="thumb bracket"><img src="images/startinglimbs_01.jpg" loading="lazy" alt="Starting with the Limbs — dispositifs scéniques" onerror="this.style.opacity='0'"></div>
         <div>
           <div class="p-head">
             <span class="p-title">Dispositifs scéniques — <em>Starting with the Limbs</em>, cie L'Autre Maison</span>
@@ -577,15 +613,13 @@
         </div>
       </div>
 
-      <div class="project">
+      <div class="project" data-reveal>
         <div class="thumb bracket slider">
   <div class="slider-track">
-    <img src="images/sanniest_vr_scene_mangrove_01.png" alt="Photophobia VR — scène mangrove" onerror="this.style.opacity='0'">
-    <img src="images/sanniest_vr_photo_premiere_01.jpg" alt="Photophobia VR — première Kampnagel" onerror="this.style.opacity='0'">
-    <img src="images/sanniest_vr_modele3d_poisson_01.png" alt="Photophobia VR — modèle 3D poisson" onerror="this.style.opacity='0'">
+    <img src="images/sanniest_vr_scene_mangrove_01.png" loading="lazy" alt="Photophobia VR — scène mangrove" onerror="this.style.opacity='0'">
+    <img src="images/sanniest_vr_photo_premiere_01.jpg" loading="lazy" alt="Photophobia VR — première Kampnagel" onerror="this.style.opacity='0'">
+    <img src="images/sanniest_vr_modele3d_poisson_01.png" loading="lazy" alt="Photophobia VR — modèle 3D poisson" onerror="this.style.opacity='0'">
   </div>
-  <button class="slider-btn prev" aria-label="Précédent">‹</button>
-  <button class="slider-btn next" aria-label="Suivant">›</button>
   <div class="slider-dots">
     <button class="slider-dot active"></button>
     <button class="slider-dot"></button>
@@ -619,13 +653,11 @@
     <div class="ff-nassij">
       <div class="slider ff-nassij-slider">
         <div class="slider-track">
-          <img src="images/nassij_caftan_rendu_dos_01.jpg" alt="Collection Nassij — caftan rendu dos, Blender" onerror="this.style.opacity='0'">
-          <img src="images/nassij_broderie_detail_01.jpg" alt="Collection Nassij — broderie détail paramétrique" onerror="this.style.opacity='0'">
-          <img src="images/nassij_caftan_detail_manche_01.jpg" alt="Collection Nassij — détail manche brodée" onerror="this.style.opacity='0'">
-          <img src="images/nassij_motif_grasshopper_01.jpg" alt="Collection Nassij — motif issu de Grasshopper" onerror="this.style.opacity='0'">
+          <img src="images/nassij_caftan_rendu_dos_01.jpg" loading="lazy" alt="Collection Nassij — caftan rendu dos, Blender" onerror="this.style.opacity='0'">
+          <img src="images/nassij_broderie_detail_01.jpg" loading="lazy" alt="Collection Nassij — broderie détail paramétrique" onerror="this.style.opacity='0'">
+          <img src="images/nassij_caftan_detail_manche_01.jpg" loading="lazy" alt="Collection Nassij — détail manche brodée" onerror="this.style.opacity='0'">
+          <img src="images/nassij_motif_grasshopper_01.jpg" loading="lazy" alt="Collection Nassij — motif issu de Grasshopper" onerror="this.style.opacity='0'">
         </div>
-        <button class="slider-btn prev" aria-label="Précédent">‹</button>
-        <button class="slider-btn next" aria-label="Suivant">›</button>
         <div class="slider-dots">
           <button class="slider-dot active"></button>
           <button class="slider-dot"></button>
@@ -728,10 +760,7 @@
         TouchDesigner &amp; MadMapper — 2026
       </div>
     </div>
-    <p class="footer-line mono">
-      Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.
-      Book en cours — visuels à intégrer.
-    </p>
+    <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
   </div>
 </footer>
 
@@ -818,6 +847,33 @@ document.querySelectorAll('.slider').forEach(function(slider) {
     if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
     if (e.key === 'ArrowLeft' && lbIndex > 0) show(lbIndex - 1);
   });
+})();
+
+
+// ── MINI NAV + BACK TO TOP ───────────────────────────────────────────────────
+(function() {
+  var nav = document.getElementById('miniNav');
+  var btn = document.getElementById('backTop');
+  var heroH = document.querySelector('header.hero').offsetHeight;
+  window.addEventListener('scroll', function() {
+    var y = window.scrollY;
+    nav.classList.toggle('visible', y > heroH * 0.8);
+    btn.classList.toggle('visible', y > 400);
+  }, { passive: true });
+})();
+
+// ── SCROLL REVEAL ─────────────────────────────────────────────────────────────
+(function() {
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('[data-reveal]').forEach(function(el) { el.classList.add('revealed'); });
+    return;
+  }
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('[data-reveal]').forEach(function(el) { obs.observe(el); });
 })();
 
 </script>

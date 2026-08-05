@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghali Bensouda — Designer de dispositifs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,450;9..144,600&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #EDEEEB;
+    --paper-2: #E4E6E1;
+    --ink: #14181A;
+    --blue: #1F3F63;
+    --grey: #6E7570;
+    --line: #C7CBC4;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--blue); }
+  .mono { font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.02em; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+  /* bracket motif */
+  .bracket { position: relative; }
+  .bracket::before, .bracket::after {
+    content: ''; position: absolute; width: 10px; height: 10px;
+    border: 1px solid var(--blue); opacity: .5;
+  }
+  .bracket::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .bracket::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+  /* ── HERO ── */
+  header.hero {
+    min-height: 92vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding-top: 64px;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow {
+    font-size: 12px; text-transform: uppercase; letter-spacing: .14em;
+    color: var(--blue); margin-bottom: 22px;
+  }
+  h1.name {
+    font-family: 'Fraunces', serif; font-weight: 450;
+    font-size: clamp(48px, 9vw, 108px);
+    line-height: .98; letter-spacing: -.01em;
+    margin-bottom: 28px;
+  }
+  .hero-sub {
+    max-width: 640px; font-size: clamp(17px, 2vw, 20px);
+    color: #2B2F2C; line-height: 1.55;
+  }
+  .hero-sub .accent { color: var(--blue); }
+  .hero-meta {
+    margin-top: 48px; display: flex; gap: 40px; flex-wrap: wrap;
+    font-size: 13px; color: var(--grey);
+    border-top: 1px solid var(--line);
+    padding-top: 32px;
+  }
+  .hero-meta strong {
+    display: block; color: var(--ink); font-size: 11px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px;
+  }
+
+  /* ── TOOLS STRIP ── */
+  .tools { padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .tools .wrap { display: flex; flex-wrap: wrap; }
+  .tools span {
+    font-size: 11px; color: var(--grey);
+    padding-right: 16px; margin-right: 16px;
+    border-right: 1px solid var(--line);
+    line-height: 2.2;
+  }
+  .tools span:last-child { border-right: none; }
+
+  /* ── SECTIONS ── */
+  section { padding: 120px 0; }
+  .section-head {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 64px; flex-wrap: wrap; gap: 16px;
+    border-bottom: 1px solid var(--line); padding-bottom: 28px;
+  }
+  .section-head h2 {
+    font-family: 'Fraunces', serif; font-weight: 450;
+    font-size: clamp(30px, 4vw, 44px);
+  }
+  .section-head .tag { font-size: 12px; color: var(--blue); }
+
+  /* ── CATEGORY ── */
+  .category { margin-bottom: 88px; }
+  .category:last-child { margin-bottom: 0; }
+  .cat-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 36px; }
+  .cat-code { font-size: 12px; color: var(--blue); min-width: 70px; }
+  .cat-title { font-size: 20px; font-weight: 500; }
+
+  /* ── PROJECT ROW ── */
+  .project {
+    display: grid; grid-template-columns: 220px 1fr; gap: 36px;
+    padding: 32px 0; border-top: 1px solid var(--line);
+    transition: background .15s ease;
+  }
+  .project:hover { background: var(--paper-2); }
+
+  .thumb {
+    aspect-ratio: 4/3; border: 1px solid rgba(31,63,99,.25);
+    display: flex; align-items: center; justify-content: center;
+    background: repeating-linear-gradient(45deg, transparent 0 8px, rgba(31,63,99,.04) 8px 9px);
+    flex-shrink: 0;
+  }
+  .thumb span { font-size: 10px; color: var(--blue); opacity: .5; letter-spacing: .08em; }
+
+  .p-head { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 10px; flex-wrap: wrap; }
+  .p-title { font-size: 18px; font-weight: 500; line-height: 1.25; }
+  .p-year { font-size: 12px; color: var(--grey); white-space: nowrap; padding-top: 3px; }
+  .p-desc { color: #3A3F3C; font-size: 15px; max-width: 64ch; margin-bottom: 16px; line-height: 1.65; }
+  .p-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+  .p-meta span {
+    font-size: 11px; color: var(--blue); border: 1px solid var(--line);
+    padding: 3px 8px; border-radius: 2px;
+  }
+
+  /* ── FEATURED PROJECT — Nassij ── */
+  .project.featured {
+    grid-template-columns: 1fr;
+    background: var(--paper-2);
+    padding: 36px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    margin-top: 4px;
+  }
+  .project.featured:hover { background: #DDE0DB; }
+  .project.featured .p-title { font-size: 22px; }
+
+  .pipeline {
+    display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+    margin: 18px 0 20px; padding: 14px 16px;
+    background: rgba(31,63,99,.05);
+    border-left: 2px solid var(--blue);
+  }
+  .pipeline .step { font-size: 11px; color: var(--grey); }
+  .pipeline .arrow { font-size: 11px; color: var(--line); }
+
+  @media (max-width: 640px) {
+    .project { grid-template-columns: 1fr; }
+    .project.featured { padding: 24px; }
+  }
+
+  /* ── FENFUTURES ── */
+  .fenfutures { background: var(--ink); color: var(--paper); }
+  .fenfutures .section-head { border-bottom-color: #2E3436; }
+  .fenfutures .section-head h2 { color: var(--paper); }
+  .fenfutures .section-head .tag { color: #7FA3C4; }
+  .ff-tagline {
+    font-family: 'Fraunces', serif; font-weight: 300; font-style: italic;
+    font-size: clamp(19px, 2.4vw, 27px);
+    max-width: 740px; margin-bottom: 56px; color: #C9CDC9; line-height: 1.5;
+  }
+  .ff-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1px; background: #2E3436; }
+  .ff-card { background: var(--ink); padding: 32px; transition: background .15s; }
+  .ff-card:hover { background: #1C2022; }
+  .ff-card .k { font-size: 11px; color: #7FA3C4; margin-bottom: 12px; letter-spacing: .08em; text-transform: uppercase; }
+  .ff-card p { font-size: 14px; color: #BABFBA; line-height: 1.7; }
+  @media (max-width: 700px) { .ff-grid { grid-template-columns: 1fr; } }
+
+  /* ── NASSIJ dans FenFutures (version dark) ── */
+  .ff-nassij {
+    border: 1px solid #2E3436;
+    border-radius: 2px;
+    padding: 36px;
+    margin-bottom: 2px;
+    background: #1A1F21;
+    transition: background .15s;
+    position: relative;
+  }
+  .ff-nassij:hover { background: #1C2426; }
+  .ff-nassij::before, .ff-nassij::after {
+    content: ''; position: absolute; width: 10px; height: 10px;
+    border: 1px solid #7FA3C4; opacity: .4;
+  }
+  .ff-nassij::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .ff-nassij::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+  .ff-nassij .p-head { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 10px; flex-wrap: wrap; }
+  .ff-nassij .p-title { font-size: 22px; font-weight: 500; color: var(--paper); line-height: 1.2; }
+  .ff-nassij .p-year { font-size: 12px; color: #7FA3C4; white-space: nowrap; padding-top: 4px; }
+  .ff-nassij .p-desc { color: #BABFBA; font-size: 15px; max-width: 72ch; margin-bottom: 16px; line-height: 1.65; }
+  .ff-nassij .pipeline {
+    margin: 18px 0 20px; padding: 14px 16px;
+    background: rgba(127,163,196,.08);
+    border-left: 2px solid #7FA3C4;
+  }
+  .ff-nassij .pipeline .step { color: #BABFBA; }
+  .ff-nassij .pipeline .arrow { color: #2E3436; }
+  .ff-nassij .p-meta span {
+    color: #7FA3C4; border-color: #2E3436;
+  }
+  @media (max-width: 640px) { .ff-nassij { padding: 24px; } }
+
+  /* ── DISPO BAND ── */
+  .dispo-band { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 20px 0; }
+  .dispo-inner { display: flex; align-items: center; gap: 12px; }
+  .dispo-dot { width: 7px; height: 7px; border-radius: 50%; background: #3D7A4F; flex-shrink: 0; }
+  .dispo-text { font-size: 13px; color: var(--grey); }
+  .dispo-text strong { color: var(--ink); font-weight: 500; }
+
+  /* ── FOOTER ── */
+  footer { padding: 80px 0 60px; }
+  footer h2 {
+    font-family: 'Fraunces', serif; font-weight: 450;
+    font-size: clamp(30px, 5vw, 56px); margin-bottom: 10px;
+  }
+  .footer-sub { font-size: 15px; color: var(--grey); margin-bottom: 48px; max-width: 480px; }
+  .contact-row { display: flex; gap: 48px; flex-wrap: wrap; font-size: 14px; }
+  .contact-row div strong {
+    display: block; font-size: 11px; color: var(--grey);
+    text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px;
+  }
+  .contact-row a { color: var(--ink); }
+  .contact-row a:hover { color: var(--blue); }
+  .footer-line {
+    margin-top: 48px; padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 12px; color: var(--grey);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow mono">Designer de dispositifs · Fabrication numérique · Scénographie</div>
+    <h1 class="name">Ghali<br>Bensouda</h1>
+    <p class="hero-sub">
+      Formé à l'ESA, je couvre l'ensemble du chemin —
+      <span class="accent">de la définition paramétrique à l'objet fabriqué.</span>
+      Décors pour le luxe, mobilier de scène, collections hybrides
+      et environnements immersifs. En atelier comme en remote,
+      entre Marseille et Paris.
+    </p>
+    <div class="hero-meta mono">
+      <div>
+        <strong>Basé à</strong>
+        Marseille — disponible Paris / remote
+      </div>
+      <div>
+        <strong>Outils</strong>
+        Rhino · Grasshopper · Blender<br>
+        Marvelous Designer · TouchDesigner · MadMapper
+      </div>
+      <div>
+        <strong>Contact</strong>
+        <a href="mailto:ghali@ghalibensouda.com">ghali@ghalibensouda.com</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ── TOOLS STRIP ── -->
+<div class="tools">
+  <div class="wrap mono">
+    <span>MODÉLISATION 3D</span>
+    <span>IMPRESSION 3D FDM / SLA</span>
+    <span>CNC BOIS / POLYSTYRÈNE</span>
+    <span>DÉCOUPE LASER</span>
+    <span>DESIGN GÉNÉRATIF</span>
+    <span>SCÉNOGRAPHIE</span>
+    <span>MAPPING VIDÉO</span>
+    <span>ANIMATION 3D</span>
+    <span>RÉALITÉ VIRTUELLE</span>
+    <span>.STL .OBJ .FBX .3DM</span>
+  </div>
+</div>
+
+<!-- ── PROJETS ATELIER ── -->
+<section id="projets">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Projets Atelier</h2>
+      <div class="tag mono">2016 — 2025</div>
+    </div>
+
+    <!-- 01 / FAB -->
+    <div class="category">
+      <div class="cat-head">
+        <span class="cat-code mono">01 / FAB</span>
+        <span class="cat-title">Fabrication de décors</span>
+      </div>
+
+      <div class="project">
+        <div class="thumb bracket"><span class="mono">↳ visuel</span></div>
+        <div>
+          <div class="p-head">
+            <span class="p-title">Décor vitrine (1:10) — Hermès</span>
+            <span class="p-year mono">2019</span>
+          </div>
+          <p class="p-desc">Modélisation et usinage d'un décor de vitrine à l'échelle 1:10. Workflow Rhino–ZBrush, pièces produites par impression 3D PLA et fraisage numérique bois/polystyrène, plans de découpe laser.</p>
+          <div class="p-meta mono"><span>RHINO</span><span>ZBRUSH</span><span>PLA</span><span>CNC</span><span>LASER</span></div>
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="thumb bracket"><span class="mono">↳ visuel</span></div>
+        <div>
+          <div class="p-head">
+            <span class="p-title">Wild Wild Quest — Hermès</span>
+            <span class="p-year mono">2021</span>
+          </div>
+          <p class="p-desc">Décor de vitrine pour le thème saisonnier Hermès. Définitions Grasshopper pour la génération des formes, production mixte impression 3D PLA/SLA et fraisage CNC polystyrène, découpe laser.</p>
+          <div class="p-meta mono"><span>RHINO</span><span>GRASSHOPPER</span><span>SLA</span><span>CNC</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 / MOB -->
+    <div class="category">
+      <div class="cat-head">
+        <span class="cat-code mono">02 / MOB</span>
+        <span class="cat-title">Conception de mobilier</span>
+      </div>
+
+      <div class="project">
+        <div class="thumb bracket"><span class="mono">↳ visuel</span></div>
+        <div>
+          <div class="p-head">
+            <span class="p-title">Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze</span>
+            <span class="p-year mono">2020</span>
+          </div>
+          <p class="p-desc">Conception et suivi de fabrication d'un mobilier lumineux pour l'espace VIP. Structure interne en découpe CNC, intégration LED, plans de fabrication complets. Miroir sans tain et stratifié.</p>
+          <div class="p-meta mono"><span>BOIS CNC</span><span>LED</span><span>STRATIFIÉ</span><span>MIROIR SANS TAIN</span></div>
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="thumb bracket"><span class="mono">↳ visuel</span></div>
+        <div>
+          <div class="p-head">
+            <span class="p-title">Collection mobilier paramétrique — Saket Sethi Design</span>
+            <span class="p-year mono">2023</span>
+          </div>
+          <p class="p-desc">Modélisation et conseil sur une collection de mobilier évolutif. Définition Grasshopper sur mesure permettant la variation des proportions et la génération automatique des plans de découpe.</p>
+          <div class="p-meta mono"><span>GRASSHOPPER</span><span>RHINO</span><span>MOBILIER</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 / DA -->
+    <div class="category">
+      <div class="cat-head">
+        <span class="cat-code mono">03 / DA</span>
+        <span class="cat-title">Direction artistique &amp; scénographie</span>
+      </div>
+
+      <div class="project">
+        <div class="thumb bracket"><span class="mono">↳ visuel</span></div>
+        <div>
+          <div class="p-head">
+            <span class="p-title">Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders</span>
+            <span class="p-year mono">2022</span>
+          </div>
+          <p class="p-desc">Conception et modélisation 3D de la sculpture centrale d'une installation vidéo, en collaboration avec l'artiste Sabrina Ratté. Esquisses et prototype réalisés avec Animatronix.</p>
+          <div class="p-meta mono"><span>SCÉNOGRAPHIE</span><span>SCULPTURE</span><span>INSTALLATION</span></div>
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="thumb bracket"><span class="mono">↳ visuel</span></div>
+        <div>
+          <div class="p-head">
+            <span class="p-title">Set design — <em>Mass</em>, film de Pierre Pauze</span>
+            <span class="p-year mono">2020</span>
+          </div>
+          <p class="p-desc">Conception et suivi de fabrication de l'ensemble du décor du film : sculptures en résine, intégrations néon. Présenté au Centre Pompidou-Metz.</p>
+          <div class="p-meta mono"><span>FILM</span><span>RÉSINE</span><span>NÉON</span><span>POMPIDOU-METZ</span></div>
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="thumb bracket"><span class="mono">↳ visuel</span></div>
+        <div>
+          <div class="p-head">
+            <span class="p-title">Scénographie — <em>L'aire poids lourd</em>, mise en scène Carole Errante</span>
+            <span class="p-year mono">Théâtre</span>
+          </div>
+          <p class="p-desc">Conception scénographique complète — de l'esquisse au plateau.</p>
+          <div class="p-meta mono"><span>THÉÂTRE</span><span>SCÉNOGRAPHIE</span></div>
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="thumb bracket"><span class="mono">↳ visuel</span></div>
+        <div>
+          <div class="p-head">
+            <span class="p-title">Dispositifs scéniques — <em>Starting with the Limbs</em>, cie L'Autre Maison</span>
+            <span class="p-year mono">Danse</span>
+          </div>
+          <p class="p-desc">Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer. Formes organiques et biomimétiques développées par modélisation paramétrique, conçues pour interagir avec le corps dansant et redéfinir la présence de l'objet sur scène.</p>
+          <div class="p-meta mono"><span>DANSE</span><span>FABRICATION</span><span>BIOMIMÉTISME</span><span>GRASSHOPPER</span></div>
+        </div>
+      </div>
+
+      <div class="project">
+        <div class="thumb bracket"><span class="mono">↳ visuel</span></div>
+        <div>
+          <div class="p-head">
+            <span class="p-title">Environnement VR — <em>Photophobia</em>, Sanni Est</span>
+            <span class="p-year mono">2022</span>
+          </div>
+          <p class="p-desc">Environnement 3D et scénographie immersive pour la première de l'album de Sanni Est, déployée en réalité virtuelle.</p>
+          <div class="p-meta mono"><span>UNITY</span><span>VR</span><span>MUSIQUE</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── FENFUTURES ── -->
+<section class="fenfutures" id="fenfutures">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>FenFutures</h2>
+      <div class="tag mono">Studio Maroc — en activité</div>
+    </div>
+    <p class="ff-tagline">Studio basé au Maroc explorant la jonction entre savoir-faire artisanal et fabrication numérique — pour habiter le corps autrement.</p>
+
+    <!-- Nassij — projet de recherche propre -->
+    <div class="ff-nassij">
+      <div class="p-head mono">
+        <span class="p-title">Collection Nassij</span>
+        <span class="p-year">2022 — 2023</span>
+      </div>
+      <p class="p-desc">Recherche hybride en trois strates : conception paramétrique, production digitale, expérimentation physique. Le projet qui illustre le mieux le pipeline complet — du fichier Grasshopper à la vidéo de défilé final.</p>
+
+      <div class="pipeline mono">
+        <span class="step">Midjourney</span>
+        <span class="arrow">→</span>
+        <span class="step">surface GH</span>
+        <span class="arrow">→</span>
+        <span class="step">plans broderie</span>
+        <span class="arrow">→</span>
+        <span class="step">Marvelous Designer</span>
+        <span class="arrow">→</span>
+        <span class="step">rig Mixamo</span>
+        <span class="arrow">→</span>
+        <span class="step">Blender</span>
+        <span class="arrow">→</span>
+        <span class="step">défilé digital</span>
+      </div>
+
+      <p class="p-desc">En parallèle, expérimentation physique : pièces d'impression 3D explorant la broderie et le perlage comme matière imprimée — modèles construits sur Grasshopper, pilotage slicer Bambu/Prusa. Chaque prototype est un objet autonome autant qu'un état intermédiaire du processus textile.</p>
+
+      <div class="p-meta mono">
+        <span>GRASSHOPPER</span>
+        <span>MARVELOUS DESIGNER</span>
+        <span>BLENDER</span>
+        <span>IMPRESSION 3D</span>
+        <span>BRODERIE</span>
+        <span>DIRECTION ARTISTIQUE</span>
+      </div>
+    </div>
+
+    <div class="ff-grid">
+      <div class="ff-card">
+        <div class="k mono">01 — PRODUCTION MATIÈRE</div>
+        <p>Vases et objets imprimés en 3D. Boutons sur-mesure pour ateliers de caftans de luxe. Moules conçus pour les artistes — de la définition paramétrique à la pièce finie.</p>
+      </div>
+      <div class="ff-card">
+        <div class="k mono">02 — TEXTILE + FABRICATION NUMÉRIQUE</div>
+        <p>Impression 3D sur tulle, perlage algorithmique, broderie paramétrique. Expérimentations sur matériaux biosourcés au Maroc. Pont entre ateliers locaux et outils numériques avancés.</p>
+      </div>
+      <div class="ff-card">
+        <div class="k mono">03 — RECHERCHE CORPS</div>
+        <p>Body Architecture 2.0 — masques génératifs (workshop Filippo Nassetti). Workshop d'architecture futuriste avec Amir Fakhrghasemi. Défilé digital comme forme de recherche sur la présence du vêtement.</p>
+      </div>
+      <div class="ff-card">
+        <div class="k mono">04 — ARTISANAT + NUMÉRIQUE</div>
+        <p>Collaboration avec artisans marocains sur des motifs conçus algorithmiquement et brodés à la main. Dialogue entre la définition Grasshopper, l'outil et la transmission du geste.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DISPO BAND ── -->
+<div class="dispo-band">
+  <div class="wrap">
+    <div class="dispo-inner mono">
+      <div class="dispo-dot"></div>
+      <p class="dispo-text">
+        <strong>Disponible</strong> — missions freelance, intermittence du spectacle, portage salarial.
+        Marseille · Paris · remote.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer id="contact">
+  <div class="wrap">
+    <h2>Travaillons ensemble.</h2>
+    <p class="footer-sub">Missions ponctuelles ou collaborations suivies — en atelier ou en remote.</p>
+    <div class="contact-row mono">
+      <div>
+        <strong>Email</strong>
+        <a href="mailto:ghali@ghalibensouda.com">ghali@ghalibensouda.com</a>
+      </div>
+      <div>
+        <strong>Studios</strong>
+        Synaptic Garden (France)<br>FenFutures (Maroc)
+      </div>
+      <div>
+        <strong>Localisation</strong>
+        Marseille / Casablanca
+      </div>
+      <div>
+        <strong>Formation</strong>
+        ESA Paris
+      </div>
+      <div>
+        <strong>Formation continue</strong>
+        TouchDesigner &amp; MadMapper — 2026
+      </div>
+    </div>
+    <p class="footer-line mono">
+      Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.
+      Book en cours — visuels à intégrer.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

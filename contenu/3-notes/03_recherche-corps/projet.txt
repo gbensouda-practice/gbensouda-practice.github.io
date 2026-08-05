@@ -1,0 +1,18 @@
+titre : Recherche corps
+
+---
+
+Body Architecture 2.0 — [masques génératifs](masques) développés pendant le workshop de
+Filippo Nassetti. Workshop d'[architecture futuriste](morphine) avec Amir Fakhrghasemi.
+Défilé digital comme forme de recherche sur la présence du vêtement.
+
+---
+
+masques_01_thalassic-face.jpg : Thalassic Mask — de face
+masques_02_thalassic-profil.jpg : Thalassic Mask — de profil
+masques_03_erosion-face.png : Masque érosion — de face
+masques_04_erosion-profil.png : Masque érosion — de profil
+masques_05_spherepacking-face.png : Masque sphere packing — de face
+masques_06_spherepacking-profil.png : Masque sphere packing — de profil
+masques_07_spherepacking-corps.png : Sphere packing sur le corps entier
+morphine_01_rendu-blender.png : Workshop Morphine — rendu Blender

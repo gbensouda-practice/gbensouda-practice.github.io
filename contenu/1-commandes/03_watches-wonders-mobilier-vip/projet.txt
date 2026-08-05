@@ -1,0 +1,23 @@
+titre    : Mobilier lumineux espace VIP — Watches & Wonders / Pierre Pauze
+annee    : 2020
+rubrique : Luxe & production
+tags     : Bois CNC, LED, Stratifié, Miroir sans tain
+
+---
+
+Design, modélisation et édition de plans de fabrication en CNC. Structure interne réalisée
+à la découpe CNC. Matériaux : bois, PLA, LED, stratifié résine, miroir sans tain.
+— Via Atelier 20point12.
+
+---
+
+01_vip-vue-eclatee.jpg : Mobilier VIP — vue éclatée 3D
+02_bar-rendu-3d.jpg : Bar — rendu 3D
+03_bar-plan-3d.jpg : Bar — plan de fabrication
+04_vip-atelier.jpg : Espace VIP — atelier
+05_vip-atelier-detail.jpg : Espace VIP — détail atelier
+06_vip-atelier-montage.jpg : Espace VIP — montage
+07_bar-atelier.jpg : Bar — atelier
+08_bar-atelier-detail.jpg : Bar — détail atelier
+09_bar-atelier-structure.jpg : Bar — structure
+10_bar-atelier-finition.jpg : Bar — finition

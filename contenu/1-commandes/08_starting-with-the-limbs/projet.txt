@@ -1,0 +1,14 @@
+titre    : Dispositifs scéniques — *Starting with the Limbs*, cie L'Autre Maison
+annee    : Danse
+rubrique : Scénographie & spectacle vivant
+tags     : Danse, Fabrication, Biomimétisme, Grasshopper
+
+---
+
+Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer.
+Formes organiques et biomimétiques développées par modélisation paramétrique, conçues pour
+interagir avec le corps dansant et redéfinir la présence de l'objet sur scène.
+
+---
+
+01_dispositif.jpg : Dispositif scénique en situation

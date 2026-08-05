@@ -1,0 +1,53 @@
+# ═══════════════════════════════════════════════════════════════════
+#  MODÈLE — UNE COMMANDE
+#
+#  Pour créer un projet :
+#   1. copie-colle le dossier _MODELE-a-copier dans 1-commandes
+#      (clic droit → Copier, puis clic droit → Coller)
+#   2. renomme la copie en  10_mon-projet
+#      (le nombre du début donne l'ordre d'affichage sur le site)
+#   3. dépose tes images dedans, nommées 01_..., 02_...
+#      (la 01 sert de vignette de couverture)
+#   4. ouvre ce projet.txt et remplis les 3 zones séparées par ---
+#   5. double-clique sur METTRE-A-JOUR-LE-SITE.bat
+#
+#  Les lignes qui commencent par # sont des notes : elles ne
+#  s'affichent jamais sur le site. Tu peux les garder ou les effacer.
+# ═══════════════════════════════════════════════════════════════════
+
+# ─── ZONE 1 : LA FICHE ─────────────────────────────────────────────
+# titre    = ce qui s'affiche en gras. *Un mot entre étoiles* = italique.
+# annee    = à droite du titre. Texte libre : 2019, 2022 — 2023, Théâtre…
+# rubrique = le sous-titre gris qui regroupe les projets.
+#            Réutilise une rubrique existante pour ranger le projet
+#            dedans, ou écris-en une nouvelle : elle sera créée.
+#            Existantes : Luxe & production
+#                         Scénographie & spectacle vivant
+# tags     = les petites étiquettes, séparées par des virgules.
+#            Elles passent automatiquement en MAJUSCULES.
+
+titre    : Nom du projet — Client
+annee    : 2025
+rubrique : Luxe & production
+tags     : Rhino, Grasshopper, CNC, Impression 3D
+
+---
+
+Le texte du projet, écrit normalement. Une ligne vide crée un nouveau
+paragraphe.
+
+Pour mettre un mot ou un titre d'œuvre en italique, entoure-le
+d'étoiles : *comme ceci*.
+
+---
+
+# ─── ZONE 3 : LES LÉGENDES (facultatif) ────────────────────────────
+# Une ligne par image :   nom-du-fichier.jpg : la légende
+# Ces textes ne sont pas visibles à l'écran : ils décrivent l'image
+# pour Google et pour les personnes malvoyantes.
+# Si tu ne mets rien, la légende est déduite du nom du fichier
+# (02_montage-atelier.jpg donne « Montage atelier »). C'est souvent
+# suffisant : ne remplis que ce que tu veux soigner.
+
+01_photo-finale.jpg : Vue finale de l'installation
+02_atelier.jpg      : Montage du décor en atelier

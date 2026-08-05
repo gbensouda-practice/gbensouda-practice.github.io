@@ -1,0 +1,50 @@
+# ═══════════════════════════════════════════════════════════════════
+#  MODÈLE — UNE CARTE TEXTE (les 4 cases sombres en bas de Recherche)
+#
+#  Particularité de cette catégorie : le texte est court, mais
+#  CERTAINS MOTS OUVRENT UNE GALERIE PHOTO en plein écran.
+#  C'est ici qu'on peut rassembler plusieurs mini-projets dans une
+#  même carte, chacun derrière son mot cliquable.
+#
+#  Pour créer une carte :
+#   1. copie-colle le dossier _MODELE-a-copier dans 3-notes
+#      (clic droit → Copier, puis clic droit → Coller)
+#   2. renomme la copie en  05_ma-carte
+#      (le nombre du début donne l'ordre ; la numérotation
+#       01 —, 02 — affichée sur le site est automatique)
+#   3. dépose tes images dedans en les nommant  groupe_01_legende.jpg
+#      Le mot AVANT le premier _ est le nom du groupe : c'est lui
+#      qui relie l'image au mot cliquable du texte.
+#         vases_01_torsade.jpg    ┐
+#         vases_02_blanc.jpg      ┘ groupe « vases »
+#         boutons_01_nacre.jpg      groupe « boutons »
+#   4. ouvre ce projet.txt et remplis les 3 zones séparées par ---
+#   5. double-clique sur METTRE-A-JOUR-LE-SITE.bat
+# ═══════════════════════════════════════════════════════════════════
+
+# ─── ZONE 1 : LA FICHE ─────────────────────────────────────────────
+# titre = l'intitulé en petites majuscules bleues, en haut de la carte.
+#         Cliquer dessus ouvre TOUTES les images du dossier à la suite.
+
+titre : Production matière
+
+---
+
+Le texte de la carte, court : trois ou quatre phrases.
+
+Pour rendre un mot cliquable, écris-le entre crochets, suivi du nom
+du groupe entre parenthèses, sans espace entre les deux :
+Vases et objets [imprimés en 3D](vases). Boutons sur-mesure pour
+ateliers de caftans [taillés à la demande](boutons).
+
+Le mot [imprimés en 3D] ouvrira alors les images vases_01..., vases_02...
+Si le groupe n'existe pas, le mot s'affiche sans lien et le .bat te
+prévient — rien ne casse.
+
+---
+
+# ─── ZONE 3 : LES LÉGENDES (facultatif) ────────────────────────────
+# Une ligne par image :   nom-du-fichier.jpg : la légende
+
+vases_01_torsade.jpg : Vase torsadé imprimé en PLA
+boutons_01_nacre.jpg : Bouton sur-mesure, finition nacre

@@ -7,12 +7,12 @@
 <meta property="og:url" content="https://ghalibensouda.com/">
 <meta property="og:title" content="Ghali Bensouda — Designer de dispositifs">
 <meta property="og:description" content="Designer de dispositifs et fabricant numérique — de la définition paramétrique à l'objet fabriqué. Marseille / Paris / remote.">
-<meta property="og:image" content="https://ghalibensouda.com/images/hermes_hw2019_vitrine_finale_01.jpg">
+<meta property="og:image" content="https://ghalibensouda.com/images/web/1-commandes/01_hermes-holiday-windows/01_vitrine-finale.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:locale" content="fr_FR">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Ghali Bensouda — Designer de dispositifs">
-<meta name="twitter:image" content="https://ghalibensouda.com/images/hermes_hw2019_vitrine_finale_01.jpg">
+<meta name="twitter:image" content="https://ghalibensouda.com/images/web/1-commandes/01_hermes-holiday-windows/01_vitrine-finale.jpg">
 <meta name="google-site-verification" content="HgqpZFQvXOk7zdPx5-Gdnly5u2AavWid60S6rM3E75E">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ghali Bensouda — Designer de dispositifs</title>
@@ -312,6 +312,28 @@
 
 
 
+
+  /* ── LIENS DE GALERIE (cartes texte) ── */
+  .lien-galerie {
+    font: inherit; color: #7FA3C4; background: none; border: none;
+    padding: 0; cursor: pointer; text-align: left;
+    border-bottom: 1px dotted rgba(127,163,196,.6);
+    transition: color .15s, border-color .15s;
+  }
+  .lien-galerie:hover { color: #A8C4DC; border-bottom-color: #A8C4DC; }
+  .ff-card .k .lien-galerie {
+    letter-spacing: .08em; text-transform: uppercase;
+    border-bottom-color: transparent;
+  }
+  .ff-card .k .lien-galerie:hover { border-bottom-color: rgba(127,163,196,.6); }
+  .galerie-source { display: none; }
+
+  /* image unique dans un bloc recherche */
+  .ff-nassij-slider > img {
+    width: 100%; aspect-ratio: 16/8; object-fit: cover;
+    display: block; cursor: zoom-in;
+  }
+
   /* ── LIAISON ── */
   .liaison { padding: 36px 0; border-bottom: 1px solid var(--line); }
   .liaison p { font-size: 14px; color: var(--grey); font-style: italic; max-width: 60ch; }
@@ -431,25 +453,30 @@
       <div class="tag mono">2016 — 2025</div>
     </div>
 
-    <!-- LUXE -->
+    <!-- AUTO:COMMANDES:DEBUT -->
     <div class="category" data-reveal>
       <div class="cat-head">
         <span class="cat-title">Luxe &amp; production</span>
       </div>
-
       <div class="project" data-reveal>
         <div class="thumb bracket slider">
-  <div class="slider-track">
-    <img src="images/hermes_hw2019_vitrine_finale_01.jpg" loading="lazy" alt="Holiday Windows Hermès 2019 — vitrine finale" onerror="this.style.opacity='0'">
-    <img src="images/hermes_hw2019_atelier_photo_01.jpg" loading="lazy" alt="Holiday Windows Hermès 2019 — atelier" onerror="this.style.opacity='0'">
-    <img src="images/hermes_hw2019_modele3d_coquillage_01.jpg" loading="lazy" alt="Holiday Windows Hermès 2019 — modèle 3D coquillage" onerror="this.style.opacity='0'">
-  </div>
-  <div class="slider-dots">
-    <button class="slider-dot active"></button>
-    <button class="slider-dot"></button>
-    <button class="slider-dot"></button>
-  </div>
-</div>
+          <div class="slider-track">
+            <img src="images/web/1-commandes/01_hermes-holiday-windows/01_vitrine-finale.jpg" loading="lazy" alt="Décor vitrine (1:10) — Hermès — Vitrine finale montée" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/01_hermes-holiday-windows/02_atelier.jpg" loading="lazy" alt="Décor vitrine (1:10) — Hermès — Décor en cours de montage à l'atelier" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/01_hermes-holiday-windows/03_modele3d-coquillage.jpg" loading="lazy" alt="Décor vitrine (1:10) — Hermès — Modèle 3D du coquillage" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/01_hermes-holiday-windows/04_modele3d-chateau.jpg" loading="lazy" alt="Décor vitrine (1:10) — Hermès — Modèle 3D du château" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/01_hermes-holiday-windows/05_modele3d-eventail.jpg" loading="lazy" alt="Décor vitrine (1:10) — Hermès — Modèle 3D de l'éventail" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/01_hermes-holiday-windows/06_atelier-pieces.jpg" loading="lazy" alt="Décor vitrine (1:10) — Hermès — Pièces usinées à l'atelier" onerror="this.style.opacity='0'">
+          </div>
+          <div class="slider-dots">
+            <button class="slider-dot active" aria-label="Image 1"></button>
+            <button class="slider-dot" aria-label="Image 2"></button>
+            <button class="slider-dot" aria-label="Image 3"></button>
+            <button class="slider-dot" aria-label="Image 4"></button>
+            <button class="slider-dot" aria-label="Image 5"></button>
+            <button class="slider-dot" aria-label="Image 6"></button>
+          </div>
+        </div>
         <div>
           <div class="p-head">
             <span class="p-title">Décor vitrine (1:10) — Hermès</span>
@@ -461,17 +488,21 @@
       </div>
       <div class="project" data-reveal>
         <div class="thumb bracket slider">
-  <div class="slider-track">
-    <img src="images/hermes_wwq2021_vitrine_photo_01.jpg" loading="lazy" alt="Wild Wild Quest Hermès 2021 — vitrine montée" onerror="this.style.opacity='0'">
-    <img src="images/hermes_wwq2021_atelier_photo_01.jpg" loading="lazy" alt="Wild Wild Quest Hermès 2021 — atelier" onerror="this.style.opacity='0'">
-    <img src="images/hermes_wwq2021_modele3d_creature_01.jpg" loading="lazy" alt="Wild Wild Quest Hermès 2021 — créature Grasshopper" onerror="this.style.opacity='0'">
-  </div>
-  <div class="slider-dots">
-    <button class="slider-dot active"></button>
-    <button class="slider-dot"></button>
-    <button class="slider-dot"></button>
-  </div>
-</div>
+          <div class="slider-track">
+            <img src="images/web/1-commandes/02_hermes-wild-wild-quest/01_vitrine-finale.jpg" loading="lazy" alt="Wild Wild Quest — Hermès — Vitrine montée" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/02_hermes-wild-wild-quest/02_atelier.jpg" loading="lazy" alt="Wild Wild Quest — Hermès — Décor à l'atelier" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/02_hermes-wild-wild-quest/03_modele3d-creature.jpg" loading="lazy" alt="Wild Wild Quest — Hermès — Créature — définition Grasshopper" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/02_hermes-wild-wild-quest/04_modele3d-champignons.jpg" loading="lazy" alt="Wild Wild Quest — Hermès — Champignons — modèle 3D" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/02_hermes-wild-wild-quest/05_modele3d-accessoires.jpg" loading="lazy" alt="Wild Wild Quest — Hermès — Accessoires — modèle 3D" onerror="this.style.opacity='0'">
+          </div>
+          <div class="slider-dots">
+            <button class="slider-dot active" aria-label="Image 1"></button>
+            <button class="slider-dot" aria-label="Image 2"></button>
+            <button class="slider-dot" aria-label="Image 3"></button>
+            <button class="slider-dot" aria-label="Image 4"></button>
+            <button class="slider-dot" aria-label="Image 5"></button>
+          </div>
+        </div>
         <div>
           <div class="p-head">
             <span class="p-title">Wild Wild Quest — Hermès</span>
@@ -483,19 +514,31 @@
       </div>
       <div class="project" data-reveal>
         <div class="thumb bracket slider">
-  <div class="slider-track">
-    <img src="images/hermes_ww_pauze_vip_eclate3d_01.jpg" loading="lazy" alt="Watches & Wonders — mobilier VIP vue éclatée" onerror="this.style.opacity='0'">
-    <img src="images/hermes_ww_pauze_bar_rendu3d_01.jpg" loading="lazy" alt="Watches & Wonders — bar rendu 3D" onerror="this.style.opacity='0'">
-    <img src="images/hermes_ww_pauze_vip_atelier_01.jpg" loading="lazy" alt="Watches & Wonders — atelier VIP" onerror="this.style.opacity='0'">
-    <img src="images/hermes_ww_pauze_bar_atelier_01.jpg" loading="lazy" alt="Watches & Wonders — atelier bar" onerror="this.style.opacity='0'">
-  </div>
-  <div class="slider-dots">
-    <button class="slider-dot active"></button>
-    <button class="slider-dot"></button>
-    <button class="slider-dot"></button>
-    <button class="slider-dot"></button>
-  </div>
-</div>
+          <div class="slider-track">
+            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/01_vip-vue-eclatee.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Mobilier VIP — vue éclatée 3D" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/02_bar-rendu-3d.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — rendu 3D" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/03_bar-plan-3d.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — plan de fabrication" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/04_vip-atelier.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Espace VIP — atelier" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/05_vip-atelier-detail.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Espace VIP — détail atelier" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/06_vip-atelier-montage.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Espace VIP — montage" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/07_bar-atelier.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — atelier" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/08_bar-atelier-detail.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — détail atelier" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/09_bar-atelier-structure.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — structure" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/10_bar-atelier-finition.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — finition" onerror="this.style.opacity='0'">
+          </div>
+          <div class="slider-dots">
+            <button class="slider-dot active" aria-label="Image 1"></button>
+            <button class="slider-dot" aria-label="Image 2"></button>
+            <button class="slider-dot" aria-label="Image 3"></button>
+            <button class="slider-dot" aria-label="Image 4"></button>
+            <button class="slider-dot" aria-label="Image 5"></button>
+            <button class="slider-dot" aria-label="Image 6"></button>
+            <button class="slider-dot" aria-label="Image 7"></button>
+            <button class="slider-dot" aria-label="Image 8"></button>
+            <button class="slider-dot" aria-label="Image 9"></button>
+            <button class="slider-dot" aria-label="Image 10"></button>
+          </div>
+        </div>
         <div>
           <div class="p-head">
             <span class="p-title">Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze</span>
@@ -507,17 +550,21 @@
       </div>
       <div class="project" data-reveal>
         <div class="thumb bracket slider">
-  <div class="slider-track">
-    <img src="images/saketsethi_sofa_rendu_01.jpg" loading="lazy" alt="Saket Sethi — sofa rendu paramétrique" onerror="this.style.opacity='0'">
-    <img src="images/saketsethi_twirlsofa_rendu_01.jpg" loading="lazy" alt="Saket Sethi — Twirl Sofa" onerror="this.style.opacity='0'">
-    <img src="images/saketsethi_declinaisons_grasshopper_01.jpg" loading="lazy" alt="Saket Sethi — déclinaisons Grasshopper" onerror="this.style.opacity='0'">
-  </div>
-  <div class="slider-dots">
-    <button class="slider-dot active"></button>
-    <button class="slider-dot"></button>
-    <button class="slider-dot"></button>
-  </div>
-</div>
+          <div class="slider-track">
+            <img src="images/web/1-commandes/04_saket-sethi-mobilier-parametrique/01_sofa-rendu.jpg" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Sofa — rendu paramétrique" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/04_saket-sethi-mobilier-parametrique/02_twirl-sofa.jpg" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Twirl Sofa" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/04_saket-sethi-mobilier-parametrique/03_declinaisons-grasshopper.jpg" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Déclinaisons issues de la définition Grasshopper" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/04_saket-sethi-mobilier-parametrique/04_structure-mesh.png" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Structure du maillage" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/04_saket-sethi-mobilier-parametrique/05_mise-en-scene.jpg" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Mobilier en situation" onerror="this.style.opacity='0'">
+          </div>
+          <div class="slider-dots">
+            <button class="slider-dot active" aria-label="Image 1"></button>
+            <button class="slider-dot" aria-label="Image 2"></button>
+            <button class="slider-dot" aria-label="Image 3"></button>
+            <button class="slider-dot" aria-label="Image 4"></button>
+            <button class="slider-dot" aria-label="Image 5"></button>
+          </div>
+        </div>
         <div>
           <div class="p-head">
             <span class="p-title">Collection mobilier paramétrique — Saket Sethi Design</span>
@@ -529,17 +576,21 @@
       </div>
       <div class="project" data-reveal>
         <div class="thumb bracket slider">
-  <div class="slider-track">
-    <img src="images/mass_pauze_expo_pompidou_01.jpg" loading="lazy" alt="Mass — exposition Centre Pompidou-Metz" onerror="this.style.opacity='0'">
-    <img src="images/mass_pauze_tournage_decor_01.png" loading="lazy" alt="Mass — tournage décor" onerror="this.style.opacity='0'">
-    <img src="images/mass_pauze_sculpture_resine_01.jpg" loading="lazy" alt="Mass — sculpture résine" onerror="this.style.opacity='0'">
-  </div>
-  <div class="slider-dots">
-    <button class="slider-dot active"></button>
-    <button class="slider-dot"></button>
-    <button class="slider-dot"></button>
-  </div>
-</div>
+          <div class="slider-track">
+            <img src="images/web/1-commandes/05_mass-set-design/01_expo-pompidou-metz.jpg" loading="lazy" alt="Set design — *Mass*, film de Pierre Pauze — Exposition au Centre Pompidou-Metz" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/05_mass-set-design/02_tournage-decor.jpg" loading="lazy" alt="Set design — *Mass*, film de Pierre Pauze — Décor pendant le tournage" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/05_mass-set-design/03_sculpture-resine.jpg" loading="lazy" alt="Set design — *Mass*, film de Pierre Pauze — Sculpture en résine" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/05_mass-set-design/04_atelier-cnc.jpg" loading="lazy" alt="Set design — *Mass*, film de Pierre Pauze — Usinage CNC à l'atelier" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/05_mass-set-design/05_atelier-cnc-detail.jpg" loading="lazy" alt="Set design — *Mass*, film de Pierre Pauze — Usinage CNC — détail" onerror="this.style.opacity='0'">
+          </div>
+          <div class="slider-dots">
+            <button class="slider-dot active" aria-label="Image 1"></button>
+            <button class="slider-dot" aria-label="Image 2"></button>
+            <button class="slider-dot" aria-label="Image 3"></button>
+            <button class="slider-dot" aria-label="Image 4"></button>
+            <button class="slider-dot" aria-label="Image 5"></button>
+          </div>
+        </div>
         <div>
           <div class="p-head">
             <span class="p-title">Set design — <em>Mass</em>, film de Pierre Pauze</span>
@@ -550,26 +601,23 @@
         </div>
       </div>
     </div>
-
-    <!-- SPECTACLE -->
     <div class="category" data-reveal>
       <div class="cat-head">
         <span class="cat-title">Scénographie &amp; spectacle vivant</span>
       </div>
-
       <div class="project" data-reveal>
         <div class="thumb bracket slider">
-  <div class="slider-track">
-    <img src="images/hermes_ww_ratte_scenographie_rendu_01.jpg" loading="lazy" alt="Sabrina Ratté × Watches & Wonders — rendu scénographie" onerror="this.style.opacity='0'">
-    <img src="images/hermes_ww_ratte_sculpture_impression3d_01.jpg" loading="lazy" alt="Sabrina Ratté × Watches & Wonders — sculpture impression 3D" onerror="this.style.opacity='0'">
-    <img src="images/hermes_ww_ratte_sculpture_himalaya_plan_01.png" loading="lazy" alt="Sabrina Ratté × Watches & Wonders — plan sculpture Himalaya" onerror="this.style.opacity='0'">
-  </div>
-  <div class="slider-dots">
-    <button class="slider-dot active"></button>
-    <button class="slider-dot"></button>
-    <button class="slider-dot"></button>
-  </div>
-</div>
+          <div class="slider-track">
+            <img src="images/web/1-commandes/06_sabrina-ratte-sculpture-cinetique/01_scenographie-rendu.jpg" loading="lazy" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Rendu de la scénographie" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/06_sabrina-ratte-sculpture-cinetique/02_sculpture-impression-3d.jpg" loading="lazy" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Sculpture imprimée en 3D" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/06_sabrina-ratte-sculpture-cinetique/03_sculpture-himalaya-plan.png" loading="lazy" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Plan de la sculpture Himalaya" onerror="this.style.opacity='0'">
+          </div>
+          <div class="slider-dots">
+            <button class="slider-dot active" aria-label="Image 1"></button>
+            <button class="slider-dot" aria-label="Image 2"></button>
+            <button class="slider-dot" aria-label="Image 3"></button>
+          </div>
+        </div>
         <div>
           <div class="p-head">
             <span class="p-title">Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders</span>
@@ -580,7 +628,7 @@
         </div>
       </div>
       <div class="project" data-reveal>
-        <div class="thumb bracket"><img src="images/poidslourd_01.jpg" loading="lazy" alt="L'aire poids lourd — scénographie" onerror="this.style.opacity='0'"></div>
+        <div class="thumb bracket"><span class="mono">SANS VISUEL</span></div>
         <div>
           <div class="p-head">
             <span class="p-title">Scénographie — <em>L'aire poids lourd</em>, mise en scène Carole Errante</span>
@@ -591,7 +639,7 @@
         </div>
       </div>
       <div class="project" data-reveal>
-        <div class="thumb bracket"><img src="images/startinglimbs_01.jpg" loading="lazy" alt="Starting with the Limbs — dispositifs scéniques" onerror="this.style.opacity='0'"></div>
+        <div class="thumb bracket"><img src="images/web/1-commandes/08_starting-with-the-limbs/01_dispositif.jpg" loading="lazy" alt="Dispositifs scéniques — *Starting with the Limbs*, cie L'Autre Maison — Dispositif scénique en situation" onerror="this.style.opacity='0'"></div>
         <div>
           <div class="p-head">
             <span class="p-title">Dispositifs scéniques — <em>Starting with the Limbs</em>, cie L'Autre Maison</span>
@@ -603,27 +651,32 @@
       </div>
       <div class="project" data-reveal>
         <div class="thumb bracket slider">
-  <div class="slider-track">
-    <img src="images/sanniest_vr_scene_mangrove_01.png" loading="lazy" alt="Photophobia VR — scène mangrove" onerror="this.style.opacity='0'">
-    <img src="images/sanniest_vr_photo_premiere_01.jpg" loading="lazy" alt="Photophobia VR — première Kampnagel" onerror="this.style.opacity='0'">
-    <img src="images/sanniest_vr_modele3d_poisson_01.png" loading="lazy" alt="Photophobia VR — modèle 3D poisson" onerror="this.style.opacity='0'">
-  </div>
-  <div class="slider-dots">
-    <button class="slider-dot active"></button>
-    <button class="slider-dot"></button>
-    <button class="slider-dot"></button>
-  </div>
-</div>
+          <div class="slider-track">
+            <img src="images/web/1-commandes/09_photophobia-vr/01_scene-mangrove.jpg" loading="lazy" alt="Environnement VR — *Photophobia*, Sanni Est — Scène de mangrove" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/09_photophobia-vr/02_premiere-kampnagel.jpg" loading="lazy" alt="Environnement VR — *Photophobia*, Sanni Est — Première à Kampnagel, Hambourg" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/09_photophobia-vr/03_premiere-public.jpg" loading="lazy" alt="Environnement VR — *Photophobia*, Sanni Est — Public de la première" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/09_photophobia-vr/04_modele3d-poisson.jpg" loading="lazy" alt="Environnement VR — *Photophobia*, Sanni Est — Modèle 3D du poisson" onerror="this.style.opacity='0'">
+            <img src="images/web/1-commandes/09_photophobia-vr/05_texture-kaleidoscope.jpg" loading="lazy" alt="Environnement VR — *Photophobia*, Sanni Est — Texture kaléidoscopique" onerror="this.style.opacity='0'">
+          </div>
+          <div class="slider-dots">
+            <button class="slider-dot active" aria-label="Image 1"></button>
+            <button class="slider-dot" aria-label="Image 2"></button>
+            <button class="slider-dot" aria-label="Image 3"></button>
+            <button class="slider-dot" aria-label="Image 4"></button>
+            <button class="slider-dot" aria-label="Image 5"></button>
+          </div>
+        </div>
         <div>
           <div class="p-head">
             <span class="p-title">Environnement VR — <em>Photophobia</em>, Sanni Est</span>
             <span class="p-year mono">2022</span>
           </div>
-          <p class="p-desc">Expérience immersive en réalité virtuelle pour la première de l'album Photophobia à Kampnagel, Hambourg. Un vidéoclip permettant d'évoluer dans un monde de mangrove imaginé pour trois pistes (Pandemonium, In Short, Self-Abolition) — du marécage futuriste sombre à un espace kaléidoscopique. Avec Sanni Est (direction artistique, concept & musique) et alpharats (programming & VFX).</p>
+          <p class="p-desc">Expérience immersive en réalité virtuelle pour la première de l'album Photophobia à Kampnagel, Hambourg. Un vidéoclip permettant d'évoluer dans un monde de mangrove imaginé pour trois pistes (Pandemonium, In Short, Self-Abolition) — du marécage futuriste sombre à un espace kaléidoscopique. Avec Sanni Est (direction artistique, concept &amp; musique) et alpharats (programming &amp; VFX).</p>
           <div class="p-meta mono"><span>UNITY</span><span>VR</span><span>MUSIQUE</span></div>
         </div>
       </div>
     </div>
+    <!-- AUTO:COMMANDES:FIN -->
 
   </div>
 </section>
@@ -637,20 +690,22 @@
     </div>
     <p class="ff-tagline">Après plusieurs années passées à développer des dispositifs pour d'autres, FenFutures est devenu l'espace où cette recherche peut évoluer librement. Chaque projet prolonge une même question : comment de nouveaux outils peuvent-ils enrichir les gestes existants plutôt que les remplacer ?</p>
 
-    <!-- Nassij — projet de recherche propre -->
-    <div class="ff-nassij">
-      <div class="slider ff-nassij-slider">
+    <!-- AUTO:RECHERCHE:DEBUT -->
+    <div class="ff-nassij" data-reveal>
+      <div class="ff-nassij-slider slider">
         <div class="slider-track">
-          <img src="images/nassij_caftan_rendu_dos_01.jpg" loading="lazy" alt="Collection Nassij — caftan rendu dos, Blender" onerror="this.style.opacity='0'">
-          <img src="images/nassij_broderie_detail_01.jpg" loading="lazy" alt="Collection Nassij — broderie détail paramétrique" onerror="this.style.opacity='0'">
-          <img src="images/nassij_caftan_detail_manche_01.jpg" loading="lazy" alt="Collection Nassij — détail manche brodée" onerror="this.style.opacity='0'">
-          <img src="images/nassij_motif_grasshopper_01.jpg" loading="lazy" alt="Collection Nassij — motif issu de Grasshopper" onerror="this.style.opacity='0'">
+          <img src="images/web/2-recherche/01_collection-nassij/01_caftan-rendu-dos.jpg" loading="lazy" alt="Collection Nassij — Caftan — rendu de dos, Blender" onerror="this.style.opacity='0'">
+          <img src="images/web/2-recherche/01_collection-nassij/02_broderie-detail.jpg" loading="lazy" alt="Collection Nassij — Broderie paramétrique — détail" onerror="this.style.opacity='0'">
+          <img src="images/web/2-recherche/01_collection-nassij/03_caftan-detail-manche.jpg" loading="lazy" alt="Collection Nassij — Détail de la manche brodée" onerror="this.style.opacity='0'">
+          <img src="images/web/2-recherche/01_collection-nassij/04_caftan-detail-bas.jpg" loading="lazy" alt="Collection Nassij — Détail du bas du caftan" onerror="this.style.opacity='0'">
+          <img src="images/web/2-recherche/01_collection-nassij/05_motif-grasshopper.jpg" loading="lazy" alt="Collection Nassij — Motif issu de la définition Grasshopper" onerror="this.style.opacity='0'">
         </div>
         <div class="slider-dots">
-          <button class="slider-dot active"></button>
-          <button class="slider-dot"></button>
-          <button class="slider-dot"></button>
-          <button class="slider-dot"></button>
+          <button class="slider-dot active" aria-label="Image 1"></button>
+          <button class="slider-dot" aria-label="Image 2"></button>
+          <button class="slider-dot" aria-label="Image 3"></button>
+          <button class="slider-dot" aria-label="Image 4"></button>
+          <button class="slider-dot" aria-label="Image 5"></button>
         </div>
       </div>
       <div class="p-head mono">
@@ -658,7 +713,6 @@
         <span class="p-year">2022 — 2023</span>
       </div>
       <p class="p-desc">Recherche hybride en trois strates : conception paramétrique, production digitale, expérimentation physique. Le projet qui illustre le mieux le pipeline complet — du fichier Grasshopper à la vidéo de défilé final.</p>
-
       <div class="pipeline mono">
         <span class="step">Midjourney</span>
         <span class="arrow">→</span>
@@ -674,37 +728,45 @@
         <span class="arrow">→</span>
         <span class="step">défilé digital</span>
       </div>
-
       <p class="p-desc">En parallèle, expérimentation physique : pièces d'impression 3D explorant la broderie et le perlage comme matière imprimée — modèles construits sur Grasshopper, pilotage slicer Bambu/Prusa. Chaque prototype est un objet autonome autant qu'un état intermédiaire du processus textile.</p>
-
-      <div class="p-meta mono">
-        <span>GRASSHOPPER</span>
-        <span>MARVELOUS DESIGNER</span>
-        <span>BLENDER</span>
-        <span>IMPRESSION 3D</span>
-        <span>BRODERIE</span>
-        <span>DIRECTION ARTISTIQUE</span>
-      </div>
+      <div class="p-meta mono"><span>GRASSHOPPER</span><span>MARVELOUS DESIGNER</span><span>BLENDER</span><span>IMPRESSION 3D</span><span>BRODERIE</span><span>DIRECTION ARTISTIQUE</span></div>
     </div>
+    <!-- AUTO:RECHERCHE:FIN -->
 
+    <!-- AUTO:NOTES:DEBUT -->
     <div class="ff-grid">
       <div class="ff-card">
-        <div class="k mono">01 — PRODUCTION MATIÈRE</div>
+        <div class="k mono">01 — Production matière</div>
         <p>Vases et objets imprimés en 3D. Boutons sur-mesure pour ateliers de caftans de luxe. Moules conçus pour les artistes — de la définition paramétrique à la pièce finie.</p>
       </div>
       <div class="ff-card">
-        <div class="k mono">02 — TEXTILE + FABRICATION NUMÉRIQUE</div>
+        <div class="k mono">02 — Textile + fabrication numérique</div>
         <p>Impression 3D sur tulle, perlage algorithmique, broderie paramétrique. Expérimentations sur matériaux biosourcés au Maroc. Pont entre ateliers locaux et outils numériques avancés.</p>
       </div>
       <div class="ff-card">
-        <div class="k mono">03 — RECHERCHE CORPS</div>
-        <p>Body Architecture 2.0 — masques génératifs (workshop Filippo Nassetti). Workshop d'architecture futuriste avec Amir Fakhrghasemi. Défilé digital comme forme de recherche sur la présence du vêtement.</p>
+        <div class="k mono"><button class="lien-galerie k-titre" data-galerie="3-notes-03-recherche-corps">03 — Recherche corps</button></div>
+        <p>Body Architecture 2.0 — <button class="lien-galerie" data-galerie="3-notes-03-recherche-corps-masques">masques génératifs</button> développés pendant le workshop de Filippo Nassetti. Workshop d'<button class="lien-galerie" data-galerie="3-notes-03-recherche-corps-morphine">architecture futuriste</button> avec Amir Fakhrghasemi. Défilé digital comme forme de recherche sur la présence du vêtement.</p>
+        <div class="galerie-source" data-galerie-id="3-notes-03-recherche-corps" hidden>
+          <span data-groupe="3-notes-03-recherche-corps-masques">
+            <i data-src="images/web/3-notes/03_recherche-corps/masques_01_thalassic-face.jpg" data-alt="Recherche corps — Thalassic Mask — de face"></i>
+            <i data-src="images/web/3-notes/03_recherche-corps/masques_02_thalassic-profil.jpg" data-alt="Recherche corps — Thalassic Mask — de profil"></i>
+            <i data-src="images/web/3-notes/03_recherche-corps/masques_03_erosion-face.jpg" data-alt="Recherche corps — Masque érosion — de face"></i>
+            <i data-src="images/web/3-notes/03_recherche-corps/masques_04_erosion-profil.jpg" data-alt="Recherche corps — Masque érosion — de profil"></i>
+            <i data-src="images/web/3-notes/03_recherche-corps/masques_05_spherepacking-face.jpg" data-alt="Recherche corps — Masque sphere packing — de face"></i>
+            <i data-src="images/web/3-notes/03_recherche-corps/masques_06_spherepacking-profil.jpg" data-alt="Recherche corps — Masque sphere packing — de profil"></i>
+            <i data-src="images/web/3-notes/03_recherche-corps/masques_07_spherepacking-corps.jpg" data-alt="Recherche corps — Sphere packing sur le corps entier"></i>
+          </span>
+          <span data-groupe="3-notes-03-recherche-corps-morphine">
+            <i data-src="images/web/3-notes/03_recherche-corps/morphine_01_rendu-blender.jpg" data-alt="Recherche corps — Workshop Morphine — rendu Blender"></i>
+          </span>
+        </div>
       </div>
       <div class="ff-card">
-        <div class="k mono">04 — ARTISANAT + NUMÉRIQUE</div>
+        <div class="k mono">04 — Artisanat + numérique</div>
         <p>Collaboration avec artisans marocains sur des motifs conçus algorithmiquement et brodés à la main. Dialogue entre la définition Grasshopper, l'outil et la transmission du geste.</p>
       </div>
     </div>
+    <!-- AUTO:NOTES:FIN -->
   </div>
 </section>
 
@@ -754,7 +816,8 @@
 
 
 <script>
-// ── SLIDER (autoplay 3s, pause hover/lightbox) ───────────────────────────────
+// ── SLIDER (autoplay, pause au survol et lightbox ouverte) ───────────────────
+var VITESSE_SLIDER = 3000;   // valeur pilotee par contenu/reglages.txt
 var lb_el = document.getElementById('lightbox');
 document.querySelectorAll('.slider').forEach(function(slider) {
   var track = slider.querySelector('.slider-track');
@@ -774,7 +837,7 @@ document.querySelectorAll('.slider').forEach(function(slider) {
     clearInterval(timer);
     timer = setInterval(function() {
       if (!lb_el.classList.contains('open')) go(cur + 1);
-    }, 3000);
+    }, VITESSE_SLIDER);
   }
   dots.forEach(function(d,i){ d.addEventListener('click', function(e){ e.stopPropagation(); go(i); }); });
   slider.addEventListener('mouseenter', function(){ clearInterval(timer); });
@@ -789,51 +852,74 @@ document.querySelectorAll('.slider').forEach(function(slider) {
   var lbImg   = document.getElementById('lb-img');
   var lbClose = document.getElementById('lb-close');
   var lbCount = document.getElementById('lb-counter');
-  var gallery = [], lbIndex = 0, savedY = 0;
+  var galerie = [], lbIndex = 0, savedY = 0;
 
-  function open(img) {
-    var container = img.closest('.thumb, .ff-nassij');
-    gallery = container ? Array.from(container.querySelectorAll('img')) : [img];
-    lbIndex = Math.max(0, gallery.indexOf(img));
-    savedY = window.scrollY;
-    show(lbIndex);
+  // galerie = liste d'objets {src, alt}
+  function ouvrir(liste, depart) {
+    if (!liste.length) return;
+    galerie = liste;
+    lbIndex = Math.max(0, depart || 0);
+    savedY  = window.scrollY;
+    afficher(lbIndex);
     lb.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
 
-  function close() {
+  function fermer() {
     lb.classList.remove('open');
     document.body.style.overflow = '';
     lbImg.src = '';
     window.scrollTo(0, savedY);
   }
 
-  function show(n) {
+  function afficher(n) {
     lbIndex = n;
-    lbImg.src = gallery[lbIndex].src;
-    lbImg.alt = gallery[lbIndex].alt;
-    lbCount.textContent = gallery.length > 1 ? (lbIndex + 1) + ' / ' + gallery.length : '';
+    lbImg.src = galerie[lbIndex].src;
+    lbImg.alt = galerie[lbIndex].alt || '';
+    lbCount.textContent = galerie.length > 1 ? (lbIndex + 1) + ' / ' + galerie.length : '';
   }
 
-  function next() {
-    if (lbIndex < gallery.length - 1) { show(lbIndex + 1); }
-    else { close(); }
+  function suivante() {
+    if (lbIndex < galerie.length - 1) { afficher(lbIndex + 1); }
+    else { fermer(); }
   }
 
+  // images visibles : sliders des commandes et de la recherche
   document.addEventListener('click', function(e) {
     var img = e.target.closest('.thumb img, .ff-nassij-slider img');
-    if (img) { e.stopPropagation(); open(img); }
+    if (!img) return;
+    e.stopPropagation();
+    var bloc = img.closest('.thumb, .ff-nassij');
+    var imgs = bloc ? Array.from(bloc.querySelectorAll('img')) : [img];
+    ouvrir(imgs.map(function(el) { return { src: el.src, alt: el.alt }; }),
+           imgs.indexOf(img));
   });
 
-  lbImg.addEventListener('click', function(e) { e.stopPropagation(); next(); });
-  lbClose.addEventListener('click', close);
-  lb.addEventListener('click', function(e) { if (e.target === lb) close(); });
+  // mots cliquables et titres des cartes texte
+  document.addEventListener('click', function(e) {
+    var lien = e.target.closest('.lien-galerie');
+    if (!lien) return;
+    e.preventDefault();
+    e.stopPropagation();
+    var id = lien.getAttribute('data-galerie');
+    var source = document.querySelector('.galerie-source[data-galerie-id="' + id + '"]')
+              || document.querySelector('[data-groupe="' + id + '"]');
+    if (!source) return;
+    var liste = Array.from(source.querySelectorAll('i')).map(function(el) {
+      return { src: el.getAttribute('data-src'), alt: el.getAttribute('data-alt') };
+    });
+    ouvrir(liste, 0);
+  });
+
+  lbImg.addEventListener('click', function(e) { e.stopPropagation(); suivante(); });
+  lbClose.addEventListener('click', fermer);
+  lb.addEventListener('click', function(e) { if (e.target === lb) fermer(); });
 
   document.addEventListener('keydown', function(e) {
     if (!lb.classList.contains('open')) return;
-    if (e.key === 'Escape') close();
-    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
-    if (e.key === 'ArrowLeft' && lbIndex > 0) show(lbIndex - 1);
+    if (e.key === 'Escape') fermer();
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); suivante(); }
+    if (e.key === 'ArrowLeft' && lbIndex > 0) afficher(lbIndex - 1);
   });
 })();
 

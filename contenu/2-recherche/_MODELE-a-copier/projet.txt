@@ -1,0 +1,48 @@
+# ═══════════════════════════════════════════════════════════════════
+#  MODÈLE — UN PROJET DE RECHERCHE (grands blocs sombres, FenFutures)
+#
+#  Pour créer un projet :
+#   1. copie-colle le dossier _MODELE-a-copier dans 2-recherche
+#      (clic droit → Copier, puis clic droit → Coller)
+#   2. renomme la copie en  02_mon-projet
+#      (le nombre du début donne l'ordre d'affichage sur le site)
+#   3. dépose tes images dedans, nommées 01_..., 02_...
+#      (elles défilent en grand format, format paysage conseillé)
+#   4. ouvre ce projet.txt et remplis les 3 zones séparées par ---
+#   5. double-clique sur METTRE-A-JOUR-LE-SITE.bat
+#
+#  Les lignes qui commencent par # sont des notes : elles ne
+#  s'affichent jamais sur le site.
+# ═══════════════════════════════════════════════════════════════════
+
+# ─── ZONE 1 : LA FICHE ─────────────────────────────────────────────
+# titre    = ce qui s'affiche en gras. *Un mot entre étoiles* = italique.
+# annee    = à droite du titre. Texte libre.
+# pipeline = la suite d'étapes affichée dans l'encadré bleu.
+#            Sépare les étapes par le signe  >
+#            Laisse vide si le projet n'a pas de pipeline :
+#            l'encadré disparaît alors complètement.
+# tags     = les étiquettes du bas, séparées par des virgules.
+
+titre    : Nom du projet
+annee    : 2025
+pipeline : première étape > deuxième étape > troisième étape
+tags     : Grasshopper, Blender, Impression 3D
+
+---
+
+Le premier paragraphe présente le projet. L'encadré du pipeline vient
+juste après lui.
+
+Le deuxième paragraphe (et les suivants) s'affichent sous le pipeline.
+Une ligne vide crée un nouveau paragraphe, et *les étoiles* mettent
+en italique.
+
+---
+
+# ─── ZONE 3 : LES LÉGENDES (facultatif) ────────────────────────────
+# Une ligne par image :   nom-du-fichier.jpg : la légende
+# Sans légende, elle est déduite du nom du fichier.
+
+01_vue-densemble.jpg : Vue d'ensemble
+02_detail.jpg        : Détail de fabrication

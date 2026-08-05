@@ -1,0 +1,10 @@
+titre : Artisanat + numérique
+
+---
+
+Collaboration avec artisans marocains sur des motifs conçus algorithmiquement et brodés à
+la main. Dialogue entre la définition Grasshopper, l'outil et la transmission du geste.
+
+---
+
+

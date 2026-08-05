@@ -1,0 +1,18 @@
+titre    : Set design — *Mass*, film de Pierre Pauze
+annee    : 2020
+rubrique : Luxe & production
+tags     : Film, Résine, Néon, Pompidou-Metz
+
+---
+
+Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film. Dessins
+de sculptures en résine, sculptures néon et plans pour les artisans peintres et sculpteurs.
+Exposé au Centre Pompidou-Metz, 2022. Photo Marc Domage. — Via Atelier 20point12.
+
+---
+
+01_expo-pompidou-metz.jpg : Exposition au Centre Pompidou-Metz
+02_tournage-decor.png : Décor pendant le tournage
+03_sculpture-resine.jpg : Sculpture en résine
+04_atelier-cnc.jpg : Usinage CNC à l'atelier
+05_atelier-cnc-detail.jpg : Usinage CNC — détail

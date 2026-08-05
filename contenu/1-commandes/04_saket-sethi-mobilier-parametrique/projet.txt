@@ -1,0 +1,17 @@
+titre    : Collection mobilier paramétrique — Saket Sethi Design
+annee    : 2023
+rubrique : Luxe & production
+tags     : Grasshopper, Rhino, Mobilier
+
+---
+
+Modélisation pour une collection de mobilier. Création d'une définition Grasshopper pour
+un modèle évolutif et adaptatif. Conseil en design — Saket Sethi Design, 2023.
+
+---
+
+01_sofa-rendu.jpg : Sofa — rendu paramétrique
+02_twirl-sofa.jpg : Twirl Sofa
+03_declinaisons-grasshopper.jpg : Déclinaisons issues de la définition Grasshopper
+04_structure-mesh.png : Structure du maillage
+05_mise-en-scene.png : Mobilier en situation

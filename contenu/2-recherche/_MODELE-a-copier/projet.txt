@@ -23,11 +23,18 @@
 #            Laisse vide si le projet n'a pas de pipeline :
 #            l'encadré disparaît alors complètement.
 # tags     = les étiquettes du bas, séparées par des virgules.
+#
+# operations = ce que tu as fait. Cinq mots possibles, définis dans
+#            contenu/vocabulaire.txt : concevoir, systematiser,
+#            fabriquer, transmettre, experimenter.
+# formes   = dans quoi ça s'incarne. Liste ouverte, même fichier.
 
-titre    : Nom du projet
-annee    : 2025
-pipeline : première étape > deuxième étape > troisième étape
-tags     : Grasshopper, Blender, Impression 3D
+titre      : Nom du projet
+annee      : 2025
+pipeline   : première étape > deuxième étape > troisième étape
+operations : concevoir, systematiser, experimenter
+formes     : textile
+tags       : Grasshopper, Blender, Impression 3D
 
 ---
 

@@ -2,6 +2,8 @@ titre    : Collection Nassij
 annee    : 2022 — 2023
 pipeline : Midjourney > surface GH > plans broderie > Marvelous Designer > rig Mixamo > Blender > défilé digital
 tags     : Grasshopper, Marvelous Designer, Blender, Impression 3D, Broderie, Direction artistique
+operations : concevoir, systematiser, fabriquer, experimenter
+formes     : textile, espace-virtuel
 
 ---
 

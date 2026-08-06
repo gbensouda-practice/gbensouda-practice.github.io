@@ -2,6 +2,8 @@ titre    : Environnement VR — *Photophobia*, Sanni Est
 annee    : 2022
 rubrique : Scénographie & spectacle vivant
 tags     : Unity, VR, Musique
+operations : concevoir, fabriquer, experimenter
+formes     : espace-virtuel
 
 ---
 

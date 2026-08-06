@@ -2,6 +2,8 @@ titre    : Scénographie — *L'aire poids lourd*, mise en scène Carole Errante
 annee    : Théâtre
 rubrique : Scénographie & spectacle vivant
 tags     : Théâtre, Scénographie
+operations : concevoir, fabriquer
+formes     : scenographie
 
 ---
 

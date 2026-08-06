@@ -2,6 +2,8 @@ titre    : Décor vitrine (1:10) — Hermès
 annee    : 2019
 rubrique : Luxe & production
 tags     : Rhino, ZBrush, PLA, CNC, Laser
+operations : concevoir, fabriquer, transmettre
+formes     : vitrine
 
 ---
 

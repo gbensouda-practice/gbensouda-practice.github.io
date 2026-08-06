@@ -2,6 +2,8 @@ titre    : Mobilier lumineux espace VIP — Watches & Wonders / Pierre Pauze
 annee    : 2020
 rubrique : Luxe & production
 tags     : Bois CNC, LED, Stratifié, Miroir sans tain
+operations : concevoir, transmettre
+formes     : mobilier
 
 ---
 

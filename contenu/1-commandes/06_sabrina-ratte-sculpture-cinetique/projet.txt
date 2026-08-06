@@ -2,6 +2,8 @@ titre    : Sculpture cinétique — Sabrina Ratté × Watches & Wonders
 annee    : 2022
 rubrique : Scénographie & spectacle vivant
 tags     : Scénographie, Sculpture, Installation
+operations : concevoir, fabriquer, transmettre
+formes     : scenographie, sculpture
 
 ---
 

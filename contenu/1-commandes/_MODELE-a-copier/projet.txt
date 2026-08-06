@@ -25,11 +25,27 @@
 #                         Scénographie & spectacle vivant
 # tags     = les petites étiquettes, séparées par des virgules.
 #            Elles passent automatiquement en MAJUSCULES.
+#
+# operations = ce que TU as fait dans ce projet. Cinq mots possibles,
+#            pas un de plus, définis dans contenu/vocabulaire.txt :
+#              concevoir      définir le principe et la forme
+#              systematiser   construire une définition réutilisable
+#              fabriquer      produire toi-même la pièce
+#              transmettre    produire ce qui permet à d'autres de
+#                             faire, et suivre l'exécution
+#              experimenter   chercher, prototyper, tester
+#            C'est le champ qui dit ta part réelle : « transmettre »
+#            sans « fabriquer » veut dire que l'atelier a exécuté.
+# formes   = dans quoi ça s'incarne (vitrine, mobilier, sculpture…).
+#            Liste ouverte, dans contenu/vocabulaire.txt : si ton
+#            projet prend une forme absente, ajoute-la là-bas d'abord.
 
-titre    : Nom du projet — Client
-annee    : 2025
-rubrique : Luxe & production
-tags     : Rhino, Grasshopper, CNC, Impression 3D
+titre      : Nom du projet — Client
+annee      : 2025
+rubrique   : Luxe & production
+operations : concevoir, fabriquer, transmettre
+formes     : vitrine
+tags       : Rhino, Grasshopper, CNC, Impression 3D
 
 ---
 

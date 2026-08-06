@@ -2,6 +2,8 @@ titre    : Collection mobilier paramétrique — Saket Sethi Design
 annee    : 2023
 rubrique : Luxe & production
 tags     : Grasshopper, Rhino, Mobilier
+operations : concevoir, systematiser, transmettre
+formes     : mobilier
 
 ---
 

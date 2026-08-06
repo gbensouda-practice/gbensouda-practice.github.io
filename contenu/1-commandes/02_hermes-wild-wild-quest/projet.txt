@@ -2,6 +2,8 @@ titre    : Wild Wild Quest — Hermès
 annee    : 2021
 rubrique : Luxe & production
 tags     : Rhino, Grasshopper, SLA, CNC
+operations : concevoir, systematiser, fabriquer, transmettre
+formes     : vitrine
 
 ---
 

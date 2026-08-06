@@ -2,6 +2,8 @@ titre    : Set design — *Mass*, film de Pierre Pauze
 annee    : 2020
 rubrique : Luxe & production
 tags     : Film, Résine, Néon, Pompidou-Metz
+operations : concevoir, transmettre
+formes     : decor, sculpture
 
 ---
 

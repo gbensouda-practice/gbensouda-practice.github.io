@@ -2,6 +2,8 @@ titre    : Dispositifs scéniques — *Starting with the Limbs*, cie L'Autre Mai
 annee    : Danse
 rubrique : Scénographie & spectacle vivant
 tags     : Danse, Fabrication, Biomimétisme, Grasshopper
+operations : concevoir, systematiser, fabriquer, experimenter
+formes     : dispositif
 
 ---
 

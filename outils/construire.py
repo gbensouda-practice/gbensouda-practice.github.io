@@ -87,6 +87,41 @@ def lire_reglages():
     return r
 
 
+def lire_vocabulaire():
+    """contenu/vocabulaire.txt : les listes fermees d'operations et de formes."""
+    vocabulaire = {"operations": set(), "formes": set()}
+    fichier = CONTENU / "vocabulaire.txt"
+    if not fichier.exists():
+        return vocabulaire
+    liste = None
+    for ligne in fichier.read_text(encoding="utf-8").splitlines():
+        nu = ligne.split("#", 1)[0].rstrip()
+        if not nu.strip():
+            continue
+        if not nu.startswith((" ", "\t")):
+            cle = normaliser_cle(nu.rstrip(":"))
+            liste = cle if cle in vocabulaire else None
+            continue
+        if liste:
+            vocabulaire[liste].add(normaliser_cle(nu))
+    return vocabulaire
+
+
+def verifier_vocabulaire(projet, vocabulaire):
+    """Signale les mots inconnus sans jamais bloquer la construction."""
+    for champ, connus in (("operations", vocabulaire["operations"]),
+                          ("formes", vocabulaire["formes"])):
+        if not connus:
+            continue
+        mots = [m.strip() for m in projet["fiche"].get(champ, "").split(",") if m.strip()]
+        for mot in mots:
+            if normaliser_cle(mot) not in connus:
+                alerte(f"« {projet['dossier'].name} » : {champ[:-1]} « {mot} » absent de "
+                       f"contenu/vocabulaire.txt — ajoute-le la-bas, ou corrige la faute.")
+        if not mots and champ == "operations":
+            alerte(f"« {projet['dossier'].name} » : aucune operation renseignee.")
+
+
 # ── Petits outils texte ──────────────────────────────────────────────────────
 def sans_accents(t):
     return "".join(c for c in unicodedata.normalize("NFD", t)
@@ -257,9 +292,11 @@ def charger_categorie(dossier_categorie):
         images = sorted(f for f in dossier.iterdir()
                         if f.is_file() and f.suffix.lower() in EXTENSIONS
                         and not f.name.startswith(("_", ".")))
-        legendes_min = {k.lower().strip(): v for k, v in legendes.items()}
+        # legendes reperees par le nom SANS extension : l'outil convertit
+        # certains PNG en JPEG, l'extension citee ne doit pas faire echouer
+        legendes_min = {Path(k).stem.lower().strip(): v for k, v in legendes.items()}
         for cle in legendes_min:
-            if cle not in {i.name.lower() for i in images}:
+            if cle not in {i.stem.lower() for i in images}:
                 alerte(f"« {dossier.name} » : legende pour « {cle} », "
                        f"mais ce fichier n'est pas dans le dossier.")
         projets.append({
@@ -283,7 +320,7 @@ def preparer_images(projet, categorie, reglages, cache, utilisees, compteur):
                                                        cache, utilisees)
         if refabriquee:
             compteur["optimisees"] += 1
-        legende = projet["legendes"].get(image.name.lower()) or legende_depuis_nom(image.name)
+        legende = projet["legendes"].get(image.stem.lower()) or legende_depuis_nom(image.name)
         resultat.append({
             "src": src,
             "alt": f"{titre} — {legende}",
@@ -545,9 +582,13 @@ def main():
     total_images = 0
     premiere_image = None
 
+    vocabulaire = lire_vocabulaire()
+
     for dossier, balise in CATEGORIES:
         projets = charger_categorie(CONTENU / dossier)
         for p in projets:
+            if dossier != "3-notes":
+                verifier_vocabulaire(p, vocabulaire)
             p["html_images"] = preparer_images(p, dossier, reglages, cache,
                                                utilisees, compteur)
             total_images += len(p["html_images"])

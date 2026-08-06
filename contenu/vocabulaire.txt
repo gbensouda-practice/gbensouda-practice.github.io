@@ -1,0 +1,52 @@
+# ═══════════════════════════════════════════════════════════════════
+#  VOCABULAIRE DE LA PRATIQUE
+#
+#  Deux listes fermées. Un projet ne peut employer que des mots
+#  écrits ici : si tu en inventes un dans un projet.txt, le .bat te
+#  prévient au lieu de l'accepter en silence. C'est volontaire —
+#  c'est ce qui empêche le vocabulaire de se déliter avec le temps.
+#
+#  Pour ajouter un mot : ajoute-le ici d'abord, puis emploie-le.
+# ═══════════════════════════════════════════════════════════════════
+
+
+# ─── COUCHE 1 : LES OPÉRATIONS ─────────────────────────────────────
+#  Ce que tu fais. Cette liste est faite pour NE PAS grandir : de
+#  nouveaux projets apportent de nouvelles formes et de nouveaux
+#  outils, pas de nouvelles opérations. Si tu ressens le besoin d'en
+#  ajouter une, c'est le signe qu'une des cinq est mal définie.
+
+operations :
+  concevoir      # définir le principe et la forme
+  systematiser   # construire une définition, un outil réutilisable
+  fabriquer      # produire soi-même la pièce, matérielle ou numérique
+  transmettre    # produire ce qui permet à d'autres de faire, et
+                 # accompagner l'exécution. Ne compte pas la simple
+                 # sous-traitance d'une étape : le livrable doit ÊTRE
+                 # l'instruction.
+  experimenter   # chercher sans commande, prototyper, tester
+
+
+# ─── COUCHE 2 : LES FORMES ─────────────────────────────────────────
+#  Dans quoi le travail s'incarne. Cette liste-là est faite pour
+#  grandir : ajoute un mot chaque fois qu'un projet prend une forme
+#  qui n'y est pas encore.
+
+formes :
+  scenographie
+  vitrine
+  mobilier
+  sculpture
+  decor
+  dispositif
+  objet
+  moule
+  textile
+  espace-virtuel
+
+
+# ─── COUCHE 3 : LES OUTILS ─────────────────────────────────────────
+#  Avec quoi. Pas de liste fermée : ce sont les étiquettes du champ
+#  « tags » de chaque projet, et elles changent au gré des logiciels.
+#  C'est justement pour ça qu'elles n'ont pas leur mot à dire sur la
+#  structure du site.

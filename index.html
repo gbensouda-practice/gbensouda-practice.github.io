@@ -86,7 +86,11 @@
   }
 
   /* ── TOOLS STRIP ── */
-  .tools { padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .tools {
+    padding: 20px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
   .tools .wrap { display: flex; flex-wrap: wrap; }
   .tools span {
     font-size: 11px; color: var(--grey);
@@ -120,27 +124,46 @@
   .project {
     display: grid; grid-template-columns: 220px 1fr; gap: 36px;
     padding: 32px 0; border-top: 1px solid var(--line);
-    transition: background .15s ease;
   }
-  .project:hover { background: var(--paper-2); }
 
   .thumb {
     aspect-ratio: 4/3; border: 1px solid rgba(31,63,99,.25);
     display: flex; align-items: center; justify-content: center;
     background: repeating-linear-gradient(45deg, transparent 0 8px, rgba(31,63,99,.04) 8px 9px);
-    flex-shrink: 0;
+    flex-shrink: 0; overflow: hidden;
   }
-  .thumb span { font-size: 10px; color: var(--blue); opacity: .5; letter-spacing: .08em; }
-  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 1px; }
+  .thumb > span { font-size: 10px; color: var(--blue); opacity: .5; letter-spacing: .08em; }
+  .thumb > .vue { height: 100%; }
+
+  /* ── VUE : l'image entière, le vide comblé par ses propres miroirs ── */
+  .vue { display: flex; width: 100%; overflow: hidden; cursor: zoom-in; }
+  .vue .miroir {
+    flex: 1 1 0; min-width: 0; min-height: 0;
+    background-repeat: no-repeat;
+  }
+  .vue .sujet { flex: 0 0 auto; display: block; }
+
+  .vue[data-cale="cotes"] { flex-direction: row; }
+  .vue[data-cale="cotes"] .sujet { height: 100%; width: auto; max-width: 100%; }
+  .vue[data-cale="cotes"] .miroir { background-size: auto 100%; transform: scaleX(-1); }
+  .vue[data-cale="cotes"] .miroir-1 { background-position: left center; }
+  .vue[data-cale="cotes"] .miroir-2 { background-position: right center; }
+
+  .vue[data-cale="hautbas"] { flex-direction: column; }
+  .vue[data-cale="hautbas"] .sujet { width: 100%; height: auto; max-height: 100%; }
+  .vue[data-cale="hautbas"] .miroir { background-size: 100% auto; transform: scaleY(-1); }
+  .vue[data-cale="hautbas"] .miroir-1 { background-position: center top; }
+  .vue[data-cale="hautbas"] .miroir-2 { background-position: center bottom; }
+
   /* ── SLIDER ── */
   .slider { position: relative; overflow: hidden; }
-  .thumb.slider { display: block; overflow: hidden; }
+  .thumb.slider { display: block; }
   .slider-track {
     display: flex; flex-wrap: nowrap;
     width: 100%;
     transition: transform .35s ease;
   }
-  .slider-track img { flex: 0 0 100%; width: 100%; object-fit: cover; aspect-ratio: 4/3; }
+  .slider-track > .vue { flex: 0 0 100%; aspect-ratio: 4/3; }
 
   .slider-dots {
     position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
@@ -154,13 +177,19 @@
   .slider-dot.active { background: rgba(255,255,255,.9); }
   /* Nassij slider in dark FenFutures section */
   .ff-nassij-slider {
-    width: 100%; aspect-ratio: 16/8; margin-bottom: 28px;
+    --ratio-nassij: 16/8;
+    width: 100%; margin-bottom: 28px;
     border-radius: 1px; background: #1A1F21;
   }
   .ff-nassij-slider .slider-track {
     display: flex; flex-wrap: nowrap; width: 100%;
   }
-  .ff-nassij-slider .slider-track img { flex: 0 0 100%; width: 100%; object-fit: cover; aspect-ratio: 16/8; }
+  .ff-nassij-slider .slider-track > .vue { flex: 0 0 100%; aspect-ratio: var(--ratio-nassij); }
+  .ff-nassij-slider > .vue { aspect-ratio: var(--ratio-nassij); }
+  /* en portrait, le bandeau paysage devient un carré : le bloc reprend du poids */
+  @media (max-width: 700px) {
+    .ff-nassij-slider { --ratio-nassij: 1/1; }
+  }
 
   .p-head { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 10px; flex-wrap: wrap; }
   .p-title { font-size: 18px; font-weight: 500; line-height: 1.25; }
@@ -181,7 +210,6 @@
     border-radius: 2px;
     margin-top: 4px;
   }
-  .project.featured:hover { background: #DDE0DB; }
   .project.featured .p-title { font-size: 22px; }
 
   .pipeline {
@@ -308,7 +336,7 @@
   .lb-prev { left: 20px; }
   .lb-next { right: 20px; }
   /* curseur zoom sur les images cliquables */
-  .thumb img, .ff-nassij-slider img { cursor: zoom-in; }
+  .thumb img, .ff-nassij-slider img, .vue { cursor: zoom-in; }
 
 
 
@@ -327,12 +355,6 @@
   }
   .ff-card .k .lien-galerie:hover { border-bottom-color: rgba(127,163,196,.6); }
   .galerie-source { display: none; }
-
-  /* image unique dans un bloc recherche */
-  .ff-nassij-slider > img {
-    width: 100%; aspect-ratio: 16/8; object-fit: cover;
-    display: block; cursor: zoom-in;
-  }
 
   /* ── LIAISON ── */
   .liaison { padding: 36px 0; border-bottom: 1px solid var(--line); }
@@ -423,22 +445,6 @@
   </div>
 </header>
 
-<!-- ── TOOLS STRIP ── -->
-<div class="tools">
-  <div class="wrap mono">
-    <span>MODÉLISATION 3D</span>
-    <span>IMPRESSION 3D FDM / SLA</span>
-    <span>CNC BOIS / POLYSTYRÈNE</span>
-    <span>DÉCOUPE LASER</span>
-    <span>DESIGN GÉNÉRATIF</span>
-    <span>SCÉNOGRAPHIE</span>
-    <span>MAPPING VIDÉO</span>
-    <span>ANIMATION 3D</span>
-    <span>RÉALITÉ VIRTUELLE</span>
-    <span>.STL .OBJ .FBX .3DM</span>
-  </div>
-</div>
-
 <!-- ── PROJETS ATELIER ── -->
 <div class="liaison">
   <div class="wrap">
@@ -461,12 +467,36 @@
       <div class="project" data-reveal>
         <div class="thumb bracket slider">
           <div class="slider-track">
-            <img src="images/web/1-commandes/01_hermes-holiday-windows/01_vitrine-finale.jpg" loading="lazy" alt="Décor vitrine (1:10) — Hermès — Vitrine finale montée" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/01_hermes-holiday-windows/02_atelier.jpg" loading="lazy" alt="Décor vitrine (1:10) — Hermès — Décor en cours de montage à l'atelier" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/01_hermes-holiday-windows/03_modele3d-coquillage.jpg" loading="lazy" alt="Décor vitrine (1:10) — Hermès — Modèle 3D du coquillage" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/01_hermes-holiday-windows/04_modele3d-chateau.jpg" loading="lazy" alt="Décor vitrine (1:10) — Hermès — Modèle 3D du château" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/01_hermes-holiday-windows/05_modele3d-eventail.jpg" loading="lazy" alt="Décor vitrine (1:10) — Hermès — Modèle 3D de l'éventail" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/01_hermes-holiday-windows/06_atelier-pieces.jpg" loading="lazy" alt="Décor vitrine (1:10) — Hermès — Pièces usinées à l'atelier" onerror="this.style.opacity='0'">
+            <div class="vue" data-cale="cotes" data-w="670" data-h="668">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/01_hermes-holiday-windows/01_vitrine-finale.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/01_hermes-holiday-windows/01_vitrine-finale.jpg" loading="lazy" alt="Décor vitrine (1:10) — Hermès — Vitrine finale montée" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/01_hermes-holiday-windows/01_vitrine-finale.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="hautbas" data-w="1511" data-h="959">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/01_hermes-holiday-windows/02_atelier.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/01_hermes-holiday-windows/02_atelier.jpg" loading="lazy" alt="Décor vitrine (1:10) — Hermès — Décor en cours de montage à l'atelier" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/01_hermes-holiday-windows/02_atelier.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="cotes" data-w="679" data-h="1147">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/01_hermes-holiday-windows/03_modele3d-coquillage.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/01_hermes-holiday-windows/03_modele3d-coquillage.jpg" loading="lazy" alt="Décor vitrine (1:10) — Hermès — Modèle 3D du coquillage" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/01_hermes-holiday-windows/03_modele3d-coquillage.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="cotes" data-w="934" data-h="903">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/01_hermes-holiday-windows/04_modele3d-chateau.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/01_hermes-holiday-windows/04_modele3d-chateau.jpg" loading="lazy" alt="Décor vitrine (1:10) — Hermès — Modèle 3D du château" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/01_hermes-holiday-windows/04_modele3d-chateau.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="cotes" data-w="656" data-h="499">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/01_hermes-holiday-windows/05_modele3d-eventail.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/01_hermes-holiday-windows/05_modele3d-eventail.jpg" loading="lazy" alt="Décor vitrine (1:10) — Hermès — Modèle 3D de l'éventail" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/01_hermes-holiday-windows/05_modele3d-eventail.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="hautbas" data-w="1511" data-h="713">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/01_hermes-holiday-windows/06_atelier-pieces.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/01_hermes-holiday-windows/06_atelier-pieces.jpg" loading="lazy" alt="Décor vitrine (1:10) — Hermès — Pièces usinées à l'atelier" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/01_hermes-holiday-windows/06_atelier-pieces.jpg&quot;)" aria-hidden="true"></span>
+            </div>
           </div>
           <div class="slider-dots">
             <button class="slider-dot active" aria-label="Image 1"></button>
@@ -489,11 +519,31 @@
       <div class="project" data-reveal>
         <div class="thumb bracket slider">
           <div class="slider-track">
-            <img src="images/web/1-commandes/02_hermes-wild-wild-quest/01_vitrine-finale.jpg" loading="lazy" alt="Wild Wild Quest — Hermès — Vitrine montée" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/02_hermes-wild-wild-quest/02_atelier.jpg" loading="lazy" alt="Wild Wild Quest — Hermès — Décor à l'atelier" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/02_hermes-wild-wild-quest/03_modele3d-creature.jpg" loading="lazy" alt="Wild Wild Quest — Hermès — Créature — définition Grasshopper" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/02_hermes-wild-wild-quest/04_modele3d-champignons.jpg" loading="lazy" alt="Wild Wild Quest — Hermès — Champignons — modèle 3D" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/02_hermes-wild-wild-quest/05_modele3d-accessoires.jpg" loading="lazy" alt="Wild Wild Quest — Hermès — Accessoires — modèle 3D" onerror="this.style.opacity='0'">
+            <div class="vue" data-cale="hautbas" data-w="1600" data-h="849">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/02_hermes-wild-wild-quest/01_vitrine-finale.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/02_hermes-wild-wild-quest/01_vitrine-finale.jpg" loading="lazy" alt="Wild Wild Quest — Hermès — Vitrine montée" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/02_hermes-wild-wild-quest/01_vitrine-finale.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="hautbas" data-w="1600" data-h="782">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/02_hermes-wild-wild-quest/02_atelier.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/02_hermes-wild-wild-quest/02_atelier.jpg" loading="lazy" alt="Wild Wild Quest — Hermès — Décor à l'atelier" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/02_hermes-wild-wild-quest/02_atelier.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="cotes" data-w="676" data-h="573">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/02_hermes-wild-wild-quest/03_modele3d-creature.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/02_hermes-wild-wild-quest/03_modele3d-creature.jpg" loading="lazy" alt="Wild Wild Quest — Hermès — Créature — définition Grasshopper" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/02_hermes-wild-wild-quest/03_modele3d-creature.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="cotes" data-w="709" data-h="541">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/02_hermes-wild-wild-quest/04_modele3d-champignons.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/02_hermes-wild-wild-quest/04_modele3d-champignons.jpg" loading="lazy" alt="Wild Wild Quest — Hermès — Champignons — modèle 3D" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/02_hermes-wild-wild-quest/04_modele3d-champignons.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="hautbas" data-w="1112" data-h="821">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/02_hermes-wild-wild-quest/05_modele3d-accessoires.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/02_hermes-wild-wild-quest/05_modele3d-accessoires.jpg" loading="lazy" alt="Wild Wild Quest — Hermès — Accessoires — modèle 3D" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/02_hermes-wild-wild-quest/05_modele3d-accessoires.jpg&quot;)" aria-hidden="true"></span>
+            </div>
           </div>
           <div class="slider-dots">
             <button class="slider-dot active" aria-label="Image 1"></button>
@@ -515,16 +565,56 @@
       <div class="project" data-reveal>
         <div class="thumb bracket slider">
           <div class="slider-track">
-            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/01_vip-vue-eclatee.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Mobilier VIP — vue éclatée 3D" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/02_bar-rendu-3d.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — rendu 3D" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/03_bar-plan-3d.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — plan de fabrication" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/04_vip-atelier.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Espace VIP — atelier" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/05_vip-atelier-detail.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Espace VIP — détail atelier" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/06_vip-atelier-montage.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Espace VIP — montage" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/07_bar-atelier.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — atelier" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/08_bar-atelier-detail.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — détail atelier" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/09_bar-atelier-structure.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — structure" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/03_watches-wonders-mobilier-vip/10_bar-atelier-finition.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — finition" onerror="this.style.opacity='0'">
+            <div class="vue" data-cale="hautbas" data-w="1167" data-h="471">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/01_vip-vue-eclatee.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/03_watches-wonders-mobilier-vip/01_vip-vue-eclatee.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Mobilier VIP — vue éclatée 3D" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/01_vip-vue-eclatee.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="cotes" data-w="1163" data-h="881">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/02_bar-rendu-3d.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/03_watches-wonders-mobilier-vip/02_bar-rendu-3d.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — rendu 3D" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/02_bar-rendu-3d.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="hautbas" data-w="843" data-h="446">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/03_bar-plan-3d.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/03_watches-wonders-mobilier-vip/03_bar-plan-3d.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — plan de fabrication" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/03_bar-plan-3d.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="hautbas" data-w="1003" data-h="579">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/04_vip-atelier.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/03_watches-wonders-mobilier-vip/04_vip-atelier.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Espace VIP — atelier" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/04_vip-atelier.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="cotes" data-w="569" data-h="576">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/05_vip-atelier-detail.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/03_watches-wonders-mobilier-vip/05_vip-atelier-detail.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Espace VIP — détail atelier" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/05_vip-atelier-detail.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="cotes" data-w="742" data-h="579">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/06_vip-atelier-montage.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/03_watches-wonders-mobilier-vip/06_vip-atelier-montage.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Espace VIP — montage" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/06_vip-atelier-montage.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="hautbas" data-w="928" data-h="572">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/07_bar-atelier.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/03_watches-wonders-mobilier-vip/07_bar-atelier.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — atelier" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/07_bar-atelier.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="cotes" data-w="522" data-h="577">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/08_bar-atelier-detail.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/03_watches-wonders-mobilier-vip/08_bar-atelier-detail.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — détail atelier" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/08_bar-atelier-detail.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="cotes" data-w="581" data-h="568">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/09_bar-atelier-structure.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/03_watches-wonders-mobilier-vip/09_bar-atelier-structure.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — structure" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/09_bar-atelier-structure.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="cotes" data-w="576" data-h="571">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/10_bar-atelier-finition.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/03_watches-wonders-mobilier-vip/10_bar-atelier-finition.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — finition" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/03_watches-wonders-mobilier-vip/10_bar-atelier-finition.jpg&quot;)" aria-hidden="true"></span>
+            </div>
           </div>
           <div class="slider-dots">
             <button class="slider-dot active" aria-label="Image 1"></button>
@@ -551,11 +641,31 @@
       <div class="project" data-reveal>
         <div class="thumb bracket slider">
           <div class="slider-track">
-            <img src="images/web/1-commandes/04_saket-sethi-mobilier-parametrique/01_sofa-rendu.jpg" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Sofa — rendu paramétrique" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/04_saket-sethi-mobilier-parametrique/02_twirl-sofa.jpg" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Twirl Sofa" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/04_saket-sethi-mobilier-parametrique/03_declinaisons-grasshopper.jpg" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Déclinaisons issues de la définition Grasshopper" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/04_saket-sethi-mobilier-parametrique/04_structure-mesh.png" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Structure du maillage" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/04_saket-sethi-mobilier-parametrique/05_mise-en-scene.jpg" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Mobilier en situation" onerror="this.style.opacity='0'">
+            <div class="vue" data-cale="hautbas" data-w="1248" data-h="585">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/04_saket-sethi-mobilier-parametrique/01_sofa-rendu.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/04_saket-sethi-mobilier-parametrique/01_sofa-rendu.jpg" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Sofa — rendu paramétrique" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/04_saket-sethi-mobilier-parametrique/01_sofa-rendu.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="cotes" data-w="988" data-h="894">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/04_saket-sethi-mobilier-parametrique/02_twirl-sofa.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/04_saket-sethi-mobilier-parametrique/02_twirl-sofa.jpg" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Twirl Sofa" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/04_saket-sethi-mobilier-parametrique/02_twirl-sofa.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="hautbas" data-w="962" data-h="488">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/04_saket-sethi-mobilier-parametrique/03_declinaisons-grasshopper.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/04_saket-sethi-mobilier-parametrique/03_declinaisons-grasshopper.jpg" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Déclinaisons issues de la définition Grasshopper" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/04_saket-sethi-mobilier-parametrique/03_declinaisons-grasshopper.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="hautbas" data-w="732" data-h="484">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/04_saket-sethi-mobilier-parametrique/04_structure-mesh.png&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/04_saket-sethi-mobilier-parametrique/04_structure-mesh.png" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Structure du maillage" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/04_saket-sethi-mobilier-parametrique/04_structure-mesh.png&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="hautbas" data-w="871" data-h="490">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/04_saket-sethi-mobilier-parametrique/05_mise-en-scene.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/04_saket-sethi-mobilier-parametrique/05_mise-en-scene.jpg" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Mobilier en situation" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/04_saket-sethi-mobilier-parametrique/05_mise-en-scene.jpg&quot;)" aria-hidden="true"></span>
+            </div>
           </div>
           <div class="slider-dots">
             <button class="slider-dot active" aria-label="Image 1"></button>
@@ -577,11 +687,31 @@
       <div class="project" data-reveal>
         <div class="thumb bracket slider">
           <div class="slider-track">
-            <img src="images/web/1-commandes/05_mass-set-design/01_expo-pompidou-metz.jpg" loading="lazy" alt="Set design — *Mass*, film de Pierre Pauze — Exposition au Centre Pompidou-Metz" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/05_mass-set-design/02_tournage-decor.jpg" loading="lazy" alt="Set design — *Mass*, film de Pierre Pauze — Décor pendant le tournage" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/05_mass-set-design/03_sculpture-resine.jpg" loading="lazy" alt="Set design — *Mass*, film de Pierre Pauze — Sculpture en résine" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/05_mass-set-design/04_atelier-cnc.jpg" loading="lazy" alt="Set design — *Mass*, film de Pierre Pauze — Usinage CNC à l'atelier" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/05_mass-set-design/05_atelier-cnc-detail.jpg" loading="lazy" alt="Set design — *Mass*, film de Pierre Pauze — Usinage CNC — détail" onerror="this.style.opacity='0'">
+            <div class="vue" data-cale="cotes" data-w="699" data-h="672">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/05_mass-set-design/01_expo-pompidou-metz.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/05_mass-set-design/01_expo-pompidou-metz.jpg" loading="lazy" alt="Set design — *Mass*, film de Pierre Pauze — Exposition au Centre Pompidou-Metz" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/05_mass-set-design/01_expo-pompidou-metz.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="hautbas" data-w="1149" data-h="763">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/05_mass-set-design/02_tournage-decor.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/05_mass-set-design/02_tournage-decor.jpg" loading="lazy" alt="Set design — *Mass*, film de Pierre Pauze — Décor pendant le tournage" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/05_mass-set-design/02_tournage-decor.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="hautbas" data-w="626" data-h="427">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/05_mass-set-design/03_sculpture-resine.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/05_mass-set-design/03_sculpture-resine.jpg" loading="lazy" alt="Set design — *Mass*, film de Pierre Pauze — Sculpture en résine" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/05_mass-set-design/03_sculpture-resine.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="cotes" data-w="632" data-h="492">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/05_mass-set-design/04_atelier-cnc.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/05_mass-set-design/04_atelier-cnc.jpg" loading="lazy" alt="Set design — *Mass*, film de Pierre Pauze — Usinage CNC à l'atelier" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/05_mass-set-design/04_atelier-cnc.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="hautbas" data-w="637" data-h="400">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/05_mass-set-design/05_atelier-cnc-detail.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/05_mass-set-design/05_atelier-cnc-detail.jpg" loading="lazy" alt="Set design — *Mass*, film de Pierre Pauze — Usinage CNC — détail" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/05_mass-set-design/05_atelier-cnc-detail.jpg&quot;)" aria-hidden="true"></span>
+            </div>
           </div>
           <div class="slider-dots">
             <button class="slider-dot active" aria-label="Image 1"></button>
@@ -608,9 +738,21 @@
       <div class="project" data-reveal>
         <div class="thumb bracket slider">
           <div class="slider-track">
-            <img src="images/web/1-commandes/06_sabrina-ratte-sculpture-cinetique/01_scenographie-rendu.jpg" loading="lazy" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Rendu de la scénographie" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/06_sabrina-ratte-sculpture-cinetique/02_sculpture-impression-3d.jpg" loading="lazy" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Sculpture imprimée en 3D" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/06_sabrina-ratte-sculpture-cinetique/03_sculpture-himalaya-plan.png" loading="lazy" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Plan de la sculpture Himalaya" onerror="this.style.opacity='0'">
+            <div class="vue" data-cale="hautbas" data-w="1600" data-h="765">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/06_sabrina-ratte-sculpture-cinetique/01_scenographie-rendu.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/06_sabrina-ratte-sculpture-cinetique/01_scenographie-rendu.jpg" loading="lazy" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Rendu de la scénographie" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/06_sabrina-ratte-sculpture-cinetique/01_scenographie-rendu.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="hautbas" data-w="1102" data-h="577">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/06_sabrina-ratte-sculpture-cinetique/02_sculpture-impression-3d.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/06_sabrina-ratte-sculpture-cinetique/02_sculpture-impression-3d.jpg" loading="lazy" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Sculpture imprimée en 3D" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/06_sabrina-ratte-sculpture-cinetique/02_sculpture-impression-3d.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="hautbas" data-w="1445" data-h="580">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/06_sabrina-ratte-sculpture-cinetique/03_sculpture-himalaya-plan.png&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/06_sabrina-ratte-sculpture-cinetique/03_sculpture-himalaya-plan.png" loading="lazy" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Plan de la sculpture Himalaya" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/06_sabrina-ratte-sculpture-cinetique/03_sculpture-himalaya-plan.png&quot;)" aria-hidden="true"></span>
+            </div>
           </div>
           <div class="slider-dots">
             <button class="slider-dot active" aria-label="Image 1"></button>
@@ -639,7 +781,13 @@
         </div>
       </div>
       <div class="project" data-reveal>
-        <div class="thumb bracket"><img src="images/web/1-commandes/08_starting-with-the-limbs/01_dispositif.jpg" loading="lazy" alt="Dispositifs scéniques — *Starting with the Limbs*, cie L'Autre Maison — Dispositif scénique en situation" onerror="this.style.opacity='0'"></div>
+        <div class="thumb bracket">
+          <div class="vue" data-cale="hautbas" data-w="1000" data-h="600">
+            <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/08_starting-with-the-limbs/01_dispositif.jpg&quot;)" aria-hidden="true"></span>
+            <img class="sujet" src="images/web/1-commandes/08_starting-with-the-limbs/01_dispositif.jpg" loading="lazy" alt="Dispositifs scéniques — *Starting with the Limbs*, cie L'Autre Maison — Dispositif scénique en situation" onerror="this.style.opacity='0'">
+            <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/08_starting-with-the-limbs/01_dispositif.jpg&quot;)" aria-hidden="true"></span>
+          </div>
+        </div>
         <div>
           <div class="p-head">
             <span class="p-title">Dispositifs scéniques — <em>Starting with the Limbs</em>, cie L'Autre Maison</span>
@@ -652,11 +800,31 @@
       <div class="project" data-reveal>
         <div class="thumb bracket slider">
           <div class="slider-track">
-            <img src="images/web/1-commandes/09_photophobia-vr/01_scene-mangrove.jpg" loading="lazy" alt="Environnement VR — *Photophobia*, Sanni Est — Scène de mangrove" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/09_photophobia-vr/02_premiere-kampnagel.jpg" loading="lazy" alt="Environnement VR — *Photophobia*, Sanni Est — Première à Kampnagel, Hambourg" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/09_photophobia-vr/03_premiere-public.jpg" loading="lazy" alt="Environnement VR — *Photophobia*, Sanni Est — Public de la première" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/09_photophobia-vr/04_modele3d-poisson.jpg" loading="lazy" alt="Environnement VR — *Photophobia*, Sanni Est — Modèle 3D du poisson" onerror="this.style.opacity='0'">
-            <img src="images/web/1-commandes/09_photophobia-vr/05_texture-kaleidoscope.jpg" loading="lazy" alt="Environnement VR — *Photophobia*, Sanni Est — Texture kaléidoscopique" onerror="this.style.opacity='0'">
+            <div class="vue" data-cale="hautbas" data-w="1600" data-h="724">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/09_photophobia-vr/01_scene-mangrove.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/09_photophobia-vr/01_scene-mangrove.jpg" loading="lazy" alt="Environnement VR — *Photophobia*, Sanni Est — Scène de mangrove" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/09_photophobia-vr/01_scene-mangrove.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="cotes" data-w="568" data-h="503">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/09_photophobia-vr/02_premiere-kampnagel.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/09_photophobia-vr/02_premiere-kampnagel.jpg" loading="lazy" alt="Environnement VR — *Photophobia*, Sanni Est — Première à Kampnagel, Hambourg" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/09_photophobia-vr/02_premiere-kampnagel.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="cotes" data-w="199" data-h="564">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/09_photophobia-vr/03_premiere-public.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/09_photophobia-vr/03_premiere-public.jpg" loading="lazy" alt="Environnement VR — *Photophobia*, Sanni Est — Public de la première" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/09_photophobia-vr/03_premiere-public.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="hautbas" data-w="785" data-h="572">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/09_photophobia-vr/04_modele3d-poisson.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/09_photophobia-vr/04_modele3d-poisson.jpg" loading="lazy" alt="Environnement VR — *Photophobia*, Sanni Est — Modèle 3D du poisson" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/09_photophobia-vr/04_modele3d-poisson.jpg&quot;)" aria-hidden="true"></span>
+            </div>
+            <div class="vue" data-cale="hautbas" data-w="1307" data-h="578">
+              <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/09_photophobia-vr/05_texture-kaleidoscope.jpg&quot;)" aria-hidden="true"></span>
+              <img class="sujet" src="images/web/1-commandes/09_photophobia-vr/05_texture-kaleidoscope.jpg" loading="lazy" alt="Environnement VR — *Photophobia*, Sanni Est — Texture kaléidoscopique" onerror="this.style.opacity='0'">
+              <span class="miroir miroir-2" style="background-image:url(&quot;images/web/1-commandes/09_photophobia-vr/05_texture-kaleidoscope.jpg&quot;)" aria-hidden="true"></span>
+            </div>
           </div>
           <div class="slider-dots">
             <button class="slider-dot active" aria-label="Image 1"></button>
@@ -681,6 +849,23 @@
   </div>
 </section>
 
+<!-- ── TOOLS STRIP ── -->
+<!-- placé après Commandes : les preuves d'abord, les moyens ensuite -->
+<div class="tools">
+  <div class="wrap mono">
+    <span>MODÉLISATION 3D</span>
+    <span>IMPRESSION 3D FDM / SLA</span>
+    <span>CNC BOIS / POLYSTYRÈNE</span>
+    <span>DÉCOUPE LASER</span>
+    <span>DESIGN GÉNÉRATIF</span>
+    <span>SCÉNOGRAPHIE</span>
+    <span>MAPPING VIDÉO</span>
+    <span>ANIMATION 3D</span>
+    <span>RÉALITÉ VIRTUELLE</span>
+    <span>.STL .OBJ .FBX .3DM</span>
+  </div>
+</div>
+
 <!-- ── FENFUTURES ── -->
 <section class="fenfutures" id="fenfutures">
   <div class="wrap">
@@ -694,11 +879,31 @@
     <div class="ff-nassij" data-reveal>
       <div class="ff-nassij-slider slider">
         <div class="slider-track">
-          <img src="images/web/2-recherche/01_collection-nassij/01_caftan-rendu-dos.jpg" loading="lazy" alt="Collection Nassij — Caftan — rendu de dos, Blender" onerror="this.style.opacity='0'">
-          <img src="images/web/2-recherche/01_collection-nassij/02_broderie-detail.jpg" loading="lazy" alt="Collection Nassij — Broderie paramétrique — détail" onerror="this.style.opacity='0'">
-          <img src="images/web/2-recherche/01_collection-nassij/03_caftan-detail-manche.jpg" loading="lazy" alt="Collection Nassij — Détail de la manche brodée" onerror="this.style.opacity='0'">
-          <img src="images/web/2-recherche/01_collection-nassij/04_caftan-detail-bas.jpg" loading="lazy" alt="Collection Nassij — Détail du bas du caftan" onerror="this.style.opacity='0'">
-          <img src="images/web/2-recherche/01_collection-nassij/05_motif-grasshopper.jpg" loading="lazy" alt="Collection Nassij — Motif issu de la définition Grasshopper" onerror="this.style.opacity='0'">
+          <div class="vue" data-cale="cotes" data-w="1413" data-h="1764">
+            <span class="miroir miroir-1" style="background-image:url(&quot;images/web/2-recherche/01_collection-nassij/01_caftan-rendu-dos.jpg&quot;)" aria-hidden="true"></span>
+            <img class="sujet" src="images/web/2-recherche/01_collection-nassij/01_caftan-rendu-dos.jpg" loading="lazy" alt="Collection Nassij — Caftan — rendu de dos, Blender" onerror="this.style.opacity='0'">
+            <span class="miroir miroir-2" style="background-image:url(&quot;images/web/2-recherche/01_collection-nassij/01_caftan-rendu-dos.jpg&quot;)" aria-hidden="true"></span>
+          </div>
+          <div class="vue" data-cale="cotes" data-w="1380" data-h="1396">
+            <span class="miroir miroir-1" style="background-image:url(&quot;images/web/2-recherche/01_collection-nassij/02_broderie-detail.jpg&quot;)" aria-hidden="true"></span>
+            <img class="sujet" src="images/web/2-recherche/01_collection-nassij/02_broderie-detail.jpg" loading="lazy" alt="Collection Nassij — Broderie paramétrique — détail" onerror="this.style.opacity='0'">
+            <span class="miroir miroir-2" style="background-image:url(&quot;images/web/2-recherche/01_collection-nassij/02_broderie-detail.jpg&quot;)" aria-hidden="true"></span>
+          </div>
+          <div class="vue" data-cale="cotes" data-w="909" data-h="524">
+            <span class="miroir miroir-1" style="background-image:url(&quot;images/web/2-recherche/01_collection-nassij/03_caftan-detail-manche.jpg&quot;)" aria-hidden="true"></span>
+            <img class="sujet" src="images/web/2-recherche/01_collection-nassij/03_caftan-detail-manche.jpg" loading="lazy" alt="Collection Nassij — Détail de la manche brodée" onerror="this.style.opacity='0'">
+            <span class="miroir miroir-2" style="background-image:url(&quot;images/web/2-recherche/01_collection-nassij/03_caftan-detail-manche.jpg&quot;)" aria-hidden="true"></span>
+          </div>
+          <div class="vue" data-cale="cotes" data-w="1376" data-h="759">
+            <span class="miroir miroir-1" style="background-image:url(&quot;images/web/2-recherche/01_collection-nassij/04_caftan-detail-bas.jpg&quot;)" aria-hidden="true"></span>
+            <img class="sujet" src="images/web/2-recherche/01_collection-nassij/04_caftan-detail-bas.jpg" loading="lazy" alt="Collection Nassij — Détail du bas du caftan" onerror="this.style.opacity='0'">
+            <span class="miroir miroir-2" style="background-image:url(&quot;images/web/2-recherche/01_collection-nassij/04_caftan-detail-bas.jpg&quot;)" aria-hidden="true"></span>
+          </div>
+          <div class="vue" data-cale="cotes" data-w="621" data-h="433">
+            <span class="miroir miroir-1" style="background-image:url(&quot;images/web/2-recherche/01_collection-nassij/05_motif-grasshopper.jpg&quot;)" aria-hidden="true"></span>
+            <img class="sujet" src="images/web/2-recherche/01_collection-nassij/05_motif-grasshopper.jpg" loading="lazy" alt="Collection Nassij — Motif issu de la définition Grasshopper" onerror="this.style.opacity='0'">
+            <span class="miroir miroir-2" style="background-image:url(&quot;images/web/2-recherche/01_collection-nassij/05_motif-grasshopper.jpg&quot;)" aria-hidden="true"></span>
+          </div>
         </div>
         <div class="slider-dots">
           <button class="slider-dot active" aria-label="Image 1"></button>
@@ -816,13 +1021,35 @@
 
 
 <script>
-// ── SLIDER (autoplay, pause au survol et lightbox ouverte) ───────────────────
+// ── CALAGE DES VUES ──────────────────────────────────────────────────────────
+// L'image se cale sur sa plus grande dimension ; le vide restant est comblé
+// par deux miroirs d'elle-même, sur les côtés ou en haut/bas selon son format
+// et celui du cadre (qui change entre paysage et portrait).
+function calerLesVues() {
+  document.querySelectorAll('.vue').forEach(function(vue) {
+    var w = parseFloat(vue.getAttribute('data-w'));
+    var h = parseFloat(vue.getAttribute('data-h'));
+    if (!w || !h) return;
+    var cadre = vue.getBoundingClientRect();
+    if (!cadre.width || !cadre.height) return;
+    vue.setAttribute('data-cale', (w / h) < (cadre.width / cadre.height) ? 'cotes' : 'hautbas');
+  });
+}
+calerLesVues();
+window.addEventListener('resize', calerLesVues, { passive: true });
+window.addEventListener('orientationchange', calerLesVues);
+
+// ── SLIDER ───────────────────────────────────────────────────────────────────
+// Le défilement ne tourne pas en permanence : il démarre quand le bloc est
+// survolé (souris) ou quand il occupe l'écran (tactile), et s'arrête ensuite.
 var VITESSE_SLIDER = 3000;   // valeur pilotee par contenu/reglages.txt
 var lb_el = document.getElementById('lightbox');
+var AU_SURVOL = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
 document.querySelectorAll('.slider').forEach(function(slider) {
   var track = slider.querySelector('.slider-track');
   if (!track) return;
-  var slides = track.querySelectorAll('img');
+  var slides = track.children;   // une diapositive = un enfant direct de la piste
   var dots   = slider.querySelectorAll('.slider-dot');
   var cur = 0, timer = null;
   if (slides.length <= 1) {
@@ -833,17 +1060,27 @@ document.querySelectorAll('.slider').forEach(function(slider) {
     track.style.transform = 'translateX(-' + (cur * 100) + '%)';
     dots.forEach(function(d,i){ d.classList.toggle('active', i===cur); });
   }
-  function startAuto() {
+  function demarrer() {
     clearInterval(timer);
     timer = setInterval(function() {
       if (!lb_el.classList.contains('open')) go(cur + 1);
     }, VITESSE_SLIDER);
   }
+  function arreter() { clearInterval(timer); timer = null; }
+
   dots.forEach(function(d,i){ d.addEventListener('click', function(e){ e.stopPropagation(); go(i); }); });
-  slider.addEventListener('mouseenter', function(){ clearInterval(timer); });
-  slider.addEventListener('mouseleave', startAuto);
   go(0);
-  startAuto();
+
+  if (AU_SURVOL) {
+    slider.addEventListener('mouseenter', demarrer);
+    slider.addEventListener('mouseleave', arreter);
+  } else if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function(entrees) {
+      entrees.forEach(function(e) { e.isIntersecting ? demarrer() : arreter(); });
+    }, { threshold: 0.4 }).observe(slider);
+  } else {
+    demarrer();
+  }
 });
 
 // ── LIGHTBOX ─────────────────────────────────────────────────────────────────
@@ -884,9 +1121,12 @@ document.querySelectorAll('.slider').forEach(function(slider) {
     else { fermer(); }
   }
 
-  // images visibles : sliders des commandes et de la recherche
+  // images visibles : sliders des commandes et de la recherche.
+  // Un clic sur un miroir de remplissage ouvre la même image que le sujet.
   document.addEventListener('click', function(e) {
-    var img = e.target.closest('.thumb img, .ff-nassij-slider img');
+    var vue = e.target.closest('.vue');
+    var img = vue ? vue.querySelector('.sujet')
+                  : e.target.closest('.thumb img, .ff-nassij-slider img');
     if (!img) return;
     e.stopPropagation();
     var bloc = img.closest('.thumb, .ff-nassij');

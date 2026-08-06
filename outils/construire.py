@@ -10,8 +10,8 @@ intact.
 Lancement : double-clic sur METTRE-A-JOUR-LE-SITE.bat
 """
 
+import hashlib
 import json
-import os
 import re
 import subprocess
 import sys
@@ -205,10 +205,11 @@ def optimiser(source, dossier_sortie, reglages, cache, utilisees):
     stat = source.stat()
     cle = str(source.relative_to(RACINE)).replace("\\", "/")
     ancien = cache.get(cle)
-    if (ancien and ancien[0] == int(stat.st_mtime) and ancien[1] == stat.st_size
-            and ancien[2] == signature and (RACINE / ancien[3]).exists()):
+    if (ancien and len(ancien) == 6 and ancien[0] == int(stat.st_mtime)
+            and ancien[1] == stat.st_size and ancien[2] == signature
+            and (RACINE / ancien[3]).exists()):
         utilisees.add(ancien[3])
-        return ancien[3], False
+        return ancien[3], ancien[4], ancien[5], False
 
     dossier_sortie.mkdir(parents=True, exist_ok=True)
     with Image.open(source) as im:
@@ -217,6 +218,7 @@ def optimiser(source, dossier_sortie, reglages, cache, utilisees):
         if im.width > largeur_max:
             hauteur = round(im.height * largeur_max / im.width)
             im = im.resize((largeur_max, hauteur), Image.LANCZOS)
+        dimensions = [im.width, im.height]
         # un PNG sans transparence pese jusqu'a 5x le JPEG equivalent
         if source.suffix.lower() == ".png" and not a_de_la_transparence(im):
             destination = dossier_sortie / (source.stem + ".jpg")
@@ -232,8 +234,8 @@ def optimiser(source, dossier_sortie, reglages, cache, utilisees):
             im.save(destination)
     relatif = str(destination.relative_to(RACINE)).replace("\\", "/")
     utilisees.add(relatif)
-    cache[cle] = [int(stat.st_mtime), stat.st_size, signature, relatif]
-    return relatif, True
+    cache[cle] = [int(stat.st_mtime), stat.st_size, signature, relatif] + dimensions
+    return relatif, dimensions[0], dimensions[1], True
 
 
 # ── Chargement des projets ───────────────────────────────────────────────────
@@ -277,7 +279,8 @@ def preparer_images(projet, categorie, reglages, cache, utilisees, compteur):
     titre = projet["fiche"]["titre"]
     dossier_sortie = SORTIE_IMAGES / categorie / projet["dossier"].name
     for image in projet["images"]:
-        src, refabriquee = optimiser(image, dossier_sortie, reglages, cache, utilisees)
+        src, largeur, hauteur, refabriquee = optimiser(image, dossier_sortie, reglages,
+                                                       cache, utilisees)
         if refabriquee:
             compteur["optimisees"] += 1
         legende = projet["legendes"].get(image.name.lower()) or legende_depuis_nom(image.name)
@@ -285,6 +288,8 @@ def preparer_images(projet, categorie, reglages, cache, utilisees, compteur):
             "src": src,
             "alt": f"{titre} — {legende}",
             "groupe": groupe_depuis_nom(image.name),
+            "w": largeur,
+            "h": hauteur,
         })
     return resultat
 
@@ -311,19 +316,35 @@ def html_pipeline(fiche, indent="        "):
             + f'\n{indent}</div>')
 
 
-def html_visuel(images, classes, indent):
+def html_vue(img, indent, ratio_cadre):
+    """L'image entière, calée sur sa plus grande dimension, le vide comblé par
+    deux miroirs d'elle-même (sur les côtés ou en haut/bas selon son format)."""
+    ratio = (img["w"] / img["h"]) if img.get("w") and img.get("h") else ratio_cadre
+    cale = "cotes" if ratio < ratio_cadre else "hautbas"
+    fond = f'style="background-image:url(&quot;{img["src"]}&quot;)"'
+    return "\n".join([
+        f'{indent}<div class="vue" data-cale="{cale}" data-w="{img.get("w", 0)}" '
+        f'data-h="{img.get("h", 0)}">',
+        f'{indent}  <span class="miroir miroir-1" {fond} aria-hidden="true"></span>',
+        f'{indent}  <img class="sujet" src="{img["src"]}" loading="lazy" '
+        f'alt="{echapper(img["alt"])}" onerror="this.style.opacity=\'0\'">',
+        f'{indent}  <span class="miroir miroir-2" {fond} aria-hidden="true"></span>',
+        f'{indent}</div>',
+    ])
+
+
+def html_visuel(images, classes, indent, ratio_cadre=4 / 3):
     """Vignette simple ou slider, selon le nombre d'images."""
     if not images:
         return (f'{indent}<div class="{classes}"><span class="mono">SANS VISUEL</span></div>')
     if len(images) == 1:
-        img = images[0]
-        return (f'{indent}<div class="{classes}"><img src="{img["src"]}" loading="lazy" '
-                f'alt="{echapper(img["alt"])}" onerror="this.style.opacity=\'0\'"></div>')
+        return (f'{indent}<div class="{classes}">\n'
+                + html_vue(images[0], indent + "  ", ratio_cadre)
+                + f'\n{indent}</div>')
     lignes = [f'{indent}<div class="{classes} slider">',
               f'{indent}  <div class="slider-track">']
     for img in images:
-        lignes.append(f'{indent}    <img src="{img["src"]}" loading="lazy" '
-                      f'alt="{echapper(img["alt"])}" onerror="this.style.opacity=\'0\'">')
+        lignes.append(html_vue(img, indent + "    ", ratio_cadre))
     lignes.append(f'{indent}  </div>')
     lignes.append(f'{indent}  <div class="slider-dots">')
     for i in range(len(images)):
@@ -381,7 +402,8 @@ def bloc_recherche(projets):
         fiche = p["fiche"]
         sortie.append('    <div class="ff-nassij" data-reveal>')
         if p["html_images"]:
-            sortie.append(html_visuel(p["html_images"], "ff-nassij-slider", "      "))
+            sortie.append(html_visuel(p["html_images"], "ff-nassij-slider", "      ",
+                                      ratio_cadre=16 / 8))
         sortie.append('      <div class="p-head mono">')
         sortie.append(f'        <span class="p-title">{fiche["titre_html"]}</span>')
         if fiche.get("annee"):
@@ -458,10 +480,13 @@ def maj_reseaux_sociaux(html, premiere_image):
 # ── Message de commit ────────────────────────────────────────────────────────
 def fabriquer_message(etat, empreintes, total_images):
     anciennes = etat.get("projets", {})
-    ajoutes = [k for k in empreintes if k not in anciennes]
-    retires = [k for k in anciennes if k not in empreintes]
-    modifies = [k for k in empreintes
+    projets = [k for k in empreintes if k != "__gabarit__"]
+    ajoutes = [k for k in projets if k not in anciennes]
+    retires = [k for k in anciennes if k != "__gabarit__" and k not in empreintes]
+    modifies = [k for k in projets
                 if k in anciennes and anciennes[k] != empreintes[k]]
+    gabarit = ("__gabarit__" in anciennes
+               and anciennes["__gabarit__"] != empreintes.get("__gabarit__"))
 
     morceaux = []
     if ajoutes:
@@ -471,15 +496,17 @@ def fabriquer_message(etat, empreintes, total_images):
         morceaux.append(f"{len(modifies)} modifie{'s' if len(modifies) > 1 else ''}")
     if retires:
         morceaux.append(f"{len(retires)} retire{'s' if len(retires) > 1 else ''}")
+    if gabarit:
+        morceaux.append("mise en page revue")
     if not morceaux:
         morceaux.append("mise en forme")
 
-    change = bool(ajoutes or retires or modifies)
+    change = bool(ajoutes or retires or modifies or gabarit)
     majeur, mineur = etat.get("version", [1, 0])
     if change:
         mineur += 1
     message = (f"v{majeur}.{mineur} — " + ", ".join(morceaux)
-               + f" · {len(empreintes)} projets, {total_images} images")
+               + f" · {len(projets)} projets, {total_images} images")
     return message, [majeur, mineur], change, (ajoutes, modifies, retires)
 
 
@@ -553,10 +580,20 @@ def main():
             if dossier.is_dir() and not any(dossier.iterdir()):
                 dossier.rmdir()
 
+    blocs = {
+        "COMMANDES": bloc_commandes(tout["COMMANDES"]),
+        "RECHERCHE": bloc_recherche(tout["RECHERCHE"]),
+        "NOTES": bloc_notes(tout["NOTES"]),
+    }
+    # le gabarit lui-meme compte comme un changement : sans ca, une evolution
+    # de la mise en page ne ferait pas monter le numero de version, et l'apercu
+    # pour IA ecraserait sa sortie precedente sous le meme nom.
+    empreintes["__gabarit__"] = hashlib.sha1(
+        "".join(blocs.values()).encode("utf-8")).hexdigest()
+
     html = INDEX.read_text(encoding="utf-8")
-    html = injecter(html, "COMMANDES", bloc_commandes(tout["COMMANDES"]))
-    html = injecter(html, "RECHERCHE", bloc_recherche(tout["RECHERCHE"]))
-    html = injecter(html, "NOTES", bloc_notes(tout["NOTES"]))
+    for nom, contenu in blocs.items():
+        html = injecter(html, nom, contenu)
     html = maj_reseaux_sociaux(html, premiere_image)
     html = re.sub(r"(var VITESSE_SLIDER = )\d+(;)",
                   lambda m: m.group(1) + str(int(reglages["vitesse_slider_secondes"] * 1000))
@@ -570,7 +607,8 @@ def main():
     MESSAGE_COMMIT.write_text(message + "\n", encoding="utf-8")
 
     print()
-    print(f"  index.html mis a jour  ·  {len(empreintes)} projets  ·  {total_images} images")
+    nb_projets = len([k for k in empreintes if k != "__gabarit__"])
+    print(f"  index.html mis a jour  ·  {nb_projets} projets  ·  {total_images} images")
     if compteur["optimisees"]:
         print(f"  {compteur['optimisees']} image(s) redimensionnee(s) "
               f"(max {reglages['largeur_max_images']} px, qualite {reglages['qualite_jpeg']})")

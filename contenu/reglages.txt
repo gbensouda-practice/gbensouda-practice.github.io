@@ -19,4 +19,6 @@ largeur_max_images : 1600
 qualite_jpeg : 82
 
 # Durée d'affichage de chaque image dans les diaporamas, en secondes.
+# Le défilement ne tourne pas en permanence : il démarre quand la souris
+# passe sur le bloc, ou — sur téléphone — quand le bloc occupe l'écran.
 vitesse_slider_secondes : 3

@@ -194,7 +194,7 @@
   }
 
   .thumb {
-    aspect-ratio: 4/3; border: 1px solid rgba(31,63,99,.25);
+    aspect-ratio: 4/3;
     display: flex; align-items: center; justify-content: center;
     background: repeating-linear-gradient(45deg, transparent 0 8px, rgba(31,63,99,.04) 8px 9px);
     flex-shrink: 0; overflow: hidden;
@@ -445,6 +445,7 @@
   /* ── LIAISON ── */
   .liaison { padding: 36px 0; border-bottom: 1px solid var(--line); }
   .liaison p { font-size: 14px; color: var(--grey); font-style: italic; max-width: 60ch; }
+  .liaison.liaison-inline { padding: 0 0 32px; border-bottom: none; }
 
   /* ── MINI NAV ── */
   .mini-nav {
@@ -532,18 +533,15 @@
   </div>
 </header>
 
-<!-- ── PROJETS ATELIER ── -->
-<div class="liaison">
-  <div class="wrap">
-    <p>Tous les projets présentés ici participent d'une même recherche — différentes expressions d'une pratique en constante évolution.</p>
-  </div>
-</div>
-
 <section id="projets">
   <div class="wrap">
     <div class="section-head">
       <h2>Commandes</h2>
       <div class="tag mono">2016 — 2025</div>
+    </div>
+
+    <div class="liaison liaison-inline">
+      <p>Tous les projets présentés ici participent d'une même recherche — différentes expressions d'une pratique en constante évolution.</p>
     </div>
 
     <!-- AUTO:COMMANDES:DEBUT -->

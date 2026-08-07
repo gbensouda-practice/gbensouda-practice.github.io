@@ -302,6 +302,16 @@
     border-top: 1px solid var(--line);
     font-size: 12px; color: var(--grey);
   }
+  /* Marqueur de version : lisible si on le cherche, invisible sinon. */
+  .footer-version {
+    margin-top: 10px;
+    font-size: 11px; color: var(--grey); opacity: .55;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .version-pastille {
+    width: 8px; height: 8px; border-radius: 50%;
+    display: inline-block; flex: none;
+  }
 
 
   /* ── LIGHTBOX ── */
@@ -1045,6 +1055,9 @@
       </div>
     </div>
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
+    <!-- AUTO:VERSION:DEBUT -->
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.8</p>
+    <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>
 

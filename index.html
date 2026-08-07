@@ -555,9 +555,6 @@
               <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/04_modele3d-chateau.jpg" loading="lazy" alt="Vitrines Hermès France H19 — Modèle 3D du château" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/05_modele3d-eventail.jpg" loading="lazy" alt="Vitrines Hermès France H19 — Modèle 3D de l'éventail" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
               <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/06_atelier-pieces.png" loading="lazy" alt="Vitrines Hermès France H19 — Pièces usinées à l'atelier" onerror="this.style.opacity='0'">
             </div>
           </div>
@@ -567,7 +564,6 @@
             <button class="slider-dot" aria-label="Image 3"></button>
             <button class="slider-dot" aria-label="Image 4"></button>
             <button class="slider-dot" aria-label="Image 5"></button>
-            <button class="slider-dot" aria-label="Image 6"></button>
           </div>
         </div>
         <div class="cmd-calque" aria-hidden="true">
@@ -932,31 +928,6 @@
           <span class="cmd-annee mono">2022</span>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,systematiser,fabriquer,experimenter" data-tags="Impression 3D" data-texte="Première sculpture conçue par modélisation paramétrique. Imprimée en PETG transparent puis assemblée, elle marque le début d'une recherche sur les formes organiques générées par le calcul et révélées par la matière.">
-        <div class="thumb slider">
-          <div class="slider-track">
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/sculpture-impression-3d/pxl-20260127-205842238.jpg" loading="lazy" alt="Anastomose I — Zoom" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/sculpture-impression-3d/pxl-20260127-222316950-2.jpg" loading="lazy" alt="Anastomose I — En place" onerror="this.style.opacity='0'">
-            </div>
-          </div>
-          <div class="slider-dots">
-            <button class="slider-dot active" aria-label="Image 1"></button>
-            <button class="slider-dot" aria-label="Image 2"></button>
-          </div>
-        </div>
-        <div class="cmd-calque" aria-hidden="true">
-          <span class="cmd-rubrique mono">Art</span>
-          <span class="cmd-titre">Anastomose I</span>
-          <span class="cmd-resume">Première étape d'une recherche sur les formes organiques</span>
-        </div>
-        <div class="cmd-pied">
-          <span class="cmd-nom">Anastomose I</span>
-          <span class="cmd-annee mono">2026</span>
-        </div>
-      </article>
     </div>
     <!-- AUTO:COMMANDES:FIN -->
 
@@ -1048,6 +1019,28 @@
       <p class="p-desc">En parallèle, expérimentation physique : pièces d'impression 3D explorant la broderie et le perlage comme matière imprimée — modèles construits sur Grasshopper, pilotage slicer Bambu/Prusa. Chaque prototype est un objet autonome autant qu'un état intermédiaire du processus textile.</p>
       <div class="p-meta mono"><span>GRASSHOPPER</span><span>MARVELOUS DESIGNER</span><span>BLENDER</span><span>IMPRESSION 3D</span><span>BRODERIE</span><span>DIRECTION ARTISTIQUE</span></div>
     </div>
+    <div class="ff-nassij" data-reveal>
+      <div class="ff-nassij-slider slider">
+        <div class="slider-track">
+          <div class="vue">
+            <img class="sujet" src="images/web/2-recherche/sculpture-impression-3d/pxl-20260127-205842238.jpg" loading="lazy" alt="Anastomose I — Zoom" onerror="this.style.opacity='0'">
+          </div>
+          <div class="vue">
+            <img class="sujet" src="images/web/2-recherche/sculpture-impression-3d/pxl-20260127-222316950-2.jpg" loading="lazy" alt="Anastomose I — En place" onerror="this.style.opacity='0'">
+          </div>
+        </div>
+        <div class="slider-dots">
+          <button class="slider-dot active" aria-label="Image 1"></button>
+          <button class="slider-dot" aria-label="Image 2"></button>
+        </div>
+      </div>
+      <div class="p-head mono">
+        <span class="p-title">Anastomose I</span>
+        <span class="p-year">2026</span>
+      </div>
+      <p class="p-desc">Première sculpture conçue par modélisation paramétrique. Imprimée en PETG transparent puis assemblée, elle marque le début d'une recherche sur les formes organiques générées par le calcul et révélées par la matière.</p>
+      <div class="p-meta mono"><span>IMPRESSION 3D</span></div>
+    </div>
     <!-- AUTO:RECHERCHE:FIN -->
 
     <!-- AUTO:NOTES:DEBUT -->
@@ -1129,7 +1122,7 @@
     </div>
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.20</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.21</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>
@@ -1275,13 +1268,18 @@ document.querySelectorAll('video.sujet').forEach(function(v) {
   var lbVid   = document.getElementById('lb-video');
   var lbClose = document.getElementById('lb-close');
   var lbCount = document.getElementById('lb-counter');
-  var galerie = [], lbIndex = 0, savedY = 0;
+  var galerie = [], lbIndex = 0, savedY = 0, vus = 0;
 
   // galerie = liste d'objets {src, alt, video}
+  // vus compte les photos deja montrees dans cette ouverture : si on entre au
+  // milieu d'une galerie (apres un defilement automatique), « suivante » doit
+  // boucler jusqu'a avoir montre les photos precedentes aussi, pas juste
+  // s'arreter a la fin de la liste.
   function ouvrir(liste, depart) {
     if (!liste.length) return;
     galerie = liste;
     lbIndex = Math.max(0, depart || 0);
+    vus = 1;
     savedY  = window.scrollY;
     afficher(lbIndex);
     lb.classList.add('open');
@@ -1319,8 +1317,12 @@ document.querySelectorAll('video.sujet').forEach(function(v) {
   }
 
   function suivante() {
-    if (lbIndex < galerie.length - 1) { afficher(lbIndex + 1); }
-    else { fermer(); }
+    if (vus < galerie.length) {
+      vus++;
+      afficher((lbIndex + 1) % galerie.length);
+    } else {
+      fermer();
+    }
   }
 
   // images visibles : sliders des commandes et de la recherche.

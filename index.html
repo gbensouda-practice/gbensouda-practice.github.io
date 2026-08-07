@@ -155,6 +155,14 @@
   .vue[data-cale="hautbas"] .miroir-1 { background-position: center top; }
   .vue[data-cale="hautbas"] .miroir-2 { background-position: center bottom; }
 
+  /* Une vidéo ne se remplit pas en miroir : un fond CSS ne s'anime pas.
+     Elle occupe donc tout le cadre et se recadre — le plein écran la remontre
+     entière, dans ses proportions d'origine. */
+  .vue[data-media="video"] { display: block; }
+  .vue[data-media="video"] .sujet {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+
   /* ── SLIDER ── */
   .slider { position: relative; overflow: hidden; }
   .thumb.slider { display: block; }
@@ -322,12 +330,13 @@
     cursor: zoom-out;
   }
   .lightbox.open { display: flex; }
-  .lightbox img {
+  .lightbox img, .lightbox video {
     max-width: 92vw; max-height: 90vh;
     object-fit: contain; border-radius: 1px;
     box-shadow: 0 8px 48px rgba(0,0,0,.5);
     cursor: default;
   }
+  .lightbox video { display: none; }
   .lightbox-close {
     position: absolute; top: 20px; right: 24px;
     font-size: 28px; color: #C9CDC9; cursor: pointer;
@@ -419,6 +428,7 @@
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
   <button class="lightbox-close" id="lb-close" aria-label="Fermer">×</button>
   <img id="lb-img" src="" alt="">
+  <video id="lb-video" src="" controls loop playsinline></video>
   <div class="lb-counter" id="lb-counter"></div>
 </div>
 
@@ -1056,7 +1066,7 @@
     </div>
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.8</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.9</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>
@@ -1125,15 +1135,37 @@ document.querySelectorAll('.slider').forEach(function(slider) {
   }
 });
 
+// ── VIDÉOS ───────────────────────────────────────────────────────────────────
+// Même règle que le défilement : rien ne tourne en permanence. La vidéo démarre
+// au survol (souris) ou quand son bloc occupe l'écran (tactile), et s'arrête
+// dès qu'on s'en va. Muette et sans contrôles dans la page ; c'est en plein
+// écran qu'elle reprend ses proportions et ses boutons.
+document.querySelectorAll('video.sujet').forEach(function(v) {
+  var cadre = v.closest('.thumb, .ff-nassij, .vue') || v;
+  function jouer()   { var p = v.play(); if (p && p.catch) p.catch(function() {}); }
+  function stopper() { v.pause(); }
+  if (AU_SURVOL) {
+    cadre.addEventListener('mouseenter', jouer);
+    cadre.addEventListener('mouseleave', stopper);
+  } else if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function(entrees) {
+      entrees.forEach(function(e) { e.isIntersecting ? jouer() : stopper(); });
+    }, { threshold: 0.4 }).observe(cadre);
+  } else {
+    jouer();
+  }
+});
+
 // ── LIGHTBOX ─────────────────────────────────────────────────────────────────
 (function() {
   var lb      = document.getElementById('lightbox');
   var lbImg   = document.getElementById('lb-img');
+  var lbVid   = document.getElementById('lb-video');
   var lbClose = document.getElementById('lb-close');
   var lbCount = document.getElementById('lb-counter');
   var galerie = [], lbIndex = 0, savedY = 0;
 
-  // galerie = liste d'objets {src, alt}
+  // galerie = liste d'objets {src, alt, video}
   function ouvrir(liste, depart) {
     if (!liste.length) return;
     galerie = liste;
@@ -1148,13 +1180,29 @@ document.querySelectorAll('.slider').forEach(function(slider) {
     lb.classList.remove('open');
     document.body.style.overflow = '';
     lbImg.src = '';
+    lbVid.pause();
+    lbVid.removeAttribute('src');
+    lbVid.load();               // libère le décodeur au lieu de le laisser tourner
     window.scrollTo(0, savedY);
   }
 
   function afficher(n) {
     lbIndex = n;
-    lbImg.src = galerie[lbIndex].src;
-    lbImg.alt = galerie[lbIndex].alt || '';
+    var item = galerie[lbIndex];
+    if (item.video) {
+      lbImg.style.display = 'none';
+      lbImg.src = '';
+      lbVid.style.display = 'block';
+      lbVid.src = item.src;
+      var p = lbVid.play(); if (p && p.catch) p.catch(function() {});
+    } else {
+      lbVid.pause();
+      lbVid.style.display = '';
+      lbVid.removeAttribute('src');
+      lbImg.style.display = '';
+      lbImg.src = item.src;
+      lbImg.alt = item.alt || '';
+    }
     lbCount.textContent = galerie.length > 1 ? (lbIndex + 1) + ' / ' + galerie.length : '';
   }
 
@@ -1172,9 +1220,15 @@ document.querySelectorAll('.slider').forEach(function(slider) {
     if (!img) return;
     e.stopPropagation();
     var bloc = img.closest('.thumb, .ff-nassij');
-    var imgs = bloc ? Array.from(bloc.querySelectorAll('img')) : [img];
-    ouvrir(imgs.map(function(el) { return { src: el.src, alt: el.alt }; }),
-           imgs.indexOf(img));
+    var imgs = bloc ? Array.from(bloc.querySelectorAll('.sujet, img')) : [img];
+    ouvrir(imgs.map(function(el) {
+      var estVideo = el.tagName === 'VIDEO';
+      return {
+        src: el.getAttribute('src'),
+        alt: estVideo ? (el.getAttribute('data-alt') || '') : el.alt,
+        video: estVideo
+      };
+    }), imgs.indexOf(img));
   });
 
   // mots cliquables et titres des cartes texte
@@ -1188,7 +1242,8 @@ document.querySelectorAll('.slider').forEach(function(slider) {
               || document.querySelector('[data-groupe="' + id + '"]');
     if (!source) return;
     var liste = Array.from(source.querySelectorAll('i')).map(function(el) {
-      return { src: el.getAttribute('data-src'), alt: el.getAttribute('data-alt') };
+      return { src: el.getAttribute('data-src'), alt: el.getAttribute('data-alt'),
+               video: el.hasAttribute('data-video') };
     });
     ouvrir(liste, 0);
   });
@@ -1196,11 +1251,18 @@ document.querySelectorAll('.slider').forEach(function(slider) {
   lbImg.addEventListener('click', function(e) { e.stopPropagation(); suivante(); });
   lbClose.addEventListener('click', fermer);
   lb.addEventListener('click', function(e) { if (e.target === lb) fermer(); });
+  // Une vidéo ne passe pas à la suivante au clic : le clic lui appartient, il
+  // sert à la mettre en pause et à se déplacer dedans. On avance à la flèche.
+  lbVid.addEventListener('click', function(e) { e.stopPropagation(); });
 
   document.addEventListener('keydown', function(e) {
     if (!lb.classList.contains('open')) return;
     if (e.key === 'Escape') fermer();
-    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); suivante(); }
+    // barre d'espace sur une vidéo : c'est play/pause, pas « suivante »
+    var surVideo = document.activeElement === lbVid;
+    if (e.key === 'ArrowRight' || (e.key === ' ' && !surVideo)) {
+      e.preventDefault(); suivante();
+    }
     if (e.key === 'ArrowLeft' && lbIndex > 0) afficher(lbIndex - 1);
   });
 })();

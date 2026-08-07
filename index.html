@@ -120,6 +120,73 @@
   .cat-code { display: none; }
   .cat-title { font-size: 13px; color: var(--grey); text-transform: uppercase; letter-spacing: .1em; font-weight: 400; }
 
+  /* ── COMMANDES : BANDE DE LECTURE + GRILLE ──
+     La vignette répond d'un coup d'œil, la bande répond si on veut savoir.
+     La bande garde toujours sa hauteur : sans ça la grille sursaute à chaque
+     mouvement de souris. */
+  .cmd-bandeau {
+    /* la mini-navigation est déjà collée en haut : le bandeau se range dessous */
+    position: sticky; top: 42px; z-index: 40;
+    background: var(--paper); border-bottom: 1px solid var(--line);
+    padding: 14px 0 12px; margin-bottom: 22px;
+  }
+  .cmd-ops { display: flex; gap: 7px; flex-wrap: wrap; }
+  .cmd-ops span {
+    font-size: 11px; letter-spacing: .04em; padding: 4px 11px;
+    border: 1px solid var(--line); border-radius: 20px;
+    color: var(--grey); background: transparent;
+    transition: background .2s, color .2s, border-color .2s;
+  }
+  .cmd-ops span.on {
+    background: var(--blue); border-color: var(--blue); color: var(--paper);
+  }
+  .cmd-lecture { margin-top: 10px; min-height: 62px; }
+  .cmd-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 6px; min-height: 15px; }
+  .cmd-tags span { font-size: 10px; color: var(--blue); opacity: .75; letter-spacing: .06em; }
+  .cmd-texte {
+    font-size: 13.5px; line-height: 1.55; color: #3A3F3C; max-width: 78ch;
+    opacity: 0; transition: opacity .2s;
+  }
+  .cmd-texte.on { opacity: 1; }
+
+  .cmd-grille {
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px; align-items: start;
+  }
+  .cmd-carte { position: relative; display: block; }
+  .cmd-carte[data-grand] { grid-column: span 2; }
+  .cmd-carte .thumb { aspect-ratio: 4/3; }
+  .cmd-carte[data-grand] .thumb { aspect-ratio: 16/9; }
+
+  .cmd-calque {
+    position: absolute; inset: 0; pointer-events: none;
+    background: rgba(20,24,26,.88); color: var(--paper);
+    padding: 16px 17px; display: flex; flex-direction: column; justify-content: center;
+    gap: 7px; opacity: 0; transition: opacity .22s;
+  }
+  .cmd-carte.lue .cmd-calque { opacity: 1; }
+  .cmd-rubrique { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; opacity: .65; }
+  .cmd-titre { font-size: 15px; line-height: 1.3; font-weight: 500; }
+  .cmd-resume { font-size: 12.5px; line-height: 1.5; color: #C7CBC4; }
+  .cmd-pied {
+    display: flex; justify-content: space-between; gap: 12px;
+    padding: 8px 1px 0; font-size: 12px; line-height: 1.35;
+  }
+  .cmd-annee { color: var(--grey); white-space: nowrap; }
+
+  @media (max-width: 900px) {
+    .cmd-grille { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cmd-carte[data-grand] { grid-column: span 2; }
+    .cmd-bandeau { top: 40px; padding-top: 12px; }
+    .cmd-lecture { min-height: 88px; }
+    /* Sur 150 px de large, le calque n'a la place que d'une chose : la phrase.
+       Le titre est déjà juste en dessous, dans le pied de carte. */
+    .cmd-calque { padding: 11px 12px; }
+    .cmd-rubrique, .cmd-calque .cmd-titre { display: none; }
+    .cmd-resume { font-size: 12px; line-height: 1.45; color: var(--paper); }
+    .cmd-carte[data-grand] .cmd-calque .cmd-titre { display: block; }
+  }
+
   /* ── PROJECT ROW ── */
   .project {
     display: grid; grid-template-columns: 220px 1fr; gap: 36px;
@@ -480,12 +547,22 @@
     </div>
 
     <!-- AUTO:COMMANDES:DEBUT -->
-    <div class="category" data-reveal>
-      <div class="cat-head">
-        <span class="cat-title">Luxe &amp; production</span>
+    <div class="cmd-bandeau" data-reveal>
+      <div class="cmd-ops mono">
+        <span data-op="concevoir">concevoir</span>
+        <span data-op="systematiser">systematiser</span>
+        <span data-op="fabriquer">fabriquer</span>
+        <span data-op="transmettre">transmettre</span>
+        <span data-op="experimenter">experimenter</span>
       </div>
-      <div class="project" data-reveal>
-        <div class="thumb bracket slider">
+      <div class="cmd-lecture">
+        <div class="cmd-tags mono"></div>
+        <p class="cmd-texte"></p>
+      </div>
+    </div>
+    <div class="cmd-grille">
+      <article class="cmd-carte" data-grand="1" data-ops="concevoir,fabriquer,transmettre" data-tags="Rhino, ZBrush, PLA, CNC, Laser" data-texte="Modélisations et usinage pour un décor de vitrine. Formes conçues pour être imprimées en atelier ou pour du fraisage numérique bois ou polystyrène. Réalisation de plans CNC bois et polystyrène, découpe laser. Suivi d'impressions 3D PLA. — Via Atelier 20point12.">
+        <div class="thumb slider">
           <div class="slider-track">
             <div class="vue" data-cale="cotes" data-w="670" data-h="668">
               <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/hermes-holiday-windows/01_vitrine-finale.jpg&quot;)" aria-hidden="true"></span>
@@ -527,17 +604,18 @@
             <button class="slider-dot" aria-label="Image 6"></button>
           </div>
         </div>
-        <div>
-          <div class="p-head">
-            <span class="p-title">Décor vitrine (1:10) — Hermès</span>
-            <span class="p-year mono">2019</span>
-          </div>
-          <p class="p-desc">Modélisations et usinage pour un décor de vitrine. Formes conçues pour être imprimées en atelier ou pour du fraisage numérique bois ou polystyrène. Réalisation de plans CNC bois et polystyrène, découpe laser. Suivi d'impressions 3D PLA. — Via Atelier 20point12.</p>
-          <div class="p-meta mono"><span>RHINO</span><span>ZBRUSH</span><span>PLA</span><span>CNC</span><span>LASER</span></div>
+        <div class="cmd-calque" aria-hidden="true">
+          <span class="cmd-rubrique mono">Luxe &amp; production</span>
+          <span class="cmd-titre">Décor vitrine (1:10) — Hermès</span>
+          <span class="cmd-resume">Modélisations et usinage pour un décor de vitrine.</span>
         </div>
-      </div>
-      <div class="project" data-reveal>
-        <div class="thumb bracket slider">
+        <div class="cmd-pied">
+          <span class="cmd-nom">Décor vitrine (1:10) — Hermès</span>
+          <span class="cmd-annee mono">2019</span>
+        </div>
+      </article>
+      <article class="cmd-carte" data-ops="concevoir,systematiser,fabriquer,transmettre" data-tags="Rhino, Grasshopper, SLA, CNC" data-texte="Modélisations et usinage pour un décor de vitrine. Travail sur Rhino, ZBrush et définitions Grasshopper pour impression 3D PLA et SLA, CNC polystyrène. Plans d'usinage numérique bois, polystyrène et découpe laser. — Via Atelier 20point12.">
+        <div class="thumb slider">
           <div class="slider-track">
             <div class="vue" data-cale="hautbas" data-w="1600" data-h="849">
               <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-finale.jpg&quot;)" aria-hidden="true"></span>
@@ -573,17 +651,18 @@
             <button class="slider-dot" aria-label="Image 5"></button>
           </div>
         </div>
-        <div>
-          <div class="p-head">
-            <span class="p-title">Wild Wild Quest — Hermès</span>
-            <span class="p-year mono">2021</span>
-          </div>
-          <p class="p-desc">Modélisations et usinage pour un décor de vitrine. Travail sur Rhino, ZBrush et définitions Grasshopper pour impression 3D PLA et SLA, CNC polystyrène. Plans d'usinage numérique bois, polystyrène et découpe laser. — Via Atelier 20point12.</p>
-          <div class="p-meta mono"><span>RHINO</span><span>GRASSHOPPER</span><span>SLA</span><span>CNC</span></div>
+        <div class="cmd-calque" aria-hidden="true">
+          <span class="cmd-rubrique mono">Luxe &amp; production</span>
+          <span class="cmd-titre">Wild Wild Quest — Hermès</span>
+          <span class="cmd-resume">Modélisations et usinage pour un décor de vitrine.</span>
         </div>
-      </div>
-      <div class="project" data-reveal>
-        <div class="thumb bracket slider">
+        <div class="cmd-pied">
+          <span class="cmd-nom">Wild Wild Quest — Hermès</span>
+          <span class="cmd-annee mono">2021</span>
+        </div>
+      </article>
+      <article class="cmd-carte" data-grand="1" data-ops="concevoir,transmettre" data-tags="Bois CNC, LED, Stratifié, Miroir sans tain" data-texte="Design, modélisation et édition de plans de fabrication en CNC. Structure interne réalisée à la découpe CNC. Matériaux : bois, PLA, LED, stratifié résine, miroir sans tain. — Via Atelier 20point12.">
+        <div class="thumb slider">
           <div class="slider-track">
             <div class="vue" data-cale="hautbas" data-w="1167" data-h="471">
               <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/watches-wonders-mobilier-vip/01_vip-vue-eclatee.jpg&quot;)" aria-hidden="true"></span>
@@ -649,17 +728,18 @@
             <button class="slider-dot" aria-label="Image 10"></button>
           </div>
         </div>
-        <div>
-          <div class="p-head">
-            <span class="p-title">Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze</span>
-            <span class="p-year mono">2020</span>
-          </div>
-          <p class="p-desc">Design, modélisation et édition de plans de fabrication en CNC. Structure interne réalisée à la découpe CNC. Matériaux : bois, PLA, LED, stratifié résine, miroir sans tain. — Via Atelier 20point12.</p>
-          <div class="p-meta mono"><span>BOIS CNC</span><span>LED</span><span>STRATIFIÉ</span><span>MIROIR SANS TAIN</span></div>
+        <div class="cmd-calque" aria-hidden="true">
+          <span class="cmd-rubrique mono">Luxe &amp; production</span>
+          <span class="cmd-titre">Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze</span>
+          <span class="cmd-resume">Design, modélisation et édition de plans de fabrication en CNC.</span>
         </div>
-      </div>
-      <div class="project" data-reveal>
-        <div class="thumb bracket slider">
+        <div class="cmd-pied">
+          <span class="cmd-nom">Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze</span>
+          <span class="cmd-annee mono">2020</span>
+        </div>
+      </article>
+      <article class="cmd-carte" data-ops="concevoir,systematiser,transmettre" data-tags="Grasshopper, Rhino, Mobilier" data-texte="Modélisation pour une collection de mobilier. Création d'une définition Grasshopper pour un modèle évolutif et adaptatif. Conseil en design — Saket Sethi Design, 2023.">
+        <div class="thumb slider">
           <div class="slider-track">
             <div class="vue" data-cale="hautbas" data-w="1248" data-h="585">
               <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/saket-sethi-mobilier-parametrique/01_sofa-rendu.jpg&quot;)" aria-hidden="true"></span>
@@ -695,17 +775,18 @@
             <button class="slider-dot" aria-label="Image 5"></button>
           </div>
         </div>
-        <div>
-          <div class="p-head">
-            <span class="p-title">Collection mobilier paramétrique — Saket Sethi Design</span>
-            <span class="p-year mono">2023</span>
-          </div>
-          <p class="p-desc">Modélisation pour une collection de mobilier. Création d'une définition Grasshopper pour un modèle évolutif et adaptatif. Conseil en design — Saket Sethi Design, 2023.</p>
-          <div class="p-meta mono"><span>GRASSHOPPER</span><span>RHINO</span><span>MOBILIER</span></div>
+        <div class="cmd-calque" aria-hidden="true">
+          <span class="cmd-rubrique mono">Luxe &amp; production</span>
+          <span class="cmd-titre">Collection mobilier paramétrique — Saket Sethi Design</span>
+          <span class="cmd-resume">Modélisation pour une collection de mobilier.</span>
         </div>
-      </div>
-      <div class="project" data-reveal>
-        <div class="thumb bracket slider">
+        <div class="cmd-pied">
+          <span class="cmd-nom">Collection mobilier paramétrique — Saket Sethi Design</span>
+          <span class="cmd-annee mono">2023</span>
+        </div>
+      </article>
+      <article class="cmd-carte" data-ops="concevoir,transmettre" data-tags="Film, Résine, Néon, Pompidou-Metz" data-texte="Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film. Dessins de sculptures en résine, sculptures néon et plans pour les artisans peintres et sculpteurs. Exposé au Centre Pompidou-Metz, 2022. Photo Marc Domage. — Via Atelier 20point12.">
+        <div class="thumb slider">
           <div class="slider-track">
             <div class="vue" data-cale="cotes" data-w="699" data-h="672">
               <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/mass-set-design/01_expo-pompidou-metz.jpg&quot;)" aria-hidden="true"></span>
@@ -741,22 +822,18 @@
             <button class="slider-dot" aria-label="Image 5"></button>
           </div>
         </div>
-        <div>
-          <div class="p-head">
-            <span class="p-title">Set design — <em>Mass</em>, film de Pierre Pauze</span>
-            <span class="p-year mono">2020</span>
-          </div>
-          <p class="p-desc">Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film. Dessins de sculptures en résine, sculptures néon et plans pour les artisans peintres et sculpteurs. Exposé au Centre Pompidou-Metz, 2022. Photo Marc Domage. — Via Atelier 20point12.</p>
-          <div class="p-meta mono"><span>FILM</span><span>RÉSINE</span><span>NÉON</span><span>POMPIDOU-METZ</span></div>
+        <div class="cmd-calque" aria-hidden="true">
+          <span class="cmd-rubrique mono">Luxe &amp; production</span>
+          <span class="cmd-titre">Set design — <em>Mass</em>, film de Pierre Pauze</span>
+          <span class="cmd-resume">Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film.</span>
         </div>
-      </div>
-    </div>
-    <div class="category" data-reveal>
-      <div class="cat-head">
-        <span class="cat-title">Scénographie &amp; spectacle vivant</span>
-      </div>
-      <div class="project" data-reveal>
-        <div class="thumb bracket slider">
+        <div class="cmd-pied">
+          <span class="cmd-nom">Set design — <em>Mass</em>, film de Pierre Pauze</span>
+          <span class="cmd-annee mono">2020</span>
+        </div>
+      </article>
+      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre" data-tags="Scénographie, Sculpture, Installation" data-texte="Conception et modélisation 3D pour la présentation d'une installation vidéo de Sabrina Ratté durant le salon Watches and Wonders 2022 à Genève. Conception et plans d'esquisse pour la sculpture centrale et les alcôves comprenant les sculptures 3D. Prototype de sculpture cinétique réalisé par Animatronix. — Via Atelier 20point12.">
+        <div class="thumb slider">
           <div class="slider-track">
             <div class="vue" data-cale="hautbas" data-w="1600" data-h="765">
               <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/sabrina-ratte-sculpture-cinetique/01_scenographie-rendu.jpg&quot;)" aria-hidden="true"></span>
@@ -780,28 +857,30 @@
             <button class="slider-dot" aria-label="Image 3"></button>
           </div>
         </div>
-        <div>
-          <div class="p-head">
-            <span class="p-title">Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders</span>
-            <span class="p-year mono">2022</span>
-          </div>
-          <p class="p-desc">Conception et modélisation 3D pour la présentation d'une installation vidéo de Sabrina Ratté durant le salon Watches and Wonders 2022 à Genève. Conception et plans d'esquisse pour la sculpture centrale et les alcôves comprenant les sculptures 3D. Prototype de sculpture cinétique réalisé par Animatronix. — Via Atelier 20point12.</p>
-          <div class="p-meta mono"><span>SCÉNOGRAPHIE</span><span>SCULPTURE</span><span>INSTALLATION</span></div>
+        <div class="cmd-calque" aria-hidden="true">
+          <span class="cmd-rubrique mono">Scénographie &amp; spectacle vivant</span>
+          <span class="cmd-titre">Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders</span>
+          <span class="cmd-resume">Conception et modélisation 3D pour la présentation d'une installation vidéo de Sabrina Ratté durant le salon Watches and Wonders 2022 à Genève.</span>
         </div>
-      </div>
-      <div class="project" data-reveal>
-        <div class="thumb bracket"><span class="mono">SANS VISUEL</span></div>
-        <div>
-          <div class="p-head">
-            <span class="p-title">Scénographie — <em>L'aire poids lourd</em>, mise en scène Carole Errante</span>
-            <span class="p-year mono">Théâtre</span>
-          </div>
-          <p class="p-desc">Conception scénographique complète — de l'esquisse au plateau.</p>
-          <div class="p-meta mono"><span>THÉÂTRE</span><span>SCÉNOGRAPHIE</span></div>
+        <div class="cmd-pied">
+          <span class="cmd-nom">Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders</span>
+          <span class="cmd-annee mono">2022</span>
         </div>
-      </div>
-      <div class="project" data-reveal>
-        <div class="thumb bracket slider">
+      </article>
+      <article class="cmd-carte" data-ops="concevoir,fabriquer" data-tags="Théâtre, Scénographie" data-texte="Conception scénographique complète — de l'esquisse au plateau.">
+        <div class="thumb"><span class="mono">SANS VISUEL</span></div>
+        <div class="cmd-calque" aria-hidden="true">
+          <span class="cmd-rubrique mono">Scénographie &amp; spectacle vivant</span>
+          <span class="cmd-titre">Scénographie — <em>L'aire poids lourd</em>, mise en scène Carole Errante</span>
+          <span class="cmd-resume">Conception scénographique complète — de l'esquisse au plateau.</span>
+        </div>
+        <div class="cmd-pied">
+          <span class="cmd-nom">Scénographie — <em>L'aire poids lourd</em>, mise en scène Carole Errante</span>
+          <span class="cmd-annee mono">Théâtre</span>
+        </div>
+      </article>
+      <article class="cmd-carte" data-grand="1" data-ops="concevoir,systematiser,fabriquer,experimenter" data-tags="Danse, Fabrication, Biomimétisme, Grasshopper" data-texte="Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer. Formes organiques et biomimétiques développées par modélisation paramétrique, conçues pour interagir avec le corps dansant et redéfinir la présence de l'objet sur scène.">
+        <div class="thumb slider">
           <div class="slider-track">
             <div class="vue" data-cale="hautbas" data-w="1600" data-h="998">
               <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/starting-with-the-limbs/dispositif1.jpg&quot;)" aria-hidden="true"></span>
@@ -837,17 +916,18 @@
             <button class="slider-dot" aria-label="Image 5"></button>
           </div>
         </div>
-        <div>
-          <div class="p-head">
-            <span class="p-title">Dispositifs scéniques — <em>Starting with the Limbs</em>, cie L'Autre Maison</span>
-            <span class="p-year mono">Danse</span>
-          </div>
-          <p class="p-desc">Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer. Formes organiques et biomimétiques développées par modélisation paramétrique, conçues pour interagir avec le corps dansant et redéfinir la présence de l'objet sur scène.</p>
-          <div class="p-meta mono"><span>DANSE</span><span>FABRICATION</span><span>BIOMIMÉTISME</span><span>GRASSHOPPER</span></div>
+        <div class="cmd-calque" aria-hidden="true">
+          <span class="cmd-rubrique mono">Scénographie &amp; spectacle vivant</span>
+          <span class="cmd-titre">Dispositifs scéniques — <em>Starting with the Limbs</em>, cie L'Autre Maison</span>
+          <span class="cmd-resume">Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer.</span>
         </div>
-      </div>
-      <div class="project" data-reveal>
-        <div class="thumb bracket slider">
+        <div class="cmd-pied">
+          <span class="cmd-nom">Dispositifs scéniques — <em>Starting with the Limbs</em>, cie L'Autre Maison</span>
+          <span class="cmd-annee mono">Danse</span>
+        </div>
+      </article>
+      <article class="cmd-carte" data-ops="concevoir,fabriquer,experimenter" data-tags="Unity, VR, Musique" data-texte="Expérience immersive en réalité virtuelle pour la première de l'album Photophobia à Kampnagel, Hambourg. Un vidéoclip permettant d'évoluer dans un monde de mangrove imaginé pour trois pistes (Pandemonium, In Short, Self-Abolition) — du marécage futuriste sombre à un espace kaléidoscopique. Avec Sanni Est (direction artistique, concept &amp; musique) et alpharats (programming &amp; VFX).">
+        <div class="thumb slider">
           <div class="slider-track">
             <div class="vue" data-cale="hautbas" data-w="1600" data-h="724">
               <span class="miroir miroir-1" style="background-image:url(&quot;images/web/1-commandes/photophobia-vr/01_scene-mangrove.jpg&quot;)" aria-hidden="true"></span>
@@ -883,15 +963,16 @@
             <button class="slider-dot" aria-label="Image 5"></button>
           </div>
         </div>
-        <div>
-          <div class="p-head">
-            <span class="p-title">Environnement VR — <em>Photophobia</em>, Sanni Est</span>
-            <span class="p-year mono">2022</span>
-          </div>
-          <p class="p-desc">Expérience immersive en réalité virtuelle pour la première de l'album Photophobia à Kampnagel, Hambourg. Un vidéoclip permettant d'évoluer dans un monde de mangrove imaginé pour trois pistes (Pandemonium, In Short, Self-Abolition) — du marécage futuriste sombre à un espace kaléidoscopique. Avec Sanni Est (direction artistique, concept &amp; musique) et alpharats (programming &amp; VFX).</p>
-          <div class="p-meta mono"><span>UNITY</span><span>VR</span><span>MUSIQUE</span></div>
+        <div class="cmd-calque" aria-hidden="true">
+          <span class="cmd-rubrique mono">Scénographie &amp; spectacle vivant</span>
+          <span class="cmd-titre">Environnement VR — <em>Photophobia</em>, Sanni Est</span>
+          <span class="cmd-resume">Expérience immersive en réalité virtuelle pour la première de l'album Photophobia à Kampnagel, Hambourg.</span>
         </div>
-      </div>
+        <div class="cmd-pied">
+          <span class="cmd-nom">Environnement VR — <em>Photophobia</em>, Sanni Est</span>
+          <span class="cmd-annee mono">2022</span>
+        </div>
+      </article>
     </div>
     <!-- AUTO:COMMANDES:FIN -->
 
@@ -1066,7 +1147,7 @@
     </div>
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.9</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.13</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>
@@ -1155,6 +1236,73 @@ document.querySelectorAll('video.sujet').forEach(function(v) {
     jouer();
   }
 });
+
+// ── GRILLE DES COMMANDES ─────────────────────────────────────────────────────
+// Une carte « lue » montre son calque et remplit la bande. Même déclenchement
+// que le défilement et la vidéo : le survol sur ordinateur, l'entrée dans
+// l'écran sur tactile. Une seule règle pour les trois.
+(function() {
+  var bandeau = document.querySelector('.cmd-bandeau');
+  var cartes  = document.querySelectorAll('.cmd-carte');
+  if (!bandeau || !cartes.length) return;
+  var pastilles = bandeau.querySelectorAll('.cmd-ops span');
+  var zoneTags  = bandeau.querySelector('.cmd-tags');
+  var zoneTexte = bandeau.querySelector('.cmd-texte');
+  var lue = null;
+
+  function lire(carte) {
+    if (lue === carte) return;
+    if (lue) lue.classList.remove('lue');
+    lue = carte;
+    if (carte) carte.classList.add('lue');
+
+    var ops = carte ? (carte.getAttribute('data-ops') || '').split(',') : [];
+    pastilles.forEach(function(p) {
+      p.classList.toggle('on', ops.indexOf(p.getAttribute('data-op')) !== -1);
+    });
+    zoneTags.innerHTML = '';
+    if (carte) {
+      (carte.getAttribute('data-tags') || '').split(',').forEach(function(t) {
+        if (!t.trim()) return;
+        var s = document.createElement('span');
+        s.textContent = t.trim().toUpperCase();
+        zoneTags.appendChild(s);
+      });
+    }
+    zoneTexte.textContent = carte ? (carte.getAttribute('data-texte') || '') : '';
+    zoneTexte.classList.toggle('on', !!carte);
+  }
+
+  if (AU_SURVOL) {
+    cartes.forEach(function(c) {
+      c.addEventListener('mouseenter', function() { lire(c); });
+    });
+    var section = document.getElementById('projets');
+    if (section) section.addEventListener('mouseleave', function() { lire(null); });
+  } else {
+    // Au doigt, on ne peut pas se contenter de « la carte est visible » : sur un
+    // écran étroit quatre cartes le sont en même temps, et plus rien ne bouge
+    // ensuite. On désigne donc celle dont le centre est le plus proche d'une
+    // ligne de lecture — il y a toujours exactement une gagnante.
+    var choisir = function() {
+      var ligne = window.innerHeight * 0.45, gagnante = null, ecartMin = Infinity;
+      cartes.forEach(function(c) {
+        var r = c.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        var ecart = Math.abs(r.top + r.height / 2 - ligne);
+        if (ecart < ecartMin) { ecartMin = ecart; gagnante = c; }
+      });
+      lire(gagnante);
+    };
+    var enAttente = false;
+    window.addEventListener('scroll', function() {
+      if (enAttente) return;
+      enAttente = true;
+      requestAnimationFrame(function() { enAttente = false; choisir(); });
+    }, { passive: true });
+    choisir();
+  }
+})();
 
 // ── LIGHTBOX ─────────────────────────────────────────────────────────────────
 (function() {

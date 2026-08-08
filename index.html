@@ -399,10 +399,48 @@
     transform: scaleY(0); transform-origin: top center;
     transition: transform .42s var(--e-out);
   }
-  .ff-card .k {
-    display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
-    font-size: 11px; color: var(--blue-nuit); letter-spacing: .08em; text-transform: uppercase;
+  /* L'en-tete d'une note. Defini sans prefixe : le meme objet sert dans la
+     grille ET en pied du grand bloc, il doit y avoir une seule source. */
+  .k {
+    font-size: 11px; color: var(--blue-nuit);
+    letter-spacing: .08em; text-transform: uppercase;
   }
+  .ff-card .k { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+
+  /* ── PIED DU GRAND BLOC : d'ou sort cette piece ──
+     Toute la ligne est un seul lien : une cible, un geste, large au doigt. */
+  .p-note {
+    margin-top: 28px; padding-top: 20px;
+    border-top: 1px solid var(--line-nuit); max-width: 62ch;
+  }
+  .lien-note {
+    display: flex; align-items: center; gap: 14px; width: 100%;
+    background: none; border: none; padding: 0; text-align: left;
+    color: inherit; cursor: pointer;
+    transition: transform .16s var(--e-out);
+  }
+  .lien-note:active { transform: translateY(.5px); }
+  .p-note-vignette {
+    width: 44px; height: 44px; flex: none; object-fit: cover; border-radius: 1px;
+    filter: grayscale(1) contrast(.9); opacity: .55;
+    transition: filter .35s ease, opacity .35s ease;
+  }
+  .p-note-texte { display: flex; flex-direction: column; gap: 3px; }
+  .p-note-texte .k {
+    background-image: linear-gradient(var(--corail), var(--corail));
+    background-repeat: no-repeat; background-position: 0 100%;
+    background-size: 0% 1px; padding-bottom: 1px;
+    transition: color .18s ease, background-size .34s var(--e-out);
+  }
+  .p-note-compte { font-size: 10.5px; color: #6F766F; letter-spacing: .04em; }
+  @media (hover: hover) and (pointer: fine) {
+    .lien-note:hover .p-note-vignette { filter: none; opacity: 1; }
+    .lien-note:hover .p-note-texte .k { background-size: 100% 1px; color: #A8C4DC; }
+  }
+
+  /* La note visee par le lien : son filet de marge se trace, le meme qu'au
+     survol. Aucun langage visuel nouveau pour dire « c'est celle-la ». */
+  .ff-card.visee::before { transform: scaleY(1); }
   .k-vignette {
     width: 44px; height: 44px; flex: none; object-fit: cover; border-radius: 1px;
     filter: grayscale(1) contrast(.9); opacity: .55;
@@ -1375,7 +1413,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
       <p class="notes-intro">Le reste du travail : en cours, collaboratif, moins fini. Les mots soulignés ouvrent les photos.</p>
     </div>
     <div class="ff-grid">
-      <div class="ff-card">
+      <div class="ff-card" data-note="2-recherche-formes-generatives-imprimees">
         <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-formes-generatives-imprimees">01 — Formes génératives imprimées</button></div>
         <p>Recherche sur les formes organiques générées par le calcul, entre sculpture et objet — une même méthode paramétrique, déclinée dans deux familles de pièces : définir une géométrie porteuse, la décliner par le calcul, la révéler par l'impression.</p>
         <p><em>Anastomose</em> est la première sculpture de cette recherche : une forme organique modélisée puis imprimée en PETG transparent et assemblée en plusieurs parties.</p>
@@ -1392,7 +1430,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           </span>
         </div>
       </div>
-      <div class="ff-card">
+      <div class="ff-card" data-note="2-recherche-collection-nassij">
         <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-collection-nassij">02 — Collection Nassij</button></div>
         <p>Recherche hybride en trois strates : conception paramétrique, production digitale, expérimentation physique. Le projet qui illustre le mieux le pipeline complet — du fichier Grasshopper à la vidéo de défilé final.</p>
         <p>En parallèle, expérimentation physique : perlage et motifs imprimés directement sur tulle, pièces construites sur Grasshopper et pilotées par mon propre outil de slicing. Chaque prototype est un objet autonome autant qu'un état intermédiaire du processus textile — le détail de cette recherche (matériaux, méthode, collaboration avec l'atelier) vit à part, dans les notes.</p>
@@ -1408,7 +1446,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           </span>
         </div>
       </div>
-      <div class="ff-card">
+      <div class="ff-card" data-note="2-recherche-artisanat-numerique">
         <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-artisanat-numerique">03 — Artisanat + numérique</button></div>
         <p>Je travaille en exclusivité avec un atelier de couture marocain qui a plus de cinquante ans d'existence, entre savoir-faire traditionnel (dfina, kaftan, kmiss, jellaba) et ouverture contemporaine. J'y propose des <button class="lien-galerie" data-galerie="2-recherche-artisanat-numerique-boutons">boutons imprimés en 3D</button> comme alternative aux boutons traditionnels en fil de soie, conçus et produits sur mesure pour chaque tenue selon ses formes, ses couleurs et ses matières.</p>
         <p>Les boutons sont réalisés en série après un échantillonnage par projet — les outils de présentation et d'échantillonnage sont eux aussi dessinés sur Grasshopper et imprimés en 3D. L'atelier me sollicite aussi pour mettre à l'échelle des graphismes ou choisir des couleurs, en soutien direct au travail des brodeurs.</p>
@@ -1420,7 +1458,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           </span>
         </div>
       </div>
-      <div class="ff-card">
+      <div class="ff-card" data-note="2-recherche-outils-applications">
         <div class="k mono">04 — Outils + applications</div>
         <p>En parallèle de la fabrication, je développe des outils numériques qui prolongent la même logique : systématiser, transmettre, rendre un savoir-faire réutilisable.</p>
         <p><em>BridgeLink</em> — application de gestion de tournois pour des clubs de bridge, pilotée gratuitement en test réel avec un club à Casablanca avant une licence payante.</p>
@@ -1428,7 +1466,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
         <p><em>Creative Memory</em> et <em>FenFuturesTools</em> — mes propres outils de travail (dont un environnement de traitement d'image par IA), pensés comme une base commune plutôt que des scripts jetables, à terme partagés par licence en tokens d'utilisation.</p>
         <p><em>HedronEquilibre</em> — un jeu d'équilibre et d'empilement en pièces imprimées en 3D, construit sur une géométrie unique déclinable en modules.</p>
       </div>
-      <div class="ff-card">
+      <div class="ff-card" data-note="2-recherche-production-matiere">
         <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-production-matiere">05 — Production matière</button></div>
         <p>Conception de moules imprimés en 3D pour des marques qui produisent ensuite leurs pièces en série — bougies, contenants, objets parfumés. Chaque moule est pensé en plusieurs parties démontables pour permettre le tirage en silicone qui sert à la production finale.</p>
         <p>Collaboration en cours avec <button class="lien-galerie" data-galerie="2-recherche-production-matiere-tiflik">Tiflik</button> : un moule en trois pièces, imprimé en FDM, pour leurs contenants de bougie parfumée à leur logo.</p>
@@ -1438,7 +1476,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           </span>
         </div>
       </div>
-      <div class="ff-card">
+      <div class="ff-card" data-note="2-recherche-recherche-corps">
         <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-recherche-corps">06 — Recherche corps</button></div>
         <p>Body Architecture 2.0 — <button class="lien-galerie" data-galerie="2-recherche-recherche-corps-masques">masques génératifs</button> développés pendant le workshop de Filippo Nassetti. Workshop d'<button class="lien-galerie" data-galerie="2-recherche-recherche-corps-morphine">architecture futuriste</button> avec Amir Fakhrghasemi. Défilé digital comme forme de recherche sur la présence du vêtement.</p>
         <div class="galerie-source" data-galerie-id="2-recherche-recherche-corps" hidden>
@@ -1456,7 +1494,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           </span>
         </div>
       </div>
-      <div class="ff-card">
+      <div class="ff-card" data-note="2-recherche-scenographie-fabrication">
         <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-scenographie-fabrication">07 — Scénographie + fabrication</button></div>
         <p>Le résultat visible d'un dispositif scénique ne raconte pas toujours le travail de fabrication qui le porte. Deux exemples.</p>
         <p>Pour <em>L'aire poids lourd</em>, la conception s'est concentrée sur le praticable — construction, décisions d'assemblage, logistique de montage et démontage — restée volontairement discrète parce qu'une écriture lumière préexistante occupait déjà tout l'espace visuel. <button class="lien-galerie" data-galerie="2-recherche-scenographie-fabrication-aire-poids-lourd">Le chantier</button>, de l'esquisse au plateau, conçu et fabriqué seul.</p>
@@ -1475,7 +1513,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           </span>
         </div>
       </div>
-      <div class="ff-card">
+      <div class="ff-card" data-note="2-recherche-textile-fabrication-numerique">
         <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-textile-fabrication-numerique">08 — Textile + fabrication numérique</button></div>
         <p>Pont entre ateliers locaux et outils numériques avancés : perlage et motifs imprimés directement sur tulle, à partir d'un workflow que j'ai construit moi-même — une image de départ, un <button class="lien-galerie" data-galerie="2-recherche-textile-fabrication-numerique-hudhud">plugin Grasshopper</button> que j'ai développé pour le systématiser (filtres d'image, disposition des motifs selon la teinte et la luminosité, trajectoires d'impression continues), puis impression 3D en filament flexible directement sur le textile.</p>
         <p>Ce sont des essais en incréments : gérer au fur et à mesure la qualité des couleurs, la disposition, les formes, l'interprétation de l'image source. Une recherche sur les matériaux biosourcés est aussi en cours, pour rapprocher cette pratique numérique des savoir-faire locaux au Maroc.</p>
@@ -1536,7 +1574,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     </div>
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.28</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.29</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>
@@ -1976,6 +2014,20 @@ document.querySelectorAll('.lien-galerie').forEach(function (lien) {
     x0 = null;
   }, { passive: true });
 })();
+
+// ── ALLER A LA NOTE D'OU SORT LA PIECE ───────────────────────────────────────
+// Le pied du grand bloc ne montre pas des images : il ramene a la note. C'est
+// pour ca qu'il ne partage pas le geste des mots cliquables.
+document.addEventListener('click', function (e) {
+  var lien = e.target.closest('.lien-note');
+  if (!lien) return;
+  e.preventDefault();
+  var cible = document.querySelector('.ff-card[data-note="' + lien.getAttribute('data-note') + '"]');
+  if (!cible) return;
+  cible.scrollIntoView({ behavior: MOINS_DE_MOUVEMENT ? 'auto' : 'smooth', block: 'center' });
+  cible.classList.add('visee');
+  setTimeout(function () { cible.classList.remove('visee'); }, 1600);
+});
 
 // ── MINI NAV, RETOUR EN HAUT, GRAIN ──────────────────────────────────────────
 (function () {

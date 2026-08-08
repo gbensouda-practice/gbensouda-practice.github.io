@@ -18,22 +18,27 @@
 <title>Ghali Bensouda — Designer de dispositifs</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,450;9..144,600&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --paper: #EDEEEB;
     --paper-2: #E4E6E1;
     --ink: #14181A;
     --blue: #1F3F63;
+    --blue-nuit: #7E9DBB;
+    --corail: #C97B68;          /* a echantillonner sur le vase bleu-orange */
     --grey: #6E7570;
     --line: #C7CBC4;
+    --line-nuit: #2E3436;
+    --e-out: cubic-bezier(.23, 1, .32, 1);
+    --e-in-out: cubic-bezier(.77, 0, .175, 1);
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
     background: var(--paper);
     color: var(--ink);
-    font-family: 'Inter', sans-serif;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-size: 16px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -42,15 +47,26 @@
   a:hover { color: var(--blue); }
   .mono { font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.02em; }
   .wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
-
-  /* bracket motif */
-  .bracket { position: relative; }
-  .bracket::before, .bracket::after {
-    content: ''; position: absolute; width: 10px; height: 10px;
-    border: 1px solid var(--blue); opacity: .5;
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); white-space: nowrap;
   }
-  .bracket::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
-  .bracket::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+  /* Etats clavier : absents du site actuel, presents partout ici. */
+  a:focus-visible, button:focus-visible {
+    outline: 1px solid var(--blue); outline-offset: 3px; border-radius: 1px;
+  }
+  .fenfutures a:focus-visible, .fenfutures button:focus-visible,
+  .lightbox button:focus-visible { outline-color: var(--corail); }
+
+  /* ── GRAIN : n'existe que sur le bloc sombre, fixe, jamais repeint au defilement ── */
+  .grain {
+    position: fixed; inset: 0; z-index: 60; pointer-events: none;
+    opacity: 0; transition: opacity .6s ease;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E");
+  }
+  .grain.actif { opacity: .055; }
 
   /* ── HERO ── */
   header.hero {
@@ -64,9 +80,10 @@
     color: var(--blue); margin-bottom: 22px;
   }
   h1.name {
-    font-family: 'Fraunces', serif; font-weight: 450;
-    font-size: clamp(48px, 9vw, 108px);
-    line-height: .98; letter-spacing: -.01em;
+    font-family: 'Newsreader', serif; font-weight: 400;
+    font-optical-sizing: auto;
+    font-size: clamp(48px, 9vw, 112px);
+    line-height: .95; letter-spacing: -.018em;
     margin-bottom: 28px;
   }
   .hero-sub {
@@ -85,122 +102,127 @@
     text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px;
   }
 
-  /* ── TOOLS STRIP ── */
-  .tools {
-    padding: 20px 0;
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-  }
-  .tools .wrap { display: flex; flex-wrap: wrap; }
-  .tools span {
-    font-size: 11px; color: var(--grey);
-    padding-right: 16px; margin-right: 16px;
-    border-right: 1px solid var(--line);
-    line-height: 2.2;
-  }
-  .tools span:last-child { border-right: none; }
-
   /* ── SECTIONS ── */
-  section { padding: 120px 0; }
+  section { padding: 96px 0 104px; }
   .section-head {
     display: flex; justify-content: space-between; align-items: flex-end;
-    margin-bottom: 64px; flex-wrap: wrap; gap: 16px;
+    margin-bottom: 48px; flex-wrap: wrap; gap: 16px;
     border-bottom: 1px solid var(--line); padding-bottom: 28px;
   }
   .section-head h2 {
-    font-family: 'Fraunces', serif; font-weight: 450;
-    font-size: clamp(30px, 4vw, 44px);
+    font-family: 'Newsreader', serif; font-weight: 400;
+    font-optical-sizing: auto;
+    font-size: clamp(30px, 4vw, 46px); letter-spacing: -.015em;
   }
   .section-head .tag { font-size: 12px; color: var(--blue); }
 
-  /* ── CATEGORY ── */
-  .category { margin-bottom: 88px; }
-  .category:last-child { margin-bottom: 0; }
-  .cat-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 36px; }
-  .cat-code { display: none; }
-  .cat-title { font-size: 13px; color: var(--grey); text-transform: uppercase; letter-spacing: .1em; font-weight: 400; }
+  .liaison { padding: 0 0 32px; }
+  .liaison p { font-size: 14px; color: var(--grey); font-style: italic; max-width: 60ch; }
 
-  /* ── COMMANDES : BANDE DE LECTURE + GRILLE ──
-     La vignette répond d'un coup d'œil, la bande répond si on veut savoir.
-     La bande garde toujours sa hauteur : sans ça la grille sursaute à chaque
-     mouvement de souris. */
+  /* ── COMMANDES : BANDE DE LECTURE ── */
   .cmd-bandeau {
-    /* la mini-navigation est déjà collée en haut : le bandeau se range dessous */
     position: sticky; top: 42px; z-index: 40;
     background: var(--paper); border-bottom: 1px solid var(--line);
-    padding: 14px 0 12px; margin-bottom: 22px;
+    padding: 14px 0 12px; margin-bottom: 26px;
   }
   .cmd-ops { display: flex; gap: 7px; flex-wrap: wrap; }
   .cmd-ops span {
+    position: relative; overflow: hidden; z-index: 0;
     font-size: 11px; letter-spacing: .04em; padding: 4px 11px;
     border: 1px solid var(--line); border-radius: 20px;
     color: var(--grey); background: transparent;
-    transition: background .2s, color .2s, border-color .2s;
+    transition: color .2s ease, border-color .2s ease;
   }
-  .cmd-ops span.on {
-    background: #fff; border-color: var(--ink); color: var(--ink);
+  /* la pastille se remplit par la gauche : une mesure qui se prend */
+  .cmd-ops span::before {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    background: #fff;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path .26s var(--e-out);
   }
+  .cmd-ops span.on { border-color: var(--ink); color: var(--ink); }
+  .cmd-ops span.on::before { clip-path: inset(0 0 0 0); }
+
   .cmd-lecture { margin-top: 10px; min-height: 62px; }
   .cmd-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 6px; min-height: 15px; }
-  .cmd-tags span { font-size: 10px; color: var(--blue); opacity: .75; letter-spacing: .06em; }
+  .cmd-tags span {
+    font-size: 10px; color: var(--blue); letter-spacing: .06em;
+    opacity: 0; transform: translateY(2px);
+    animation: tag-entre .26s var(--e-out) forwards;
+  }
+  .cmd-tags span:nth-child(1) { animation-delay: 0ms; }
+  .cmd-tags span:nth-child(2) { animation-delay: 30ms; }
+  .cmd-tags span:nth-child(3) { animation-delay: 60ms; }
+  .cmd-tags span:nth-child(4) { animation-delay: 90ms; }
+  .cmd-tags span:nth-child(n+5) { animation-delay: 120ms; }
+  @keyframes tag-entre { to { opacity: .75; transform: none; } }
   .cmd-texte {
     font-size: 13.5px; line-height: 1.55; color: #3A3F3C; max-width: 78ch;
-    opacity: 0; transition: opacity .2s;
+    opacity: 0; transform: translateY(3px);
+    transition: opacity .2s ease-out, transform .28s var(--e-out);
   }
-  .cmd-texte.on { opacity: 1; }
+  .cmd-texte.on { opacity: 1; transform: none; }
 
+  /* ── COMMANDES : GRILLE ── */
   .cmd-grille {
     display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px; align-items: start;
+    gap: 20px 18px; align-items: start;
   }
   .cmd-carte { position: relative; display: block; }
-  .cmd-carte[data-grand] { grid-column: span 2; }
-  .cmd-carte .thumb { aspect-ratio: 4/3; }
+  /* une case double est deux fois plus large : sa vignette 4/3 occupe donc
+     exactement deux lignes. On le declare, et la grille se referme. */
+  .cmd-carte[data-grand] { grid-column: span 2; grid-row: span 2; }
+  .cmd-carte .thumb { aspect-ratio: 4/3; position: relative; }
 
+  /* le trait de mesure se trace en haut de la vignette lue */
+  .cmd-carte .thumb::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: var(--blue); z-index: 3;
+    transform: scaleX(0); transform-origin: left center;
+    transition: transform .32s var(--e-out);
+  }
+  .cmd-carte.lue .thumb::after { transform: scaleX(1); }
+
+  /* Le calque ne remplit plus la carte : il monte du bas.
+     Au repos il porte le titre, a la lecture il deplie le resume. */
   .cmd-calque {
-    position: absolute; inset: 0; pointer-events: none;
-    background: rgba(20,24,26,.88); color: var(--paper);
-    padding: 16px 17px; display: flex; flex-direction: column; justify-content: center;
-    gap: 7px; opacity: 0; transition: opacity .22s;
+    position: absolute; inset: 0; pointer-events: none; z-index: 2;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    color: var(--paper);
   }
-  .cmd-carte.lue .cmd-calque { opacity: 1; }
-  .cmd-rubrique { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; opacity: .65; }
+  /* Le voile appartient au bloc de texte : il fait toujours sa hauteur, plus
+     46 px de fondu au-dessus. Un titre sur trois lignes reste donc lisible,
+     et une carte au titre court n'est pas assombrie pour rien. */
+  .cmd-bloc {
+    display: flex; flex-direction: column; gap: 6px;
+    padding: 46px 17px 16px;
+    background: linear-gradient(to top,
+      rgba(20,24,26,.93) 0%, rgba(20,24,26,.90) 42%, rgba(20,24,26,0) 100%);
+    transition: background .28s var(--e-out);
+  }
+  .cmd-carte.lue .cmd-bloc {
+    background: linear-gradient(to top,
+      rgba(20,24,26,.95) 0%, rgba(20,24,26,.93) 62%, rgba(20,24,26,0) 100%);
+  }
+  .cmd-rubrique {
+    font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+    color: #9BA5AC;
+    display: flex; justify-content: space-between; gap: 12px; align-items: baseline;
+  }
+  .cmd-annee { font-style: normal; opacity: .7; flex: none; }
   .cmd-titre { font-size: 15px; line-height: 1.3; font-weight: 500; }
-  .cmd-resume { font-size: 12.5px; line-height: 1.5; color: #C7CBC4; }
-  .cmd-pied {
-    display: flex; justify-content: space-between; gap: 12px;
-    padding: 8px 1px 0; font-size: 12px; line-height: 1.35;
+  .cmd-resume {
+    font-size: 12.5px; line-height: 1.5; color: #C7CBC4;
+    max-height: 0; opacity: 0; overflow: hidden;
+    transition: max-height .3s var(--e-out), opacity .2s ease-out .06s;
   }
-  .cmd-annee { color: var(--grey); white-space: nowrap; }
+  .cmd-carte.lue .cmd-resume { max-height: 6em; opacity: 1; }
 
-  @media (max-width: 900px) {
-    .cmd-grille { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .cmd-carte[data-grand] { grid-column: span 2; }
-    .cmd-bandeau { top: 40px; padding-top: 12px; }
-    .cmd-lecture { min-height: 88px; }
-    /* Sur 150 px de large, le calque n'a la place que d'une chose : la phrase.
-       Le titre est déjà juste en dessous, dans le pied de carte. */
-    .cmd-calque { padding: 11px 12px; }
-    .cmd-rubrique, .cmd-calque .cmd-titre { display: none; }
-    .cmd-resume { font-size: 12px; line-height: 1.45; color: var(--paper); }
-    .cmd-carte[data-grand] .cmd-calque .cmd-titre { display: block; }
-  }
-
-  /* ── PROJECT ROW ── */
-  .project {
-    display: grid; grid-template-columns: 220px 1fr; gap: 36px;
-    padding: 32px 0; border-top: 1px solid var(--line);
-  }
-
+  /* ── VUE : l'image entiere, centree, jamais recadree ── */
   .thumb {
-    aspect-ratio: 4/3;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0; overflow: hidden;
   }
-  .thumb > span { font-size: 10px; color: var(--blue); opacity: .5; letter-spacing: .08em; }
-  .thumb > .vue { height: 100%; }
-
-  /* ── VUE : l'image ou la vidéo entière, centrée, sans recadrage ── */
   .vue {
     display: flex; align-items: center; justify-content: center;
     width: 100%; height: 100%; cursor: zoom-in;
@@ -210,126 +232,224 @@
     object-fit: contain; display: block;
   }
 
-  /* ── SLIDER ── */
+  /* ── DIAPORAMA ── */
   .slider { position: relative; overflow: hidden; }
   .thumb.slider { display: block; }
-  .slider-track {
-    display: flex; flex-wrap: nowrap;
-    width: 100%;
-    transition: transform .35s ease;
-  }
+  .slider-track { display: flex; flex-wrap: nowrap; width: 100%; transition: transform .35s ease; }
   .slider-track > .vue { flex: 0 0 100%; aspect-ratio: 4/3; }
 
+  /* La reglette : le meme objet partout sur le site veut dire la meme chose,
+     ou tu es dans une serie. Dans les vignettes elle monte en haut a droite,
+     le bas etant occupe par le voile qui porte le titre. */
   .slider-dots {
-    position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
-    display: flex; gap: 5px; z-index: 2;
+    position: absolute; top: 12px; right: 13px;
+    display: flex; gap: 3px; z-index: 4;
   }
   .slider-dot {
-    width: 5px; height: 5px; border-radius: 50%;
-    background: rgba(255,255,255,.35); cursor: pointer;
-    border: none; padding: 0; transition: background .15s;
+    width: 14px; height: 2px; border: none; padding: 0; cursor: pointer;
+    background: rgba(255,255,255,.26); border-radius: 0;
+    position: relative; overflow: hidden;
+    transition: background .2s ease, transform .16s var(--e-out);
   }
-  .slider-dot.active { background: rgba(255,255,255,.9); }
-  /* Nassij slider in dark FenFutures section */
-  .ff-nassij-slider {
-    --ratio-nassij: 16/8;
-    width: 100%; margin-bottom: 28px;
-    border-radius: 1px; background: #1A1F21;
+  .slider-dot:hover { background: rgba(255,255,255,.55); }
+  .slider-dot:active { transform: scaleY(2); }
+  .slider-dot.active { background: rgba(255,255,255,.34); }
+  .slider-dot.active::after {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(255,255,255,.95);
+    transform-origin: left center; transform: scaleX(0);
   }
-  .ff-nassij-slider .slider-track {
-    display: flex; flex-wrap: nowrap; width: 100%;
-  }
-  .ff-nassij-slider .slider-track > .vue { flex: 0 0 100%; aspect-ratio: var(--ratio-nassij); }
-  .ff-nassij-slider > .vue { aspect-ratio: var(--ratio-nassij); }
-  /* en portrait, le bandeau paysage devient un carré : le bloc reprend du poids */
-  @media (max-width: 700px) {
-    .ff-nassij-slider { --ratio-nassij: 1/1; }
+  /* la jauge ne court que si le diaporama tourne vraiment */
+  .slider.en-cours .slider-dot.active::after {
+    transition: transform 3s linear; transform: scaleX(1);
   }
 
-  .p-head { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 10px; flex-wrap: wrap; }
-  .p-title { font-size: 18px; font-weight: 500; line-height: 1.25; }
-  .p-year { font-size: 12px; color: var(--grey); white-space: nowrap; padding-top: 3px; }
-  .p-desc { color: #3A3F3C; font-size: 15px; max-width: 64ch; margin-bottom: 16px; line-height: 1.65; }
-  .p-meta { display: flex; gap: 8px; flex-wrap: wrap; }
-  .p-meta span {
-    font-size: 11px; color: var(--blue); border: 1px solid var(--line);
-    padding: 3px 8px; border-radius: 2px;
+  /* ── CLOTURE DU BLOC PRO + CHARNIERE MATIERE ── */
+  .cloture { padding: 56px 0 40px; }
+  .cloture p {
+    font-family: 'Newsreader', serif; font-size: clamp(19px, 2.2vw, 25px);
+    line-height: 1.4; letter-spacing: -.01em; color: #3A3F3C; max-width: 46ch;
   }
-
-  /* ── FEATURED PROJECT — Nassij ── */
-  .project.featured {
-    grid-template-columns: 1fr;
-    background: var(--paper-2);
-    padding: 36px;
-    border: 1px solid var(--line);
-    border-radius: 2px;
-    margin-top: 4px;
+  /* le constat, puis sa consequence : deux lignes, pas une cesure au hasard */
+  .cloture em { display: block; font-style: italic; color: var(--blue); }
+  .charniere {
+    height: clamp(110px, 14vw, 180px); position: relative;
+    background: url('images/web/3-notes/textile-fabrication-numerique/PXL_20260427_121018672.MP.jpg') center 42% / cover no-repeat;
   }
-  .project.featured .p-title { font-size: 22px; }
-
-  .pipeline {
-    display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
-    margin: 18px 0 20px; padding: 14px 16px;
-    background: rgba(31,63,99,.05);
-    border-left: 2px solid var(--blue);
+  .charniere::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to bottom,
+      var(--paper) 0%, rgba(237,238,235,.62) 26%, rgba(20,24,26,.62) 76%, var(--ink) 100%);
   }
-  .pipeline .step { font-size: 11px; color: var(--grey); }
-  .pipeline .arrow { font-size: 11px; color: var(--line); }
-
-  @media (max-width: 640px) {
-    .project { grid-template-columns: 1fr; }
-    .project.featured { padding: 24px; }
+  /* retour vers le papier en bas du bloc sombre : meme principe, sans image */
+  .charniere-retour {
+    height: 96px;
+    background: linear-gradient(to bottom, var(--ink) 0%, var(--paper) 100%);
   }
 
   /* ── FENFUTURES ── */
-  .fenfutures { background: var(--ink); color: var(--paper); }
-  .fenfutures .section-head { border-bottom-color: #2E3436; }
+  .fenfutures { background: var(--ink); color: var(--paper); padding: 128px 0 136px; }
+  .fenfutures .section-head { border-bottom-color: var(--line-nuit); }
   .fenfutures .section-head h2 { color: var(--paper); }
-  .fenfutures .section-head .tag { color: #7FA3C4; }
+  .fenfutures .section-head .tag { color: var(--blue-nuit); }
   .ff-tagline {
-    font-family: 'Fraunces', serif; font-weight: 300; font-style: italic;
-    font-size: clamp(19px, 2.4vw, 27px);
-    max-width: 740px; margin-bottom: 56px; color: #C9CDC9; line-height: 1.5;
+    font-family: 'Newsreader', serif; font-weight: 300; font-style: italic;
+    font-size: clamp(19px, 2.4vw, 28px);
+    max-width: 740px; margin-bottom: 96px; color: #C9CDC9;
+    line-height: 1.5; padding-bottom: 4px;
   }
-  .ff-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1px; background: #2E3436; }
-  .ff-card { background: var(--ink); padding: 32px; transition: background .15s; }
-  .ff-card:hover { background: #1C2022; }
-  .ff-card .k { font-size: 11px; color: #7FA3C4; margin-bottom: 12px; letter-spacing: .08em; text-transform: uppercase; }
-  .ff-card p { font-size: 14px; color: #BABFBA; line-height: 1.7; }
-  @media (max-width: 700px) { .ff-grid { grid-template-columns: 1fr; } }
 
-  /* ── NASSIJ dans FenFutures (version dark) ── */
-  .ff-nassij {
-    border: 1px solid #2E3436;
-    border-radius: 2px;
-    padding: 36px;
-    margin-bottom: 2px;
-    background: #1A1F21;
-    transition: background .15s;
-    position: relative;
+  /* ── RECHERCHE : marge d'atelier + media ── */
+  .ff-nassij { margin-bottom: 104px; position: relative; }
+  .ff-nassij:last-of-type { margin-bottom: 0; }
+  .ff-media {
+    display: grid; grid-template-columns: 132px minmax(0, 1fr);
+    gap: 28px; align-items: end; margin-bottom: 32px;
   }
-  .ff-nassij:hover { background: #1C2426; }
-  .ff-nassij::before, .ff-nassij::after {
-    content: ''; position: absolute; width: 10px; height: 10px;
-    border: 1px solid #7FA3C4; opacity: .4;
+  .ff-marge {
+    grid-column: 1; display: flex; flex-direction: column;
+    gap: 16px; padding-bottom: 2px;
   }
-  .ff-nassij::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
-  .ff-nassij::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
-  .ff-nassij .p-head { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 10px; flex-wrap: wrap; }
-  .ff-nassij .p-title { font-size: 22px; font-weight: 500; color: var(--paper); line-height: 1.2; }
-  .ff-nassij .p-year { font-size: 12px; color: #7FA3C4; white-space: nowrap; padding-top: 4px; }
-  .ff-nassij .p-desc { color: #BABFBA; font-size: 15px; max-width: 72ch; margin-bottom: 16px; line-height: 1.65; }
-  .ff-nassij .pipeline {
-    margin: 18px 0 20px; padding: 14px 16px;
-    background: rgba(127,163,196,.08);
-    border-left: 2px solid #7FA3C4;
+  .ff-legende {
+    font-size: 10.5px; line-height: 1.6; letter-spacing: .03em;
+    color: #6F766F; transition: opacity .28s ease;
   }
-  .ff-nassij .pipeline .step { color: #BABFBA; }
-  .ff-nassij .pipeline .arrow { color: #2E3436; }
-  .ff-nassij .p-meta span {
-    color: #7FA3C4; border-color: #2E3436;
+  /* la reglette quitte l'image : plus rien n'est dessine sur les photos */
+  .ff-marge .slider-dots { position: static; top: auto; right: auto; }
+  .ff-marge .slider-dot { background: rgba(237,238,235,.18); }
+  .ff-marge .slider-dot:hover { background: rgba(237,238,235,.45); }
+  .ff-marge .slider-dot.active { background: rgba(237,238,235,.24); }
+  .ff-marge .slider-dot.active::after { background: var(--blue-nuit); }
+
+  /* Le cadre prend la largeur de la plus large image de la serie (--w-media,
+     pose en JS). Une serie entierement en portrait n'a donc plus de vide
+     lateral du tout : le cadre est la piece, et les equerres la cadrent. */
+  .ff-nassij-slider {
+    --h-media: clamp(340px, 62vh, 620px);
+    grid-column: 2; position: relative; background: transparent;
+    justify-self: start; width: 100%; max-width: var(--w-media, none);
   }
-  @media (max-width: 640px) { .ff-nassij { padding: 24px; } }
+  .ff-nassij-slider .slider-track { display: block; position: relative; transform: none !important; }
+  .ff-nassij-slider .slider-track > .vue {
+    position: absolute; inset: 0; aspect-ratio: auto; height: var(--h-media);
+    opacity: 0; filter: blur(3px);
+    transition: opacity .58s ease, filter .58s ease;
+  }
+  .ff-nassij-slider .slider-track > .vue.vue-active {
+    position: relative; opacity: 1; filter: blur(0);
+  }
+  /* les equerres cadrent le media : le vide devient un passe-partout */
+  .ff-nassij-slider::before, .ff-nassij-slider::after {
+    content: ''; position: absolute; width: 14px; height: 14px;
+    border: 1px solid var(--blue-nuit); opacity: .32;
+    pointer-events: none; z-index: 2;
+  }
+  .ff-nassij-slider::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .ff-nassij-slider::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+  /* l'impression par couches : la piece sort de l'imprimante */
+  .ff-media { clip-path: inset(0 0 100% 0); transition: clip-path .85s var(--e-in-out); }
+  .ff-nassij.revealed .ff-media { clip-path: inset(0 0 0 0); }
+
+  .p-head { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 10px; flex-wrap: wrap; max-width: 62ch; }
+  .p-title { font-size: 21px; font-weight: 500; color: var(--paper); line-height: 1.25; }
+  .p-year { font-size: 12px; color: var(--blue-nuit); white-space: nowrap; padding-top: 4px; }
+  .p-desc { color: #BABFBA; font-size: 15px; max-width: 62ch; margin-bottom: 16px; line-height: 1.65; }
+  .p-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+  .p-meta span {
+    font-size: 11px; color: var(--blue-nuit); border: 1px solid var(--line-nuit);
+    padding: 3px 8px; border-radius: 2px;
+  }
+
+  /* ── LA REGLE GRADUEE (remplace la chaine de fleches) ── */
+  .regle { margin: 24px 0 26px; max-width: 62ch; }
+  .regle-axe { display: flex; height: 1px; background: var(--line-nuit); align-items: center; }
+  .regle-axe .tw { flex: 1 1 0; display: flex; justify-content: center; }
+  .regle-axe .tw:first-child { justify-content: flex-start; }
+  .regle-axe .tw:last-child { justify-content: flex-end; }
+  .regle-axe .tick { display: block; width: 1px; height: 7px; background: #454E51; }
+  .regle-axe .tick.fort { height: 12px; background: var(--blue-nuit); }
+  .regle-mots {
+    display: flex; gap: 10px; margin-top: 12px;
+    font-size: 10.5px; line-height: 1.45; color: #8A918B;
+  }
+  .regle-mots span { flex: 1 1 0; text-align: center; }
+  .regle-mots span:first-child { text-align: left; }
+  .regle-mots span:last-child { text-align: right; color: #C9CDC9; }
+
+  /* ── CHARNIERE DES NOTES ── */
+  .notes-charniere {
+    margin: 120px 0 40px; padding-top: 22px;
+    border-top: 1px solid var(--line-nuit);
+    display: flex; align-items: baseline; gap: 24px; flex-wrap: wrap;
+  }
+  .notes-titre {
+    font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--blue-nuit);
+  }
+  .notes-intro { font-size: 13px; line-height: 1.6; color: #7A817C; max-width: 52ch; }
+
+  /* ── NOTES ── */
+  .ff-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: #22282A; }
+  .ff-card { background: var(--ink); padding: 34px 32px 38px; position: relative; }
+  /* on annote en marge au lieu de surligner la case */
+  .ff-card::before {
+    content: ''; position: absolute; left: 0; top: 26px; bottom: 26px; width: 1px;
+    background: var(--blue-nuit);
+    transform: scaleY(0); transform-origin: top center;
+    transition: transform .42s var(--e-out);
+  }
+  .ff-card .k {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+    font-size: 11px; color: var(--blue-nuit); letter-spacing: .08em; text-transform: uppercase;
+  }
+  .k-vignette {
+    width: 44px; height: 44px; flex: none; object-fit: cover; border-radius: 1px;
+    filter: grayscale(1) contrast(.9); opacity: .55;
+    transition: filter .35s ease, opacity .35s ease;
+  }
+  .ff-card p { font-size: 13.5px; line-height: 1.72; color: #A2A8A3; transition: color .32s ease; }
+  .ff-card p:first-of-type { font-size: 15px; line-height: 1.6; color: #D2D7D2; }
+  .ff-card p + p { margin-top: 12px; }
+
+  @media (hover: hover) and (pointer: fine) {
+    .ff-card:hover::before { transform: scaleY(1); }
+    .ff-card:hover .k-vignette { filter: none; opacity: 1; }
+    .ff-card:hover p { color: #B6BCB7; }
+    .ff-card:hover p:first-of-type { color: #E2E6E2; }
+  }
+
+  /* ── MOTS CLIQUABLES : le mot est bleu, sa trace est corail ── */
+  .lien-galerie {
+    font: inherit; background: none; border: none; padding: 0 0 1px;
+    cursor: pointer; text-align: left; color: var(--blue-nuit);
+    background-image: linear-gradient(var(--corail), var(--corail));
+    background-repeat: no-repeat; background-position: 0 100%;
+    background-size: 100% 1px;
+    transition: color .18s ease, background-size .34s var(--e-out), transform .16s var(--e-out);
+  }
+  .lien-galerie:active { transform: translateY(.5px); }
+  .lien-galerie .compte {
+    font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .06em;
+    vertical-align: .35em; margin-left: 3px; color: var(--corail); opacity: .85;
+  }
+  .ff-card .k .lien-galerie {
+    letter-spacing: .1em; text-transform: uppercase; background-size: 0% 1px;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .lien-galerie:hover { color: #A8C4DC; background-size: 100% 2px; }
+    .ff-card .k .lien-galerie:hover { background-size: 100% 1px; }
+  }
+  .galerie-source { display: none; }
+
+  /* apercu au survol d'un mot cliquable */
+  .apercu {
+    position: fixed; left: 0; top: 0; z-index: 200; pointer-events: none;
+    width: 168px; height: 126px; object-fit: cover; border-radius: 1px;
+    box-shadow: 0 10px 34px rgba(0,0,0,.55);
+    opacity: 0; transition: opacity .18s ease-out;
+  }
+  .apercu.visible { opacity: 1; }
 
   /* ── DISPO BAND ── */
   .dispo-band { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 20px 0; }
@@ -341,8 +461,8 @@
   /* ── FOOTER ── */
   footer { padding: 80px 0 60px; }
   footer h2 {
-    font-family: 'Fraunces', serif; font-weight: 450;
-    font-size: clamp(30px, 5vw, 56px); margin-bottom: 10px;
+    font-family: 'Newsreader', serif; font-weight: 400; font-optical-sizing: auto;
+    font-size: clamp(30px, 5vw, 58px); letter-spacing: -.02em; margin-bottom: 10px;
   }
   .footer-sub { font-size: 15px; color: var(--grey); margin-bottom: 48px; max-width: 480px; }
   .contact-row { display: flex; gap: 48px; flex-wrap: wrap; font-size: 14px; }
@@ -352,80 +472,62 @@
   }
   .contact-row a { color: var(--ink); }
   .contact-row a:hover { color: var(--blue); }
-  .footer-line {
-    margin-top: 48px; padding-top: 24px;
-    border-top: 1px solid var(--line);
-    font-size: 12px; color: var(--grey);
-  }
-  /* Marqueur de version : lisible si on le cherche, invisible sinon. */
-  .footer-version {
-    margin-top: 10px;
-    font-size: 11px; color: var(--grey); opacity: .55;
-    display: flex; align-items: center; gap: 7px;
-  }
-  .version-pastille {
-    width: 8px; height: 8px; border-radius: 50%;
-    display: inline-block; flex: none;
-  }
+  .footer-line { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 12px; color: var(--grey); }
+  .footer-version { margin-top: 10px; font-size: 11px; color: var(--grey); opacity: .55; display: flex; align-items: center; gap: 7px; }
+  .version-pastille { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: none; }
 
-
-  /* ── LIGHTBOX ── */
+  /* ── VISIONNEUSE ── */
   .lightbox {
-    display: none; position: fixed; inset: 0; z-index: 1000;
-    background: rgba(20,24,26,.93);
-    align-items: center; justify-content: center;
-    cursor: zoom-out;
+    display: flex; position: fixed; inset: 0; z-index: 1000;
+    /* assez opaque pour qu'aucun fantome de la page ne passe derriere la photo */
+    background: rgba(16,19,20,.975);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    align-items: center; justify-content: center; cursor: zoom-out;
+    opacity: 0; visibility: hidden;
+    transition: opacity .2s ease-out, visibility 0s linear .2s;
   }
-  .lightbox.open { display: flex; }
+  .lightbox.open { opacity: 1; visibility: visible; transition: opacity .22s ease-out, visibility 0s; }
   .lightbox img, .lightbox video {
-    max-width: 92vw; max-height: 90vh;
-    object-fit: contain; border-radius: 1px;
-    box-shadow: 0 8px 48px rgba(0,0,0,.5);
-    cursor: default;
+    max-width: 92vw; max-height: 76vh; object-fit: contain;
+    box-shadow: 0 8px 48px rgba(0,0,0,.5); cursor: default;
+    transform: scale(.975);
+    transition: transform .26s var(--e-out), opacity .16s ease;
   }
+  .lightbox.open img, .lightbox.open video { transform: scale(1); }
   .lightbox video { display: none; }
   .lightbox-close {
     position: absolute; top: 20px; right: 24px;
     font-size: 28px; color: #C9CDC9; cursor: pointer;
     background: none; border: none; line-height: 1;
-    opacity: .7; transition: opacity .15s;
+    opacity: .7; transition: opacity .15s, transform .16s var(--e-out);
   }
   .lightbox-close:hover { opacity: 1; }
-  .lb-nav {
-    position: absolute; top: 50%; transform: translateY(-50%);
-    background: rgba(20,24,26,.55); color: #EDEEEB;
-    border: none; width: 40px; height: 40px; cursor: pointer;
-    font-size: 20px; display: flex; align-items: center; justify-content: center;
-    transition: background .15s; border-radius: 1px;
+  .lightbox-close:active { transform: scale(.92); }
+
+  /* la reglette, jamais de fleches */
+  .lb-points {
+    position: absolute; bottom: 104px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 3px; z-index: 3;
   }
-  .lb-nav:hover { background: rgba(20,24,26,.9); }
-  .lb-prev { left: 20px; }
-  .lb-next { right: 20px; }
-  /* curseur zoom sur les images cliquables */
-  .thumb img, .ff-nassij-slider img, .vue { cursor: zoom-in; }
-
-
-
-
-  /* ── LIENS DE GALERIE (cartes texte) ── */
-  .lien-galerie {
-    font: inherit; color: #7FA3C4; background: none; border: none;
-    padding: 0; cursor: pointer; text-align: left;
-    border-bottom: 1px dotted rgba(127,163,196,.6);
-    transition: color .15s, border-color .15s;
+  .lb-point {
+    width: 16px; height: 2px; border: none; padding: 0; cursor: pointer;
+    background: rgba(255,255,255,.24); border-radius: 0;
+    transition: background .2s ease, transform .16s var(--e-out);
   }
-  .lien-galerie:hover { color: #A8C4DC; border-bottom-color: #A8C4DC; }
-  .ff-card .k .lien-galerie {
-    letter-spacing: .08em; text-transform: uppercase;
-    border-bottom-color: transparent;
-  }
-  .ff-card .k .lien-galerie:hover { border-bottom-color: rgba(127,163,196,.6); }
-  .galerie-source { display: none; }
+  .lb-point:hover { background: rgba(255,255,255,.5); }
+  .lb-point:active { transform: scaleY(2); }
+  .lb-point.actif { background: rgba(255,255,255,.92); }
 
-  /* ── LIAISON ── */
-  .liaison { padding: 36px 0; border-bottom: 1px solid var(--line); }
-  .liaison p { font-size: 14px; color: var(--grey); font-style: italic; max-width: 60ch; }
-  .liaison.liaison-inline { padding: 0 0 32px; border-bottom: none; }
+  /* le cartouche : le bandeau de lecture qui te suit en plein ecran */
+  .lb-cartouche {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 18px 26px 22px; min-height: 88px;
+    background: linear-gradient(to top, rgba(12,15,16,.96), rgba(12,15,16,0));
+    display: grid; gap: 4px; pointer-events: none;
+  }
+  .lb-titre { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--paper); }
+  .lb-legende { font-size: 13.5px; line-height: 1.45; color: #C7CBC4; max-width: 62ch; }
+  .lb-tags { margin-top: 3px; font-size: 9.5px; letter-spacing: .09em; color: #6E7570; }
 
   /* ── MINI NAV ── */
   .mini-nav {
@@ -435,14 +537,20 @@
     border-bottom: 1px solid var(--line);
     padding: 12px 40px; display: flex; align-items: center; gap: 16px;
     font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
-    transform: translateY(-100%); transition: transform .3s ease;
+    transform: translateY(-100%);
+    transition: transform .3s ease, background-color .45s ease, border-color .45s ease;
   }
   .mini-nav.visible { transform: translateY(0); }
-  .mini-nav a { color: var(--grey); text-decoration: none; transition: color .15s; }
+  .mini-nav a { color: var(--grey); text-decoration: none; transition: color .45s ease; }
   .mini-nav a:hover { color: var(--ink); }
-  .mini-nav .sep { width: 3px; height: 3px; border-radius: 50%; background: var(--line); }
+  .mini-nav .sep { width: 3px; height: 3px; border-radius: 50%; background: var(--line); transition: background .45s ease; }
+  /* elle change de camp quand elle passe au-dessus du bloc sombre */
+  .mini-nav.sur-sombre { background: rgba(20,24,26,.88); border-bottom-color: var(--line-nuit); }
+  .mini-nav.sur-sombre a { color: #8B918B; }
+  .mini-nav.sur-sombre a:hover { color: var(--paper); }
+  .mini-nav.sur-sombre .sep { background: #3A4042; }
 
-  /* ── BACK TO TOP ── */
+  /* ── RETOUR EN HAUT ── */
   .back-top {
     position: fixed; bottom: 28px; right: 28px; z-index: 150;
     width: 34px; height: 34px;
@@ -450,36 +558,93 @@
     color: var(--grey); font-size: 15px; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     opacity: 0; pointer-events: none;
-    transition: opacity .2s, color .15s, border-color .15s;
+    transition: opacity .2s, color .15s, border-color .15s,
+                background-color .45s ease, transform .16s var(--e-out);
   }
   .back-top.visible { opacity: 1; pointer-events: all; }
   .back-top:hover { color: var(--ink); border-color: var(--ink); }
+  .back-top:active { transform: scale(.94); }
+  .back-top.sur-sombre { background: #1A1F21; border-color: var(--line-nuit); color: #8B918B; }
+  .back-top.sur-sombre:hover { color: var(--paper); border-color: var(--blue-nuit); }
 
   /* ── SCROLL REVEAL ── */
-  [data-reveal] {
-    opacity: 0; transform: translateY(18px);
-    transition: opacity .55s ease, transform .55s ease;
-  }
+  [data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity .55s ease, transform .55s ease; }
   [data-reveal].revealed { opacity: 1; transform: translateY(0); }
+  /* Une piece de Recherche ne fait pas deux animations a la fois : le texte est
+     la, seule l'image s'imprime. */
+  .ff-nassij[data-reveal] { opacity: 1; transform: none; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .cmd-grille { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cmd-carte[data-grand] { grid-column: span 2; grid-row: span 2; }
+    .cmd-bandeau { top: 40px; padding-top: 12px; }
+    .cmd-lecture { min-height: 88px; }
+    /* sur une case etroite : le titre, et rien d'autre.
+       Le resume est deja dans le bandeau, qui suit le defilement. */
+    .cmd-bloc { padding: 40px 12px 11px; }
+    .cmd-carte:not([data-grand]) .cmd-resume { display: none; }
+    /* la rubrique ne tient pas sur 150 px : on garde l'annee, qui date */
+    .cmd-carte:not([data-grand]) .cmd-rub-mot { display: none; }
+    .cmd-rubrique { justify-content: flex-end; }
+    .cmd-carte[data-grand] .cmd-rubrique { justify-content: space-between; }
+    .cmd-titre { font-size: 13px; }
+
+    .ff-media { grid-template-columns: 1fr; gap: 14px; }
+    .ff-marge { flex-direction: row; justify-content: space-between; align-items: baseline; }
+    .ff-legende { font-size: 10px; max-width: 60%; }
+    .ff-nassij-slider { grid-column: 1; grid-row: 1; }
+    .ff-marge { grid-row: 2; }
+  }
+  @media (max-width: 700px) {
+    section { padding: 72px 0 76px; }
+    .fenfutures { padding: 84px 0 92px; }
+    .ff-tagline { margin-bottom: 56px; }
+    .ff-nassij { margin-bottom: 64px; }
+    .ff-nassij-slider { --h-media: clamp(280px, 52vh, 420px); }
+    .notes-charniere { margin-top: 72px; }
+    .ff-grid { grid-template-columns: 1fr; }
+    .ff-card { padding: 28px 24px 30px; }
+    .charniere { height: 88px; }
+    .cloture { padding: 40px 0 32px; }
+    /* le bandeau est colle en haut : sur 844 px de haut, il ne peut pas
+       manger le quart de l'ecran. Quatre lignes, le reste est dans la piece. */
+    .cmd-texte {
+      display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .lb-cartouche { padding: 14px 18px 18px; min-height: 82px; }
+    .lb-legende { font-size: 12.5px; }
+    .lb-points { bottom: 96px; }
+    .lightbox img, .lightbox video { max-height: 68vh; }
+  }
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    * { transition: none !important; }
+    * { transition: none !important; animation: none !important; }
+    .ff-media { clip-path: none; }
+    .cmd-tags span { opacity: .75; transform: none; }
+    .slider.en-cours .slider-dot.active::after { transform: scaleX(1); }
+    .ff-nassij-slider .slider-track > .vue { filter: none; }
   }
 </style>
 </head>
+
 <body>
 
-<!-- ── HERO ── -->
+<div class="grain" aria-hidden="true"></div>
 
-<!-- ── LIGHTBOX ── -->
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image en plein écran">
   <button class="lightbox-close" id="lb-close" aria-label="Fermer">×</button>
   <img id="lb-img" src="" alt="">
   <video id="lb-video" src="" controls loop playsinline></video>
-  <div class="lb-counter" id="lb-counter"></div>
+  <div class="lb-points" id="lb-points"></div>
+  <div class="lb-cartouche">
+    <span class="lb-titre mono" id="lb-titre"></span>
+    <span class="lb-legende" id="lb-legende"></span>
+    <span class="lb-tags mono" id="lb-tags"></span>
+  </div>
 </div>
-
 
 <nav class="mini-nav mono" id="miniNav">
   <a href="#projets">Commandes</a>
@@ -522,7 +687,7 @@
       <div class="tag mono">2016 — 2025</div>
     </div>
 
-    <div class="liaison liaison-inline">
+    <div class="liaison">
       <p><!-- AUTO:COMMANDES_INTRO:DEBUT -->
 Conception et fabrication pour des marques de luxe, le cinéma et le spectacle vivant — du rendu 3D à la pièce livrée.
     <!-- AUTO:COMMANDES_INTRO:FIN --></p>
@@ -569,15 +734,13 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
             <button class="slider-dot" aria-label="Image 4"></button>
             <button class="slider-dot" aria-label="Image 5"></button>
           </div>
-        </div>
-        <div class="cmd-calque" aria-hidden="true">
-          <span class="cmd-rubrique mono">Luxe &amp; production</span>
-          <span class="cmd-titre">Vitrines Hermès France H19</span>
-          <span class="cmd-resume">Modélisations et usinage pour un décor de vitrine.</span>
-        </div>
-        <div class="cmd-pied">
-          <span class="cmd-nom">Vitrines Hermès France H19</span>
-          <span class="cmd-annee mono">2019</span>
+          <div class="cmd-calque" aria-hidden="true">
+            <div class="cmd-bloc">
+              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Luxe &amp; production</b><i class="cmd-annee">2019</i></span>
+              <span class="cmd-titre">Vitrines Hermès France H19</span>
+              <span class="cmd-resume">Modélisations et usinage pour un décor de vitrine.</span>
+            </div>
+          </div>
         </div>
       </article>
       <article class="cmd-carte" data-ops="concevoir,systematiser,fabriquer,transmettre" data-tags="Rhino, Grasshopper, SLA, CNC" data-texte="Modélisations et usinage pour un décor de vitrine. Travail sur Rhino, ZBrush et définitions Grasshopper pour impression 3D PLA et SLA, CNC polystyrène. Plans d'usinage numérique bois, polystyrène et découpe laser. — Via Atelier 20point12.">
@@ -614,15 +777,13 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
             <button class="slider-dot" aria-label="Image 6"></button>
             <button class="slider-dot" aria-label="Image 7"></button>
           </div>
-        </div>
-        <div class="cmd-calque" aria-hidden="true">
-          <span class="cmd-rubrique mono">Luxe &amp; production</span>
-          <span class="cmd-titre">Vitrines Hermès France H21</span>
-          <span class="cmd-resume">Modélisations et usinage pour un décor de vitrine.</span>
-        </div>
-        <div class="cmd-pied">
-          <span class="cmd-nom">Vitrines Hermès France H21</span>
-          <span class="cmd-annee mono">2021</span>
+          <div class="cmd-calque" aria-hidden="true">
+            <div class="cmd-bloc">
+              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Luxe &amp; production</b><i class="cmd-annee">2021</i></span>
+              <span class="cmd-titre">Vitrines Hermès France H21</span>
+              <span class="cmd-resume">Modélisations et usinage pour un décor de vitrine.</span>
+            </div>
+          </div>
         </div>
       </article>
       <article class="cmd-carte" data-ops="concevoir,transmettre" data-tags="Bois CNC, LED, Stratifié, Miroir sans tain" data-texte="Design, modélisation et édition de plans de fabrication en CNC. Structure interne réalisée à la découpe CNC. Matériaux : bois, PLA, LED, stratifié résine, miroir sans tain. — Via Atelier 20point12.">
@@ -667,15 +828,13 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
             <button class="slider-dot" aria-label="Image 8"></button>
             <button class="slider-dot" aria-label="Image 9"></button>
           </div>
-        </div>
-        <div class="cmd-calque" aria-hidden="true">
-          <span class="cmd-rubrique mono">Luxe &amp; production</span>
-          <span class="cmd-titre">Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze</span>
-          <span class="cmd-resume">Design, modélisation et édition de plans de fabrication en CNC.</span>
-        </div>
-        <div class="cmd-pied">
-          <span class="cmd-nom">Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze</span>
-          <span class="cmd-annee mono">2020</span>
+          <div class="cmd-calque" aria-hidden="true">
+            <div class="cmd-bloc">
+              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Luxe &amp; production</b><i class="cmd-annee">2020</i></span>
+              <span class="cmd-titre">Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze</span>
+              <span class="cmd-resume">Design, modélisation et édition de plans de fabrication en CNC.</span>
+            </div>
+          </div>
         </div>
       </article>
       <article class="cmd-carte" data-grand="1" data-ops="concevoir,transmettre" data-tags="Film, Résine, Néon, Pompidou-Metz" data-texte="Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film. Dessins de sculptures en résine, sculptures néon et plans pour les artisans peintres et sculpteurs. Exposé au Centre Pompidou-Metz, 2022. Photo Marc Domage. — Via Atelier 20point12.">
@@ -704,15 +863,13 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
             <button class="slider-dot" aria-label="Image 4"></button>
             <button class="slider-dot" aria-label="Image 5"></button>
           </div>
-        </div>
-        <div class="cmd-calque" aria-hidden="true">
-          <span class="cmd-rubrique mono">Luxe &amp; production</span>
-          <span class="cmd-titre">Set design — <em>Mass</em>, film de Pierre Pauze</span>
-          <span class="cmd-resume">Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film.</span>
-        </div>
-        <div class="cmd-pied">
-          <span class="cmd-nom">Set design — <em>Mass</em>, film de Pierre Pauze</span>
-          <span class="cmd-annee mono">2020</span>
+          <div class="cmd-calque" aria-hidden="true">
+            <div class="cmd-bloc">
+              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Luxe &amp; production</b><i class="cmd-annee">2020</i></span>
+              <span class="cmd-titre">Set design — <em>Mass</em>, film de Pierre Pauze</span>
+              <span class="cmd-resume">Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film.</span>
+            </div>
+          </div>
         </div>
       </article>
       <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre" data-tags="Scénographie, Sculpture, Installation" data-texte="Conception et modélisation 3D pour la présentation d'une installation vidéo de Sabrina Ratté durant le salon Watches and Wonders 2022 à Genève. Conception et plans d'esquisse pour la sculpture centrale et les alcôves comprenant les sculptures 3D. Prototype de sculpture cinétique réalisé par Animatronix. — Via Atelier 20point12.">
@@ -733,15 +890,13 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
             <button class="slider-dot" aria-label="Image 2"></button>
             <button class="slider-dot" aria-label="Image 3"></button>
           </div>
-        </div>
-        <div class="cmd-calque" aria-hidden="true">
-          <span class="cmd-rubrique mono">Scénographie &amp; spectacle vivant</span>
-          <span class="cmd-titre">Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders</span>
-          <span class="cmd-resume">Conception et modélisation 3D pour la présentation d'une installation vidéo de Sabrina Ratté durant le salon Watches and Wonders 2022 à Genève.</span>
-        </div>
-        <div class="cmd-pied">
-          <span class="cmd-nom">Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders</span>
-          <span class="cmd-annee mono">2022</span>
+          <div class="cmd-calque" aria-hidden="true">
+            <div class="cmd-bloc">
+              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Scénographie &amp; spectacle vivant</b><i class="cmd-annee">2022</i></span>
+              <span class="cmd-titre">Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders</span>
+              <span class="cmd-resume">Conception et modélisation 3D pour la présentation d'une installation vidéo de Sabrina Ratté durant le salon Watches and Wonders 2022 à Genève.</span>
+            </div>
+          </div>
         </div>
       </article>
       <article class="cmd-carte" data-grand="1" data-ops="concevoir,systematiser,fabriquer,experimenter" data-tags="Danse, Fabrication, Biomimétisme, Grasshopper" data-texte="Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer. Formes organiques et biomimétiques développées par modélisation paramétrique, conçues pour interagir avec le corps dansant et redéfinir la présence de l'objet sur scène.">
@@ -782,15 +937,13 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
             <button class="slider-dot" aria-label="Image 7"></button>
             <button class="slider-dot" aria-label="Image 8"></button>
           </div>
-        </div>
-        <div class="cmd-calque" aria-hidden="true">
-          <span class="cmd-rubrique mono">Scénographie &amp; spectacle vivant</span>
-          <span class="cmd-titre">Dispositifs scéniques — <em>Starting with the Limbs</em>, cie L'Autre Maison</span>
-          <span class="cmd-resume">Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer.</span>
-        </div>
-        <div class="cmd-pied">
-          <span class="cmd-nom">Dispositifs scéniques — <em>Starting with the Limbs</em>, cie L'Autre Maison</span>
-          <span class="cmd-annee mono">Danse</span>
+          <div class="cmd-calque" aria-hidden="true">
+            <div class="cmd-bloc">
+              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Scénographie &amp; spectacle vivant</b><i class="cmd-annee">Danse</i></span>
+              <span class="cmd-titre">Dispositifs scéniques — <em>Starting with the Limbs</em>, cie L'Autre Maison</span>
+              <span class="cmd-resume">Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer.</span>
+            </div>
+          </div>
         </div>
       </article>
       <article class="cmd-carte" data-ops="concevoir,systematiser,transmettre" data-tags="Grasshopper, Rhino, Mobilier" data-texte="Modélisation pour une collection de mobilier. Création d'une définition Grasshopper pour un modèle évolutif et adaptatif. Conseil en design — Saket Sethi Design, 2023.">
@@ -819,15 +972,13 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
             <button class="slider-dot" aria-label="Image 4"></button>
             <button class="slider-dot" aria-label="Image 5"></button>
           </div>
-        </div>
-        <div class="cmd-calque" aria-hidden="true">
-          <span class="cmd-rubrique mono">Luxe &amp; production</span>
-          <span class="cmd-titre">Collection mobilier paramétrique — Saket Sethi Design</span>
-          <span class="cmd-resume">Modélisation pour une collection de mobilier.</span>
-        </div>
-        <div class="cmd-pied">
-          <span class="cmd-nom">Collection mobilier paramétrique — Saket Sethi Design</span>
-          <span class="cmd-annee mono">2023</span>
+          <div class="cmd-calque" aria-hidden="true">
+            <div class="cmd-bloc">
+              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Luxe &amp; production</b><i class="cmd-annee">2023</i></span>
+              <span class="cmd-titre">Collection mobilier paramétrique — Saket Sethi Design</span>
+              <span class="cmd-resume">Modélisation pour une collection de mobilier.</span>
+            </div>
+          </div>
         </div>
       </article>
       <article class="cmd-carte" data-ops="concevoir,fabriquer,experimenter" data-tags="Unity, VR, Musique" data-texte="Expérience immersive en réalité virtuelle pour la première de l'album Photophobia à Kampnagel, Hambourg. Un vidéoclip permettant d'évoluer dans un monde de mangrove imaginé pour trois pistes (Pandemonium, In Short, Self-Abolition) — du marécage futuriste sombre à un espace kaléidoscopique. Avec Sanni Est (direction artistique, concept &amp; musique) et alpharats (programming &amp; VFX).">
@@ -856,15 +1007,13 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
             <button class="slider-dot" aria-label="Image 4"></button>
             <button class="slider-dot" aria-label="Image 5"></button>
           </div>
-        </div>
-        <div class="cmd-calque" aria-hidden="true">
-          <span class="cmd-rubrique mono">Scénographie &amp; spectacle vivant</span>
-          <span class="cmd-titre">Environnement VR — <em>Photophobia</em>, Sanni Est</span>
-          <span class="cmd-resume">Expérience immersive en réalité virtuelle pour la première de l'album Photophobia à Kampnagel, Hambourg.</span>
-        </div>
-        <div class="cmd-pied">
-          <span class="cmd-nom">Environnement VR — <em>Photophobia</em>, Sanni Est</span>
-          <span class="cmd-annee mono">2022</span>
+          <div class="cmd-calque" aria-hidden="true">
+            <div class="cmd-bloc">
+              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Scénographie &amp; spectacle vivant</b><i class="cmd-annee">2022</i></span>
+              <span class="cmd-titre">Environnement VR — <em>Photophobia</em>, Sanni Est</span>
+              <span class="cmd-resume">Expérience immersive en réalité virtuelle pour la première de l'album Photophobia à Kampnagel, Hambourg.</span>
+            </div>
+          </div>
         </div>
       </article>
       <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre,experimenter" data-tags="" data-texte="Ce caftan explore la rencontre entre conception algorithmique et artisanat marocain. J'ai conçu un motif paramétrique original sur Grasshopper, puis l'ai fabriqué par une succession d'impressions 3D en filament flexible argenté directement sur les différentes pièces du vêtement avant leur assemblage. L'atelier a ensuite souligné ce motif par un travail de pailletage et réalisé les finitions du caftan, faisant dialoguer fabrication numérique et savoir-faire traditionnel.">
@@ -889,15 +1038,13 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
             <button class="slider-dot" aria-label="Image 3"></button>
             <button class="slider-dot" aria-label="Image 4"></button>
           </div>
-        </div>
-        <div class="cmd-calque" aria-hidden="true">
-          <span class="cmd-rubrique mono">Mode</span>
-          <span class="cmd-titre">Mousseline Orange</span>
-          <span class="cmd-resume">Le paramétrique comme ornement.</span>
-        </div>
-        <div class="cmd-pied">
-          <span class="cmd-nom">Mousseline Orange</span>
-          <span class="cmd-annee mono">2024</span>
+          <div class="cmd-calque" aria-hidden="true">
+            <div class="cmd-bloc">
+              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Mode</b><i class="cmd-annee">2024</i></span>
+              <span class="cmd-titre">Mousseline Orange</span>
+              <span class="cmd-resume">Le paramétrique comme ornement.</span>
+            </div>
+          </div>
         </div>
       </article>
       <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre,experimenter" data-tags="Midjourney, Rhino, Photoshop, Impression 3D" data-texte="Veste en brocart doré ornée de fleurs imprimées en 3D en contour, composées et assemblées à la main. Workflow en plusieurs étapes : génération d'images sur Midjourney, retouche sous Photoshop, mise en plan de broderie et typologies de fleurs sous Rhino, puis impression du contour de chaque fleur en filament flexible sur un textile à trame large, avant assemblage sur la pièce. Commande d'un atelier de couture de luxe au Maroc.">
@@ -946,15 +1093,13 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
             <button class="slider-dot" aria-label="Image 9"></button>
             <button class="slider-dot" aria-label="Image 10"></button>
           </div>
-        </div>
-        <div class="cmd-calque" aria-hidden="true">
-          <span class="cmd-rubrique mono">Mode</span>
-          <span class="cmd-titre">Gilet brocard avec fleurs imprimées 3D</span>
-          <span class="cmd-resume">Fleurs imprimées en 3D, composées et assemblées à la main sur un brocart doré.</span>
-        </div>
-        <div class="cmd-pied">
-          <span class="cmd-nom">Gilet brocard avec fleurs imprimées 3D</span>
-          <span class="cmd-annee mono">2024</span>
+          <div class="cmd-calque" aria-hidden="true">
+            <div class="cmd-bloc">
+              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Mode</b><i class="cmd-annee">2024</i></span>
+              <span class="cmd-titre">Gilet brocard avec fleurs imprimées 3D</span>
+              <span class="cmd-resume">Fleurs imprimées en 3D, composées et assemblées à la main sur un brocart doré.</span>
+            </div>
+          </div>
         </div>
       </article>
       <article class="cmd-carte" data-ops="concevoir,transmettre,experimenter" data-tags="Midjourney, Broderie" data-texte="Kaftans brodés main à partir d'un motif généré numériquement puis retravaillé pour servir de plan de broderie à l'atelier. Le motif de départ — ici une texture florale continue — est corrigé en couleur et en échelle avant d'être transmis aux brodeuses, qui l'interprètent à la main, point par point. La même méthode que celle développée pour mes recherches de motifs de broderie, appliquée ici à une pièce commandée.">
@@ -995,15 +1140,13 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
             <button class="slider-dot" aria-label="Image 7"></button>
             <button class="slider-dot" aria-label="Image 8"></button>
           </div>
-        </div>
-        <div class="cmd-calque" aria-hidden="true">
-          <span class="cmd-rubrique mono">Mode</span>
-          <span class="cmd-titre">Kaftan brodées à partir d'image</span>
-          <span class="cmd-resume">Broderie main à partir d'un motif généré numériquement.</span>
-        </div>
-        <div class="cmd-pied">
-          <span class="cmd-nom">Kaftan brodées à partir d'image</span>
-          <span class="cmd-annee mono">2024</span>
+          <div class="cmd-calque" aria-hidden="true">
+            <div class="cmd-bloc">
+              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Mode</b><i class="cmd-annee">2024</i></span>
+              <span class="cmd-titre">Kaftan brodées à partir d'image</span>
+              <span class="cmd-resume">Broderie main à partir d'un motif généré numériquement.</span>
+            </div>
+          </div>
         </div>
       </article>
     </div>
@@ -1012,24 +1155,13 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
   </div>
 </section>
 
-<!-- ── TOOLS STRIP ── -->
-<!-- placé après Commandes : les preuves d'abord, les moyens ensuite -->
-<div class="tools">
-  <div class="wrap mono">
-    <span>MODÉLISATION 3D</span>
-    <span>IMPRESSION 3D FDM / SLA</span>
-    <span>CNC BOIS / POLYSTYRÈNE</span>
-    <span>DÉCOUPE LASER</span>
-    <span>DESIGN GÉNÉRATIF</span>
-    <span>SCÉNOGRAPHIE</span>
-    <span>MAPPING VIDÉO</span>
-    <span>ANIMATION 3D</span>
-    <span>RÉALITÉ VIRTUELLE</span>
-    <span>.STL .OBJ .FBX .3DM</span>
+<div class="cloture">
+  <div class="wrap">
+    <p>De la définition 3D à la pièce montée. <em>Ce qui suit n'est plus du travail de commande.</em></p>
   </div>
 </div>
+<div class="charniere" role="presentation"></div>
 
-<!-- ── FENFUTURES ── -->
 <section class="fenfutures" id="fenfutures">
   <div class="wrap">
     <div class="section-head">
@@ -1042,42 +1174,38 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
 
     <!-- AUTO:RECHERCHE:DEBUT -->
     <div class="ff-nassij" data-reveal>
-      <div class="ff-nassij-slider slider">
-        <div class="slider-track">
-          <div class="vue">
-            <img class="sujet" src="images/web/2-recherche/collection-nassij/01_caftan-rendu-dos.jpg" loading="lazy" alt="Collection Nassij — Caftan — rendu de dos, Blender" onerror="this.style.opacity='0'">
-          </div>
-          <div class="vue">
-            <img class="sujet" src="images/web/2-recherche/collection-nassij/02_broderie-detail.jpg" loading="lazy" alt="Collection Nassij — Broderie paramétrique — détail" onerror="this.style.opacity='0'">
-          </div>
-          <div class="vue">
-            <img class="sujet" src="images/web/2-recherche/collection-nassij/03_caftan-detail-manche.jpg" loading="lazy" alt="Collection Nassij — Détail de la manche brodée" onerror="this.style.opacity='0'">
-          </div>
-          <div class="vue">
-            <img class="sujet" src="images/web/2-recherche/collection-nassij/04_caftan-detail-bas.jpg" loading="lazy" alt="Collection Nassij — Détail du bas du caftan" onerror="this.style.opacity='0'">
-          </div>
-          <div class="vue">
-            <img class="sujet" src="images/web/2-recherche/collection-nassij/05_motif-grasshopper.jpg" loading="lazy" alt="Collection Nassij — Motif issu de la définition Grasshopper" onerror="this.style.opacity='0'">
-          </div>
-          <div class="vue">
-            <img class="sujet" src="images/web/2-recherche/collection-nassij/PXL_20260516_194723132.MP.jpg" loading="lazy" alt="Collection Nassij — Perlage imprimé directement sur tulle" onerror="this.style.opacity='0'">
-          </div>
-          <div class="vue">
-            <img class="sujet" src="images/web/2-recherche/collection-nassij/screenshot-20251209-111325.jpg" loading="lazy" alt="Collection Nassij — Screenshot 20251209 111325" onerror="this.style.opacity='0'">
-          </div>
-          <div class="vue">
-            <img class="sujet" src="images/web/2-recherche/collection-nassij/screenshot-20251209-111342.png" loading="lazy" alt="Collection Nassij — Screenshot 20251209 111342" onerror="this.style.opacity='0'">
-          </div>
+      <div class="ff-media">
+        <div class="ff-marge">
+          <p class="ff-legende mono"></p>
+          <div class="slider-dots"><button class="slider-dot active" aria-label="Image 1"></button><button class="slider-dot" aria-label="Image 2"></button><button class="slider-dot" aria-label="Image 3"></button><button class="slider-dot" aria-label="Image 4"></button><button class="slider-dot" aria-label="Image 5"></button><button class="slider-dot" aria-label="Image 6"></button><button class="slider-dot" aria-label="Image 7"></button><button class="slider-dot" aria-label="Image 8"></button></div>
         </div>
-        <div class="slider-dots">
-          <button class="slider-dot active" aria-label="Image 1"></button>
-          <button class="slider-dot" aria-label="Image 2"></button>
-          <button class="slider-dot" aria-label="Image 3"></button>
-          <button class="slider-dot" aria-label="Image 4"></button>
-          <button class="slider-dot" aria-label="Image 5"></button>
-          <button class="slider-dot" aria-label="Image 6"></button>
-          <button class="slider-dot" aria-label="Image 7"></button>
-          <button class="slider-dot" aria-label="Image 8"></button>
+        <div class="ff-nassij-slider slider">
+          <div class="slider-track">
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/collection-nassij/01_caftan-rendu-dos.jpg" loading="lazy" alt="Collection Nassij — Caftan — rendu de dos, Blender" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/collection-nassij/02_broderie-detail.jpg" loading="lazy" alt="Collection Nassij — Broderie paramétrique — détail" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/collection-nassij/03_caftan-detail-manche.jpg" loading="lazy" alt="Collection Nassij — Détail de la manche brodée" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/collection-nassij/04_caftan-detail-bas.jpg" loading="lazy" alt="Collection Nassij — Détail du bas du caftan" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/collection-nassij/05_motif-grasshopper.jpg" loading="lazy" alt="Collection Nassij — Motif issu de la définition Grasshopper" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/collection-nassij/PXL_20260516_194723132.MP.jpg" loading="lazy" alt="Collection Nassij — Perlage imprimé directement sur tulle" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/collection-nassij/screenshot-20251209-111325.jpg" loading="lazy" alt="Collection Nassij — Screenshot 20251209 111325" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/collection-nassij/screenshot-20251209-111342.png" loading="lazy" alt="Collection Nassij — Screenshot 20251209 111342" onerror="this.style.opacity='0'">
+            </div>
+          </div>
         </div>
       </div>
       <div class="p-head mono">
@@ -1085,49 +1213,37 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
         <span class="p-year">2022 — 2023</span>
       </div>
       <p class="p-desc">Recherche hybride en trois strates : conception paramétrique, production digitale, expérimentation physique. Le projet qui illustre le mieux le pipeline complet — du fichier Grasshopper à la vidéo de défilé final.</p>
-      <div class="pipeline mono">
-        <span class="step">Midjourney</span>
-        <span class="arrow">→</span>
-        <span class="step">surface GH</span>
-        <span class="arrow">→</span>
-        <span class="step">plans broderie</span>
-        <span class="arrow">→</span>
-        <span class="step">Marvelous Designer</span>
-        <span class="arrow">→</span>
-        <span class="step">rig Mixamo</span>
-        <span class="arrow">→</span>
-        <span class="step">Blender</span>
-        <span class="arrow">→</span>
-        <span class="step">défilé digital</span>
+      <div class="regle" aria-label="Chaine de fabrication">
+        <div class="regle-axe"><span class="tw"><i class="tick fort"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick fort"></i></span></div>
+        <div class="regle-mots mono"><span>Midjourney</span><span>surface GH</span><span>plans broderie</span><span>Marvelous Designer</span><span>rig Mixamo</span><span>Blender</span><span>défilé digital</span></div>
       </div>
       <p class="p-desc">En parallèle, expérimentation physique : perlage et motifs imprimés directement sur tulle, pièces construites sur Grasshopper et pilotées par mon propre outil de slicing. Chaque prototype est un objet autonome autant qu'un état intermédiaire du processus textile — le détail de cette recherche (matériaux, méthode, collaboration avec l'atelier) vit à part, dans les notes.</p>
       <div class="p-meta mono"><span>GRASSHOPPER</span><span>MARVELOUS DESIGNER</span><span>BLENDER</span><span>IMPRESSION 3D</span><span>BRODERIE</span><span>DIRECTION ARTISTIQUE</span></div>
     </div>
     <div class="ff-nassij" data-reveal>
-      <div class="ff-nassij-slider slider">
-        <div class="slider-track">
-          <div class="vue">
-            <img class="sujet" src="images/web/2-recherche/formes-generatives-imprimees/pxl-20260127-205842238.jpg" loading="lazy" alt="Formes génératives imprimées — Anastomose — détail" onerror="this.style.opacity='0'">
-          </div>
-          <div class="vue">
-            <img class="sujet" src="images/web/2-recherche/formes-generatives-imprimees/pxl-20260127-222316950-2.jpg" loading="lazy" alt="Formes génératives imprimées — Anastomose — en situation" onerror="this.style.opacity='0'">
-          </div>
-          <div class="vue">
-            <img class="sujet" src="images/web/2-recherche/formes-generatives-imprimees/PXL_20260715_173250407.MP.jpg" loading="lazy" alt="Formes génératives imprimées — Trois vases, textures et couleurs multiples" onerror="this.style.opacity='0'">
-          </div>
-          <div class="vue">
-            <img class="sujet" src="images/web/2-recherche/formes-generatives-imprimees/PXL_20260321_110027366.jpg" loading="lazy" alt="Formes génératives imprimées — Vase, dégradé bleu-orange" onerror="this.style.opacity='0'">
-          </div>
-          <div class="vue">
-            <img class="sujet" src="images/web/2-recherche/formes-generatives-imprimees/PXL_20260721_124109180.MP.jpg" loading="lazy" alt="Formes génératives imprimées — Vase logo FenFutures, disque texturé" onerror="this.style.opacity='0'">
-          </div>
+      <div class="ff-media">
+        <div class="ff-marge">
+          <p class="ff-legende mono"></p>
+          <div class="slider-dots"><button class="slider-dot active" aria-label="Image 1"></button><button class="slider-dot" aria-label="Image 2"></button><button class="slider-dot" aria-label="Image 3"></button><button class="slider-dot" aria-label="Image 4"></button><button class="slider-dot" aria-label="Image 5"></button></div>
         </div>
-        <div class="slider-dots">
-          <button class="slider-dot active" aria-label="Image 1"></button>
-          <button class="slider-dot" aria-label="Image 2"></button>
-          <button class="slider-dot" aria-label="Image 3"></button>
-          <button class="slider-dot" aria-label="Image 4"></button>
-          <button class="slider-dot" aria-label="Image 5"></button>
+        <div class="ff-nassij-slider slider">
+          <div class="slider-track">
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/formes-generatives-imprimees/pxl-20260127-205842238.jpg" loading="lazy" alt="Formes génératives imprimées — Anastomose — détail" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/formes-generatives-imprimees/pxl-20260127-222316950-2.jpg" loading="lazy" alt="Formes génératives imprimées — Anastomose — en situation" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/formes-generatives-imprimees/PXL_20260715_173250407.MP.jpg" loading="lazy" alt="Formes génératives imprimées — Trois vases, textures et couleurs multiples" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/formes-generatives-imprimees/PXL_20260321_110027366.jpg" loading="lazy" alt="Formes génératives imprimées — Vase, dégradé bleu-orange" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/formes-generatives-imprimees/PXL_20260721_124109180.MP.jpg" loading="lazy" alt="Formes génératives imprimées — Vase logo FenFutures, disque texturé" onerror="this.style.opacity='0'">
+            </div>
+          </div>
         </div>
       </div>
       <div class="p-head mono">
@@ -1135,7 +1251,10 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
         <span class="p-year">2026</span>
       </div>
       <p class="p-desc">Recherche sur les formes organiques générées par le calcul, entre sculpture et objet — une même méthode paramétrique, déclinée dans deux familles de pièces : définir une géométrie porteuse, la décliner par le calcul, la révéler par l'impression.</p>
-      <p class="p-desc">définition paramétrique &gt; impression 3D (PLA/PETG, mode vase) &gt; assemblage</p>
+      <div class="regle" aria-label="Chaine de fabrication">
+        <div class="regle-axe"><span class="tw"><i class="tick fort"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick fort"></i></span></div>
+        <div class="regle-mots mono"><span>définition paramétrique</span><span>impression 3D (PLA/PETG, mode vase)</span><span>assemblage</span></div>
+      </div>
       <p class="p-desc"><em>Anastomose</em> est la première sculpture de cette recherche : une forme organique modélisée puis imprimée en PETG transparent et assemblée en plusieurs parties.</p>
       <p class="p-desc">En parallèle, une série de vases explore le mode d'impression <em>vase</em> — une paroi unique et continue, sans strate visible, où alternent parfois deux textures ou deux couleurs sur une même pièce. Les profils, dessinés à partir d'une centaine de sommets disposés sur une courbe de Bézier, créent un effet de mouvement presque vortex : une contrainte structurelle autant qu'un choix esthétique, puisque cette technique n'imprime qu'une seule paroi et que la forme doit se suffire à elle-même pour rester solide.</p>
       <div class="p-meta mono"><span>IMPRESSION 3D</span><span>GRASSHOPPER</span></div>
@@ -1143,6 +1262,10 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     <!-- AUTO:RECHERCHE:FIN -->
 
     <!-- AUTO:NOTES:DEBUT -->
+    <div class="notes-charniere">
+      <span class="notes-titre mono">Notes</span>
+      <p class="notes-intro">Le reste du travail : en cours, collaboratif, moins fini. Les mots soulignés ouvrent les photos.</p>
+    </div>
     <div class="ff-grid">
       <div class="ff-card">
         <div class="k mono"><button class="lien-galerie k-titre" data-galerie="3-notes-textile-fabrication-numerique">01 — Textile + fabrication numérique</button></div>
@@ -1223,10 +1346,12 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
       </div>
     </div>
     <!-- AUTO:NOTES:FIN -->
+
   </div>
 </section>
 
-<!-- ── DISPO BAND ── -->
+<div class="charniere-retour" role="presentation"></div>
+
 <div class="dispo-band">
   <div class="wrap">
     <div class="dispo-inner mono">
@@ -1239,7 +1364,6 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
   </div>
 </div>
 
-<!-- ── FOOTER ── -->
 <footer id="contact">
   <div class="wrap">
     <h2>Discutons.</h2>
@@ -1268,72 +1392,139 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     </div>
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.26</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.27</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>
 
-
 <script>
-// ── SLIDER ───────────────────────────────────────────────────────────────────
-// Le défilement ne tourne pas en permanence : il démarre quand le bloc est
-// survolé (souris) ou quand il occupe l'écran (tactile), et s'arrête ensuite.
 var VITESSE_SLIDER = 3000;   // valeur pilotee par contenu/reglages.txt
 var lb_el = document.getElementById('lightbox');
 var AU_SURVOL = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+var MOINS_DE_MOUVEMENT = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-document.querySelectorAll('.slider').forEach(function(slider) {
+// Les legendes sont fabriquees en « Titre du projet — legende ». Affichee juste
+// sous le titre, la partie « Titre du projet — » ne dit rien de neuf : on la
+// retire. Si la legende ne commence pas par le titre, rien n'est touche.
+function legendeSeule(alt, titre) {
+  alt = (alt || '').trim();
+  titre = (titre || '').trim();
+  if (!titre) return alt;
+  var prefixe = titre + ' — ';
+  return alt.indexOf(prefixe) === 0 ? alt.slice(prefixe.length) : alt;
+}
+
+// ── DIAPORAMAS ───────────────────────────────────────────────────────────────
+// Ne tourne pas en permanence : demarre au survol (souris) ou quand le bloc
+// occupe l'ecran (tactile). Deux modes de bascule : glissement lateral dans les
+// vignettes, fondu floute dans les pieces de Recherche.
+document.querySelectorAll('.slider').forEach(function (slider) {
   var track = slider.querySelector('.slider-track');
   if (!track) return;
-  var slides = track.children;   // une diapositive = un enfant direct de la piste
-  var dots   = slider.querySelectorAll('.slider-dot');
+  var slides = track.children;
+  var fondu = slider.classList.contains('ff-nassij-slider');
+  // la reglette peut vivre hors du slider, dans la marge d'atelier
+  var cadre = slider.closest('.ff-media') || slider;
+  var dots = cadre.querySelectorAll('.slider-dot');
+  var legende = cadre.querySelector('.ff-legende');
+  var piece = slider.closest('.ff-nassij');
+  var titrePiece = piece && piece.querySelector('.p-title')
+                 ? piece.querySelector('.p-title').textContent : '';
   var cur = 0, timer = null;
+
   if (slides.length <= 1) {
-    var dd = slider.querySelector('.slider-dots'); if (dd) dd.style.display='none'; return;
+    var dd = cadre.querySelector('.slider-dots');
+    if (dd) dd.style.display = 'none';
   }
+
   function go(n) {
     cur = ((n % slides.length) + slides.length) % slides.length;
-    track.style.transform = 'translateX(-' + (cur * 100) + '%)';
-    dots.forEach(function(d,i){ d.classList.toggle('active', i===cur); });
+    if (fondu) {
+      Array.prototype.forEach.call(slides, function (s, i) {
+        s.classList.toggle('vue-active', i === cur);
+      });
+    } else {
+      track.style.transform = 'translateX(-' + (cur * 100) + '%)';
+    }
+    dots.forEach(function (d, i) { d.classList.toggle('active', i === cur); });
+    if (legende) {
+      var im = slides[cur].querySelector('.sujet');
+      var texte = legendeSeule(im ? im.getAttribute('alt') : '', titrePiece);
+      if (MOINS_DE_MOUVEMENT) { legende.textContent = texte; return; }
+      legende.style.opacity = 0;
+      setTimeout(function () { legende.textContent = texte; legende.style.opacity = 1; }, 160);
+    }
   }
   function demarrer() {
+    if (slides.length <= 1) return;
     clearInterval(timer);
-    timer = setInterval(function() {
+    slider.classList.add('en-cours');
+    timer = setInterval(function () {
       if (!lb_el.classList.contains('open')) go(cur + 1);
     }, VITESSE_SLIDER);
   }
-  function arreter() { clearInterval(timer); timer = null; }
+  function arreter() { clearInterval(timer); timer = null; slider.classList.remove('en-cours'); }
 
-  dots.forEach(function(d,i){ d.addEventListener('click', function(e){ e.stopPropagation(); go(i); }); });
+  dots.forEach(function (d, i) {
+    d.addEventListener('click', function (e) { e.stopPropagation(); arreter(); go(i); });
+  });
   go(0);
 
+  if (slides.length <= 1) return;
   if (AU_SURVOL) {
-    slider.addEventListener('mouseenter', demarrer);
-    slider.addEventListener('mouseleave', arreter);
+    cadre.addEventListener('mouseenter', demarrer);
+    cadre.addEventListener('mouseleave', arreter);
   } else if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function(entrees) {
-      entrees.forEach(function(e) { e.isIntersecting ? demarrer() : arreter(); });
+    new IntersectionObserver(function (entrees) {
+      entrees.forEach(function (e) { e.isIntersecting ? demarrer() : arreter(); });
     }, { threshold: 0.4 }).observe(slider);
   } else {
     demarrer();
   }
 });
 
-// ── VIDÉOS ───────────────────────────────────────────────────────────────────
-// Même règle que le défilement : rien ne tourne en permanence. La vidéo démarre
-// au survol (souris) ou quand son bloc occupe l'écran (tactile), et s'arrête
-// dès qu'on s'en va. Muette et sans contrôles dans la page ; c'est en plein
-// écran qu'elle reprend ses proportions et ses boutons.
-document.querySelectorAll('video.sujet').forEach(function(v) {
-  var cadre = v.closest('.thumb, .ff-nassij, .vue') || v;
-  function jouer()   { var p = v.play(); if (p && p.catch) p.catch(function() {}); }
+// ── CADRE DES PIECES DE RECHERCHE ────────────────────────────────────────────
+// Le cadre se cale sur la plus large image de la serie. Une serie entierement
+// en portrait ne laisse alors aucun vide lateral, et la legende de la marge
+// tombe juste a cote de la piece au lieu d'etre a 250 px de distance.
+(function () {
+  function caler(slider) {
+    var h = slider.getBoundingClientRect().height;
+    if (!h) return;
+    var max = 0;
+    slider.querySelectorAll('.sujet').forEach(function (i) {
+      if (i.naturalWidth && i.naturalHeight) {
+        max = Math.max(max, h * i.naturalWidth / i.naturalHeight);
+      }
+    });
+    if (max) slider.style.setProperty('--w-media', Math.ceil(max) + 'px');
+  }
+  var cadres = document.querySelectorAll('.ff-nassij-slider');
+  cadres.forEach(function (s) {
+    caler(s);
+    s.querySelectorAll('.sujet').forEach(function (i) {
+      if (!i.complete) i.addEventListener('load', function () { caler(s); }, { once: true });
+    });
+  });
+  var enAttente = false;
+  window.addEventListener('resize', function () {
+    if (enAttente) return;
+    enAttente = true;
+    requestAnimationFrame(function () { enAttente = false; cadres.forEach(caler); });
+  }, { passive: true });
+})();
+
+// ── VIDEOS ───────────────────────────────────────────────────────────────────
+document.querySelectorAll('video.sujet').forEach(function (v) {
+  var cadre = v.closest('.thumb, .ff-media, .vue') || v;
+  function jouer() { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
   function stopper() { v.pause(); }
   if (AU_SURVOL) {
     cadre.addEventListener('mouseenter', jouer);
     cadre.addEventListener('mouseleave', stopper);
   } else if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function(entrees) {
-      entrees.forEach(function(e) { e.isIntersecting ? jouer() : stopper(); });
+    new IntersectionObserver(function (entrees) {
+      entrees.forEach(function (e) { e.isIntersecting ? jouer() : stopper(); });
     }, { threshold: 0.4 }).observe(cadre);
   } else {
     jouer();
@@ -1341,15 +1532,12 @@ document.querySelectorAll('video.sujet').forEach(function(v) {
 });
 
 // ── GRILLE DES COMMANDES ─────────────────────────────────────────────────────
-// Une carte « lue » montre son calque et remplit la bande. Même déclenchement
-// que le défilement et la vidéo : le survol sur ordinateur, l'entrée dans
-// l'écran sur tactile. Une seule règle pour les trois.
-(function() {
+(function () {
   var bandeau = document.querySelector('.cmd-bandeau');
-  var cartes  = document.querySelectorAll('.cmd-carte');
+  var cartes = document.querySelectorAll('.cmd-carte');
   if (!bandeau || !cartes.length) return;
   var pastilles = bandeau.querySelectorAll('.cmd-ops span');
-  var zoneTags  = bandeau.querySelector('.cmd-tags');
+  var zoneTags = bandeau.querySelector('.cmd-tags');
   var zoneTexte = bandeau.querySelector('.cmd-texte');
   var lue = null;
 
@@ -1358,14 +1546,13 @@ document.querySelectorAll('video.sujet').forEach(function(v) {
     if (lue) lue.classList.remove('lue');
     lue = carte;
     if (carte) carte.classList.add('lue');
-
     var ops = carte ? (carte.getAttribute('data-ops') || '').split(',') : [];
-    pastilles.forEach(function(p) {
+    pastilles.forEach(function (p) {
       p.classList.toggle('on', ops.indexOf(p.getAttribute('data-op')) !== -1);
     });
     zoneTags.innerHTML = '';
     if (carte) {
-      (carte.getAttribute('data-tags') || '').split(',').forEach(function(t) {
+      (carte.getAttribute('data-tags') || '').split(',').forEach(function (t) {
         if (!t.trim()) return;
         var s = document.createElement('span');
         s.textContent = t.trim().toUpperCase();
@@ -1377,19 +1564,13 @@ document.querySelectorAll('video.sujet').forEach(function(v) {
   }
 
   if (AU_SURVOL) {
-    cartes.forEach(function(c) {
-      c.addEventListener('mouseenter', function() { lire(c); });
-    });
+    cartes.forEach(function (c) { c.addEventListener('mouseenter', function () { lire(c); }); });
     var section = document.getElementById('projets');
-    if (section) section.addEventListener('mouseleave', function() { lire(null); });
+    if (section) section.addEventListener('mouseleave', function () { lire(null); });
   } else {
-    // Au doigt, on ne peut pas se contenter de « la carte est visible » : sur un
-    // écran étroit quatre cartes le sont en même temps, et plus rien ne bouge
-    // ensuite. On désigne donc celle dont le centre est le plus proche d'une
-    // ligne de lecture — il y a toujours exactement une gagnante.
-    var choisir = function() {
+    var choisir = function () {
       var ligne = window.innerHeight * 0.45, gagnante = null, ecartMin = Infinity;
-      cartes.forEach(function(c) {
+      cartes.forEach(function (c) {
         var r = c.getBoundingClientRect();
         if (r.bottom < 0 || r.top > window.innerHeight) return;
         var ecart = Math.abs(r.top + r.height / 2 - ligne);
@@ -1398,38 +1579,119 @@ document.querySelectorAll('video.sujet').forEach(function(v) {
       lire(gagnante);
     };
     var enAttente = false;
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', function () {
       if (enAttente) return;
       enAttente = true;
-      requestAnimationFrame(function() { enAttente = false; choisir(); });
+      requestAnimationFrame(function () { enAttente = false; choisir(); });
     }, { passive: true });
     choisir();
   }
 })();
 
-// ── LIGHTBOX ─────────────────────────────────────────────────────────────────
-(function() {
-  var lb      = document.getElementById('lightbox');
-  var lbImg   = document.getElementById('lb-img');
-  var lbVid   = document.getElementById('lb-video');
+// ── NOTES : vignette d'ancrage + compte de photos ────────────────────────────
+// Tout est deduit des galeries deja presentes dans la page : rien a ajouter
+// dans contenu/. Une note sans images n'a ni vignette ni compte.
+document.querySelectorAll('.ff-card').forEach(function (carte) {
+  var premiere = carte.querySelector('.galerie-source i');
+  var titre = carte.querySelector('.k .lien-galerie');
+  if (!premiere || !titre) return;
+  var v = document.createElement('img');
+  v.className = 'k-vignette';
+  v.src = premiere.getAttribute('data-src');
+  v.alt = '';
+  v.loading = 'lazy';
+  v.setAttribute('data-galerie', titre.getAttribute('data-galerie'));
+  carte.querySelector('.k').prepend(v);
+});
+
+document.querySelectorAll('.lien-galerie').forEach(function (lien) {
+  var id = lien.getAttribute('data-galerie');
+  var source = document.querySelector('.galerie-source[data-galerie-id="' + id + '"]')
+            || document.querySelector('[data-groupe="' + id + '"]');
+  if (!source) return;
+  var n = source.querySelectorAll('i').length;
+  if (n < 1) return;
+  // on garde le libelle propre avant d'y coller le chiffre : il sert de titre
+  // dans la visionneuse, et le chiffre ne doit pas polluer le nom accessible
+  lien.setAttribute('data-libelle', lien.textContent.trim());
+  lien.setAttribute('aria-label', lien.textContent.trim() + ' — ouvrir ' +
+                    n + (n > 1 ? ' photos' : ' photo'));
+  var s = document.createElement('span');
+  s.className = 'compte';
+  s.setAttribute('aria-hidden', 'true');
+  s.textContent = n;
+  lien.appendChild(s);
+});
+
+// ── APERCU AU SURVOL D'UN MOT CLIQUABLE ──────────────────────────────────────
+// N'existe qu'a la souris : zero pixel ajoute pour un recruteur presse.
+(function () {
+  if (!AU_SURVOL) return;
+  var vue = document.createElement('img');
+  vue.className = 'apercu';
+  vue.alt = '';
+  document.body.appendChild(vue);
+  var x = 0, y = 0, cx = 0, cy = 0, boucle = null, visible = false;
+
+  function suivre() {
+    cx += (x - cx) * 0.18;
+    cy += (y - cy) * 0.18;
+    vue.style.transform = 'translate3d(' + cx + 'px,' + cy + 'px,0) scale(' + (visible ? 1 : 0.94) + ')';
+    boucle = (Math.abs(x - cx) > 0.5 || Math.abs(y - cy) > 0.5) ? requestAnimationFrame(suivre) : null;
+  }
+
+  document.addEventListener('mousemove', function (e) {
+    x = Math.min(e.clientX + 18, window.innerWidth - 182);
+    y = Math.min(e.clientY + 18, window.innerHeight - 140);
+    if (!boucle) boucle = requestAnimationFrame(suivre);
+  }, { passive: true });
+
+  document.addEventListener('mouseover', function (e) {
+    var lien = e.target.closest('.lien-galerie, .k-vignette');
+    if (!lien) return;
+    var id = lien.getAttribute('data-galerie');
+    var source = document.querySelector('.galerie-source[data-galerie-id="' + id + '"]')
+              || document.querySelector('[data-groupe="' + id + '"]');
+    var prem = source && source.querySelector('i');
+    if (!prem) return;
+    vue.src = prem.getAttribute('data-src');
+    visible = true;
+    vue.classList.add('visible');
+  });
+
+  document.addEventListener('mouseout', function (e) {
+    if (!e.target.closest('.lien-galerie, .k-vignette')) return;
+    visible = false;
+    vue.classList.remove('visible');
+  });
+})();
+
+// ── VISIONNEUSE ──────────────────────────────────────────────────────────────
+(function () {
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lb-img');
+  var lbVid = document.getElementById('lb-video');
   var lbClose = document.getElementById('lb-close');
-  var lbCount = document.getElementById('lb-counter');
+  var lbTitre = document.getElementById('lb-titre');
+  var lbLeg = document.getElementById('lb-legende');
+  var lbTags = document.getElementById('lb-tags');
+  var lbPoints = document.getElementById('lb-points');
   var galerie = [], lbIndex = 0, savedY = 0, vus = 0;
 
-  // galerie = liste d'objets {src, alt, video}
-  // vus compte les photos deja montrees dans cette ouverture : si on entre au
-  // milieu d'une galerie (apres un defilement automatique), « suivante » doit
-  // boucler jusqu'a avoir montre les photos precedentes aussi, pas juste
-  // s'arreter a la fin de la liste.
-  function ouvrir(liste, depart) {
+  function ouvrir(liste, depart, contexte) {
     if (!liste.length) return;
     galerie = liste;
     lbIndex = Math.max(0, depart || 0);
     vus = 1;
-    savedY  = window.scrollY;
+    savedY = window.scrollY;
+    contexte = contexte || {};
+    lbTitre.textContent = contexte.titre || '';
+    lbTags.textContent = contexte.tags || '';
+    poserPoints();
     afficher(lbIndex);
     lb.classList.add('open');
     document.body.style.overflow = 'hidden';
+    lbClose.focus();
   }
 
   function fermer() {
@@ -1438,19 +1700,30 @@ document.querySelectorAll('video.sujet').forEach(function(v) {
     lbImg.src = '';
     lbVid.pause();
     lbVid.removeAttribute('src');
-    lbVid.load();               // libère le décodeur au lieu de le laisser tourner
-    window.scrollTo(0, savedY);
+    lbVid.load();
+    // 'instant' : sans ca, scroll-behavior:smooth fait glisser la page au retour
+    window.scrollTo({ top: savedY, behavior: 'instant' });
   }
 
-  function afficher(n) {
-    lbIndex = n;
-    var item = galerie[lbIndex];
+  function poserPoints() {
+    lbPoints.innerHTML = '';
+    if (galerie.length < 2) return;
+    galerie.forEach(function (_, i) {
+      var b = document.createElement('button');
+      b.className = 'lb-point';
+      b.setAttribute('aria-label', 'Image ' + (i + 1) + ' sur ' + galerie.length);
+      b.addEventListener('click', function (e) { e.stopPropagation(); afficher(i); });
+      lbPoints.appendChild(b);
+    });
+  }
+
+  function poser(item) {
     if (item.video) {
       lbImg.style.display = 'none';
       lbImg.src = '';
       lbVid.style.display = 'block';
       lbVid.src = item.src;
-      var p = lbVid.play(); if (p && p.catch) p.catch(function() {});
+      var p = lbVid.play(); if (p && p.catch) p.catch(function () {});
     } else {
       lbVid.pause();
       lbVid.style.display = '';
@@ -1459,40 +1732,59 @@ document.querySelectorAll('video.sujet').forEach(function(v) {
       lbImg.src = item.src;
       lbImg.alt = item.alt || '';
     }
-    lbCount.textContent = galerie.length > 1 ? (lbIndex + 1) + ' / ' + galerie.length : '';
+    lbLeg.textContent = legendeSeule(item.alt, lbTitre.textContent);
+    lbPoints.querySelectorAll('.lb-point').forEach(function (p, i) {
+      p.classList.toggle('actif', i === lbIndex);
+    });
   }
 
+  function afficher(n) {
+    lbIndex = n;
+    var item = galerie[lbIndex];
+    if (MOINS_DE_MOUVEMENT) { poser(item); return; }
+    lbImg.style.opacity = 0;
+    setTimeout(function () { poser(item); lbImg.style.opacity = 1; }, 110);
+  }
+
+  // vus : si on entre au milieu d'une galerie, « suivante » boucle jusqu'a
+  // avoir montre les precedentes aussi, puis ferme.
   function suivante() {
-    if (vus < galerie.length) {
-      vus++;
-      afficher((lbIndex + 1) % galerie.length);
-    } else {
-      fermer();
-    }
+    if (vus < galerie.length) { vus++; afficher((lbIndex + 1) % galerie.length); }
+    else { fermer(); }
+  }
+  function precedente() {
+    afficher((lbIndex - 1 + galerie.length) % galerie.length);
   }
 
-  // images visibles : sliders des commandes et de la recherche.
-  document.addEventListener('click', function(e) {
+  document.addEventListener('click', function (e) {
     var vue = e.target.closest('.vue');
     var img = vue ? vue.querySelector('.sujet')
                   : e.target.closest('.thumb img, .ff-nassij-slider img');
     if (!img) return;
     e.stopPropagation();
-    var bloc = img.closest('.thumb, .ff-nassij');
+    var bloc = img.closest('.thumb, .ff-nassij-slider');
     var imgs = bloc ? Array.from(bloc.querySelectorAll('.sujet, img')) : [img];
-    ouvrir(imgs.map(function(el) {
+    var carte = img.closest('.cmd-carte, .ff-nassij');
+    var t = carte && carte.querySelector('.cmd-titre, .p-title');
+    var contexte = {
+      titre: t ? t.textContent.trim() : '',
+      tags: carte ? (carte.getAttribute('data-tags') || '').split(',')
+                      .map(function (s) { return s.trim().toUpperCase(); })
+                      .filter(Boolean).join('   ') : ''
+    };
+    ouvrir(imgs.map(function (el) {
       var estVideo = el.tagName === 'VIDEO';
       return {
         src: el.getAttribute('src'),
         alt: estVideo ? (el.getAttribute('data-alt') || '') : el.alt,
         video: estVideo
       };
-    }), imgs.indexOf(img));
+    }), imgs.indexOf(img), contexte);
   });
 
-  // mots cliquables et titres des cartes texte
-  document.addEventListener('click', function(e) {
-    var lien = e.target.closest('.lien-galerie');
+  // mots cliquables, titres de note et vignettes d'ancrage
+  document.addEventListener('click', function (e) {
+    var lien = e.target.closest('.lien-galerie, .k-vignette');
     if (!lien) return;
     e.preventDefault();
     e.stopPropagation();
@@ -1500,61 +1792,93 @@ document.querySelectorAll('video.sujet').forEach(function(v) {
     var source = document.querySelector('.galerie-source[data-galerie-id="' + id + '"]')
               || document.querySelector('[data-groupe="' + id + '"]');
     if (!source) return;
-    var liste = Array.from(source.querySelectorAll('i')).map(function(el) {
+    var carte = lien.closest('.ff-card');
+    var titre = carte && carte.querySelector('.k .lien-galerie');
+    var liste = Array.from(source.querySelectorAll('i')).map(function (el) {
       return { src: el.getAttribute('data-src'), alt: el.getAttribute('data-alt'),
                video: el.hasAttribute('data-video') };
     });
-    ouvrir(liste, 0);
+    ouvrir(liste, 0, {
+      titre: titre ? (titre.getAttribute('data-libelle') || titre.textContent.trim()) : '',
+      tags: ''
+    });
   });
 
-  lbImg.addEventListener('click', function(e) { e.stopPropagation(); suivante(); });
+  lbImg.addEventListener('click', function (e) { e.stopPropagation(); suivante(); });
   lbClose.addEventListener('click', fermer);
-  lb.addEventListener('click', function(e) { if (e.target === lb) fermer(); });
-  // Une vidéo ne passe pas à la suivante au clic : le clic lui appartient, il
-  // sert à la mettre en pause et à se déplacer dedans. On avance à la flèche.
-  lbVid.addEventListener('click', function(e) { e.stopPropagation(); });
+  lb.addEventListener('click', function (e) { if (e.target === lb) fermer(); });
+  lbVid.addEventListener('click', function (e) { e.stopPropagation(); });
 
-  document.addEventListener('keydown', function(e) {
+  document.addEventListener('keydown', function (e) {
     if (!lb.classList.contains('open')) return;
     if (e.key === 'Escape') fermer();
-    // barre d'espace sur une vidéo : c'est play/pause, pas « suivante »
     var surVideo = document.activeElement === lbVid;
-    if (e.key === 'ArrowRight' || (e.key === ' ' && !surVideo)) {
-      e.preventDefault(); suivante();
-    }
-    if (e.key === 'ArrowLeft' && lbIndex > 0) afficher(lbIndex - 1);
+    if (e.key === 'ArrowRight' || (e.key === ' ' && !surVideo)) { e.preventDefault(); suivante(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); precedente(); }
   });
-})();
 
-
-// ── MINI NAV + BACK TO TOP ───────────────────────────────────────────────────
-(function() {
-  var nav = document.getElementById('miniNav');
-  var btn = document.getElementById('backTop');
-  var heroH = document.querySelector('header.hero').offsetHeight;
-  window.addEventListener('scroll', function() {
-    var y = window.scrollY;
-    nav.classList.toggle('visible', y > heroH * 0.8);
-    btn.classList.toggle('visible', y > 400);
+  // Balayage du doigt : un geste, pas un dessin. Aucun element ajoute.
+  var x0 = null, y0 = null;
+  lb.addEventListener('touchstart', function (e) {
+    x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+  }, { passive: true });
+  lb.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    var dy = e.changedTouches[0].clientY - y0;
+    if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.8) {
+      dx < 0 ? suivante() : precedente();
+    }
+    x0 = null;
   }, { passive: true });
 })();
 
-// ── SCROLL REVEAL ─────────────────────────────────────────────────────────────
-(function() {
+// ── MINI NAV, RETOUR EN HAUT, GRAIN ──────────────────────────────────────────
+(function () {
+  var nav = document.getElementById('miniNav');
+  var btn = document.getElementById('backTop');
+  var grain = document.querySelector('.grain');
+  var hero = document.querySelector('header.hero');
+  var sombre = document.getElementById('fenfutures');
+  var heroH = hero.offsetHeight;
+  window.addEventListener('resize', function () { heroH = hero.offsetHeight; }, { passive: true });
+
+  var enAttente = false;
+  function verifier() {
+    var y = window.scrollY;
+    nav.classList.toggle('visible', y > heroH * 0.8);
+    btn.classList.toggle('visible', y > 400);
+    if (!sombre) return;
+    var r = sombre.getBoundingClientRect();
+    var navSurSombre = r.top <= 42 && r.bottom >= 0;
+    var btnSurSombre = r.top <= window.innerHeight - 45 && r.bottom >= window.innerHeight - 45;
+    nav.classList.toggle('sur-sombre', navSurSombre);
+    btn.classList.toggle('sur-sombre', btnSurSombre);
+    if (grain) grain.classList.toggle('actif', r.top < window.innerHeight * 0.6 && r.bottom > 0);
+  }
+  window.addEventListener('scroll', function () {
+    if (enAttente) return;
+    enAttente = true;
+    requestAnimationFrame(function () { enAttente = false; verifier(); });
+  }, { passive: true });
+  verifier();
+})();
+
+// ── SCROLL REVEAL ────────────────────────────────────────────────────────────
+(function () {
   if (!('IntersectionObserver' in window)) {
-    document.querySelectorAll('[data-reveal]').forEach(function(el) { el.classList.add('revealed'); });
+    document.querySelectorAll('[data-reveal]').forEach(function (el) { el.classList.add('revealed'); });
     return;
   }
-  var obs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
       if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); }
     });
   }, { threshold: 0.08 });
-  document.querySelectorAll('[data-reveal]').forEach(function(el) { obs.observe(el); });
+  document.querySelectorAll('[data-reveal]').forEach(function (el) { obs.observe(el); });
 })();
 
 </script>
-
 
 </body>
 </html>

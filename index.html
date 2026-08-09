@@ -707,7 +707,7 @@
     <div class="hero-meta mono">
       <div>
         <strong>Basé à</strong>
-        Marseille — disponible Paris / remote
+        Marseille — dispo Marseille / Paris en présentiel, remote privilégié
       </div>
       <div>
         <strong>Outils</strong>
@@ -981,7 +981,7 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
           </div>
           <div class="cmd-calque" aria-hidden="true">
             <div class="cmd-bloc">
-              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Scénographie &amp; spectacle vivant</b><i class="cmd-annee">Danse</i></span>
+              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Scénographie &amp; spectacle vivant</b><i class="cmd-annee">2025</i></span>
               <span class="cmd-titre">Dispositifs scéniques — <em>Starting with the Limbs</em>, cie L'Autre Maison</span>
               <span class="cmd-resume">Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer.</span>
             </div>
@@ -1586,6 +1586,25 @@ document.querySelectorAll('video.sujet').forEach(function (v) {
   var zoneTexte = bandeau.querySelector('.cmd-texte');
   var lue = null;
 
+  // Demo unique : au premier passage de la bande, les pastilles s'allument
+  // en vague puis s'eteignent - meme animation qu'au survol d'une carte,
+  // pour montrer que la rangee reagit, sans rien changer a son repos.
+  if ('IntersectionObserver' in window) {
+    var demoFaite = false;
+    var obsDemo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting || demoFaite) return;
+        demoFaite = true;
+        obsDemo.disconnect();
+        pastilles.forEach(function (p, i) {
+          setTimeout(function () { p.classList.add('on'); }, i * 90);
+          setTimeout(function () { if (lue === null) p.classList.remove('on'); }, 900 + i * 90);
+        });
+      });
+    }, { threshold: 0.6 });
+    obsDemo.observe(bandeau);
+  }
+
   function lire(carte) {
     if (lue === carte) return;
     if (lue) lue.classList.remove('lue');
@@ -1911,7 +1930,7 @@ document.addEventListener('click', function (e) {
   var enAttente = false;
   function verifier() {
     var y = window.scrollY;
-    nav.classList.toggle('visible', y > heroH * 0.8);
+    nav.classList.toggle('visible', y > 20);
     btn.classList.toggle('visible', y > 400);
     if (!sombre) return;
     var r = sombre.getBoundingClientRect();

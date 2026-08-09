@@ -26,7 +26,7 @@
     --ink: #14181A;
     --blue: #1F3F63;
     --blue-nuit: #7E9DBB;
-    --corail: #C97B68;          /* a echantillonner sur le vase bleu-orange */
+    --corail: #C7804D;          /* échantillon réel : vortex-vase/PXL_20260321_110027366.jpg */
     --grey: #6E7570;
     --line: #C7CBC4;
     --line-nuit: #2E3436;
@@ -1694,6 +1694,12 @@ document.querySelectorAll('.lien-galerie').forEach(function (lien) {
   document.addEventListener('mouseover', function (e) {
     var lien = e.target.closest('.lien-galerie, .k-vignette');
     if (!lien) return;
+    // si la souris n'a encore jamais bougé (tactile, ou script), on part
+    // de la position de cet evenement plutot que de rester colle a (0,0)
+    if (x === 0 && y === 0) {
+      x = cx = Math.min(e.clientX + 18, window.innerWidth - 182);
+      y = cy = Math.min(e.clientY + 18, window.innerHeight - 140);
+    }
     var id = lien.getAttribute('data-galerie');
     var source = document.querySelector('.galerie-source[data-galerie-id="' + id + '"]')
               || document.querySelector('[data-groupe="' + id + '"]');

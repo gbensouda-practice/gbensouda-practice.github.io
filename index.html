@@ -272,9 +272,13 @@
   }
   /* le constat, puis sa consequence : deux lignes, pas une cesure au hasard */
   .cloture em { display: block; font-style: italic; color: var(--blue); }
+  /* L'image et son cadrage viennent de contenu/textes-generaux.txt, poses en
+     variables sur la balise. Sans image declaree, il ne reste que le degrade
+     du ::after — la bande ne casse jamais. */
   .charniere {
     height: clamp(110px, 14vw, 180px); position: relative;
-    background: url('images/web/3-notes/textile-fabrication-numerique/PXL_20260427_121018672.MP.jpg') center 42% / cover no-repeat;
+    background: var(--charniere-image, none) center var(--charniere-cadrage, 42%)
+                / cover no-repeat;
   }
   .charniere::after {
     content: ''; position: absolute; inset: 0;
@@ -1569,7 +1573,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     </div>
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.30</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.31</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>

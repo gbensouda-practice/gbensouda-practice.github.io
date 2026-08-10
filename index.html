@@ -15,6 +15,7 @@
 <meta name="twitter:image" content="https://ghalibensouda.com/images/web/1-commandes/hermes-holiday-windows/01_vitrine-finale.jpg">
 <meta name="google-site-verification" content="HgqpZFQvXOk7zdPx5-Gdnly5u2AavWid60S6rM3E75E">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://ghalibensouda.com/">
 <title>Ghali Bensouda — Designer de dispositifs</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -461,6 +462,35 @@
     .ff-card:hover p:first-of-type { color: #E2E6E2; }
   }
 
+  /* ── LA RANGEE DE PIECES D'UN SUJET ──
+     Ce que le sujet cite, calcule depuis ses propres mots. C'est le meme objet
+     que les pastilles d'operations des Commandes — meme forme, meme
+     remplissage par la gauche — parce que ca dit la meme chose : voila de quoi
+     c'est fait. Cliquer un nom amene la piece dans le grand espace du haut. */
+  .sujet-pieces { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 18px; }
+  .lien-piece {
+    position: relative; overflow: hidden; z-index: 0;
+    font: inherit; font-size: 10.5px; letter-spacing: .04em;
+    padding: 4px 11px; cursor: pointer; text-align: left;
+    border: 1px solid var(--line-nuit); border-radius: 20px;
+    background: transparent; color: #8A918B;
+    transition: color .2s ease, border-color .2s ease, transform .16s var(--e-out);
+  }
+  .lien-piece::before {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    background: var(--blue-nuit);
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path .26s var(--e-out);
+  }
+  .lien-piece:active { transform: translateY(.5px); }
+  @media (hover: hover) and (pointer: fine) {
+    .lien-piece:hover { color: var(--ink); border-color: var(--blue-nuit); }
+    .lien-piece:hover::before { clip-path: inset(0 0 0 0); }
+  }
+  /* Une piece au repos est cachee par le script, jamais par le CSS : sans
+     JavaScript, elles restent toutes visibles au lieu que la section se vide. */
+  .ff-piece[hidden] { display: none; }
+
   /* ── MOTS CLIQUABLES : le mot est bleu, sa trace est corail ── */
   .lien-galerie {
     font: inherit; background: none; border: none; padding: 0 0 1px;
@@ -754,19 +784,19 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/01_vitrine-finale.jpg" loading="lazy" alt="Vitrines Hermès France H19 — Vitrine finale montée" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/01_vitrine-finale.jpg" loading="lazy" width="891" height="668" alt="Vitrines Hermès France H19 — Vitrine finale montée" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/02_atelier.jpg" loading="lazy" alt="Vitrines Hermès France H19 — Décor en cours de montage à l'atelier" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/02_atelier.jpg" loading="lazy" width="1266" height="950" alt="Vitrines Hermès France H19 — Décor en cours de montage à l'atelier" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/03_modele3d-coquillage.jpg" loading="lazy" alt="Vitrines Hermès France H19 — Modèle 3D du coquillage" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/03_modele3d-coquillage.jpg" loading="lazy" width="1358" height="1018" alt="Vitrines Hermès France H19 — Modèle 3D du coquillage" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/04_modele3d-chateau.jpg" loading="lazy" alt="Vitrines Hermès France H19 — Modèle 3D du château" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/04_modele3d-chateau.jpg" loading="lazy" width="1156" height="867" alt="Vitrines Hermès France H19 — Modèle 3D du château" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/06_atelier-pieces.jpg" loading="lazy" alt="Vitrines Hermès France H19 — Pièces usinées à l'atelier" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/06_atelier-pieces.jpg" loading="lazy" width="1322" height="992" alt="Vitrines Hermès France H19 — Pièces usinées à l'atelier" onerror="this.style.opacity='0'">
             </div>
           </div>
           <div class="slider-dots">
@@ -789,25 +819,25 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-finale.jpg" loading="lazy" alt="Vitrines Hermès France H21 — Vitrine finale — le dragon" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-finale.jpg" loading="lazy" width="1600" height="849" alt="Vitrines Hermès France H21 — Vitrine finale — le dragon" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/Capture d’écran 2026-08-07 165332.jpg" loading="lazy" alt="Vitrines Hermès France H21 — Le dragon en cours de montage à l'atelier" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/Capture d’écran 2026-08-07 165332.jpg" loading="lazy" width="1006" height="1258" alt="Vitrines Hermès France H21 — Le dragon en cours de montage à l'atelier" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/Capture d’écran 2026-08-07 165430.jpg" loading="lazy" alt="Vitrines Hermès France H21 — Mains moulées en série, à l'atelier" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/Capture d’écran 2026-08-07 165430.jpg" loading="lazy" width="1570" height="1256" alt="Vitrines Hermès France H21 — Mains moulées en série, à l'atelier" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/02_atelier.jpg" loading="lazy" alt="Vitrines Hermès France H21 — Vitrines finales, duo de mannequins" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/02_atelier.jpg" loading="lazy" width="1289" height="966" alt="Vitrines Hermès France H21 — Vitrines finales, duo de mannequins" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/03_modele3d-creature.jpg" loading="lazy" alt="Vitrines Hermès France H21 — Modèle 3D du dragon" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/03_modele3d-creature.jpg" loading="lazy" width="776" height="582" alt="Vitrines Hermès France H21 — Modèle 3D du dragon" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/04_modele3d-champignons.jpg" loading="lazy" alt="Vitrines Hermès France H21 — Modèle 3D des champignons lumineux" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/04_modele3d-champignons.jpg" loading="lazy" width="721" height="541" alt="Vitrines Hermès France H21 — Modèle 3D des champignons lumineux" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/05_modele3d-accessoires.jpg" loading="lazy" alt="Vitrines Hermès France H21 — Modèle 3D des accessoires" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/05_modele3d-accessoires.jpg" loading="lazy" width="1112" height="834" alt="Vitrines Hermès France H21 — Modèle 3D des accessoires" onerror="this.style.opacity='0'">
             </div>
           </div>
           <div class="slider-dots">
@@ -832,31 +862,31 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/05_vip-atelier-detail.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Espace VIP — détail atelier" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/05_vip-atelier-detail.jpg" loading="lazy" width="768" height="576" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Espace VIP — détail atelier" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/04_vip-atelier.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Espace VIP — atelier" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/04_vip-atelier.jpg" loading="lazy" width="1003" height="579" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Espace VIP — atelier" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/06_vip-atelier-montage.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Espace VIP — montage" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/06_vip-atelier-montage.jpg" loading="lazy" width="742" height="579" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Espace VIP — montage" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/01_vip-vue-eclatee.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Mobilier VIP — vue éclatée 3D" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/01_vip-vue-eclatee.jpg" loading="lazy" width="1167" height="875" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Mobilier VIP — vue éclatée 3D" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/07_bar-atelier.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — atelier" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/07_bar-atelier.jpg" loading="lazy" width="928" height="572" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — atelier" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/02_bar-rendu-3d.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — rendu 3D" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/02_bar-rendu-3d.jpg" loading="lazy" width="1163" height="881" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — rendu 3D" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/08_bar-atelier-detail.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — détail atelier" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/08_bar-atelier-detail.jpg" loading="lazy" width="522" height="577" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — détail atelier" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/03_bar-plan-3d.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — plan de fabrication" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/03_bar-plan-3d.jpg" loading="lazy" width="843" height="632" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — plan de fabrication" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/10_bar-atelier-finition.jpg" loading="lazy" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — finition" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/10_bar-atelier-finition.jpg" loading="lazy" width="576" height="571" alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Bar — finition" onerror="this.style.opacity='0'">
             </div>
           </div>
           <div class="slider-dots">
@@ -883,19 +913,19 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/mass-set-design/01_expo-pompidou-metz.jpg" loading="lazy" alt="Set design — Mass, film de Pierre Pauze — Exposition au Centre Pompidou-Metz" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/mass-set-design/01_expo-pompidou-metz.jpg" loading="lazy" width="896" height="672" alt="Set design — Mass, film de Pierre Pauze — Exposition au Centre Pompidou-Metz" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/mass-set-design/02_tournage-decor.jpg" loading="lazy" alt="Set design — Mass, film de Pierre Pauze — Décor pendant le tournage" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/mass-set-design/02_tournage-decor.jpg" loading="lazy" width="1149" height="862" alt="Set design — Mass, film de Pierre Pauze — Décor pendant le tournage" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/mass-set-design/03_sculpture-resine.jpg" loading="lazy" alt="Set design — Mass, film de Pierre Pauze — Sculpture en résine" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/mass-set-design/03_sculpture-resine.jpg" loading="lazy" width="626" height="470" alt="Set design — Mass, film de Pierre Pauze — Sculpture en résine" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/mass-set-design/04_atelier-cnc.png" loading="lazy" alt="Set design — Mass, film de Pierre Pauze — Usinage CNC à l'atelier" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/mass-set-design/04_atelier-cnc.png" loading="lazy" width="630" height="473" alt="Set design — Mass, film de Pierre Pauze — Usinage CNC à l'atelier" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/mass-set-design/05_atelier-cnc-detail.jpg" loading="lazy" alt="Set design — Mass, film de Pierre Pauze — Usinage CNC — détail" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/mass-set-design/05_atelier-cnc-detail.jpg" loading="lazy" width="568" height="426" alt="Set design — Mass, film de Pierre Pauze — Usinage CNC — détail" onerror="this.style.opacity='0'">
             </div>
           </div>
           <div class="slider-dots">
@@ -918,13 +948,13 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/01_scenographie-rendu.jpg" loading="lazy" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Rendu de la scénographie" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/01_scenographie-rendu.jpg" loading="lazy" width="1600" height="1200" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Rendu de la scénographie" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/02_sculpture-impression-3d.jpg" loading="lazy" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Sculpture imprimée en 3D" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/02_sculpture-impression-3d.jpg" loading="lazy" width="1102" height="826" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Sculpture imprimée en 3D" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/03_sculpture-himalaya-plan.png" loading="lazy" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Plan de la sculpture Himalaya" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/03_sculpture-himalaya-plan.png" loading="lazy" width="922" height="691" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Plan de la sculpture Himalaya" onerror="this.style.opacity='0'">
             </div>
           </div>
           <div class="slider-dots">
@@ -945,28 +975,28 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif1.jpg" loading="lazy" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique en situation" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif1.jpg" loading="lazy" width="1600" height="998" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique en situation" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/pxl-20250613-113842873.png" loading="lazy" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Pxl 20250613 113842873" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/pxl-20250613-113842873.png" loading="lazy" width="1600" height="1200" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Pxl 20250613 113842873" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif2.jpg" loading="lazy" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique — vue 2" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif2.jpg" loading="lazy" width="1600" height="1004" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique — vue 2" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/pxl-20250615-162211608.png" loading="lazy" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Pxl 20250615 162211608" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/pxl-20250615-162211608.png" loading="lazy" width="1600" height="1200" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Pxl 20250615 162211608" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif3.jpg" loading="lazy" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique — vue 3" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif3.jpg" loading="lazy" width="1600" height="1003" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique — vue 3" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/pxl-20250615-162300172.png" loading="lazy" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Pxl 20250615 162300172" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/pxl-20250615-162300172.png" loading="lazy" width="1600" height="1200" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Pxl 20250615 162300172" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif4.jpg" loading="lazy" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique — vue 4" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif4.jpg" loading="lazy" width="1600" height="1007" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique — vue 4" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif5.jpg" loading="lazy" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique — vue 5" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif5.jpg" loading="lazy" width="1600" height="995" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique — vue 5" onerror="this.style.opacity='0'">
             </div>
           </div>
           <div class="slider-dots">
@@ -981,7 +1011,7 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
           </div>
           <div class="cmd-calque" aria-hidden="true">
             <div class="cmd-bloc">
-              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Scénographie &amp; spectacle vivant</b><i class="cmd-annee">2025</i></span>
+              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Scénographie &amp; spectacle vivant</b><i class="cmd-annee">Danse</i></span>
               <span class="cmd-titre">Dispositifs scéniques — <em>Starting with the Limbs</em>, cie L'Autre Maison</span>
               <span class="cmd-resume">Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer.</span>
             </div>
@@ -992,19 +1022,19 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/saket-sethi-mobilier-parametrique/01_sofa-rendu.jpg" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Sofa — rendu paramétrique" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/saket-sethi-mobilier-parametrique/01_sofa-rendu.jpg" loading="lazy" width="1248" height="585" alt="Collection mobilier paramétrique — Saket Sethi Design — Sofa — rendu paramétrique" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/saket-sethi-mobilier-parametrique/02_twirl-sofa.jpg" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Twirl Sofa" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/saket-sethi-mobilier-parametrique/02_twirl-sofa.jpg" loading="lazy" width="988" height="894" alt="Collection mobilier paramétrique — Saket Sethi Design — Twirl Sofa" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/saket-sethi-mobilier-parametrique/03_declinaisons-grasshopper.jpg" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Déclinaisons issues de la définition Grasshopper" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/saket-sethi-mobilier-parametrique/03_declinaisons-grasshopper.jpg" loading="lazy" width="962" height="488" alt="Collection mobilier paramétrique — Saket Sethi Design — Déclinaisons issues de la définition Grasshopper" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/saket-sethi-mobilier-parametrique/04_structure-mesh.png" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Structure du maillage" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/saket-sethi-mobilier-parametrique/04_structure-mesh.png" loading="lazy" width="732" height="484" alt="Collection mobilier paramétrique — Saket Sethi Design — Structure du maillage" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/saket-sethi-mobilier-parametrique/05_mise-en-scene.jpg" loading="lazy" alt="Collection mobilier paramétrique — Saket Sethi Design — Mobilier en situation" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/saket-sethi-mobilier-parametrique/05_mise-en-scene.jpg" loading="lazy" width="871" height="490" alt="Collection mobilier paramétrique — Saket Sethi Design — Mobilier en situation" onerror="this.style.opacity='0'">
             </div>
           </div>
           <div class="slider-dots">
@@ -1027,19 +1057,19 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/photophobia-vr/01_scene-mangrove.jpg" loading="lazy" alt="Environnement VR — Photophobia, Sanni Est — Scène de mangrove" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/photophobia-vr/01_scene-mangrove.jpg" loading="lazy" width="1600" height="724" alt="Environnement VR — Photophobia, Sanni Est — Scène de mangrove" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/photophobia-vr/02_premiere-kampnagel.jpg" loading="lazy" alt="Environnement VR — Photophobia, Sanni Est — Première à Kampnagel, Hambourg" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/photophobia-vr/02_premiere-kampnagel.jpg" loading="lazy" width="568" height="503" alt="Environnement VR — Photophobia, Sanni Est — Première à Kampnagel, Hambourg" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/photophobia-vr/03_premiere-public.jpg" loading="lazy" alt="Environnement VR — Photophobia, Sanni Est — Public de la première" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/photophobia-vr/03_premiere-public.jpg" loading="lazy" width="199" height="564" alt="Environnement VR — Photophobia, Sanni Est — Public de la première" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/photophobia-vr/04_modele3d-poisson.jpg" loading="lazy" alt="Environnement VR — Photophobia, Sanni Est — Modèle 3D du poisson" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/photophobia-vr/04_modele3d-poisson.jpg" loading="lazy" width="785" height="572" alt="Environnement VR — Photophobia, Sanni Est — Modèle 3D du poisson" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/photophobia-vr/05_texture-kaleidoscope.jpg" loading="lazy" alt="Environnement VR — Photophobia, Sanni Est — Texture kaléidoscopique" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/photophobia-vr/05_texture-kaleidoscope.jpg" loading="lazy" width="1307" height="578" alt="Environnement VR — Photophobia, Sanni Est — Texture kaléidoscopique" onerror="this.style.opacity='0'">
             </div>
           </div>
           <div class="slider-dots">
@@ -1062,16 +1092,16 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/mousseline-orange/pxl-20240517-123240129.jpg" loading="lazy" alt="Mousseline Orange — Caftan finalisé, vue de face" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/mousseline-orange/pxl-20240517-123240129.jpg" loading="lazy" width="1600" height="2844" alt="Mousseline Orange — Caftan finalisé, vue de face" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/mousseline-orange/pxl-20240517-122934822.jpg" loading="lazy" alt="Mousseline Orange — Motif imprimé, détail poitrine" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/mousseline-orange/pxl-20240517-122934822.jpg" loading="lazy" width="1600" height="2844" alt="Mousseline Orange — Motif imprimé, détail poitrine" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/mousseline-orange/pxl-20240517-122946850-mp.jpg" loading="lazy" alt="Mousseline Orange — Motif imprimé — détail rapproché" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/mousseline-orange/pxl-20240517-122946850-mp.jpg" loading="lazy" width="1600" height="900" alt="Mousseline Orange — Motif imprimé — détail rapproché" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/mousseline-orange/pxl-20240517-123327608.jpg" loading="lazy" alt="Mousseline Orange — Caftan finalisé, vue de dos" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/mousseline-orange/pxl-20240517-123327608.jpg" loading="lazy" width="1600" height="2844" alt="Mousseline Orange — Caftan finalisé, vue de dos" onerror="this.style.opacity='0'">
             </div>
           </div>
           <div class="slider-dots">
@@ -1093,34 +1123,34 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/pxl-20240517-124224570.jpg" loading="lazy" alt="Gilet brocard avec fleurs imprimées 3D — Gilet finalisé, vue de face" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/pxl-20240517-124224570.jpg" loading="lazy" width="1600" height="2844" alt="Gilet brocard avec fleurs imprimées 3D — Gilet finalisé, vue de face" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/pxl-20240517-124238652.jpg" loading="lazy" alt="Gilet brocard avec fleurs imprimées 3D — Gilet finalisé — détail manche" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/pxl-20240517-124238652.jpg" loading="lazy" width="1600" height="2844" alt="Gilet brocard avec fleurs imprimées 3D — Gilet finalisé — détail manche" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/pxl-20240517-124247515.jpg" loading="lazy" alt="Gilet brocard avec fleurs imprimées 3D — Gilet finalisé — détail épaule" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/pxl-20240517-124247515.jpg" loading="lazy" width="1600" height="2844" alt="Gilet brocard avec fleurs imprimées 3D — Gilet finalisé — détail épaule" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/pxl-20240517-124259998.jpg" loading="lazy" alt="Gilet brocard avec fleurs imprimées 3D — Gilet finalisé — détail dos" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/pxl-20240517-124259998.jpg" loading="lazy" width="1600" height="2844" alt="Gilet brocard avec fleurs imprimées 3D — Gilet finalisé — détail dos" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/PXL_20240506_120016033.jpg" loading="lazy" alt="Gilet brocard avec fleurs imprimées 3D — Fleurs en cours de composition, détail" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/PXL_20240506_120016033.jpg" loading="lazy" width="1600" height="2844" alt="Gilet brocard avec fleurs imprimées 3D — Fleurs en cours de composition, détail" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/PXL_20240506_120042836.jpg" loading="lazy" alt="Gilet brocard avec fleurs imprimées 3D — Fleurs et perles, détail d'assemblage" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/PXL_20240506_120042836.jpg" loading="lazy" width="1600" height="2844" alt="Gilet brocard avec fleurs imprimées 3D — Fleurs et perles, détail d'assemblage" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/pxl-20240508-205716910.jpg" loading="lazy" alt="Gilet brocard avec fleurs imprimées 3D — Fleurs imprimées, premiers essais" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/pxl-20240508-205716910.jpg" loading="lazy" width="1600" height="2844" alt="Gilet brocard avec fleurs imprimées 3D — Fleurs imprimées, premiers essais" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/pxl-20240508-205719890.jpg" loading="lazy" alt="Gilet brocard avec fleurs imprimées 3D — Fleurs imprimées, essais — détail" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/pxl-20240508-205719890.jpg" loading="lazy" width="1600" height="2844" alt="Gilet brocard avec fleurs imprimées 3D — Fleurs imprimées, essais — détail" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/pxl-20240508-215042269.jpg" loading="lazy" alt="Gilet brocard avec fleurs imprimées 3D — Composition des fleurs sur le buste" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/pxl-20240508-215042269.jpg" loading="lazy" width="1600" height="2844" alt="Gilet brocard avec fleurs imprimées 3D — Composition des fleurs sur le buste" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/pxl-20240514-130123591.jpg" loading="lazy" alt="Gilet brocard avec fleurs imprimées 3D — Assemblage en cours" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/gilet-brocard-avec-flowers-imprimes-3d/pxl-20240514-130123591.jpg" loading="lazy" width="1600" height="2844" alt="Gilet brocard avec fleurs imprimées 3D — Assemblage en cours" onerror="this.style.opacity='0'">
             </div>
           </div>
           <div class="slider-dots">
@@ -1148,28 +1178,28 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/kaftan-brodees-a-partir-d-image/pxl-20240420-122646650.jpg" loading="lazy" alt="Kaftan brodées à partir d'image — Broderie florale, détail" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/kaftan-brodees-a-partir-d-image/pxl-20240420-122646650.jpg" loading="lazy" width="1600" height="900" alt="Kaftan brodées à partir d'image — Broderie florale, détail" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/kaftan-brodees-a-partir-d-image/pxl-20240420-122720392.jpg" loading="lazy" alt="Kaftan brodées à partir d'image — Broderie florale — autre détail" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/kaftan-brodees-a-partir-d-image/pxl-20240420-122720392.jpg" loading="lazy" width="1600" height="2844" alt="Kaftan brodées à partir d'image — Broderie florale — autre détail" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/kaftan-brodees-a-partir-d-image/0-0.jpg" loading="lazy" alt="Kaftan brodées à partir d'image — Motif de départ, généré numériquement" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/kaftan-brodees-a-partir-d-image/0-0.jpg" loading="lazy" width="1024" height="1024" alt="Kaftan brodées à partir d'image — Motif de départ, généré numériquement" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/kaftan-brodees-a-partir-d-image/pxl-20240316-120314711-mp.jpg" loading="lazy" alt="Kaftan brodées à partir d'image — Toile, premier essayage" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/kaftan-brodees-a-partir-d-image/pxl-20240316-120314711-mp.jpg" loading="lazy" width="1600" height="2844" alt="Kaftan brodées à partir d'image — Toile, premier essayage" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/kaftan-brodees-a-partir-d-image/pxl-20240501-122444438.jpg" loading="lazy" alt="Kaftan brodées à partir d'image — Broderie en cours" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/kaftan-brodees-a-partir-d-image/pxl-20240501-122444438.jpg" loading="lazy" width="1600" height="2844" alt="Kaftan brodées à partir d'image — Broderie en cours" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/kaftan-brodees-a-partir-d-image/pxl-20240501-122459875.jpg" loading="lazy" alt="Kaftan brodées à partir d'image — Broderie en cours — détail" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/kaftan-brodees-a-partir-d-image/pxl-20240501-122459875.jpg" loading="lazy" width="1600" height="2844" alt="Kaftan brodées à partir d'image — Broderie en cours — détail" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/kaftan-brodees-a-partir-d-image/pxl-20240514-151328957.jpg" loading="lazy" alt="Kaftan brodées à partir d'image — Kaftan finalisé" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/kaftan-brodees-a-partir-d-image/pxl-20240514-151328957.jpg" loading="lazy" width="1600" height="2844" alt="Kaftan brodées à partir d'image — Kaftan finalisé" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/kaftan-brodees-a-partir-d-image/pxl-20240514-151346068.jpg" loading="lazy" alt="Kaftan brodées à partir d'image — Kaftan finalisé — détail" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/kaftan-brodees-a-partir-d-image/pxl-20240514-151346068.jpg" loading="lazy" width="1600" height="2844" alt="Kaftan brodées à partir d'image — Kaftan finalisé — détail" onerror="this.style.opacity='0'">
             </div>
           </div>
           <div class="slider-dots">
@@ -1203,7 +1233,7 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
   </div>
 </div>
 <!-- AUTO:CHARNIERE:DEBUT -->
-<div class="charniere" role="presentation" style="--charniere-image:url('images/web/2-recherche/textile-fabrication-numerique/PXL_20260516_194723132.MP.jpg'); --charniere-cadrage:42%"></div>
+<div class="charniere" role="presentation"></div>
     <!-- AUTO:CHARNIERE:FIN -->
 
 <section class="fenfutures" id="fenfutures">
@@ -1217,7 +1247,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     <!-- AUTO:RECHERCHE_INTRO:FIN --></p>
 
     <!-- AUTO:RECHERCHE:DEBUT -->
-    <div class="ff-nassij ff-piece" data-piece="0" data-reveal>
+    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-digital-runway" data-rotation="1" data-reveal>
       <div class="ff-media">
         <div class="ff-marge">
           <p class="ff-legende mono"></p>
@@ -1226,25 +1256,25 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
         <div class="ff-nassij-slider slider">
           <div class="slider-track">
             <div class="vue">
-              <img class="sujet" src="images/web/2-recherche/collection-nassij/digital-runway/01_caftan-rendu-dos.jpg" loading="lazy" alt="Digital Runway — Caftan — rendu de dos, Blender" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/2-recherche/projets/digital-runway/01_caftan-rendu-dos.jpg" loading="lazy" width="1413" height="1764" alt="Digital Runway — Caftan — rendu de dos, Blender" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/2-recherche/collection-nassij/digital-runway/02_broderie-detail.jpg" loading="lazy" alt="Digital Runway — Broderie paramétrique — détail" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/2-recherche/projets/digital-runway/02_broderie-detail.jpg" loading="lazy" width="1380" height="1396" alt="Digital Runway — Broderie paramétrique — détail" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/2-recherche/collection-nassij/digital-runway/03_caftan-detail-manche.jpg" loading="lazy" alt="Digital Runway — Détail de la manche brodée" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/2-recherche/projets/digital-runway/03_caftan-detail-manche.jpg" loading="lazy" width="909" height="524" alt="Digital Runway — Détail de la manche brodée" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/2-recherche/collection-nassij/digital-runway/04_caftan-detail-bas.jpg" loading="lazy" alt="Digital Runway — Détail du bas du caftan" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/2-recherche/projets/digital-runway/04_caftan-detail-bas.jpg" loading="lazy" width="1376" height="759" alt="Digital Runway — Détail du bas du caftan" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/2-recherche/collection-nassij/digital-runway/05_motif-grasshopper.jpg" loading="lazy" alt="Digital Runway — Motif issu de la définition Grasshopper" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/2-recherche/projets/digital-runway/05_motif-grasshopper.jpg" loading="lazy" width="621" height="433" alt="Digital Runway — Motif issu de la définition Grasshopper" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/2-recherche/collection-nassij/digital-runway/06_defile-digital.jpg" loading="lazy" alt="Digital Runway — Défilé digital — passage du caftan" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/2-recherche/projets/digital-runway/06_defile-digital.jpg" loading="lazy" width="1079" height="1062" alt="Digital Runway — Défilé digital — passage du caftan" onerror="this.style.opacity='0'">
             </div>
             <div class="vue">
-              <img class="sujet" src="images/web/2-recherche/collection-nassij/digital-runway/07_reference-broderie.png" loading="lazy" alt="Digital Runway — Étude Midjourney — point de départ du motif" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/2-recherche/projets/digital-runway/07_reference-broderie.png" loading="lazy" width="1079" height="1049" alt="Digital Runway — Étude Midjourney — point de départ du motif" onerror="this.style.opacity='0'">
             </div>
           </div>
         </div>
@@ -1260,14 +1290,256 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
       </div>
       <div class="p-meta mono"><span>GRASSHOPPER</span><span>MARVELOUS DESIGNER</span><span>BLENDER</span><span>IMPRESSION 3D</span><span>BRODERIE</span><span>DIRECTION ARTISTIQUE</span></div>
       <div class="p-note">
-        <button class="lien-note" data-note="2-recherche-collection-nassij">
-          <img class="p-note-vignette" src="images/web/2-recherche/collection-nassij/digital-runway/01_caftan-rendu-dos.jpg" alt="" loading="lazy">
+        <button class="lien-note" data-note="2-recherche-sujets-collection-nassij">
+          <img class="p-note-vignette" src="images/web/2-recherche/projets/digital-runway/01_caftan-rendu-dos.jpg" alt="" loading="lazy">
           <span class="p-note-texte">
             <span class="k mono">02 — Collection Nassij</span>
           </span>
         </button>
       </div>
     </div>
+    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-boutons" data-reveal>
+      <div class="ff-media">
+        <div class="ff-marge">
+          <p class="ff-legende mono"></p>
+          <div class="slider-dots"><button class="slider-dot active" aria-label="Image 1"></button><button class="slider-dot" aria-label="Image 2"></button><button class="slider-dot" aria-label="Image 3"></button></div>
+        </div>
+        <div class="ff-nassij-slider slider">
+          <div class="slider-track">
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260709_100516708.jpg" loading="lazy" width="1600" height="2844" alt="Boutons — Rangée de boutons sur mesure, motifs variés" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260610_140239002.jpg" loading="lazy" width="1600" height="2844" alt="Boutons — Boutons en spirale sur mousseline orange" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260704_111238925.jpg" loading="lazy" width="1600" height="2844" alt="Boutons — Boutons sertis, détail sur chiffon fleuri" onerror="this.style.opacity='0'">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-head mono">
+        <span class="p-title">Boutons</span>
+      </div>
+      <div class="p-note">
+        <button class="lien-note" data-note="2-recherche-sujets-artisanat-numerique">
+          <img class="p-note-vignette" src="images/web/2-recherche/projets/boutons/PXL_20260709_100516708.jpg" alt="" loading="lazy">
+          <span class="p-note-texte">
+            <span class="k mono">03 — Artisanat + numérique</span>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-tiflik" data-reveal>
+      <div class="ff-media">
+        <div class="ff-marge">
+          <p class="ff-legende mono"></p>
+        </div>
+        <div class="ff-nassij-slider">
+          <div class="vue">
+            <img class="sujet" src="images/web/2-recherche/projets/tiflik/PXL_20260504_152604167.MP.jpg" loading="lazy" width="1600" height="2844" alt="Tiflik — Moule Tiflik en trois parties, impression FDM" onerror="this.style.opacity='0'">
+          </div>
+        </div>
+      </div>
+      <div class="p-head mono">
+        <span class="p-title">Tiflik</span>
+      </div>
+      <div class="p-note">
+        <button class="lien-note" data-note="2-recherche-sujets-production-matiere">
+          <img class="p-note-vignette" src="images/web/2-recherche/projets/tiflik/PXL_20260504_152604167.MP.jpg" alt="" loading="lazy">
+          <span class="p-note-texte">
+            <span class="k mono">05 — Production matière</span>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-masques" data-reveal>
+      <div class="ff-media">
+        <div class="ff-marge">
+          <p class="ff-legende mono"></p>
+          <div class="slider-dots"><button class="slider-dot active" aria-label="Image 1"></button><button class="slider-dot" aria-label="Image 2"></button><button class="slider-dot" aria-label="Image 3"></button><button class="slider-dot" aria-label="Image 4"></button><button class="slider-dot" aria-label="Image 5"></button><button class="slider-dot" aria-label="Image 6"></button><button class="slider-dot" aria-label="Image 7"></button></div>
+        </div>
+        <div class="ff-nassij-slider slider">
+          <div class="slider-track">
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/projets/masques/01-thalassic-face.jpg" loading="lazy" width="669" height="745" alt="Masques — Thalassic Mask — de face" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/projets/masques/02-thalassic-profil.jpg" loading="lazy" width="696" height="725" alt="Masques — Thalassic Mask — de profil" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/projets/masques/03-erosion-face.jpg" loading="lazy" width="669" height="745" alt="Masques — Masque érosion — de face" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/projets/masques/04-erosion-profil.jpg" loading="lazy" width="696" height="725" alt="Masques — Masque érosion — de profil" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/projets/masques/05-spherepacking-face.jpg" loading="lazy" width="674" height="745" alt="Masques — Masque sphere packing — de face" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/projets/masques/06-spherepacking-profil.jpg" loading="lazy" width="697" height="725" alt="Masques — Masque sphere packing — de profil" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/projets/masques/07-spherepacking-corps.jpg" loading="lazy" width="322" height="675" alt="Masques — Sphere packing sur le corps entier" onerror="this.style.opacity='0'">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-head mono">
+        <span class="p-title">Masques</span>
+      </div>
+      <div class="p-note">
+        <button class="lien-note" data-note="2-recherche-sujets-recherche-corps">
+          <img class="p-note-vignette" src="images/web/2-recherche/projets/masques/01-thalassic-face.jpg" alt="" loading="lazy">
+          <span class="p-note-texte">
+            <span class="k mono">06 — Recherche corps</span>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-morphine" data-reveal>
+      <div class="ff-media">
+        <div class="ff-marge">
+          <p class="ff-legende mono"></p>
+        </div>
+        <div class="ff-nassij-slider">
+          <div class="vue">
+            <img class="sujet" src="images/web/2-recherche/projets/morphine/08-rendu-blender.jpg" loading="lazy" width="1600" height="924" alt="Morphine — Workshop Morphine — rendu Blender" onerror="this.style.opacity='0'">
+          </div>
+        </div>
+      </div>
+      <div class="p-head mono">
+        <span class="p-title">Morphine</span>
+      </div>
+      <div class="p-note">
+        <button class="lien-note" data-note="2-recherche-sujets-recherche-corps">
+          <img class="p-note-vignette" src="images/web/2-recherche/projets/masques/01-thalassic-face.jpg" alt="" loading="lazy">
+          <span class="p-note-texte">
+            <span class="k mono">06 — Recherche corps</span>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-aire-poids-lourd" data-reveal>
+      <div class="ff-media">
+        <div class="ff-marge">
+          <p class="ff-legende mono"></p>
+          <div class="slider-dots"><button class="slider-dot active" aria-label="Image 1"></button><button class="slider-dot" aria-label="Image 2"></button><button class="slider-dot" aria-label="Image 3"></button><button class="slider-dot" aria-label="Image 4"></button></div>
+        </div>
+        <div class="ff-nassij-slider slider">
+          <div class="slider-track">
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-110930503.jpg" loading="lazy" width="1600" height="900" alt="Aire poids lourd — Praticable en construction" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-131926747.jpg" loading="lazy" width="1600" height="900" alt="Aire poids lourd — Plateau, lumière et praticable en place" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-144453920.jpg" loading="lazy" width="1600" height="900" alt="Aire poids lourd — Détail d'assemblage" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-145734025.jpg" loading="lazy" width="1600" height="900" alt="Aire poids lourd — Montage en cours" onerror="this.style.opacity='0'">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-head mono">
+        <span class="p-title">Aire poids lourd</span>
+      </div>
+      <div class="p-note">
+        <button class="lien-note" data-note="2-recherche-sujets-scenographie-fabrication">
+          <img class="p-note-vignette" src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-110930503.jpg" alt="" loading="lazy">
+          <span class="p-note-texte">
+            <span class="k mono">07 — Scénographie + fabrication</span>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-limbs" data-reveal>
+      <div class="ff-media">
+        <div class="ff-marge">
+          <p class="ff-legende mono"></p>
+          <div class="slider-dots"><button class="slider-dot active" aria-label="Image 1"></button><button class="slider-dot" aria-label="Image 2"></button><button class="slider-dot" aria-label="Image 3"></button></div>
+        </div>
+        <div class="ff-nassij-slider slider">
+          <div class="slider-track">
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20240904-131134711-mp.jpg" loading="lazy" width="1600" height="900" alt="Limbs — Essai en atelier, dispositif porté" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20240904-131206456-mp.jpg" loading="lazy" width="1600" height="2844" alt="Limbs — Essai en atelier, groupe en mouvement" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20240904-131312353.jpg" loading="lazy" width="1600" height="2844" alt="Limbs — Essai en atelier, détail du dispositif" onerror="this.style.opacity='0'">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-head mono">
+        <span class="p-title">Limbs</span>
+      </div>
+      <div class="p-note">
+        <button class="lien-note" data-note="2-recherche-sujets-scenographie-fabrication">
+          <img class="p-note-vignette" src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-110930503.jpg" alt="" loading="lazy">
+          <span class="p-note-texte">
+            <span class="k mono">07 — Scénographie + fabrication</span>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-hudhud" data-reveal>
+      <div class="ff-media">
+        <div class="ff-marge">
+          <p class="ff-legende mono"></p>
+        </div>
+        <div class="ff-nassij-slider">
+          <div class="vue">
+            <img class="sujet" src="images/web/2-recherche/projets/hudhud/PXL_20260427_121018672.MP.jpg" loading="lazy" width="1600" height="900" alt="Hudhud — Perlage imprimé, motif dégradé sur tulle" onerror="this.style.opacity='0'">
+          </div>
+        </div>
+      </div>
+      <div class="p-head mono">
+        <span class="p-title">Hudhud</span>
+      </div>
+      <div class="p-note">
+        <button class="lien-note" data-note="2-recherche-sujets-textile-fabrication-numerique">
+          <img class="p-note-vignette" src="images/web/2-recherche/sujets/textile-fabrication-numerique/PXL_20260516_194723132.MP.jpg" alt="" loading="lazy">
+          <span class="p-note-texte">
+            <span class="k mono">08 — Textile + fabrication numérique</span>
+          </span>
+        </button>
+      </div>
+    </div>
+    <script>
+    (function () {
+      var pieces = document.querySelectorAll('.ff-piece');
+      if (pieces.length < 2) return;
+      var rotation = [];
+      pieces.forEach(function (p) {
+        if (p.hasAttribute('data-rotation')) rotation.push(p);
+      });
+      function montrer(cible) {
+        pieces.forEach(function (p) { p.hidden = (p !== cible); });
+        cible.classList.add('revealed');
+      }
+      // Une tranche de quinze minutes, pas le hasard : deux visiteurs de la
+      // meme minute voient la meme piece, et elle change sans republier.
+      if (rotation.length) {
+        montrer(rotation[Math.floor(Date.now() / 900000) % rotation.length]);
+      }
+      // Un nom de piece cliqué dans un sujet prend la place de la rotation,
+      // le temps de la visite. Au rechargement, la rotation reprend.
+      document.addEventListener('click', function (e) {
+        var carte = e.target.closest('.lien-piece');
+        if (!carte) return;
+        var cible = document.querySelector('.ff-piece[data-piece="'
+                    + carte.getAttribute('data-piece') + '"]');
+        if (!cible) return;
+        montrer(cible);
+        cible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    })();
+    </script>
     <!-- AUTO:RECHERCHE:FIN -->
 
     <!-- AUTO:NOTES:DEBUT -->
@@ -1276,52 +1548,47 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
       <p class="notes-intro">Le reste du travail : en cours, collaboratif, moins fini. Les mots soulignés ouvrent les photos.</p>
     </div>
     <div class="ff-grid">
-      <div class="ff-card" data-note="2-recherche-formes-generatives-imprimees">
-        <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-formes-generatives-imprimees">01 — Formes génératives imprimées</button></div>
+      <div class="ff-card" data-note="2-recherche-sujets-formes-generatives-imprimees">
+        <div class="k mono">01 — Formes génératives imprimées</div>
         <p>Recherche sur les formes organiques générées par le calcul, entre sculpture et objet — une même méthode paramétrique, déclinée dans deux familles de pièces : définir une géométrie porteuse, la décliner par le calcul, la révéler par l'impression.</p>
         <p><em>Anastomose</em> est la première sculpture de cette recherche : une forme organique modélisée puis imprimée en PETG transparent et assemblée en plusieurs parties.</p>
         <p>En parallèle, une série de vases explore le mode d'impression <em>vase</em> — une paroi unique et continue, sans strate visible, où alternent parfois deux textures ou deux couleurs sur une même pièce. Les profils, dessinés à partir d'une centaine de sommets disposés sur une courbe de Bézier, créent un effet de mouvement presque vortex : une contrainte structurelle autant qu'un choix esthétique, puisque cette technique n'imprime qu'une seule paroi et que la forme doit se suffire à elle-même pour rester solide.</p>
-        <div class="galerie-source" data-galerie-id="2-recherche-formes-generatives-imprimees" hidden>
-          <span data-groupe="2-recherche-formes-generatives-imprimees-anastomose">
-            <i data-src="images/web/2-recherche/formes-generatives-imprimees/anastomose/pxl-20260127-205842238.jpg" data-alt="Formes génératives imprimées — Anastomose — détail"></i>
-            <i data-src="images/web/2-recherche/formes-generatives-imprimees/anastomose/pxl-20260127-222316950-2.jpg" data-alt="Formes génératives imprimées — Anastomose — en situation"></i>
-          </span>
-          <span data-groupe="2-recherche-formes-generatives-imprimees-vortex-vase">
-            <i data-src="images/web/2-recherche/formes-generatives-imprimees/vortex-vase/PXL_20260715_173250407.MP.jpg" data-alt="Formes génératives imprimées — Trois vases, textures et couleurs multiples"></i>
-            <i data-src="images/web/2-recherche/formes-generatives-imprimees/vortex-vase/PXL_20260321_110027366.jpg" data-alt="Formes génératives imprimées — Vase, dégradé bleu-orange"></i>
-            <i data-src="images/web/2-recherche/formes-generatives-imprimees/vortex-vase/PXL_20260721_124109180.MP.jpg" data-alt="Formes génératives imprimées — Vase logo FenFutures, disque texturé"></i>
-          </span>
-        </div>
       </div>
-      <div class="ff-card" data-note="2-recherche-collection-nassij">
-        <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-collection-nassij">02 — Collection Nassij</button></div>
-        <p>Conception paramétrique, production digitale, expérimentation physique : trois strates tenues par un même vocabulaire de motifs. Le <button class="lien-galerie" data-galerie="2-recherche-collection-nassij-digital-runway">défilé digital</button> en est l'état le plus abouti, du fichier Grasshopper à la vidéo finale.</p>
+      <div class="ff-card" data-note="2-recherche-sujets-collection-nassij">
+        <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-sujets-collection-nassij">02 — Collection Nassij</button></div>
+        <div class="sujet-pieces mono">
+          <button class="lien-piece" data-piece="2-recherche-projets-digital-runway">Digital Runway</button>
+        </div>
+        <p>Conception paramétrique, production digitale, expérimentation physique : trois strates tenues par un même vocabulaire de motifs. Le <button class="lien-galerie" data-galerie="2-recherche-sujets-collection-nassij-digital-runway">défilé digital</button> en est l'état le plus abouti, du fichier Grasshopper à la vidéo finale.</p>
         <p>En parallèle, expérimentation physique : perlage et motifs imprimés directement sur tulle, pièces construites sur Grasshopper et pilotées par mon propre outil de slicing. Chaque prototype est un objet autonome autant qu'un état intermédiaire du processus textile.</p>
-        <div class="galerie-source" data-galerie-id="2-recherche-collection-nassij" hidden>
-          <span data-groupe="2-recherche-collection-nassij-digital-runway">
-            <i data-src="images/web/2-recherche/collection-nassij/digital-runway/01_caftan-rendu-dos.jpg" data-alt="Collection Nassij — Caftan — rendu de dos, Blender"></i>
-            <i data-src="images/web/2-recherche/collection-nassij/digital-runway/02_broderie-detail.jpg" data-alt="Collection Nassij — Broderie paramétrique — détail"></i>
-            <i data-src="images/web/2-recherche/collection-nassij/digital-runway/03_caftan-detail-manche.jpg" data-alt="Collection Nassij — Détail de la manche brodée"></i>
-            <i data-src="images/web/2-recherche/collection-nassij/digital-runway/04_caftan-detail-bas.jpg" data-alt="Collection Nassij — Détail du bas du caftan"></i>
-            <i data-src="images/web/2-recherche/collection-nassij/digital-runway/05_motif-grasshopper.jpg" data-alt="Collection Nassij — Motif issu de la définition Grasshopper"></i>
-            <i data-src="images/web/2-recherche/collection-nassij/digital-runway/06_defile-digital.jpg" data-alt="Collection Nassij — Défilé digital — passage du caftan"></i>
-            <i data-src="images/web/2-recherche/collection-nassij/digital-runway/07_reference-broderie.png" data-alt="Collection Nassij — Étude Midjourney — point de départ du motif"></i>
+        <div class="galerie-source" data-galerie-id="2-recherche-sujets-collection-nassij" hidden>
+          <span data-groupe="2-recherche-sujets-collection-nassij-digital-runway">
+            <i data-src="images/web/2-recherche/projets/digital-runway/01_caftan-rendu-dos.jpg" data-alt="Collection Nassij — Caftan — rendu de dos, Blender"></i>
+            <i data-src="images/web/2-recherche/projets/digital-runway/02_broderie-detail.jpg" data-alt="Collection Nassij — Broderie paramétrique — détail"></i>
+            <i data-src="images/web/2-recherche/projets/digital-runway/03_caftan-detail-manche.jpg" data-alt="Collection Nassij — Détail de la manche brodée"></i>
+            <i data-src="images/web/2-recherche/projets/digital-runway/04_caftan-detail-bas.jpg" data-alt="Collection Nassij — Détail du bas du caftan"></i>
+            <i data-src="images/web/2-recherche/projets/digital-runway/05_motif-grasshopper.jpg" data-alt="Collection Nassij — Motif issu de la définition Grasshopper"></i>
+            <i data-src="images/web/2-recherche/projets/digital-runway/06_defile-digital.jpg" data-alt="Collection Nassij — Défilé digital — passage du caftan"></i>
+            <i data-src="images/web/2-recherche/projets/digital-runway/07_reference-broderie.png" data-alt="Collection Nassij — Étude Midjourney — point de départ du motif"></i>
           </span>
         </div>
       </div>
-      <div class="ff-card" data-note="2-recherche-artisanat-numerique">
-        <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-artisanat-numerique">03 — Artisanat + numérique</button></div>
-        <p>Je travaille en exclusivité avec un atelier de couture marocain qui a plus de cinquante ans d'existence, entre savoir-faire traditionnel (dfina, kaftan, kmiss, jellaba) et ouverture contemporaine. J'y propose des <button class="lien-galerie" data-galerie="2-recherche-artisanat-numerique-boutons">boutons imprimés en 3D</button> comme alternative aux boutons traditionnels en fil de soie, conçus et produits sur mesure pour chaque tenue selon ses formes, ses couleurs et ses matières.</p>
+      <div class="ff-card" data-note="2-recherche-sujets-artisanat-numerique">
+        <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-sujets-artisanat-numerique">03 — Artisanat + numérique</button></div>
+        <div class="sujet-pieces mono">
+          <button class="lien-piece" data-piece="2-recherche-projets-boutons">Boutons</button>
+        </div>
+        <p>Je travaille en exclusivité avec un atelier de couture marocain qui a plus de cinquante ans d'existence, entre savoir-faire traditionnel (dfina, kaftan, kmiss, jellaba) et ouverture contemporaine. J'y propose des <button class="lien-galerie" data-galerie="2-recherche-sujets-artisanat-numerique-boutons">boutons imprimés en 3D</button> comme alternative aux boutons traditionnels en fil de soie, conçus et produits sur mesure pour chaque tenue selon ses formes, ses couleurs et ses matières.</p>
         <p>Les boutons sont réalisés en série après un échantillonnage par projet — les outils de présentation et d'échantillonnage sont eux aussi dessinés sur Grasshopper et imprimés en 3D. L'atelier me sollicite aussi pour mettre à l'échelle des graphismes ou choisir des couleurs, en soutien direct au travail des brodeurs.</p>
-        <div class="galerie-source" data-galerie-id="2-recherche-artisanat-numerique" hidden>
-          <span data-groupe="2-recherche-artisanat-numerique-boutons">
-            <i data-src="images/web/2-recherche/artisanat-numerique/boutons/PXL_20260709_100516708.jpg" data-alt="Artisanat + numérique — Rangée de boutons sur mesure, motifs variés"></i>
-            <i data-src="images/web/2-recherche/artisanat-numerique/boutons/PXL_20260610_140239002.jpg" data-alt="Artisanat + numérique — Boutons en spirale sur mousseline orange"></i>
-            <i data-src="images/web/2-recherche/artisanat-numerique/boutons/PXL_20260704_111238925.jpg" data-alt="Artisanat + numérique — Boutons sertis, détail sur chiffon fleuri"></i>
+        <div class="galerie-source" data-galerie-id="2-recherche-sujets-artisanat-numerique" hidden>
+          <span data-groupe="2-recherche-sujets-artisanat-numerique-boutons">
+            <i data-src="images/web/2-recherche/projets/boutons/PXL_20260709_100516708.jpg" data-alt="Artisanat + numérique — Rangée de boutons sur mesure, motifs variés"></i>
+            <i data-src="images/web/2-recherche/projets/boutons/PXL_20260610_140239002.jpg" data-alt="Artisanat + numérique — Boutons en spirale sur mousseline orange"></i>
+            <i data-src="images/web/2-recherche/projets/boutons/PXL_20260704_111238925.jpg" data-alt="Artisanat + numérique — Boutons sertis, détail sur chiffon fleuri"></i>
           </span>
         </div>
       </div>
-      <div class="ff-card" data-note="2-recherche-outils-applications">
+      <div class="ff-card" data-note="2-recherche-sujets-outils-applications">
         <div class="k mono">04 — Outils + applications</div>
         <p>En parallèle de la fabrication, je développe des outils numériques qui prolongent la même logique : systématiser, transmettre, rendre un savoir-faire réutilisable.</p>
         <p><em>BridgeLink</em> — application de gestion de tournois pour des clubs de bridge, pilotée gratuitement en test réel avec un club à Casablanca avant une licence payante.</p>
@@ -1329,63 +1596,77 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
         <p><em>Creative Memory</em> et <em>FenFuturesTools</em> — mes propres outils de travail (dont un environnement de traitement d'image par IA), pensés comme une base commune plutôt que des scripts jetables, à terme partagés par licence en tokens d'utilisation.</p>
         <p><em>HedronEquilibre</em> — un jeu d'équilibre et d'empilement en pièces imprimées en 3D, construit sur une géométrie unique déclinable en modules.</p>
       </div>
-      <div class="ff-card" data-note="2-recherche-production-matiere">
-        <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-production-matiere">05 — Production matière</button></div>
+      <div class="ff-card" data-note="2-recherche-sujets-production-matiere">
+        <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-sujets-production-matiere">05 — Production matière</button></div>
+        <div class="sujet-pieces mono">
+          <button class="lien-piece" data-piece="2-recherche-projets-tiflik">Tiflik</button>
+        </div>
         <p>Conception de moules imprimés en 3D pour des marques qui produisent ensuite leurs pièces en série — bougies, contenants, objets parfumés. Chaque moule est pensé en plusieurs parties démontables pour permettre le tirage en silicone qui sert à la production finale.</p>
-        <p>Collaboration en cours avec <button class="lien-galerie" data-galerie="2-recherche-production-matiere-tiflik">Tiflik</button> : un moule en trois pièces, imprimé en FDM, pour leurs contenants de bougie parfumée à leur logo.</p>
-        <div class="galerie-source" data-galerie-id="2-recherche-production-matiere" hidden>
-          <span data-groupe="2-recherche-production-matiere-tiflik">
-            <i data-src="images/web/2-recherche/production-matiere/tiflik/PXL_20260504_152604167.MP.jpg" data-alt="Production matière — Moule Tiflik en trois parties, impression FDM"></i>
+        <p>Collaboration en cours avec <button class="lien-galerie" data-galerie="2-recherche-sujets-production-matiere-tiflik">Tiflik</button> : un moule en trois pièces, imprimé en FDM, pour leurs contenants de bougie parfumée à leur logo.</p>
+        <div class="galerie-source" data-galerie-id="2-recherche-sujets-production-matiere" hidden>
+          <span data-groupe="2-recherche-sujets-production-matiere-tiflik">
+            <i data-src="images/web/2-recherche/projets/tiflik/PXL_20260504_152604167.MP.jpg" data-alt="Production matière — Moule Tiflik en trois parties, impression FDM"></i>
           </span>
         </div>
       </div>
-      <div class="ff-card" data-note="2-recherche-recherche-corps">
-        <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-recherche-corps">06 — Recherche corps</button></div>
-        <p>Body Architecture 2.0 — <button class="lien-galerie" data-galerie="2-recherche-recherche-corps-masques">masques génératifs</button> développés pendant le workshop de Filippo Nassetti. Workshop d'<button class="lien-galerie" data-galerie="2-recherche-recherche-corps-morphine">architecture futuriste</button> avec Amir Fakhrghasemi. Défilé digital comme forme de recherche sur la présence du vêtement.</p>
-        <div class="galerie-source" data-galerie-id="2-recherche-recherche-corps" hidden>
-          <span data-groupe="2-recherche-recherche-corps-masques">
-            <i data-src="images/web/2-recherche/recherche-corps/masques/01-thalassic-face.jpg" data-alt="Recherche corps — Thalassic Mask — de face"></i>
-            <i data-src="images/web/2-recherche/recherche-corps/masques/02-thalassic-profil.jpg" data-alt="Recherche corps — Thalassic Mask — de profil"></i>
-            <i data-src="images/web/2-recherche/recherche-corps/masques/03-erosion-face.jpg" data-alt="Recherche corps — Masque érosion — de face"></i>
-            <i data-src="images/web/2-recherche/recherche-corps/masques/04-erosion-profil.jpg" data-alt="Recherche corps — Masque érosion — de profil"></i>
-            <i data-src="images/web/2-recherche/recherche-corps/masques/05-spherepacking-face.jpg" data-alt="Recherche corps — Masque sphere packing — de face"></i>
-            <i data-src="images/web/2-recherche/recherche-corps/masques/06-spherepacking-profil.jpg" data-alt="Recherche corps — Masque sphere packing — de profil"></i>
-            <i data-src="images/web/2-recherche/recherche-corps/masques/07-spherepacking-corps.jpg" data-alt="Recherche corps — Sphere packing sur le corps entier"></i>
+      <div class="ff-card" data-note="2-recherche-sujets-recherche-corps">
+        <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-sujets-recherche-corps">06 — Recherche corps</button></div>
+        <div class="sujet-pieces mono">
+          <button class="lien-piece" data-piece="2-recherche-projets-masques">Masques</button>
+          <button class="lien-piece" data-piece="2-recherche-projets-morphine">Morphine</button>
+        </div>
+        <p>Body Architecture 2.0 — <button class="lien-galerie" data-galerie="2-recherche-sujets-recherche-corps-masques">masques génératifs</button> développés pendant le workshop de Filippo Nassetti. Workshop d'<button class="lien-galerie" data-galerie="2-recherche-sujets-recherche-corps-morphine">architecture futuriste</button> avec Amir Fakhrghasemi. Défilé digital comme forme de recherche sur la présence du vêtement.</p>
+        <div class="galerie-source" data-galerie-id="2-recherche-sujets-recherche-corps" hidden>
+          <span data-groupe="2-recherche-sujets-recherche-corps-masques">
+            <i data-src="images/web/2-recherche/projets/masques/01-thalassic-face.jpg" data-alt="Recherche corps — Thalassic Mask — de face"></i>
+            <i data-src="images/web/2-recherche/projets/masques/02-thalassic-profil.jpg" data-alt="Recherche corps — Thalassic Mask — de profil"></i>
+            <i data-src="images/web/2-recherche/projets/masques/03-erosion-face.jpg" data-alt="Recherche corps — Masque érosion — de face"></i>
+            <i data-src="images/web/2-recherche/projets/masques/04-erosion-profil.jpg" data-alt="Recherche corps — Masque érosion — de profil"></i>
+            <i data-src="images/web/2-recherche/projets/masques/05-spherepacking-face.jpg" data-alt="Recherche corps — Masque sphere packing — de face"></i>
+            <i data-src="images/web/2-recherche/projets/masques/06-spherepacking-profil.jpg" data-alt="Recherche corps — Masque sphere packing — de profil"></i>
+            <i data-src="images/web/2-recherche/projets/masques/07-spherepacking-corps.jpg" data-alt="Recherche corps — Sphere packing sur le corps entier"></i>
           </span>
-          <span data-groupe="2-recherche-recherche-corps-morphine">
-            <i data-src="images/web/2-recherche/recherche-corps/morphine/08-rendu-blender.jpg" data-alt="Recherche corps — Workshop Morphine — rendu Blender"></i>
+          <span data-groupe="2-recherche-sujets-recherche-corps-morphine">
+            <i data-src="images/web/2-recherche/projets/morphine/08-rendu-blender.jpg" data-alt="Recherche corps — Workshop Morphine — rendu Blender"></i>
           </span>
         </div>
       </div>
-      <div class="ff-card" data-note="2-recherche-scenographie-fabrication">
-        <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-scenographie-fabrication">07 — Scénographie + fabrication</button></div>
+      <div class="ff-card" data-note="2-recherche-sujets-scenographie-fabrication">
+        <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-sujets-scenographie-fabrication">07 — Scénographie + fabrication</button></div>
+        <div class="sujet-pieces mono">
+          <button class="lien-piece" data-piece="2-recherche-projets-aire-poids-lourd">Aire poids lourd</button>
+          <button class="lien-piece" data-piece="2-recherche-projets-limbs">Limbs</button>
+        </div>
         <p>Le résultat visible d'un dispositif scénique ne raconte pas toujours le travail de fabrication qui le porte. Deux exemples.</p>
-        <p>Pour <em>L'aire poids lourd</em>, la conception s'est concentrée sur le praticable — construction, décisions d'assemblage, logistique de montage et démontage — restée volontairement discrète parce qu'une écriture lumière préexistante occupait déjà tout l'espace visuel. <button class="lien-galerie" data-galerie="2-recherche-scenographie-fabrication-aire-poids-lourd">Le chantier</button>, de l'esquisse au plateau, conçu et fabriqué seul.</p>
-        <p>Pour <em>Starting with the Limbs</em>, <button class="lien-galerie" data-galerie="2-recherche-scenographie-fabrication-limbs">les essais en atelier</button> précèdent le dispositif final déjà présenté en Commandes — matière, articulation, tenue en mouvement, avant le passage en scène.</p>
-        <div class="galerie-source" data-galerie-id="2-recherche-scenographie-fabrication" hidden>
-          <span data-groupe="2-recherche-scenographie-fabrication-aire-poids-lourd">
-            <i data-src="images/web/2-recherche/scenographie-fabrication/aire-poids-lourd/pxl-20241214-110930503.jpg" data-alt="Scénographie + fabrication — Praticable en construction"></i>
-            <i data-src="images/web/2-recherche/scenographie-fabrication/aire-poids-lourd/pxl-20241214-131926747.jpg" data-alt="Scénographie + fabrication — Plateau, lumière et praticable en place"></i>
-            <i data-src="images/web/2-recherche/scenographie-fabrication/aire-poids-lourd/pxl-20241214-144453920.jpg" data-alt="Scénographie + fabrication — Détail d'assemblage"></i>
-            <i data-src="images/web/2-recherche/scenographie-fabrication/aire-poids-lourd/pxl-20241214-145734025.jpg" data-alt="Scénographie + fabrication — Montage en cours"></i>
+        <p>Pour <em>L'aire poids lourd</em>, la conception s'est concentrée sur le praticable — construction, décisions d'assemblage, logistique de montage et démontage — restée volontairement discrète parce qu'une écriture lumière préexistante occupait déjà tout l'espace visuel. <button class="lien-galerie" data-galerie="2-recherche-sujets-scenographie-fabrication-aire-poids-lourd">Le chantier</button>, de l'esquisse au plateau, conçu et fabriqué seul.</p>
+        <p>Pour <em>Starting with the Limbs</em>, <button class="lien-galerie" data-galerie="2-recherche-sujets-scenographie-fabrication-limbs">les essais en atelier</button> précèdent le dispositif final déjà présenté en Commandes — matière, articulation, tenue en mouvement, avant le passage en scène.</p>
+        <div class="galerie-source" data-galerie-id="2-recherche-sujets-scenographie-fabrication" hidden>
+          <span data-groupe="2-recherche-sujets-scenographie-fabrication-aire-poids-lourd">
+            <i data-src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-110930503.jpg" data-alt="Scénographie + fabrication — Praticable en construction"></i>
+            <i data-src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-131926747.jpg" data-alt="Scénographie + fabrication — Plateau, lumière et praticable en place"></i>
+            <i data-src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-144453920.jpg" data-alt="Scénographie + fabrication — Détail d'assemblage"></i>
+            <i data-src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-145734025.jpg" data-alt="Scénographie + fabrication — Montage en cours"></i>
           </span>
-          <span data-groupe="2-recherche-scenographie-fabrication-limbs">
-            <i data-src="images/web/2-recherche/scenographie-fabrication/limbs/pxl-20240904-131134711-mp.jpg" data-alt="Scénographie + fabrication — Essai en atelier, dispositif porté"></i>
-            <i data-src="images/web/2-recherche/scenographie-fabrication/limbs/pxl-20240904-131206456-mp.jpg" data-alt="Scénographie + fabrication — Essai en atelier, groupe en mouvement"></i>
-            <i data-src="images/web/2-recherche/scenographie-fabrication/limbs/pxl-20240904-131312353.jpg" data-alt="Scénographie + fabrication — Essai en atelier, détail du dispositif"></i>
+          <span data-groupe="2-recherche-sujets-scenographie-fabrication-limbs">
+            <i data-src="images/web/2-recherche/projets/limbs/pxl-20240904-131134711-mp.jpg" data-alt="Scénographie + fabrication — Essai en atelier, dispositif porté"></i>
+            <i data-src="images/web/2-recherche/projets/limbs/pxl-20240904-131206456-mp.jpg" data-alt="Scénographie + fabrication — Essai en atelier, groupe en mouvement"></i>
+            <i data-src="images/web/2-recherche/projets/limbs/pxl-20240904-131312353.jpg" data-alt="Scénographie + fabrication — Essai en atelier, détail du dispositif"></i>
           </span>
         </div>
       </div>
-      <div class="ff-card" data-note="2-recherche-textile-fabrication-numerique">
-        <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-textile-fabrication-numerique">08 — Textile + fabrication numérique</button></div>
-        <p>Pont entre ateliers locaux et outils numériques avancés : perlage et motifs imprimés directement sur tulle, à partir d'un workflow que j'ai construit moi-même — une image de départ, un <button class="lien-galerie" data-galerie="2-recherche-textile-fabrication-numerique-hudhud">plugin Grasshopper</button> que j'ai développé pour le systématiser (filtres d'image, disposition des motifs selon la teinte et la luminosité, trajectoires d'impression continues), puis impression 3D en filament flexible directement sur le textile.</p>
+      <div class="ff-card" data-note="2-recherche-sujets-textile-fabrication-numerique">
+        <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-sujets-textile-fabrication-numerique">08 — Textile + fabrication numérique</button></div>
+        <div class="sujet-pieces mono">
+          <button class="lien-piece" data-piece="2-recherche-projets-hudhud">Hudhud</button>
+        </div>
+        <p>Pont entre ateliers locaux et outils numériques avancés : perlage et motifs imprimés directement sur tulle, à partir d'un workflow que j'ai construit moi-même — une image de départ, un <button class="lien-galerie" data-galerie="2-recherche-sujets-textile-fabrication-numerique-hudhud">plugin Grasshopper</button> que j'ai développé pour le systématiser (filtres d'image, disposition des motifs selon la teinte et la luminosité, trajectoires d'impression continues), puis impression 3D en filament flexible directement sur le textile.</p>
         <p>Ce sont des essais en incréments : gérer au fur et à mesure la qualité des couleurs, la disposition, les formes, l'interprétation de l'image source. Une recherche sur les matériaux biosourcés est aussi en cours, pour rapprocher cette pratique numérique des savoir-faire locaux au Maroc.</p>
-        <div class="galerie-source" data-galerie-id="2-recherche-textile-fabrication-numerique" hidden>
-          <span data-groupe="2-recherche-textile-fabrication-numerique">
-            <i data-src="images/web/2-recherche/textile-fabrication-numerique/PXL_20260516_194723132.MP.jpg" data-alt="Textile + fabrication numérique — Perlage imprimé directement sur tulle"></i>
+        <div class="galerie-source" data-galerie-id="2-recherche-sujets-textile-fabrication-numerique" hidden>
+          <span data-groupe="2-recherche-sujets-textile-fabrication-numerique">
+            <i data-src="images/web/2-recherche/sujets/textile-fabrication-numerique/PXL_20260516_194723132.MP.jpg" data-alt="Textile + fabrication numérique — Perlage imprimé directement sur tulle"></i>
           </span>
-          <span data-groupe="2-recherche-textile-fabrication-numerique-hudhud">
-            <i data-src="images/web/2-recherche/textile-fabrication-numerique/hudhud/PXL_20260427_121018672.MP.jpg" data-alt="Textile + fabrication numérique — Perlage imprimé, motif dégradé sur tulle"></i>
+          <span data-groupe="2-recherche-sujets-textile-fabrication-numerique-hudhud">
+            <i data-src="images/web/2-recherche/projets/hudhud/PXL_20260427_121018672.MP.jpg" data-alt="Textile + fabrication numérique — Perlage imprimé, motif dégradé sur tulle"></i>
           </span>
         </div>
       </div>
@@ -1437,7 +1718,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     </div>
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.40</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.41</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>

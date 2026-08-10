@@ -462,6 +462,24 @@
     .ff-card:hover p:first-of-type { color: #E2E6E2; }
   }
 
+  /* ── LIEN VERS L'EXTERIEUR ──
+     Un mot qui sort du site ne doit pas se confondre avec un mot qui ouvre des
+     photos : meme famille, mais trait continu au lieu du trait corail, et une
+     fleche discrete pour dire qu'on s'en va. */
+  .lien-externe {
+    color: var(--blue-nuit);
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat; background-position: 0 100%;
+    background-size: 100% 1px; padding-bottom: 1px;
+    transition: color .18s ease, background-size .34s var(--e-out);
+  }
+  .lien-externe::after { content: ' ↗'; font-size: .82em; opacity: .7; }
+  @media (hover: hover) and (pointer: fine) {
+    .lien-externe:hover { color: #A8C4DC; background-size: 100% 2px; }
+  }
+  /* sur fond clair (Commandes), l'accent du site reprend la main */
+  .cmd-texte .lien-externe, .liaison .lien-externe { color: var(--blue); }
+
   /* ── LA RANGEE DE PIECES D'UN SUJET ──
      Ce que le sujet cite, calcule depuis ses propres mots. C'est le meme objet
      que les pastilles d'operations des Commandes — meme forme, meme
@@ -1392,6 +1410,61 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           </span>
         </button>
       </div>
+      <div class="galerie-source" data-galerie-id="2-recherche-projets-thalassic-kaftan" hidden>
+        <span data-groupe="2-recherche-projets-thalassic-kaftan">
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/01_broderie-generee-ia.png" data-alt="Thalassic Kaftan — L'image qui a ouvert la recherche — broderie générée, corail et fil d'or"></i>
+        </span>
+        <span data-groupe="2-recherche-projets-thalassic-kaftan-identite">
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/03_diagramme-identite.jpg" data-alt="Thalassic Kaftan — Où tombent les images générées — traditionnel / interprété, oriental / marocain"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/02_premier-essai-midjourney.jpg" data-alt="Thalassic Kaftan — Premier essai Midjourney — broderie d'or sur organza noir"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/05_variation-caftan-or-01.jpg" data-alt="Thalassic Kaftan — Variation sur la fente centrale — densité du semis"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/06_variation-caftan-or-02.jpg" data-alt="Thalassic Kaftan — Variation sur la fente centrale — motif continu"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/07_variation-caftan-or-03.jpg" data-alt="Thalassic Kaftan — Variation sur la fente centrale — dégradé vers le bas"></i>
+        </span>
+        <span data-groupe="2-recherche-projets-thalassic-kaftan-explorations">
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/08_planche-materialite.jpg" data-alt="Thalassic Kaftan — Planche de matérialité — vingt-huit états du même principe"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/09_planche-variations-motif.jpg" data-alt="Thalassic Kaftan — Variations de motif sur l'épaule et le dos"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/04_planche-zooms.jpg" data-alt="Thalassic Kaftan — Zooms — ce que devient le détail à cinquante-cinq millimètres"></i>
+        </span>
+        <span data-groupe="2-recherche-projets-thalassic-kaftan-image-source">
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/10_corail-couleur.jpg" data-alt="Thalassic Kaftan — Recherche d'image source — corail, saturation maximale"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/11_corail-image-source.jpg" data-alt="Thalassic Kaftan — L'image retenue — le relief lisible en luminosité"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/12_image-source-symetrique.jpg" data-alt="Thalassic Kaftan — L'image source symétrisée, prête pour l'échantillonnage"></i>
+        </span>
+        <span data-groupe="2-recherche-projets-thalassic-kaftan-definition">
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/13_definition-image-sampler-01.jpg" data-alt="Thalassic Kaftan — Définition Grasshopper — l'image lue canal par canal"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/14_definition-image-sampler-02.jpg" data-alt="Thalassic Kaftan — Définition Grasshopper — seuil de contour et attracteurs"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/15_fleuron-contour-01.jpg" data-alt="Thalassic Kaftan — Fleuron obtenu par symétrie — premier seuil"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/16_fleuron-contour-02.jpg" data-alt="Thalassic Kaftan — Fleuron obtenu par symétrie — deuxième seuil"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/17_fleuron-contour-03.jpg" data-alt="Thalassic Kaftan — Fleuron obtenu par symétrie — troisième seuil"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/18_bande-symetrique.jpg" data-alt="Thalassic Kaftan — Bande symétrique — le motif déroulé en frise"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/19_contours-variante.jpg" data-alt="Thalassic Kaftan — Courbes de niveau, variante ouverte"></i>
+        </span>
+        <span data-groupe="2-recherche-projets-thalassic-kaftan-patronage">
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/33_symetrie-forme-de-base.jpg" data-alt="Thalassic Kaftan — Recherche de symétrie — la forme de base et ses replis"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/34_patronage-devant.jpg" data-alt="Thalassic Kaftan — Patronage devant — demi-empiècement, symétrisé"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/35_patronage-dos-rendu.jpg" data-alt="Thalassic Kaftan — Patronage dos, posé sur le buste"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/36_plein-et-vide-etude.jpg" data-alt="Thalassic Kaftan — Plein et vide — étude d'une cellule répétable"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/37_plein-et-vide-panneau.png" data-alt="Thalassic Kaftan — Le panneau complet, matières attribuées"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/38_plein-et-vide-caftan.png" data-alt="Thalassic Kaftan — Le motif reporté sur les pièces du caftan"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/39_materiau-substance.png" data-alt="Thalassic Kaftan — Matière multicouche construite sous Substance Designer"></i>
+        </span>
+        <span data-groupe="2-recherche-projets-thalassic-kaftan-thalassic">
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/45_caftan-rendu-dos.jpg" data-alt="Thalassic Kaftan — Thalassic Kaftan — rendu Blender, de dos"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/46_caftan-buste-detail.jpg" data-alt="Thalassic Kaftan — Buste — or, turquoise et perles sur voile noir"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/47_caftan-manche-detail.jpg" data-alt="Thalassic Kaftan — Poignet brodé"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/48_caftan-bas-detail.jpg" data-alt="Thalassic Kaftan — Bas de robe — la broderie remonte de l'ourlet"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/49_broderie-matiere-detail.jpg" data-alt="Thalassic Kaftan — La matière de près — fils d'or, remplissages perlés, transparences"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/40_thalassic-epaules.png" data-alt="Thalassic Kaftan — Premier montage — empiècement d'épaules"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/41_thalassic-buste.png" data-alt="Thalassic Kaftan — Premier montage — buste et fente centrale"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/42_thalassic-face.png" data-alt="Thalassic Kaftan — Silhouette de face"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/43_thalassic-trois-quarts.png" data-alt="Thalassic Kaftan — Silhouette de trois quarts"></i>
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/44_thalassic-dos.png" data-alt="Thalassic Kaftan — Silhouette de dos"></i>
+        </span>
+        <span data-groupe="2-recherche-projets-thalassic-kaftan-defile">
+          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/50_defile-digital.jpg" data-alt="Thalassic Kaftan — Défilé digital — un autre passage de la collection, rendu sous Blender"></i>
+        </span>
+      </div>
     </div>
     <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-boutons" data-reveal>
       <div class="ff-media">
@@ -1448,6 +1521,21 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           </span>
         </button>
       </div>
+      <div class="galerie-source" data-galerie-id="2-recherche-projets-boutons" hidden>
+        <span data-groupe="2-recherche-projets-boutons">
+          <i data-src="images/web/2-recherche/projets/boutons/PXL_20260709_100516708.jpg" data-alt="Boutons — Rangée de boutons sur mesure, motifs variés"></i>
+          <i data-src="images/web/2-recherche/projets/boutons/PXL_20260610_140239002.jpg" data-alt="Boutons — Boutons en spirale sur mousseline orange"></i>
+          <i data-src="images/web/2-recherche/projets/boutons/PXL_20260704_111238925.jpg" data-alt="Boutons — Boutons sertis, détail sur chiffon fleuri"></i>
+          <i data-src="images/web/2-recherche/projets/boutons/PXL_20260610_135539565.jpg" data-alt="Boutons — PXL 20260610 135539565"></i>
+          <i data-src="images/web/2-recherche/projets/boutons/PXL_20260610_135556599.MP.jpg" data-alt="Boutons — PXL 20260610 135556599.MP"></i>
+          <i data-src="images/web/2-recherche/projets/boutons/PXL_20260610_140313055.jpg" data-alt="Boutons — PXL 20260610 140313055"></i>
+          <i data-src="images/web/2-recherche/projets/boutons/PXL_20260704_111244235.jpg" data-alt="Boutons — PXL 20260704 111244235"></i>
+          <i data-src="images/web/2-recherche/projets/boutons/PXL_20260704_151248364.jpg" data-alt="Boutons — PXL 20260704 151248364"></i>
+          <i data-src="images/web/2-recherche/projets/boutons/PXL_20260706_140607253.jpg" data-alt="Boutons — PXL 20260706 140607253"></i>
+          <i data-src="images/web/2-recherche/projets/boutons/PXL_20260709_100541963.jpg" data-alt="Boutons — PXL 20260709 100541963"></i>
+          <i data-src="images/web/2-recherche/projets/boutons/PXL_20260715_175518889.MP.jpg" data-alt="Boutons — PXL 20260715 175518889.MP"></i>
+        </span>
+      </div>
     </div>
     <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-tiflik" data-reveal>
       <div class="ff-media">
@@ -1470,6 +1558,11 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
             <span class="k mono">05 — Production matière</span>
           </span>
         </button>
+      </div>
+      <div class="galerie-source" data-galerie-id="2-recherche-projets-tiflik" hidden>
+        <span data-groupe="2-recherche-projets-tiflik">
+          <i data-src="images/web/2-recherche/projets/tiflik/PXL_20260504_152604167.MP.jpg" data-alt="Tiflik — Moule Tiflik en trois parties, impression FDM"></i>
+        </span>
       </div>
     </div>
     <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-masques" data-reveal>
@@ -1515,6 +1608,17 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           </span>
         </button>
       </div>
+      <div class="galerie-source" data-galerie-id="2-recherche-projets-masques" hidden>
+        <span data-groupe="2-recherche-projets-masques">
+          <i data-src="images/web/2-recherche/projets/masques/01-thalassic-face.jpg" data-alt="Masques — Thalassic Mask — de face"></i>
+          <i data-src="images/web/2-recherche/projets/masques/02-thalassic-profil.jpg" data-alt="Masques — Thalassic Mask — de profil"></i>
+          <i data-src="images/web/2-recherche/projets/masques/03-erosion-face.jpg" data-alt="Masques — Masque érosion — de face"></i>
+          <i data-src="images/web/2-recherche/projets/masques/04-erosion-profil.jpg" data-alt="Masques — Masque érosion — de profil"></i>
+          <i data-src="images/web/2-recherche/projets/masques/05-spherepacking-face.jpg" data-alt="Masques — Masque sphere packing — de face"></i>
+          <i data-src="images/web/2-recherche/projets/masques/06-spherepacking-profil.jpg" data-alt="Masques — Masque sphere packing — de profil"></i>
+          <i data-src="images/web/2-recherche/projets/masques/07-spherepacking-corps.jpg" data-alt="Masques — Sphere packing sur le corps entier"></i>
+        </span>
+      </div>
     </div>
     <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-morphine" data-reveal>
       <div class="ff-media">
@@ -1537,6 +1641,11 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
             <span class="k mono">06 — Recherche corps</span>
           </span>
         </button>
+      </div>
+      <div class="galerie-source" data-galerie-id="2-recherche-projets-morphine" hidden>
+        <span data-groupe="2-recherche-projets-morphine">
+          <i data-src="images/web/2-recherche/projets/morphine/08-rendu-blender.jpg" data-alt="Morphine — Workshop Morphine — rendu Blender"></i>
+        </span>
       </div>
     </div>
     <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-aire-poids-lourd" data-reveal>
@@ -1573,6 +1682,14 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           </span>
         </button>
       </div>
+      <div class="galerie-source" data-galerie-id="2-recherche-projets-aire-poids-lourd" hidden>
+        <span data-groupe="2-recherche-projets-aire-poids-lourd">
+          <i data-src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-110930503.jpg" data-alt="Aire poids lourd — Praticable en construction"></i>
+          <i data-src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-131926747.jpg" data-alt="Aire poids lourd — Plateau, lumière et praticable en place"></i>
+          <i data-src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-144453920.jpg" data-alt="Aire poids lourd — Détail d'assemblage"></i>
+          <i data-src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-145734025.jpg" data-alt="Aire poids lourd — Montage en cours"></i>
+        </span>
+      </div>
     </div>
     <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-limbs" data-reveal>
       <div class="ff-media">
@@ -1605,6 +1722,13 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           </span>
         </button>
       </div>
+      <div class="galerie-source" data-galerie-id="2-recherche-projets-limbs" hidden>
+        <span data-groupe="2-recherche-projets-limbs">
+          <i data-src="images/web/2-recherche/projets/limbs/pxl-20240904-131134711-mp.jpg" data-alt="Limbs — Essai en atelier, dispositif porté"></i>
+          <i data-src="images/web/2-recherche/projets/limbs/pxl-20240904-131206456-mp.jpg" data-alt="Limbs — Essai en atelier, groupe en mouvement"></i>
+          <i data-src="images/web/2-recherche/projets/limbs/pxl-20240904-131312353.jpg" data-alt="Limbs — Essai en atelier, détail du dispositif"></i>
+        </span>
+      </div>
     </div>
     <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-hudhud" data-reveal>
       <div class="ff-media">
@@ -1627,6 +1751,11 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
             <span class="k mono">08 — Textile + fabrication numérique</span>
           </span>
         </button>
+      </div>
+      <div class="galerie-source" data-galerie-id="2-recherche-projets-hudhud" hidden>
+        <span data-groupe="2-recherche-projets-hudhud">
+          <i data-src="images/web/2-recherche/projets/hudhud/PXL_20260427_121018672.MP.jpg" data-alt="Hudhud — Perlage imprimé, motif dégradé sur tulle"></i>
+        </span>
       </div>
     </div>
     <script>
@@ -1875,7 +2004,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     </div>
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.43</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.44</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>
@@ -2302,12 +2431,17 @@ document.querySelectorAll('.lien-galerie').forEach(function (lien) {
     if (!source) return;
     var carte = lien.closest('.ff-card');
     var titre = carte && carte.querySelector('.k .lien-galerie');
+    // Un mot cliquable peut aussi vivre dans le texte d'une piece : son titre
+    // n'est alors pas dans une .ff-card mais dans l'en-tete du grand bloc.
+    var piece = !titre && lien.closest('.ff-piece');
+    var pieceTitre = piece && piece.querySelector('.p-title');
     var liste = Array.from(source.querySelectorAll('i')).map(function (el) {
       return { src: el.getAttribute('data-src'), alt: el.getAttribute('data-alt'),
                video: el.hasAttribute('data-video') };
     });
     ouvrir(liste, 0, {
-      titre: titre ? (titre.getAttribute('data-libelle') || titre.textContent.trim()) : '',
+      titre: titre ? (titre.getAttribute('data-libelle') || titre.textContent.trim())
+           : (pieceTitre ? pieceTitre.textContent.trim() : ''),
       tags: ''
     });
   });

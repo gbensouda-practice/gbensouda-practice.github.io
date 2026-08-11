@@ -233,6 +233,16 @@
     object-fit: contain; display: block;
   }
 
+  /* Exception assumee a la regle « jamais de recadrage » : dans la GRILLE des
+     Commandes seulement, la vignette est remplie. Une serie melant portraits
+     et paysages y ferait clignoter des bandes vides a chaque image, et c'est
+     la grille qu'on lit, pas la photo. Au clic, le plein ecran rend a chacune
+     son vrai format — c'est la qu'on regarde vraiment. */
+  .cmd-carte .thumb .vue .sujet {
+    width: 100%; height: 100%; max-width: none; max-height: none;
+    object-fit: cover;
+  }
+
   /* ── DIAPORAMA ── */
   .slider { position: relative; overflow: hidden; }
   .thumb.slider { display: block; }
@@ -383,19 +393,18 @@
   .ff-piece.depliee .p-repli { display: block; }
   .p-lire { margin-top: 12px; }
 
-  /* ── LE CORPS D'UNE PIECE A SOUS-PROJETS : deux colonnes ──
-     Le texte de famille a gauche, les deroules a droite. Sur une seule colonne,
-     ouvrir un sous-projet se fait trop loin sous l'image pour qu'on voie le
-     cadre changer — et c'est ce changement qui donne son sens au geste.
-     La colonne de droite est collante : elle reste a hauteur de lecture. */
-  .p-corps {
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 12px 48px; align-items: start;
+  /* ── L'IMAGE ET SES SOUS-PROJETS, COTE A COTE ──
+     Ouvrir un sous-projet change les images du cadre. La liste doit donc etre
+     A HAUTEUR de l'image, jamais dessous : plus bas, elle serait hors du
+     regard au moment precis ou elle agit, et le geste ne dirait plus rien. */
+  .p-haut {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 30%);
+    gap: 40px; align-items: start; margin-bottom: 32px;
   }
-  .p-corps .p-desc, .p-corps .regle, .p-corps .p-meta { max-width: none; }
+  .p-haut .ff-media { margin-bottom: 0; }
   .p-volets { position: sticky; top: 76px; }
   @media (max-width: 900px) {
-    .p-corps { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .p-haut { grid-template-columns: minmax(0, 1fr); gap: 20px; }
     .p-volets { position: static; }
   }
 
@@ -1374,11 +1383,178 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     <!-- AUTO:RECHERCHE_INTRO:FIN --></p>
 
     <!-- AUTO:RECHERCHE:DEBUT -->
-    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-thalassic-kaftan" data-rotation="1" data-reveal>
+    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-mode-vase" data-rotation="1" data-reveal>
+      <div class="p-haut">
       <div class="ff-media">
         <div class="ff-marge">
           <p class="ff-legende mono"></p>
-          <div class="slider-dots"><button class="slider-dot active" aria-label="Image 1"></button><button class="slider-dot" aria-label="Image 2"></button><button class="slider-dot" aria-label="Image 3"></button><button class="slider-dot" aria-label="Image 4"></button><button class="slider-dot" aria-label="Image 5"></button><button class="slider-dot" aria-label="Image 6"></button><button class="slider-dot" aria-label="Image 7"></button><button class="slider-dot" aria-label="Image 8"></button><button class="slider-dot" aria-label="Image 9"></button><button class="slider-dot" aria-label="Image 10"></button><button class="slider-dot" aria-label="Image 11"></button><button class="slider-dot" aria-label="Image 12"></button><button class="slider-dot" aria-label="Image 13"></button><button class="slider-dot" aria-label="Image 14"></button><button class="slider-dot" aria-label="Image 15"></button><button class="slider-dot" aria-label="Image 16"></button><button class="slider-dot" aria-label="Image 17"></button><button class="slider-dot" aria-label="Image 18"></button><button class="slider-dot" aria-label="Image 19"></button><button class="slider-dot" aria-label="Image 20"></button><button class="slider-dot" aria-label="Image 21"></button><button class="slider-dot" aria-label="Image 22"></button><button class="slider-dot" aria-label="Image 23"></button><button class="slider-dot" aria-label="Image 24"></button><button class="slider-dot" aria-label="Image 25"></button><button class="slider-dot" aria-label="Image 26"></button><button class="slider-dot" aria-label="Image 27"></button><button class="slider-dot" aria-label="Image 28"></button><button class="slider-dot" aria-label="Image 29"></button><button class="slider-dot" aria-label="Image 30"></button><button class="slider-dot" aria-label="Image 31"></button><button class="slider-dot" aria-label="Image 32"></button><button class="slider-dot" aria-label="Image 33"></button><button class="slider-dot" aria-label="Image 34"></button><button class="slider-dot" aria-label="Image 35"></button><button class="slider-dot" aria-label="Image 36"></button><button class="slider-dot" aria-label="Image 37"></button><button class="slider-dot" aria-label="Image 38"></button><button class="slider-dot" aria-label="Image 39"></button><button class="slider-dot" aria-label="Image 40"></button><button class="slider-dot" aria-label="Image 41"></button><button class="slider-dot" aria-label="Image 42"></button><button class="slider-dot" aria-label="Image 43"></button><button class="slider-dot" aria-label="Image 44"></button><button class="slider-dot" aria-label="Image 45"></button><button class="slider-dot" aria-label="Image 46"></button><button class="slider-dot" aria-label="Image 47"></button><button class="slider-dot" aria-label="Image 48"></button><button class="slider-dot" aria-label="Image 49"></button><button class="slider-dot" aria-label="Image 50"></button><button class="slider-dot" aria-label="Image 51"></button></div>
+          <div class="slider-dots"><button class="slider-dot active" aria-label="Image 1"></button><button class="slider-dot" aria-label="Image 2"></button><button class="slider-dot" aria-label="Image 3"></button><button class="slider-dot" aria-label="Image 4"></button><button class="slider-dot" aria-label="Image 5"></button><button class="slider-dot" aria-label="Image 6"></button><button class="slider-dot" aria-label="Image 7"></button><button class="slider-dot" aria-label="Image 8"></button><button class="slider-dot" aria-label="Image 9"></button><button class="slider-dot" aria-label="Image 10"></button><button class="slider-dot" aria-label="Image 11"></button><button class="slider-dot" aria-label="Image 12"></button></div>
+        </div>
+        <div class="ff-nassij-slider slider">
+          <div class="slider-track">
+            <div class="vue">
+              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/PXL_20260424_173227668.MP.jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Les deux parois sur une même photo : cannelures vrillées devant, texture en relief derrière" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue" data-groupe="2-recherche-projets-mode-vase-fleuris">
+              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Fleuris/image.jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Deux tirages roses et un blanc, en usage" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue" data-groupe="2-recherche-projets-mode-vase-fleuris">
+              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Fleuris/image (1).jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Vase noir, profil vrillé, lys" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue" data-groupe="2-recherche-projets-mode-vase-fleuris">
+              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Fleuris/image (2).jpg" loading="lazy" width="1600" height="1638" alt="Mode vase — Deux tirages du même profil, dégradé rose-orange" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue" data-groupe="2-recherche-projets-mode-vase-soliflore">
+              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Soliflore/PXL_20260715_173250407.MP.jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Trois soliflores, même définition, trois profils" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue" data-groupe="2-recherche-projets-mode-vase-duo">
+              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260429_183442768.jpg" loading="lazy" width="1600" height="900" alt="Mode vase — Deux tirages du même profil — la couleur qui affleure dépend de l'angle d'impression" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue" data-groupe="2-recherche-projets-mode-vase-duo">
+              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260715_173346298.MP.jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Un seul point de vue, deux couleurs : le flanc intérieur ne renvoie pas ce que renvoie le flanc extérieur" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue" data-groupe="2-recherche-projets-mode-vase-trio">
+              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Trio/PXL_20260715_173307446.MP.jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Même architecture, même hauteur : seule la courbe intermédiaire du loft change" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue" data-groupe="2-recherche-projets-mode-vase-cache-pot">
+              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Cache-pot/PXL_20260715_173300388.MP.jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Un mur continu, un effet de strates, une souplesse de ressort au toucher" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue" data-groupe="2-recherche-projets-mode-vase-relief">
+              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Relief/PXL_20260321_110027366.jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Tenu en main : l'amplitude retenue, celle qui se sent sans que la paroi décroche" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue" data-groupe="2-recherche-projets-mode-vase-relief">
+              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Relief/PXL_20260715_173404455.MP.jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Le même objet posé — la couleur n'a pas changé, la lumière si" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue" data-groupe="2-recherche-projets-mode-vase-boite">
+              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Boite/PXL_20260721_124109180.MP.jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Boîte et son couvercle : le remplissage en courbe de Hilbert, laissé apparent au lieu d'être couvert" onerror="this.style.opacity='0'">
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="p-volets">
+          <div class="sous-projets">
+            <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-soliflore">
+              <summary>
+                <span class="sp-titre mono">Soliflores</span>
+                <span class="sp-resume">Le profil nu, sans variation : trois cols étroits pour une seule tige.</span>
+                <span class="sp-compte mono">1</span>
+              </summary>
+              <p class="p-desc">Le point de départ de la famille : la définition à l'état simple, sans variation ajoutée. Trois soliflores tirés du même profil en étoile, un col assez étroit pour tenir une tige droite sans la serrer.</p>
+              <p class="p-desc">C'est sur eux que la contrainte se voit le mieux. Un col fin et un ventre large, en une seule paroi, c'est exactement le cas où un cylindre lisse s'effondrerait : ce sont les cannelures qui portent le rétrécissement.</p>
+            </details>
+            <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-duo">
+              <summary>
+                <span class="sp-titre mono">Duos</span>
+                <span class="sp-resume">Deux tirages côte à côte, pour rendre visible ce que l'angle fait à la couleur.</span>
+                <span class="sp-compte mono">2</span>
+              </summary>
+              <p class="p-desc">Là où les soliflores montrent le profil, les duos montrent la couleur — et il en faut deux pour ça. Une seule pièce ne prouve rien : c'est la comparaison, à la même heure et sous la même lumière, qui rend l'effet lisible.</p>
+              <p class="p-desc">Le filament est coextrudé sur trois ou quatre pistes. L'angle sous lequel la buse dépose la matière décide de celle qui affleure, si bien que deux objets issus du même rouleau ne renvoient pas la même teinte. Et sur un seul d'entre eux, le flanc extérieur d'une cannelure et son flanc intérieur ne donnent pas la même couleur non plus.</p>
+            </details>
+            <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-trio">
+              <summary>
+                <span class="sp-titre mono">Trio</span>
+                <span class="sp-resume">Une seule variable déplacée : la courbe intermédiaire du loft monte ou descend.</span>
+                <span class="sp-compte mono">1</span>
+              </summary>
+              <p class="p-desc">Les duos comparent deux tirages du même profil ; le trio compare trois profils différents issus de la même architecture. Même hauteur, même nombre de branches, même filament — et une seule variable qu'on déplace : la courbe intermédiaire du loft, qu'on fait monter ou descendre entre la base et le col.</p>
+              <p class="p-desc">Ça suffit à changer complètement la silhouette sans que la famille se défasse. Le filament à dégradé fait le reste : comme la couleur avance avec la longueur imprimée, deux pièces de hauteurs identiques mais de volumes différents ne consomment pas la même matière, et ne sortent jamais de l'imprimante avec le même dégradé.</p>
+            </details>
+            <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-cache-pot">
+              <summary>
+                <span class="sp-titre mono">Cache-pot</span>
+                <span class="sp-resume">Large et bas, un mur continu qui se comporte comme un ressort sous la main.</span>
+                <span class="sp-compte mono">1</span>
+              </summary>
+              <p class="p-desc">Le seul de la famille à ne pas être vertical. Sa forme large et basse laisse la paroi presque libre entre la base et le bord, et c'est là que la finesse devient sensible : imprimé en buse 0,6 mm, le mur cède un peu sous les doigts et revient — un effet de ressort, sans que l'objet perde sa tenue.</p>
+              <p class="p-desc">Le tracé continu, lui, se lit à l'œil comme un empilement de strates. C'est la même paroi unique que sur les soliflores, mais posée à plat elle raconte l'impression au lieu de la cacher.</p>
+            </details>
+            <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-relief">
+              <summary>
+                <span class="sp-titre mono">Relief</span>
+                <span class="sp-resume">L'autre façon de faire une surface : un bruit déplace les sommets, l'étanchéité arbitre.</span>
+                <span class="sp-compte mono">2</span>
+              </summary>
+              <p class="p-desc">Les cinq autres contenants tirent leur surface du profil. Celui-ci est le seul à la tirer du maillage — et c'est pour ça qu'il existe.</p>
+              <p class="p-desc">Le point de départ est la même surface loftée, mais lisse. Convertie en maillage, elle reçoit une texture de bruit qui lui sert de carte de hauteur : chaque sommet est déplacé le long de la normale à la surface, d'une valeur lue dans le bruit au point le plus proche. Vers l'extérieur, vers l'intérieur, selon le point.</p>
+              <p class="p-desc">Toute la recherche tient dans cette valeur. Trop faible, le relief ne se sent pas sous la main et l'objet ne raconte rien. Trop forte, la paroi part en porte-à-faux, l'impression laisse des trous, et le vase fuit. <em>L'étanchéité est le juge</em> — c'est la seule fois de la série où le critère n'est pas visuel.</p>
+            </details>
+            <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-boite">
+              <summary>
+                <span class="sp-titre mono">Boîte</span>
+                <span class="sp-resume">L'exception de la série : ici la surface vient du remplissage, pas de la paroi.</span>
+                <span class="sp-compte mono">1</span>
+              </summary>
+              <p class="p-desc">C'est le seul objet de la famille qui n'est pas une paroi unique — et il y a sa place quand même, parce qu'il pose la même question par l'autre bout.</p>
+              <p class="p-desc">Ses couvercles ont un intérieur, donc un remplissage. Au lieu de le couvrir d'une peau lisse comme le fait tout slicer par défaut, il est laissé apparent : le motif choisi est une courbe de Hilbert, une ligne unique qui remplit le plan sans jamais se croiser. Sur le même filament coextrudé que les vases, ça donne un moirage serré que la photo rend mal.</p>
+              <p class="p-desc">Le lettrage est imprimé dans un second filament, sur une A1 équipée de son extension multi-matière. Là encore, rien n'est ajouté après coup : la marque est dans la matière.</p>
+              <div class="p-meta mono"><span>COURBE DE HILBERT</span><span>BAMBU LAB A1</span><span>IMPRESSION MULTI-FILAMENT</span></div>
+            </details>
+          </div>
+        </div>
+      </div>
+      <div class="p-head mono">
+        <span class="p-title">Mode vase</span>
+        <span class="p-year">2026</span>
+      </div>
+      <p class="p-resume">Des contenants imprimés d'une seule paroi, où la surface est le chemin de la buse.</p>
+      <div class="p-repli">
+        <p class="p-desc">Une famille de contenants imprimés d'une seule paroi continue. La buse ne s'arrête pas entre la base et le col : tout ce qu'on voit à la surface — les cannelures, le relief, les couleurs qui basculent — est le tracé lui-même. Rien n'est peint ni texturé après coup.</p>
+        <div class="regle" aria-label="Chaine de fabrication">
+          <div class="regle-axe"><span class="tw"><i class="tick fort"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick fort"></i></span></div>
+          <div class="regle-mots mono"><span>profil en étoile (Grasshopper)</span><span>loft entre cercles pivotés</span><span>tranchage en mode vase (Bambu Studio)</span><span>impression une paroi, buse 0,6 mm</span></div>
+        </div>
+        <p class="p-desc">Le profil est une étoile, lissée par un loft entre des cercles qu'une rotation décale les uns par rapport aux autres : c'est de là que vient le mouvement en vortex. C'est aussi ce qui tient l'objet debout. Une paroi de 0,6 mm n'a aucune raison d'être rigide ; pliée en cannelures vrillées, elle le devient. Le pli remplace l'épaisseur.</p>
+        <p class="p-desc">Le filament est coextrudé en trois ou quatre couleurs, et c'est l'angle d'impression qui décide de celle qui affleure. De loin, l'objet change de teinte quand on tourne autour. De près, une même face en montre deux à la fois, selon qu'on voit le flanc extérieur ou le flanc intérieur d'une cannelure.</p>
+        <p class="p-desc">Six objets sortent de cette même définition, et chacun en déplace un paramètre. Ils se lisent un par un ci-dessous : ouvrir l'un d'eux change les images du cadre.</p>
+        <div class="p-meta mono"><span>RHINO</span><span>GRASSHOPPER</span><span>BAMBU STUDIO</span><span>IMPRESSION 3D</span><span>BAMBU LAB A1</span></div>
+      </div>
+      <button class="lire-plus p-lire mono" aria-expanded="false">Lire la suite …</button>
+      <div class="p-note">
+        <button class="lien-note" data-note="2-recherche-sujets-formes-generatives-imprimees">
+          <img class="p-note-vignette" src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260429_183442768.jpg" alt="" loading="lazy">
+          <span class="p-note-texte">
+            <span class="k mono">01 — Une définition, plusieurs objets</span>
+          </span>
+        </button>
+      </div>
+      <div class="galerie-source" data-galerie-id="2-recherche-projets-mode-vase" hidden>
+        <span data-groupe="2-recherche-projets-mode-vase">
+          <i data-src="images/web/2-recherche/projets/mode-vase/PXL_20260424_173227668.MP.jpg" data-alt="Mode vase — Les deux parois sur une même photo : cannelures vrillées devant, texture en relief derrière"></i>
+        </span>
+        <span data-groupe="2-recherche-projets-mode-vase-fleuris">
+          <i data-src="images/web/2-recherche/projets/mode-vase/Fleuris/image.jpg" data-alt="Mode vase — Deux tirages roses et un blanc, en usage"></i>
+          <i data-src="images/web/2-recherche/projets/mode-vase/Fleuris/image (1).jpg" data-alt="Mode vase — Vase noir, profil vrillé, lys"></i>
+          <i data-src="images/web/2-recherche/projets/mode-vase/Fleuris/image (2).jpg" data-alt="Mode vase — Deux tirages du même profil, dégradé rose-orange"></i>
+        </span>
+        <span data-groupe="2-recherche-projets-mode-vase-soliflore">
+          <i data-src="images/web/2-recherche/projets/mode-vase/Soliflore/PXL_20260715_173250407.MP.jpg" data-alt="Mode vase — Trois soliflores, même définition, trois profils"></i>
+        </span>
+        <span data-groupe="2-recherche-projets-mode-vase-duo">
+          <i data-src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260429_183442768.jpg" data-alt="Mode vase — Deux tirages du même profil — la couleur qui affleure dépend de l'angle d'impression"></i>
+          <i data-src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260715_173346298.MP.jpg" data-alt="Mode vase — Un seul point de vue, deux couleurs : le flanc intérieur ne renvoie pas ce que renvoie le flanc extérieur"></i>
+        </span>
+        <span data-groupe="2-recherche-projets-mode-vase-trio">
+          <i data-src="images/web/2-recherche/projets/mode-vase/Trio/PXL_20260715_173307446.MP.jpg" data-alt="Mode vase — Même architecture, même hauteur : seule la courbe intermédiaire du loft change"></i>
+        </span>
+        <span data-groupe="2-recherche-projets-mode-vase-cache-pot">
+          <i data-src="images/web/2-recherche/projets/mode-vase/Cache-pot/PXL_20260715_173300388.MP.jpg" data-alt="Mode vase — Un mur continu, un effet de strates, une souplesse de ressort au toucher"></i>
+        </span>
+        <span data-groupe="2-recherche-projets-mode-vase-relief">
+          <i data-src="images/web/2-recherche/projets/mode-vase/Relief/PXL_20260321_110027366.jpg" data-alt="Mode vase — Tenu en main : l'amplitude retenue, celle qui se sent sans que la paroi décroche"></i>
+          <i data-src="images/web/2-recherche/projets/mode-vase/Relief/PXL_20260715_173404455.MP.jpg" data-alt="Mode vase — Le même objet posé — la couleur n'a pas changé, la lumière si"></i>
+        </span>
+        <span data-groupe="2-recherche-projets-mode-vase-boite">
+          <i data-src="images/web/2-recherche/projets/mode-vase/Boite/PXL_20260721_124109180.MP.jpg" data-alt="Mode vase — Boîte et son couvercle : le remplissage en courbe de Hilbert, laissé apparent au lieu d'être couvert"></i>
+        </span>
+      </div>
+    </div>
+    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-thalassic-kaftan" data-rotation="1" data-reveal>
+      <div class="p-haut">
+      <div class="ff-media">
+        <div class="ff-marge">
+          <p class="ff-legende mono"></p>
+          <div class="slider-dots"><button class="slider-dot active" aria-label="Image 1"></button><button class="slider-dot" aria-label="Image 2"></button><button class="slider-dot" aria-label="Image 3"></button><button class="slider-dot" aria-label="Image 4"></button><button class="slider-dot" aria-label="Image 5"></button><button class="slider-dot" aria-label="Image 6"></button><button class="slider-dot" aria-label="Image 7"></button><button class="slider-dot" aria-label="Image 8"></button><button class="slider-dot" aria-label="Image 9"></button><button class="slider-dot" aria-label="Image 10"></button><button class="slider-dot" aria-label="Image 11"></button><button class="slider-dot" aria-label="Image 12"></button><button class="slider-dot" aria-label="Image 13"></button><button class="slider-dot" aria-label="Image 14"></button><button class="slider-dot" aria-label="Image 15"></button><button class="slider-dot" aria-label="Image 16"></button><button class="slider-dot" aria-label="Image 17"></button><button class="slider-dot" aria-label="Image 18"></button><button class="slider-dot" aria-label="Image 19"></button><button class="slider-dot" aria-label="Image 20"></button><button class="slider-dot" aria-label="Image 21"></button><button class="slider-dot" aria-label="Image 22"></button><button class="slider-dot" aria-label="Image 23"></button><button class="slider-dot" aria-label="Image 24"></button><button class="slider-dot" aria-label="Image 25"></button><button class="slider-dot" aria-label="Image 26"></button><button class="slider-dot" aria-label="Image 27"></button><button class="slider-dot" aria-label="Image 28"></button><button class="slider-dot" aria-label="Image 29"></button><button class="slider-dot" aria-label="Image 30"></button><button class="slider-dot" aria-label="Image 31"></button><button class="slider-dot" aria-label="Image 32"></button><button class="slider-dot" aria-label="Image 33"></button><button class="slider-dot" aria-label="Image 34"></button><button class="slider-dot" aria-label="Image 35"></button><button class="slider-dot" aria-label="Image 36"></button><button class="slider-dot" aria-label="Image 37"></button><button class="slider-dot" aria-label="Image 38"></button><button class="slider-dot" aria-label="Image 39"></button><button class="slider-dot" aria-label="Image 40"></button><button class="slider-dot" aria-label="Image 41"></button><button class="slider-dot" aria-label="Image 42"></button><button class="slider-dot" aria-label="Image 43"></button><button class="slider-dot" aria-label="Image 44"></button><button class="slider-dot" aria-label="Image 45"></button><button class="slider-dot" aria-label="Image 46"></button><button class="slider-dot" aria-label="Image 47"></button><button class="slider-dot" aria-label="Image 48"></button><button class="slider-dot" aria-label="Image 49"></button><button class="slider-dot" aria-label="Image 50"></button></div>
         </div>
         <div class="ff-nassij-slider slider">
           <div class="slider-track">
@@ -1532,9 +1708,68 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
             <div class="vue" data-media="video" data-groupe="2-recherche-projets-thalassic-kaftan-defile">
               <video class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Defile/51_defile-digital.mp4" muted loop playsinline preload="metadata" data-alt="Thalassic Kaftan — Le défilé digital — le vêtement porté et marché, rendu sous Blender"></video>
             </div>
-            <div class="vue" data-groupe="2-recherche-projets-thalassic-kaftan-defile">
-              <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Defile/50_defile-digital.jpg" loading="lazy" width="1079" height="955" alt="Thalassic Kaftan — Un autre passage de la collection" onerror="this.style.opacity='0'">
-            </div>
+          </div>
+        </div>
+      </div>
+        <div class="p-volets">
+          <div class="sous-projets">
+            <details class="sous-projet" data-groupe="2-recherche-projets-thalassic-kaftan-identite">
+              <summary>
+                <span class="sp-titre mono">L'identité du motif</span>
+                <span class="sp-resume">Ce qui fait qu'un caftan est marocain ne tient pas dans sa silhouette.</span>
+                <span class="sp-compte mono">11</span>
+              </summary>
+              <p class="p-desc">Avant la définition, avant le vêtement, une question : qu'est-ce qui rend un caftan marocain ? C'est elle qui a décidé de tout le reste, et c'est la seule étape où l'outil a répondu à côté.</p>
+              <p class="p-desc">J'ai reporté mes premières images générées sur un diagramme à deux axes — traditionnel / interprété, oriental / marocain — pour voir où elles tombaient. Presque toutes du côté oriental. L'outil restitue un imaginaire, pas une identité. Ce qui fait le marocain tient dans les techniques et dans les mains qui les tiennent — le <em>ntaâ</em> de Fès, la <em>sfifa skali</em>, le perlage — pas dans la silhouette.</p>
+              <p class="p-desc">J'ai donc cherché le motif du côté de la matière plutôt que du répertoire. Les explorations tournent autour d'une architecture corallienne : floral et géométrique à la fois, ce que le motif de Fès fait déjà.</p>
+              <p class="p-desc">Trouver l'image à échantillonner a demandé autant de travail que le motif lui-même. Il fallait une photographie dont le rouge, le contraste et la luminosité portent chacun une information exploitable à une étape différente du calcul — trois canaux, trois usages.</p>
+              <div class="p-meta mono"><span>MIDJOURNEY</span><span>RECHERCHE ICONOGRAPHIQUE</span></div>
+            </details>
+            <details class="sous-projet" data-groupe="2-recherche-projets-thalassic-kaftan-definition">
+              <summary>
+                <span class="sp-titre mono">La définition</span>
+                <span class="sp-resume">Une image lue canal par canal, qui ressort en trajectoires de buse.</span>
+                <span class="sp-compte mono">7</span>
+              </summary>
+              <p class="p-desc">C'est le seul des quatre moments qui ressert ailleurs : une fois écrite, la définition ne connaît plus le caftan. Donne-lui une autre image et elle produit un autre motif.</p>
+              <p class="p-desc">Elle lit l'image source canal par canal, en tire des courbes de niveau, les ferme, les symétrise. En sortie, un motif dont la densité, l'épaisseur et le remplissage restent réglables — c'est tout l'intérêt : on change d'avis sur la surface entière d'un coup, sans reprendre le tracé.</p>
+              <p class="p-desc">Et elle ne produit pas un objet à trancher. Elle produit *<em>directement le parcours de la buse</em>* : chaque bourrelet de broderie est une trajectoire, pas un volume qu'un logiciel de découpe traduirait ensuite. C'est ce qui permet d'imprimer sur du tulle tendu au lieu d'imprimer un objet qu'on coudrait après.</p>
+              <div class="p-meta mono"><span>GRASSHOPPER</span><span>IMAGE SAMPLER</span><span>RHINO</span><span>G-CODE</span></div>
+            </details>
+            <details class="sous-projet" data-groupe="2-recherche-projets-thalassic-kaftan-broderie-imprimee">
+              <summary>
+                <span class="sp-titre mono">La broderie imprimée</span>
+                <span class="sp-resume">La partie qui sort de l'écran : imprimée sur tulle tendu, perlée à la main.</span>
+                <span class="sp-compte mono">13</span>
+              </summary>
+              <p class="p-desc">C'est ici que la chaîne quitte l'écran, et c'est le seul moment où elle peut échouer pour de bon : ce qui tient dans un rendu ne tient pas forcément sur un mètre de tulle.</p>
+              <p class="p-desc">La définition ne produit pas un objet à trancher mais directement le parcours de la buse — chaque bourrelet est une trajectoire. Le modèle prévoit ses propres logements : le bourrelet est dessiné avec le creux où la perle viendra se loger, avant même d'être imprimé.</p>
+              <p class="p-desc">Imprimé sur du tulle tendu, le filament prend le tissu. Les perles sont ensuite cousues à la main dans les creux prévus pour elles. Deux échantillons, un noir et un blanc — assez pour savoir que le geste de l'atelier et la machine peuvent tenir sur le même morceau d'étoffe.</p>
+              <p class="p-desc">C'est le partage qui compte : la machine pose ce qu'une main ne saurait pas répéter à l'identique sur toute une surface, et la main fait ce qu'aucune buse ne sait faire — enfiler, tendre, arrêter le fil.</p>
+              <div class="p-meta mono"><span>G-CODE</span><span>IMPRESSION 3D</span><span>FILAMENT FLEXIBLE</span><span>PERLAGE</span></div>
+            </details>
+            <details class="sous-projet" data-groupe="2-recherche-projets-thalassic-kaftan-caftan">
+              <summary>
+                <span class="sp-titre mono">Le caftan</span>
+                <span class="sp-resume">Le patronage rejoue la symétrie du motif à l'échelle du vêtement.</span>
+                <span class="sp-compte mono">17</span>
+              </summary>
+              <p class="p-desc">Le motif existe, la définition tourne : reste à décider où il tombe sur un corps. C'est ici que le vêtement apparaît, et c'est ici que les arbitrages se font.</p>
+              <p class="p-desc">Le patronage rejoue la même symétrie, mais à l'échelle du vêtement. Le motif se pose sur les pièces à plat, et c'est là que se décide où va le plein, où va le vide, où vont l'or et les perles — pas sur le rendu, où il serait trop tard.</p>
+              <p class="p-desc">Le montage est fait sous Marvelous Designer, la matière construite en multicouche sous Substance Designer, l'éclairage sous Blender. La broderie n'est pas une texture plaquée : elle a une épaisseur, des transparences, et le voile noir se voit à travers là où le remplissage s'arrête.</p>
+              <div class="p-meta mono"><span>MARVELOUS DESIGNER</span><span>SUBSTANCE DESIGNER</span><span>BLENDER</span></div>
+            </details>
+            <details class="sous-projet" data-groupe="2-recherche-projets-thalassic-kaftan-defile">
+              <summary>
+                <span class="sp-titre mono">Le défilé digital</span>
+                <span class="sp-resume">Le vêtement porté et marché, sans qu'un mètre de tissu ait été coupé.</span>
+                <span class="sp-compte mono">1</span>
+              </summary>
+              <p class="p-desc">Le dernier état de la pièce, et celui qui a fini par déborder du caftan : le vêtement est posé sur un personnage animé sous Mixamo, puis rendu sous Blender.</p>
+              <p class="p-desc">Porté et marché sans qu'un mètre de tissu ait été coupé, et sans qu'aucune caméra n'ait tourné. Ce n'est pas une vue de présentation : c'est l'endroit où le vêtement doit tenir en mouvement — les plis, la retombée, la façon dont la broderie accroche la lumière quand le corps se déplace. Un rendu fixe ne dit rien de tout ça.</p>
+              <p class="p-desc">C'est de là qu'est partie l'idée d'un défilé comme méthode plutôt que comme aboutissement.</p>
+              <div class="p-meta mono"><span>MIXAMO</span><span>BLENDER</span></div>
+            </details>
           </div>
         </div>
       </div>
@@ -1544,79 +1779,14 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
       </div>
       <p class="p-resume">Un caftan dont la broderie n'est pas dessinée mais calculée.</p>
       <div class="p-repli">
-        <div class="p-corps">
-          <div class="p-texte">
-          <p class="p-desc">Un caftan dont la broderie n'est pas dessinée mais calculée. La pièce va d'un bout à l'autre de la chaîne : le motif, le patronage, la matière, le rendu — et deux échantillons cousus main qui vérifient que la chose peut exister en atelier. Elle a été menée pendant <em>Body Architecture 2.0</em>, la masterclass de Filippo Nassetti (PAACADEMY, février 2023), d'où viennent aussi les masques de la même série.</p>
-          <div class="regle" aria-label="Chaine de fabrication">
-            <div class="regle-axe"><span class="tw"><i class="tick fort"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick fort"></i></span></div>
-            <div class="regle-mots mono"><span>image échantillonnée</span><span>contours Grasshopper</span><span>G-code, impression sur tulle</span><span>perlage main</span><span>patronage Marvelous Designer</span><span>rendu Blender</span><span>défilé digital</span></div>
-          </div>
-          <p class="p-desc">Ce que la broderie paramétrique permet et que le dessin à la main ne permet pas, c'est de changer d'avis sur toute la surface d'un coup, sans recommencer le tracé. La densité, l'épaisseur et le remplissage du motif restent réglables jusqu'au dernier moment — jusqu'au patronage, où l'on décide encore où va le plein, où va le vide, où vont l'or et les perles.</p>
-          <p class="p-desc">Quatre moments se lisent séparément ci-dessous. Chacun a une vie propre : la définition est un outil qui ressert, le défilé est devenu un objet à lui seul.</p>
-          <div class="p-meta mono"><span>MIDJOURNEY</span><span>GRASSHOPPER</span><span>IMAGE SAMPLER</span><span>RHINO</span><span>G-CODE</span><span>IMPRESSION 3D</span><span>PERLAGE</span><span>MARVELOUS DESIGNER</span><span>SUBSTANCE DESIGNER</span><span>MIXAMO</span><span>BLENDER</span></div>
-          </div>
-          <div class="p-volets">
-            <div class="sous-projets">
-              <details class="sous-projet" data-groupe="2-recherche-projets-thalassic-kaftan-identite">
-                <summary>
-                  <span class="sp-titre mono">L'identité du motif</span>
-                  <span class="sp-resume">Ce qui fait qu'un caftan est marocain ne tient pas dans sa silhouette.</span>
-                  <span class="sp-compte mono">11</span>
-                </summary>
-                <p class="p-desc">Avant la définition, avant le vêtement, une question : qu'est-ce qui rend un caftan marocain ? C'est elle qui a décidé de tout le reste, et c'est la seule étape où l'outil a répondu à côté.</p>
-                <p class="p-desc">J'ai reporté mes premières images générées sur un diagramme à deux axes — traditionnel / interprété, oriental / marocain — pour voir où elles tombaient. Presque toutes du côté oriental. L'outil restitue un imaginaire, pas une identité. Ce qui fait le marocain tient dans les techniques et dans les mains qui les tiennent — le <em>ntaâ</em> de Fès, la <em>sfifa skali</em>, le perlage — pas dans la silhouette.</p>
-                <p class="p-desc">J'ai donc cherché le motif du côté de la matière plutôt que du répertoire. Les explorations tournent autour d'une architecture corallienne : floral et géométrique à la fois, ce que le motif de Fès fait déjà.</p>
-                <p class="p-desc">Trouver l'image à échantillonner a demandé autant de travail que le motif lui-même. Il fallait une photographie dont le rouge, le contraste et la luminosité portent chacun une information exploitable à une étape différente du calcul — trois canaux, trois usages.</p>
-                <div class="p-meta mono"><span>MIDJOURNEY</span><span>RECHERCHE ICONOGRAPHIQUE</span></div>
-              </details>
-              <details class="sous-projet" data-groupe="2-recherche-projets-thalassic-kaftan-definition">
-                <summary>
-                  <span class="sp-titre mono">La définition</span>
-                  <span class="sp-resume">Une image lue canal par canal, qui ressort en trajectoires de buse.</span>
-                  <span class="sp-compte mono">7</span>
-                </summary>
-                <p class="p-desc">C'est le seul des quatre moments qui ressert ailleurs : une fois écrite, la définition ne connaît plus le caftan. Donne-lui une autre image et elle produit un autre motif.</p>
-                <p class="p-desc">Elle lit l'image source canal par canal, en tire des courbes de niveau, les ferme, les symétrise. En sortie, un motif dont la densité, l'épaisseur et le remplissage restent réglables — c'est tout l'intérêt : on change d'avis sur la surface entière d'un coup, sans reprendre le tracé.</p>
-                <p class="p-desc">Et elle ne produit pas un objet à trancher. Elle produit *<em>directement le parcours de la buse</em>* : chaque bourrelet de broderie est une trajectoire, pas un volume qu'un logiciel de découpe traduirait ensuite. C'est ce qui permet d'imprimer sur du tulle tendu au lieu d'imprimer un objet qu'on coudrait après.</p>
-                <div class="p-meta mono"><span>GRASSHOPPER</span><span>IMAGE SAMPLER</span><span>RHINO</span><span>G-CODE</span></div>
-              </details>
-              <details class="sous-projet" data-groupe="2-recherche-projets-thalassic-kaftan-broderie-imprimee">
-                <summary>
-                  <span class="sp-titre mono">La broderie imprimée</span>
-                  <span class="sp-resume">La partie qui sort de l'écran : imprimée sur tulle tendu, perlée à la main.</span>
-                  <span class="sp-compte mono">13</span>
-                </summary>
-                <p class="p-desc">C'est ici que la chaîne quitte l'écran, et c'est le seul moment où elle peut échouer pour de bon : ce qui tient dans un rendu ne tient pas forcément sur un mètre de tulle.</p>
-                <p class="p-desc">La définition ne produit pas un objet à trancher mais directement le parcours de la buse — chaque bourrelet est une trajectoire. Le modèle prévoit ses propres logements : le bourrelet est dessiné avec le creux où la perle viendra se loger, avant même d'être imprimé.</p>
-                <p class="p-desc">Imprimé sur du tulle tendu, le filament prend le tissu. Les perles sont ensuite cousues à la main dans les creux prévus pour elles. Deux échantillons, un noir et un blanc — assez pour savoir que le geste de l'atelier et la machine peuvent tenir sur le même morceau d'étoffe.</p>
-                <p class="p-desc">C'est le partage qui compte : la machine pose ce qu'une main ne saurait pas répéter à l'identique sur toute une surface, et la main fait ce qu'aucune buse ne sait faire — enfiler, tendre, arrêter le fil.</p>
-                <div class="p-meta mono"><span>G-CODE</span><span>IMPRESSION 3D</span><span>FILAMENT FLEXIBLE</span><span>PERLAGE</span></div>
-              </details>
-              <details class="sous-projet" data-groupe="2-recherche-projets-thalassic-kaftan-caftan">
-                <summary>
-                  <span class="sp-titre mono">Le caftan</span>
-                  <span class="sp-resume">Le patronage rejoue la symétrie du motif à l'échelle du vêtement.</span>
-                  <span class="sp-compte mono">17</span>
-                </summary>
-                <p class="p-desc">Le motif existe, la définition tourne : reste à décider où il tombe sur un corps. C'est ici que le vêtement apparaît, et c'est ici que les arbitrages se font.</p>
-                <p class="p-desc">Le patronage rejoue la même symétrie, mais à l'échelle du vêtement. Le motif se pose sur les pièces à plat, et c'est là que se décide où va le plein, où va le vide, où vont l'or et les perles — pas sur le rendu, où il serait trop tard.</p>
-                <p class="p-desc">Le montage est fait sous Marvelous Designer, la matière construite en multicouche sous Substance Designer, l'éclairage sous Blender. La broderie n'est pas une texture plaquée : elle a une épaisseur, des transparences, et le voile noir se voit à travers là où le remplissage s'arrête.</p>
-                <div class="p-meta mono"><span>MARVELOUS DESIGNER</span><span>SUBSTANCE DESIGNER</span><span>BLENDER</span></div>
-              </details>
-              <details class="sous-projet" data-groupe="2-recherche-projets-thalassic-kaftan-defile">
-                <summary>
-                  <span class="sp-titre mono">Le défilé digital</span>
-                  <span class="sp-resume">Le vêtement porté et marché, sans qu'un mètre de tissu ait été coupé.</span>
-                  <span class="sp-compte mono">2</span>
-                </summary>
-                <p class="p-desc">Le dernier état de la pièce, et celui qui a fini par déborder du caftan : le vêtement est posé sur un personnage animé sous Mixamo, puis rendu sous Blender.</p>
-                <p class="p-desc">Porté et marché sans qu'un mètre de tissu ait été coupé, et sans qu'aucune caméra n'ait tourné. Ce n'est pas une vue de présentation : c'est l'endroit où le vêtement doit tenir en mouvement — les plis, la retombée, la façon dont la broderie accroche la lumière quand le corps se déplace. Un rendu fixe ne dit rien de tout ça.</p>
-                <p class="p-desc">C'est de là qu'est partie l'idée d'un défilé comme méthode plutôt que comme aboutissement.</p>
-                <div class="p-meta mono"><span>MIXAMO</span><span>BLENDER</span></div>
-              </details>
-            </div>
-          </div>
+        <p class="p-desc">Un caftan dont la broderie n'est pas dessinée mais calculée. La pièce va d'un bout à l'autre de la chaîne : le motif, le patronage, la matière, le rendu — et deux échantillons cousus main qui vérifient que la chose peut exister en atelier. Elle a été menée pendant <em>Body Architecture 2.0</em>, la masterclass de Filippo Nassetti (PAACADEMY, février 2023), d'où viennent aussi les masques de la même série.</p>
+        <div class="regle" aria-label="Chaine de fabrication">
+          <div class="regle-axe"><span class="tw"><i class="tick fort"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick fort"></i></span></div>
+          <div class="regle-mots mono"><span>image échantillonnée</span><span>contours Grasshopper</span><span>G-code, impression sur tulle</span><span>perlage main</span><span>patronage Marvelous Designer</span><span>rendu Blender</span><span>défilé digital</span></div>
         </div>
+        <p class="p-desc">Ce que la broderie paramétrique permet et que le dessin à la main ne permet pas, c'est de changer d'avis sur toute la surface d'un coup, sans recommencer le tracé. La densité, l'épaisseur et le remplissage du motif restent réglables jusqu'au dernier moment — jusqu'au patronage, où l'on décide encore où va le plein, où va le vide, où vont l'or et les perles.</p>
+        <p class="p-desc">Quatre moments se lisent séparément ci-dessous. Chacun a une vie propre : la définition est un outil qui ressert, le défilé est devenu un objet à lui seul.</p>
+        <div class="p-meta mono"><span>MIDJOURNEY</span><span>GRASSHOPPER</span><span>IMAGE SAMPLER</span><span>RHINO</span><span>G-CODE</span><span>IMPRESSION 3D</span><span>PERLAGE</span><span>MARVELOUS DESIGNER</span><span>SUBSTANCE DESIGNER</span><span>MIXAMO</span><span>BLENDER</span></div>
       </div>
       <button class="lire-plus p-lire mono" aria-expanded="false">Lire la suite …</button>
       <div class="p-note">
@@ -1628,7 +1798,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           </span>
         </button>
         <button class="lien-note" data-note="2-recherche-sujets-defile-avant-le-vetement">
-          <img class="p-note-vignette" src="images/web/2-recherche/projets/thalassic-kaftan/Defile/50_defile-digital.jpg" alt="" loading="lazy">
+          <img class="p-note-vignette" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/42_thalassic-face.png" alt="" loading="lazy">
           <span class="p-note-texte">
             <span class="k mono">03 — Le défilé avant le vêtement</span>
           </span>
@@ -1696,244 +1866,10 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
         </span>
         <span data-groupe="2-recherche-projets-thalassic-kaftan-defile">
           <i data-src="images/web/2-recherche/projets/thalassic-kaftan/Defile/51_defile-digital.mp4" data-alt="Thalassic Kaftan — Le défilé digital — le vêtement porté et marché, rendu sous Blender" data-video="1"></i>
-          <i data-src="images/web/2-recherche/projets/thalassic-kaftan/Defile/50_defile-digital.jpg" data-alt="Thalassic Kaftan — Un autre passage de la collection"></i>
         </span>
       </div>
     </div>
-    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-sculptures" data-reveal>
-      <div class="ff-media">
-        <div class="ff-marge">
-          <p class="ff-legende mono"></p>
-          <div class="slider-dots"><button class="slider-dot active" aria-label="Image 1"></button><button class="slider-dot" aria-label="Image 2"></button></div>
-        </div>
-        <div class="ff-nassij-slider slider">
-          <div class="slider-track">
-            <div class="vue" data-groupe="2-recherche-projets-sculptures-anastomose">
-              <img class="sujet" src="images/web/2-recherche/projets/sculptures/anastomose/pxl-20260127-222316950-2.jpg" loading="lazy" width="1600" height="2844" alt="Sculptures — L'échelle : trois pieds, à hauteur d'un lampadaire" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue" data-groupe="2-recherche-projets-sculptures-anastomose">
-              <img class="sujet" src="images/web/2-recherche/projets/sculptures/anastomose/pxl-20260127-205842238.jpg" loading="lazy" width="1600" height="2844" alt="Sculptures — Les tronçons, leurs jonctions et la ligne d'index — et la matière qui s'assombrit dans les courbes" onerror="this.style.opacity='0'">
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="p-head mono">
-        <span class="p-title">Sculptures</span>
-        <span class="p-year">2026</span>
-      </div>
-      <p class="p-resume">Des volumes plus grands que la machine : imprimés en tronçons, remontés en une pièce.</p>
-      <div class="p-repli">
-        <div class="p-corps">
-          <div class="p-texte">
-          <p class="p-desc">Une famille de pièces dont la forme dépasse le volume d'impression. Elles sont donc découpées, tirées en parties, puis remontées — et la découpe cesse d'être un contretemps de fabrication pour devenir une décision de dessin : c'est elle qui dit où la forme a le droit d'être interrompue.</p>
-          <p class="p-desc">Le parti pris est de ne pas effacer les jonctions. Poncer, mastiquer, repeindre coûterait des jours et ferait mentir l'objet sur la façon dont il est né. Laissées visibles, les lignes de reprise donnent un rythme à la pièce et rappellent qu'une machine de trente centimètres a produit un objet d'un mètre.</p>
-          <p class="p-desc">Ce qui suppose que le découpage soit prévu dans la définition, pas subi au moment de trancher : emmanchements dans la matière, numérotation, repères d'orientation. Un tronçon doit pouvoir dire tout seul où il va et dans quel sens.</p>
-          <div class="p-meta mono"><span>GRASSHOPPER</span><span>IMPRESSION 3D</span><span>PETG</span></div>
-          </div>
-          <div class="p-volets">
-            <div class="sous-projets">
-              <details class="sous-projet" data-groupe="2-recherche-projets-sculptures-anastomose">
-                <summary>
-                  <span class="sp-titre mono">Anastomose</span>
-                  <span class="sp-resume">Une forme trouvée à l'envers, par la gravité — puis retournée, imprimée en tronçons, remontée.</span>
-                  <span class="sp-compte mono">2</span>
-                </summary>
-                <p class="p-desc">Le mot dit la forme : une <em>anastomose</em>, c'est deux conduits qui se rejoignent après s'être séparés. La pièce fait exactement ça — des tubes qui divergent, se croisent et se referment en boucle, jusqu'à ménager un vide au milieu du volume. Elle tient sur trois pieds évasés, à hauteur d'un lampadaire.</p>
-                <p class="p-desc">Elle a été dessinée à l'envers. La définition laisse la gravité tirer sur la forme suspendue, et c'est la traction qui trouve les courbes ; on retourne ensuite l'ensemble pour l'imprimer et le monter. C'est la vieille méthode des maquettes suspendues, celle de la <em>Sagrada Família</em> : ce qui pend en tension pure devient, une fois retourné, une structure qui ne travaille qu'en compression. La forme n'est donc pas un tracé qu'on a corrigé jusqu'à ce qu'il tienne — elle est ce que les efforts ont donné.</p>
-                <p class="p-desc">Le PETG est translucide, dans une gamme d'ambre et de rouge. La lumière traverse au lieu de s'arrêter à la surface : dans les courbes serrées, l'épaisseur de matière devient visible et la couleur s'assombrit toute seule. C'est cette translucidité qui fait qu'un tube n'a l'air ni plein ni creux, et qui donne à l'ensemble sa qualité de vaisseau plutôt que de tuyau.</p>
-                <p class="p-desc">La forme dépasse largement le volume d'impression, alors elle est découpée en tronçons qui tiennent dans le plateau d'une A1. Chacun reçoit un emmanchement femelle à ses deux bouts, et l'assemblage se fait par un tube glissé à l'intérieur, d'un logement à l'autre. Les tronçons sont numérotés — sans quoi rien ne dirait lequel va avec lequel — et chacun porte une ligne gravée le long du corps. Elle sert d'abord d'index : c'est elle qui donne l'angle de rotation d'un tronçon par rapport au suivant, la seule façon de ne pas monter la pièce de travers. Et comme elle se poursuit d'un tronçon à l'autre, elle finit par courir sur toutes les branches : un repère de montage devenu un trait continu à la surface de la sculpture.</p>
-                <p class="p-desc">Les couleurs viennent de fins de bobines, mais choisies — toutes dans les ambres et les rouges. Rien n'a été fait pour masquer les changements : ils tombent aux jonctions, et c'est voulu. La pièce dit comment elle a été faite au lieu de faire semblant d'être sortie d'un seul bloc.</p>
-                <div class="p-meta mono"><span>GRASSHOPPER</span><span>IMPRESSION 3D</span><span>PETG</span><span>BAMBU LAB A1</span></div>
-              </details>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button class="lire-plus p-lire mono" aria-expanded="false">Lire la suite …</button>
-      <div class="p-note">
-        <button class="lien-note" data-note="2-recherche-sujets-formes-generatives-imprimees">
-          <img class="p-note-vignette" src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260429_183442768.jpg" alt="" loading="lazy">
-          <span class="p-note-texte">
-            <span class="k mono">01 — Une définition, plusieurs objets</span>
-          </span>
-        </button>
-      </div>
-      <div class="galerie-source" data-galerie-id="2-recherche-projets-sculptures" hidden>
-        <span data-groupe="2-recherche-projets-sculptures-anastomose">
-          <i data-src="images/web/2-recherche/projets/sculptures/anastomose/pxl-20260127-222316950-2.jpg" data-alt="Sculptures — L'échelle : trois pieds, à hauteur d'un lampadaire"></i>
-          <i data-src="images/web/2-recherche/projets/sculptures/anastomose/pxl-20260127-205842238.jpg" data-alt="Sculptures — Les tronçons, leurs jonctions et la ligne d'index — et la matière qui s'assombrit dans les courbes"></i>
-        </span>
-      </div>
-    </div>
-    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-mode-vase" data-reveal>
-      <div class="ff-media">
-        <div class="ff-marge">
-          <p class="ff-legende mono"></p>
-          <div class="slider-dots"><button class="slider-dot active" aria-label="Image 1"></button><button class="slider-dot" aria-label="Image 2"></button><button class="slider-dot" aria-label="Image 3"></button><button class="slider-dot" aria-label="Image 4"></button><button class="slider-dot" aria-label="Image 5"></button><button class="slider-dot" aria-label="Image 6"></button><button class="slider-dot" aria-label="Image 7"></button><button class="slider-dot" aria-label="Image 8"></button><button class="slider-dot" aria-label="Image 9"></button><button class="slider-dot" aria-label="Image 10"></button><button class="slider-dot" aria-label="Image 11"></button><button class="slider-dot" aria-label="Image 12"></button></div>
-        </div>
-        <div class="ff-nassij-slider slider">
-          <div class="slider-track">
-            <div class="vue">
-              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/PXL_20260424_173227668.MP.jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Les deux parois sur une même photo : cannelures vrillées devant, texture en relief derrière" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue" data-groupe="2-recherche-projets-mode-vase-fleuris">
-              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Fleuris/image.jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Deux tirages roses et un blanc, en usage" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue" data-groupe="2-recherche-projets-mode-vase-fleuris">
-              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Fleuris/image (1).jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Vase noir, profil vrillé, lys" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue" data-groupe="2-recherche-projets-mode-vase-fleuris">
-              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Fleuris/image (2).jpg" loading="lazy" width="1600" height="1638" alt="Mode vase — Deux tirages du même profil, dégradé rose-orange" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue" data-groupe="2-recherche-projets-mode-vase-soliflore">
-              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Soliflore/PXL_20260715_173250407.MP.jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Trois soliflores, même définition, trois profils" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue" data-groupe="2-recherche-projets-mode-vase-duo">
-              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260429_183442768.jpg" loading="lazy" width="1600" height="900" alt="Mode vase — Deux tirages du même profil — la couleur qui affleure dépend de l'angle d'impression" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue" data-groupe="2-recherche-projets-mode-vase-duo">
-              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260715_173346298.MP.jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Un seul point de vue, deux couleurs : le flanc intérieur ne renvoie pas ce que renvoie le flanc extérieur" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue" data-groupe="2-recherche-projets-mode-vase-trio">
-              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Trio/PXL_20260715_173307446.MP.jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Même architecture, même hauteur : seule la courbe intermédiaire du loft change" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue" data-groupe="2-recherche-projets-mode-vase-cache-pot">
-              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Cache-pot/PXL_20260715_173300388.MP.jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Un mur continu, un effet de strates, une souplesse de ressort au toucher" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue" data-groupe="2-recherche-projets-mode-vase-relief">
-              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Relief/PXL_20260321_110027366.jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Tenu en main : l'amplitude retenue, celle qui se sent sans que la paroi décroche" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue" data-groupe="2-recherche-projets-mode-vase-relief">
-              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Relief/PXL_20260715_173404455.MP.jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Le même objet posé — la couleur n'a pas changé, la lumière si" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue" data-groupe="2-recherche-projets-mode-vase-boite">
-              <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Boite/PXL_20260721_124109180.MP.jpg" loading="lazy" width="1600" height="2844" alt="Mode vase — Boîte et son couvercle : le remplissage en courbe de Hilbert, laissé apparent au lieu d'être couvert" onerror="this.style.opacity='0'">
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="p-head mono">
-        <span class="p-title">Mode vase</span>
-        <span class="p-year">2026</span>
-      </div>
-      <p class="p-resume">Des contenants imprimés d'une seule paroi, où la surface est le chemin de la buse.</p>
-      <div class="p-repli">
-        <div class="p-corps">
-          <div class="p-texte">
-          <p class="p-desc">Une famille de contenants imprimés d'une seule paroi continue. La buse ne s'arrête pas entre la base et le col : tout ce qu'on voit à la surface — les cannelures, le relief, les couleurs qui basculent — est le tracé lui-même. Rien n'est peint ni texturé après coup.</p>
-          <div class="regle" aria-label="Chaine de fabrication">
-            <div class="regle-axe"><span class="tw"><i class="tick fort"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick fort"></i></span></div>
-            <div class="regle-mots mono"><span>profil en étoile (Grasshopper)</span><span>loft entre cercles pivotés</span><span>tranchage en mode vase (Bambu Studio)</span><span>impression une paroi, buse 0,6 mm</span></div>
-          </div>
-          <p class="p-desc">Le profil est une étoile, lissée par un loft entre des cercles qu'une rotation décale les uns par rapport aux autres : c'est de là que vient le mouvement en vortex. C'est aussi ce qui tient l'objet debout. Une paroi de 0,6 mm n'a aucune raison d'être rigide ; pliée en cannelures vrillées, elle le devient. Le pli remplace l'épaisseur.</p>
-          <p class="p-desc">Le filament est coextrudé en trois ou quatre couleurs, et c'est l'angle d'impression qui décide de celle qui affleure. De loin, l'objet change de teinte quand on tourne autour. De près, une même face en montre deux à la fois, selon qu'on voit le flanc extérieur ou le flanc intérieur d'une cannelure.</p>
-          <p class="p-desc">Six objets sortent de cette même définition, et chacun en déplace un paramètre. Ils se lisent un par un ci-dessous : ouvrir l'un d'eux change les images du cadre.</p>
-          <div class="p-meta mono"><span>RHINO</span><span>GRASSHOPPER</span><span>BAMBU STUDIO</span><span>IMPRESSION 3D</span><span>BAMBU LAB A1</span></div>
-          </div>
-          <div class="p-volets">
-            <div class="sous-projets">
-              <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-soliflore">
-                <summary>
-                  <span class="sp-titre mono">Soliflores</span>
-                  <span class="sp-resume">Le profil nu, sans variation : trois cols étroits pour une seule tige.</span>
-                  <span class="sp-compte mono">1</span>
-                </summary>
-                <p class="p-desc">Le point de départ de la famille : la définition à l'état simple, sans variation ajoutée. Trois soliflores tirés du même profil en étoile, un col assez étroit pour tenir une tige droite sans la serrer.</p>
-                <p class="p-desc">C'est sur eux que la contrainte se voit le mieux. Un col fin et un ventre large, en une seule paroi, c'est exactement le cas où un cylindre lisse s'effondrerait : ce sont les cannelures qui portent le rétrécissement.</p>
-              </details>
-              <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-duo">
-                <summary>
-                  <span class="sp-titre mono">Duos</span>
-                  <span class="sp-resume">Deux tirages côte à côte, pour rendre visible ce que l'angle fait à la couleur.</span>
-                  <span class="sp-compte mono">2</span>
-                </summary>
-                <p class="p-desc">Là où les soliflores montrent le profil, les duos montrent la couleur — et il en faut deux pour ça. Une seule pièce ne prouve rien : c'est la comparaison, à la même heure et sous la même lumière, qui rend l'effet lisible.</p>
-                <p class="p-desc">Le filament est coextrudé sur trois ou quatre pistes. L'angle sous lequel la buse dépose la matière décide de celle qui affleure, si bien que deux objets issus du même rouleau ne renvoient pas la même teinte. Et sur un seul d'entre eux, le flanc extérieur d'une cannelure et son flanc intérieur ne donnent pas la même couleur non plus.</p>
-              </details>
-              <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-trio">
-                <summary>
-                  <span class="sp-titre mono">Trio</span>
-                  <span class="sp-resume">Une seule variable déplacée : la courbe intermédiaire du loft monte ou descend.</span>
-                  <span class="sp-compte mono">1</span>
-                </summary>
-                <p class="p-desc">Les duos comparent deux tirages du même profil ; le trio compare trois profils différents issus de la même architecture. Même hauteur, même nombre de branches, même filament — et une seule variable qu'on déplace : la courbe intermédiaire du loft, qu'on fait monter ou descendre entre la base et le col.</p>
-                <p class="p-desc">Ça suffit à changer complètement la silhouette sans que la famille se défasse. Le filament à dégradé fait le reste : comme la couleur avance avec la longueur imprimée, deux pièces de hauteurs identiques mais de volumes différents ne consomment pas la même matière, et ne sortent jamais de l'imprimante avec le même dégradé.</p>
-              </details>
-              <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-cache-pot">
-                <summary>
-                  <span class="sp-titre mono">Cache-pot</span>
-                  <span class="sp-resume">Large et bas, un mur continu qui se comporte comme un ressort sous la main.</span>
-                  <span class="sp-compte mono">1</span>
-                </summary>
-                <p class="p-desc">Le seul de la famille à ne pas être vertical. Sa forme large et basse laisse la paroi presque libre entre la base et le bord, et c'est là que la finesse devient sensible : imprimé en buse 0,6 mm, le mur cède un peu sous les doigts et revient — un effet de ressort, sans que l'objet perde sa tenue.</p>
-                <p class="p-desc">Le tracé continu, lui, se lit à l'œil comme un empilement de strates. C'est la même paroi unique que sur les soliflores, mais posée à plat elle raconte l'impression au lieu de la cacher.</p>
-              </details>
-              <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-relief">
-                <summary>
-                  <span class="sp-titre mono">Relief</span>
-                  <span class="sp-resume">L'autre façon de faire une surface : un bruit déplace les sommets, l'étanchéité arbitre.</span>
-                  <span class="sp-compte mono">2</span>
-                </summary>
-                <p class="p-desc">Les cinq autres contenants tirent leur surface du profil. Celui-ci est le seul à la tirer du maillage — et c'est pour ça qu'il existe.</p>
-                <p class="p-desc">Le point de départ est la même surface loftée, mais lisse. Convertie en maillage, elle reçoit une texture de bruit qui lui sert de carte de hauteur : chaque sommet est déplacé le long de la normale à la surface, d'une valeur lue dans le bruit au point le plus proche. Vers l'extérieur, vers l'intérieur, selon le point.</p>
-                <p class="p-desc">Toute la recherche tient dans cette valeur. Trop faible, le relief ne se sent pas sous la main et l'objet ne raconte rien. Trop forte, la paroi part en porte-à-faux, l'impression laisse des trous, et le vase fuit. <em>L'étanchéité est le juge</em> — c'est la seule fois de la série où le critère n'est pas visuel.</p>
-              </details>
-              <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-boite">
-                <summary>
-                  <span class="sp-titre mono">Boîte</span>
-                  <span class="sp-resume">L'exception de la série : ici la surface vient du remplissage, pas de la paroi.</span>
-                  <span class="sp-compte mono">1</span>
-                </summary>
-                <p class="p-desc">C'est le seul objet de la famille qui n'est pas une paroi unique — et il y a sa place quand même, parce qu'il pose la même question par l'autre bout.</p>
-                <p class="p-desc">Ses couvercles ont un intérieur, donc un remplissage. Au lieu de le couvrir d'une peau lisse comme le fait tout slicer par défaut, il est laissé apparent : le motif choisi est une courbe de Hilbert, une ligne unique qui remplit le plan sans jamais se croiser. Sur le même filament coextrudé que les vases, ça donne un moirage serré que la photo rend mal.</p>
-                <p class="p-desc">Le lettrage est imprimé dans un second filament, sur une A1 équipée de son extension multi-matière. Là encore, rien n'est ajouté après coup : la marque est dans la matière.</p>
-                <div class="p-meta mono"><span>COURBE DE HILBERT</span><span>BAMBU LAB A1</span><span>IMPRESSION MULTI-FILAMENT</span></div>
-              </details>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button class="lire-plus p-lire mono" aria-expanded="false">Lire la suite …</button>
-      <div class="p-note">
-        <button class="lien-note" data-note="2-recherche-sujets-formes-generatives-imprimees">
-          <img class="p-note-vignette" src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260429_183442768.jpg" alt="" loading="lazy">
-          <span class="p-note-texte">
-            <span class="k mono">01 — Une définition, plusieurs objets</span>
-          </span>
-        </button>
-      </div>
-      <div class="galerie-source" data-galerie-id="2-recherche-projets-mode-vase" hidden>
-        <span data-groupe="2-recherche-projets-mode-vase">
-          <i data-src="images/web/2-recherche/projets/mode-vase/PXL_20260424_173227668.MP.jpg" data-alt="Mode vase — Les deux parois sur une même photo : cannelures vrillées devant, texture en relief derrière"></i>
-        </span>
-        <span data-groupe="2-recherche-projets-mode-vase-fleuris">
-          <i data-src="images/web/2-recherche/projets/mode-vase/Fleuris/image.jpg" data-alt="Mode vase — Deux tirages roses et un blanc, en usage"></i>
-          <i data-src="images/web/2-recherche/projets/mode-vase/Fleuris/image (1).jpg" data-alt="Mode vase — Vase noir, profil vrillé, lys"></i>
-          <i data-src="images/web/2-recherche/projets/mode-vase/Fleuris/image (2).jpg" data-alt="Mode vase — Deux tirages du même profil, dégradé rose-orange"></i>
-        </span>
-        <span data-groupe="2-recherche-projets-mode-vase-soliflore">
-          <i data-src="images/web/2-recherche/projets/mode-vase/Soliflore/PXL_20260715_173250407.MP.jpg" data-alt="Mode vase — Trois soliflores, même définition, trois profils"></i>
-        </span>
-        <span data-groupe="2-recherche-projets-mode-vase-duo">
-          <i data-src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260429_183442768.jpg" data-alt="Mode vase — Deux tirages du même profil — la couleur qui affleure dépend de l'angle d'impression"></i>
-          <i data-src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260715_173346298.MP.jpg" data-alt="Mode vase — Un seul point de vue, deux couleurs : le flanc intérieur ne renvoie pas ce que renvoie le flanc extérieur"></i>
-        </span>
-        <span data-groupe="2-recherche-projets-mode-vase-trio">
-          <i data-src="images/web/2-recherche/projets/mode-vase/Trio/PXL_20260715_173307446.MP.jpg" data-alt="Mode vase — Même architecture, même hauteur : seule la courbe intermédiaire du loft change"></i>
-        </span>
-        <span data-groupe="2-recherche-projets-mode-vase-cache-pot">
-          <i data-src="images/web/2-recherche/projets/mode-vase/Cache-pot/PXL_20260715_173300388.MP.jpg" data-alt="Mode vase — Un mur continu, un effet de strates, une souplesse de ressort au toucher"></i>
-        </span>
-        <span data-groupe="2-recherche-projets-mode-vase-relief">
-          <i data-src="images/web/2-recherche/projets/mode-vase/Relief/PXL_20260321_110027366.jpg" data-alt="Mode vase — Tenu en main : l'amplitude retenue, celle qui se sent sans que la paroi décroche"></i>
-          <i data-src="images/web/2-recherche/projets/mode-vase/Relief/PXL_20260715_173404455.MP.jpg" data-alt="Mode vase — Le même objet posé — la couleur n'a pas changé, la lumière si"></i>
-        </span>
-        <span data-groupe="2-recherche-projets-mode-vase-boite">
-          <i data-src="images/web/2-recherche/projets/mode-vase/Boite/PXL_20260721_124109180.MP.jpg" data-alt="Mode vase — Boîte et son couvercle : le remplissage en courbe de Hilbert, laissé apparent au lieu d'être couvert"></i>
-        </span>
-      </div>
-    </div>
-    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-boutons" data-reveal>
+    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-boutons" data-rotation="1" data-reveal>
       <div class="ff-media">
         <div class="ff-marge">
           <p class="ff-legende mono"></p>
@@ -2007,38 +1943,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
         </span>
       </div>
     </div>
-    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-tiflik" data-reveal>
-      <div class="ff-media">
-        <div class="ff-marge">
-          <p class="ff-legende mono"></p>
-        </div>
-        <div class="ff-nassij-slider">
-          <div class="vue">
-            <img class="sujet" src="images/web/2-recherche/projets/tiflik/PXL_20260504_152604167.MP.jpg" loading="lazy" width="1600" height="2844" alt="Tiflik — Moule Tiflik en trois parties, impression FDM" onerror="this.style.opacity='0'">
-          </div>
-        </div>
-      </div>
-      <div class="p-head mono">
-        <span class="p-title">Tiflik</span>
-      </div>
-      <div class="p-repli">
-      </div>
-      <button class="lire-plus p-lire mono" aria-expanded="false">Lire la suite …</button>
-      <div class="p-note">
-        <button class="lien-note" data-note="2-recherche-sujets-production-matiere">
-          <img class="p-note-vignette" src="images/web/2-recherche/projets/tiflik/PXL_20260504_152604167.MP.jpg" alt="" loading="lazy">
-          <span class="p-note-texte">
-            <span class="k mono">06 — Production matière</span>
-          </span>
-        </button>
-      </div>
-      <div class="galerie-source" data-galerie-id="2-recherche-projets-tiflik" hidden>
-        <span data-groupe="2-recherche-projets-tiflik">
-          <i data-src="images/web/2-recherche/projets/tiflik/PXL_20260504_152604167.MP.jpg" data-alt="Tiflik — Moule Tiflik en trois parties, impression FDM"></i>
-        </span>
-      </div>
-    </div>
-    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-aire-poids-lourd" data-reveal>
+    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-aire-poids-lourd" data-rotation="1" data-reveal>
       <div class="ff-media">
         <div class="ff-marge">
           <p class="ff-legende mono"></p>
@@ -2084,7 +1989,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
         </span>
       </div>
     </div>
-    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-limbs" data-reveal>
+    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-limbs" data-rotation="1" data-reveal>
       <div class="ff-media">
         <div class="ff-marge">
           <p class="ff-legende mono"></p>
@@ -2123,6 +2028,100 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           <i data-src="images/web/2-recherche/projets/limbs/pxl-20240904-131134711-mp.jpg" data-alt="Limbs — Essai en atelier, dispositif porté"></i>
           <i data-src="images/web/2-recherche/projets/limbs/pxl-20240904-131206456-mp.jpg" data-alt="Limbs — Essai en atelier, groupe en mouvement"></i>
           <i data-src="images/web/2-recherche/projets/limbs/pxl-20240904-131312353.jpg" data-alt="Limbs — Essai en atelier, détail du dispositif"></i>
+        </span>
+      </div>
+    </div>
+    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-sculptures" data-reveal>
+      <div class="p-haut">
+      <div class="ff-media">
+        <div class="ff-marge">
+          <p class="ff-legende mono"></p>
+          <div class="slider-dots"><button class="slider-dot active" aria-label="Image 1"></button><button class="slider-dot" aria-label="Image 2"></button></div>
+        </div>
+        <div class="ff-nassij-slider slider">
+          <div class="slider-track">
+            <div class="vue" data-groupe="2-recherche-projets-sculptures-anastomose">
+              <img class="sujet" src="images/web/2-recherche/projets/sculptures/anastomose/pxl-20260127-222316950-2.jpg" loading="lazy" width="1600" height="2844" alt="Sculptures — L'échelle : trois pieds, à hauteur d'un lampadaire" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue" data-groupe="2-recherche-projets-sculptures-anastomose">
+              <img class="sujet" src="images/web/2-recherche/projets/sculptures/anastomose/pxl-20260127-205842238.jpg" loading="lazy" width="1600" height="2844" alt="Sculptures — Les tronçons, leurs jonctions et la ligne d'index — et la matière qui s'assombrit dans les courbes" onerror="this.style.opacity='0'">
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="p-volets">
+          <div class="sous-projets">
+            <details class="sous-projet" data-groupe="2-recherche-projets-sculptures-anastomose">
+              <summary>
+                <span class="sp-titre mono">Anastomose</span>
+                <span class="sp-resume">Une forme trouvée à l'envers, par la gravité — puis retournée, imprimée en tronçons, remontée.</span>
+                <span class="sp-compte mono">2</span>
+              </summary>
+              <p class="p-desc">Le mot dit la forme : une <em>anastomose</em>, c'est deux conduits qui se rejoignent après s'être séparés. La pièce fait exactement ça — des tubes qui divergent, se croisent et se referment en boucle, jusqu'à ménager un vide au milieu du volume. Elle tient sur trois pieds évasés, à hauteur d'un lampadaire.</p>
+              <p class="p-desc">Elle a été dessinée à l'envers. La définition laisse la gravité tirer sur la forme suspendue, et c'est la traction qui trouve les courbes ; on retourne ensuite l'ensemble pour l'imprimer et le monter. C'est la vieille méthode des maquettes suspendues, celle de la <em>Sagrada Família</em> : ce qui pend en tension pure devient, une fois retourné, une structure qui ne travaille qu'en compression. La forme n'est donc pas un tracé qu'on a corrigé jusqu'à ce qu'il tienne — elle est ce que les efforts ont donné.</p>
+              <p class="p-desc">Le PETG est translucide, dans une gamme d'ambre et de rouge. La lumière traverse au lieu de s'arrêter à la surface : dans les courbes serrées, l'épaisseur de matière devient visible et la couleur s'assombrit toute seule. C'est cette translucidité qui fait qu'un tube n'a l'air ni plein ni creux, et qui donne à l'ensemble sa qualité de vaisseau plutôt que de tuyau.</p>
+              <p class="p-desc">La forme dépasse largement le volume d'impression, alors elle est découpée en tronçons qui tiennent dans le plateau d'une A1. Chacun reçoit un emmanchement femelle à ses deux bouts, et l'assemblage se fait par un tube glissé à l'intérieur, d'un logement à l'autre. Les tronçons sont numérotés — sans quoi rien ne dirait lequel va avec lequel — et chacun porte une ligne gravée le long du corps. Elle sert d'abord d'index : c'est elle qui donne l'angle de rotation d'un tronçon par rapport au suivant, la seule façon de ne pas monter la pièce de travers. Et comme elle se poursuit d'un tronçon à l'autre, elle finit par courir sur toutes les branches : un repère de montage devenu un trait continu à la surface de la sculpture.</p>
+              <p class="p-desc">Les couleurs viennent de fins de bobines, mais choisies — toutes dans les ambres et les rouges. Rien n'a été fait pour masquer les changements : ils tombent aux jonctions, et c'est voulu. La pièce dit comment elle a été faite au lieu de faire semblant d'être sortie d'un seul bloc.</p>
+              <div class="p-meta mono"><span>GRASSHOPPER</span><span>IMPRESSION 3D</span><span>PETG</span><span>BAMBU LAB A1</span></div>
+            </details>
+          </div>
+        </div>
+      </div>
+      <div class="p-head mono">
+        <span class="p-title">Sculptures</span>
+        <span class="p-year">2026</span>
+      </div>
+      <p class="p-resume">Des volumes plus grands que la machine : imprimés en tronçons, remontés en une pièce.</p>
+      <div class="p-repli">
+        <p class="p-desc">Une famille de pièces dont la forme dépasse le volume d'impression. Elles sont donc découpées, tirées en parties, puis remontées — et la découpe cesse d'être un contretemps de fabrication pour devenir une décision de dessin : c'est elle qui dit où la forme a le droit d'être interrompue.</p>
+        <p class="p-desc">Le parti pris est de ne pas effacer les jonctions. Poncer, mastiquer, repeindre coûterait des jours et ferait mentir l'objet sur la façon dont il est né. Laissées visibles, les lignes de reprise donnent un rythme à la pièce et rappellent qu'une machine de trente centimètres a produit un objet d'un mètre.</p>
+        <p class="p-desc">Ce qui suppose que le découpage soit prévu dans la définition, pas subi au moment de trancher : emmanchements dans la matière, numérotation, repères d'orientation. Un tronçon doit pouvoir dire tout seul où il va et dans quel sens.</p>
+        <div class="p-meta mono"><span>GRASSHOPPER</span><span>IMPRESSION 3D</span><span>PETG</span></div>
+      </div>
+      <button class="lire-plus p-lire mono" aria-expanded="false">Lire la suite …</button>
+      <div class="p-note">
+        <button class="lien-note" data-note="2-recherche-sujets-formes-generatives-imprimees">
+          <img class="p-note-vignette" src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260429_183442768.jpg" alt="" loading="lazy">
+          <span class="p-note-texte">
+            <span class="k mono">01 — Une définition, plusieurs objets</span>
+          </span>
+        </button>
+      </div>
+      <div class="galerie-source" data-galerie-id="2-recherche-projets-sculptures" hidden>
+        <span data-groupe="2-recherche-projets-sculptures-anastomose">
+          <i data-src="images/web/2-recherche/projets/sculptures/anastomose/pxl-20260127-222316950-2.jpg" data-alt="Sculptures — L'échelle : trois pieds, à hauteur d'un lampadaire"></i>
+          <i data-src="images/web/2-recherche/projets/sculptures/anastomose/pxl-20260127-205842238.jpg" data-alt="Sculptures — Les tronçons, leurs jonctions et la ligne d'index — et la matière qui s'assombrit dans les courbes"></i>
+        </span>
+      </div>
+    </div>
+    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-tiflik" data-reveal>
+      <div class="ff-media">
+        <div class="ff-marge">
+          <p class="ff-legende mono"></p>
+        </div>
+        <div class="ff-nassij-slider">
+          <div class="vue">
+            <img class="sujet" src="images/web/2-recherche/projets/tiflik/PXL_20260504_152604167.MP.jpg" loading="lazy" width="1600" height="2844" alt="Tiflik — Moule Tiflik en trois parties, impression FDM" onerror="this.style.opacity='0'">
+          </div>
+        </div>
+      </div>
+      <div class="p-head mono">
+        <span class="p-title">Tiflik</span>
+      </div>
+      <div class="p-repli">
+      </div>
+      <button class="lire-plus p-lire mono" aria-expanded="false">Lire la suite …</button>
+      <div class="p-note">
+        <button class="lien-note" data-note="2-recherche-sujets-production-matiere">
+          <img class="p-note-vignette" src="images/web/2-recherche/projets/tiflik/PXL_20260504_152604167.MP.jpg" alt="" loading="lazy">
+          <span class="p-note-texte">
+            <span class="k mono">06 — Production matière</span>
+          </span>
+        </button>
+      </div>
+      <div class="galerie-source" data-galerie-id="2-recherche-projets-tiflik" hidden>
+        <span data-groupe="2-recherche-projets-tiflik">
+          <i data-src="images/web/2-recherche/projets/tiflik/PXL_20260504_152604167.MP.jpg" data-alt="Tiflik — Moule Tiflik en trois parties, impression FDM"></i>
         </span>
       </div>
     </div>
@@ -2363,7 +2362,6 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
         <div class="galerie-source" data-galerie-id="2-recherche-sujets-defile-avant-le-vetement" hidden>
           <span data-groupe="2-recherche-sujets-defile-avant-le-vetement-defile">
             <i data-src="images/web/2-recherche/projets/thalassic-kaftan/Defile/51_defile-digital.mp4" data-alt="Le défilé avant le vêtement — Porté et marché sans qu'un mètre de tissu ait été coupé, et sans qu'aucune caméra n'ait tourné" data-video="1"></i>
-            <i data-src="images/web/2-recherche/projets/thalassic-kaftan/Defile/50_defile-digital.jpg" data-alt="Le défilé avant le vêtement — Un autre passage de la collection"></i>
           </span>
           <span data-groupe="2-recherche-sujets-defile-avant-le-vetement-caftan">
             <i data-src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/42_thalassic-face.png" data-alt="Le défilé avant le vêtement — La silhouette de face, immobile — ce qu'un rendu fixe sait montrer"></i>
@@ -2499,7 +2497,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     </div>
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.63</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.64</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>

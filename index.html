@@ -2499,7 +2499,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     </div>
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.62</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.63</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>
@@ -2627,6 +2627,17 @@ document.querySelectorAll('.slider').forEach(function (slider) {
   go(0);
 
   if (slides.length <= 1) return;
+
+  // Dans la grille des Commandes, le diaporama obeit au MEME levier que le
+  // degrade et le texte deplie : la carte lue. Sans ca, toutes les vignettes
+  // visibles s'animent ensemble et la grille clignote de partout. C'est
+  // « lire() », plus bas, qui tire ces deux poignees.
+  if (slider.closest('.cmd-carte')) {
+    slider.demarrerSlider = demarrer;
+    slider.arreterSlider = arreter;
+    return;
+  }
+
   if (AU_SURVOL) {
     cadre.addEventListener('mouseenter', demarrer);
     cadre.addEventListener('mouseleave', arreter);
@@ -2773,11 +2784,19 @@ document.querySelectorAll('video.sujet').forEach(function (v) {
     obsDemo.observe(bandeau);
   }
 
+  // Un seul levier pour toute la carte : le degrade se deplie, les pastilles
+  // s'allument et le diaporama part ensemble. Une vignette qui defile alors
+  // que sa carte est au repos serait du mouvement sans raison.
+  function poignee(carte, nom) {
+    var s = carte && carte.querySelector('.slider');
+    if (s && s[nom]) s[nom]();
+  }
+
   function lire(carte) {
     if (lue === carte) return;
-    if (lue) lue.classList.remove('lue');
+    if (lue) { lue.classList.remove('lue'); poignee(lue, 'arreterSlider'); }
     lue = carte;
-    if (carte) carte.classList.add('lue');
+    if (carte) { carte.classList.add('lue'); poignee(carte, 'demarrerSlider'); }
     var ops = carte ? (carte.getAttribute('data-ops') || '').split(',') : [];
     pastilles.forEach(function (p) {
       p.classList.toggle('on', ops.indexOf(p.getAttribute('data-op')) !== -1);

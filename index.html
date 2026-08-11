@@ -2499,7 +2499,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     </div>
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.61</p>
+      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.62</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>
@@ -2555,13 +2555,25 @@ document.querySelectorAll('.slider').forEach(function (slider) {
       // dans la selection courante n'ont simplement jamais la classe active
       toutes.forEach(function (s) { s.classList.remove('vue-active'); });
       slides[cur].classList.add('vue-active');
+      // Une vue au repos garde sa place dans le document (position absolue,
+      // opacite nulle) : elle « intersecte » donc toujours, et une video
+      // qu'on y laisserait tournerait sans qu'on la voie. On les arrete
+      // toutes, on ne lance que celle qui est a l'ecran.
+      toutes.forEach(function (s) {
+        var v = s.querySelector('video.sujet');
+        if (!v) return;
+        if (s === slides[cur]) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+        else { v.pause(); }
+      });
     } else {
       track.style.transform = 'translateX(-' + (cur * 100) + '%)';
     }
     dots.forEach(function (d, i) { d.classList.toggle('active', i === cur); });
     if (legende) {
       var im = slides[cur].querySelector('.sujet');
-      var texte = legendeSeule(im ? im.getAttribute('alt') : '', titrePiece);
+      // une video porte sa legende dans data-alt : elle n'a pas d'attribut alt
+      var texte = legendeSeule(im ? (im.getAttribute('alt')
+                                     || im.getAttribute('data-alt')) : '', titrePiece);
       if (MOINS_DE_MOUVEMENT) { legende.textContent = texte; return; }
       legende.style.opacity = 0;
       setTimeout(function () { legende.textContent = texte; legende.style.opacity = 1; }, 160);
@@ -2714,6 +2726,9 @@ document.querySelectorAll('.ff-piece').forEach(function (piece) {
 
 // ── VIDEOS ───────────────────────────────────────────────────────────────────
 document.querySelectorAll('video.sujet').forEach(function (v) {
+  // Dans un slider en fondu, c'est go() qui decide quelle video tourne :
+  // sinon toutes tourneraient a la fois, invisibles et superposees.
+  if (v.closest('.ff-nassij-slider')) return;
   var cadre = v.closest('.thumb, .ff-media, .vue') || v;
   function jouer() { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
   function stopper() { v.pause(); }

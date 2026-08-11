@@ -370,6 +370,22 @@
     padding: 3px 8px; border-radius: 2px;
   }
 
+  /* ── LE CORPS D'UNE PIECE A SOUS-PROJETS : deux colonnes ──
+     Le texte de famille a gauche, les deroules a droite. Sur une seule colonne,
+     ouvrir un sous-projet se fait trop loin sous l'image pour qu'on voie le
+     cadre changer — et c'est ce changement qui donne son sens au geste.
+     La colonne de droite est collante : elle reste a hauteur de lecture. */
+  .p-corps {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px 48px; align-items: start;
+  }
+  .p-corps .p-desc, .p-corps .regle, .p-corps .p-meta { max-width: none; }
+  .p-volets { position: sticky; top: 76px; }
+  @media (max-width: 900px) {
+    .p-corps { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .p-volets { position: static; }
+  }
+
   /* ── LES SOUS-PROJETS : des paragraphes deroulables ──
      Un projet peut contenir des projets. Chacun est un <details> natif : le
      texte reste dans la page (donc lu par Google, trouve par Ctrl+F), ca
@@ -547,9 +563,43 @@
     .lien-piece:hover { color: var(--ink); border-color: var(--blue-nuit); }
     .lien-piece:hover::before { clip-path: inset(0 0 0 0); }
   }
+  /* Un sous-projet se distingue de sa famille sans changer de nature : meme
+     pastille, un cran plus discrete, et un tiret qui dit l'appartenance. */
+  .lien-sous { border-style: dashed; color: #6F766F; }
+  .lien-sous::after { content: ''; }
   /* Une piece au repos est cachee par le script, jamais par le CSS : sans
      JavaScript, elles restent toutes visibles au lieu que la section se vide. */
   .ff-piece[hidden] { display: none; }
+
+  /* ── UNE CARTE DE SUJET : pliee par defaut, depliee sur deux colonnes ──
+     Un sujet complet fait un mur, et six murs empiles rendent la page
+     illisible. Pliee, la carte tient dans sa case : titre, resume, rangee de
+     pieces, premier paragraphe. Depliee, elle prend toute la largeur de la
+     grille et se lit en deux colonnes — les autres cartes descendent d'elles
+     memes, c'est la grille qui s'en charge. */
+  .carte-resume {
+    font-size: 15px; color: #C9CDC9; line-height: 1.55;
+    margin: -4px 0 16px; max-width: 62ch;
+  }
+  .carte-suite { display: none; }
+  .ff-card.ouverte { grid-column: 1 / -1; }
+  .ff-card.ouverte .carte-suite { display: block; }
+  .lire-plus {
+    font: inherit; font-size: 10.5px; letter-spacing: .06em;
+    text-transform: uppercase; cursor: pointer;
+    background: none; border: none; padding: 6px 0 0;
+    color: var(--blue-nuit); border-bottom: 1px solid transparent;
+    transition: color .2s ease, border-color .2s ease;
+  }
+  .lire-plus:hover { color: var(--corail); border-bottom-color: var(--corail); }
+  .lire-plus:focus-visible { outline: 1px solid var(--corail); outline-offset: 3px; }
+  @media (min-width: 901px) {
+    .ff-card.ouverte .carte-suite {
+      columns: 2; column-gap: 48px;
+    }
+    /* une colonne ne doit jamais couper un paragraphe en deux */
+    .ff-card.ouverte .carte-suite p { break-inside: avoid; }
+  }
 
   /* ── MOTS CLIQUABLES : le mot est bleu, sa trace est corail ── */
   .lien-galerie {
@@ -1533,19 +1583,25 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
         <span class="p-title">Sculptures</span>
         <span class="p-year">2026</span>
       </div>
-      <p class="p-desc">Une famille de pièces où la forme dépasse le volume d'impression : elle est découpée, tirée en plusieurs parties, puis remontée. L'assemblage n'est pas un pis-aller de fabrication — c'est lui qui décide où la forme a le droit d'être coupée, et ces lignes-là restent visibles sur l'objet fini.</p>
-      <div class="sous-projets">
-        <details class="sous-projet" data-groupe="2-recherche-projets-sculptures-anastomose">
-          <summary>
-            <span class="sp-titre mono">Anastomose</span>
-            <span class="sp-resume">La première sculpture de la recherche — imprimée en parties, puis remontée.</span>
-            <span class="sp-compte mono">2</span>
-          </summary>
-          <p class="p-desc">La première sculpture de cette famille, et celle qui en pose la contrainte : une forme organique modélisée puis imprimée en PETG transparent, en plusieurs parties, et assemblée.</p>
-          <div class="p-meta mono"><span>GRASSHOPPER</span><span>IMPRESSION 3D</span><span>PETG</span></div>
-        </details>
+      <div class="p-corps">
+        <div class="p-texte">
+        <p class="p-desc">Une famille de pièces où la forme dépasse le volume d'impression : elle est découpée, tirée en plusieurs parties, puis remontée. L'assemblage n'est pas un pis-aller de fabrication — c'est lui qui décide où la forme a le droit d'être coupée, et ces lignes-là restent visibles sur l'objet fini.</p>
+        <div class="p-meta mono"><span>GRASSHOPPER</span><span>IMPRESSION 3D</span><span>PETG</span></div>
+        </div>
+        <div class="p-volets">
+          <div class="sous-projets">
+            <details class="sous-projet" data-groupe="2-recherche-projets-sculptures-anastomose">
+              <summary>
+                <span class="sp-titre mono">Anastomose</span>
+                <span class="sp-resume">La première sculpture de la recherche — imprimée en parties, puis remontée.</span>
+                <span class="sp-compte mono">2</span>
+              </summary>
+              <p class="p-desc">La première sculpture de cette famille, et celle qui en pose la contrainte : une forme organique modélisée puis imprimée en PETG transparent, en plusieurs parties, et assemblée.</p>
+              <div class="p-meta mono"><span>GRASSHOPPER</span><span>IMPRESSION 3D</span><span>PETG</span></div>
+            </details>
+          </div>
+        </div>
       </div>
-      <div class="p-meta mono"><span>GRASSHOPPER</span><span>IMPRESSION 3D</span><span>PETG</span></div>
       <div class="p-note">
         <button class="lien-note" data-note="2-recherche-sujets-formes-generatives-imprimees">
           <img class="p-note-vignette" src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260429_183442768.jpg" alt="" loading="lazy">
@@ -1612,74 +1668,80 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
         <span class="p-title">Mode vase</span>
         <span class="p-year">2026</span>
       </div>
-      <p class="p-desc">Une famille de contenants imprimés d'une seule paroi continue. La buse ne s'arrête pas entre la base et le col : tout ce qu'on voit à la surface — les cannelures, le relief, les couleurs qui basculent — est le tracé lui-même. Rien n'est peint ni texturé après coup.</p>
-      <div class="regle" aria-label="Chaine de fabrication">
-        <div class="regle-axe"><span class="tw"><i class="tick fort"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick fort"></i></span></div>
-        <div class="regle-mots mono"><span>profil en étoile (Grasshopper)</span><span>loft entre cercles pivotés</span><span>tranchage en mode vase (Bambu Studio)</span><span>impression une paroi, buse 0,6 mm</span></div>
+      <div class="p-corps">
+        <div class="p-texte">
+        <p class="p-desc">Une famille de contenants imprimés d'une seule paroi continue. La buse ne s'arrête pas entre la base et le col : tout ce qu'on voit à la surface — les cannelures, le relief, les couleurs qui basculent — est le tracé lui-même. Rien n'est peint ni texturé après coup.</p>
+        <div class="regle" aria-label="Chaine de fabrication">
+          <div class="regle-axe"><span class="tw"><i class="tick fort"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick"></i></span><span class="tw"><i class="tick fort"></i></span></div>
+          <div class="regle-mots mono"><span>profil en étoile (Grasshopper)</span><span>loft entre cercles pivotés</span><span>tranchage en mode vase (Bambu Studio)</span><span>impression une paroi, buse 0,6 mm</span></div>
+        </div>
+        <p class="p-desc">Le profil est une étoile, lissée par un loft entre des cercles qu'une rotation décale les uns par rapport aux autres : c'est de là que vient le mouvement en vortex. C'est aussi ce qui tient l'objet debout. Une paroi de 0,6 mm n'a aucune raison d'être rigide ; pliée en cannelures vrillées, elle le devient. Le pli remplace l'épaisseur.</p>
+        <p class="p-desc">Le filament est coextrudé en trois ou quatre couleurs, et c'est l'angle d'impression qui décide de celle qui affleure. De loin, l'objet change de teinte quand on tourne autour. De près, une même face en montre deux à la fois, selon qu'on voit le flanc extérieur ou le flanc intérieur d'une cannelure.</p>
+        <p class="p-desc">Six objets sortent de cette même définition, et chacun en déplace un paramètre. Ils se lisent un par un ci-dessous : ouvrir l'un d'eux change les images du cadre.</p>
+        <div class="p-meta mono"><span>RHINO</span><span>GRASSHOPPER</span><span>BAMBU STUDIO</span><span>IMPRESSION 3D</span><span>BAMBU LAB A1</span></div>
+        </div>
+        <div class="p-volets">
+          <div class="sous-projets">
+            <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-soliflore">
+              <summary>
+                <span class="sp-titre mono">Soliflores</span>
+                <span class="sp-resume">Le profil nu, sans variation : trois cols étroits pour une seule tige.</span>
+                <span class="sp-compte mono">1</span>
+              </summary>
+              <p class="p-desc">Le point de départ de la famille : la définition à l'état simple, sans variation ajoutée. Trois soliflores tirés du même profil en étoile, un col assez étroit pour tenir une tige droite sans la serrer.</p>
+              <p class="p-desc">C'est sur eux que la contrainte se voit le mieux. Un col fin et un ventre large, en une seule paroi, c'est exactement le cas où un cylindre lisse s'effondrerait : ce sont les cannelures qui portent le rétrécissement.</p>
+            </details>
+            <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-duo">
+              <summary>
+                <span class="sp-titre mono">Duos</span>
+                <span class="sp-resume">Deux tirages côte à côte, pour rendre visible ce que l'angle fait à la couleur.</span>
+                <span class="sp-compte mono">2</span>
+              </summary>
+              <p class="p-desc">Là où les soliflores montrent le profil, les duos montrent la couleur — et il en faut deux pour ça. Une seule pièce ne prouve rien : c'est la comparaison, à la même heure et sous la même lumière, qui rend l'effet lisible.</p>
+              <p class="p-desc">Le filament est coextrudé sur trois ou quatre pistes. L'angle sous lequel la buse dépose la matière décide de celle qui affleure, si bien que deux objets issus du même rouleau ne renvoient pas la même teinte. Et sur un seul d'entre eux, le flanc extérieur d'une cannelure et son flanc intérieur ne donnent pas la même couleur non plus.</p>
+            </details>
+            <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-trio">
+              <summary>
+                <span class="sp-titre mono">Trio</span>
+                <span class="sp-resume">Une seule variable déplacée : la courbe intermédiaire du loft monte ou descend.</span>
+                <span class="sp-compte mono">1</span>
+              </summary>
+              <p class="p-desc">Les duos comparent deux tirages du même profil ; le trio compare trois profils différents issus de la même architecture. Même hauteur, même nombre de branches, même filament — et une seule variable qu'on déplace : la courbe intermédiaire du loft, qu'on fait monter ou descendre entre la base et le col.</p>
+              <p class="p-desc">Ça suffit à changer complètement la silhouette sans que la famille se défasse. Le filament à dégradé fait le reste : comme la couleur avance avec la longueur imprimée, deux pièces de hauteurs identiques mais de volumes différents ne consomment pas la même matière, et ne sortent jamais de l'imprimante avec le même dégradé.</p>
+            </details>
+            <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-cache-pot">
+              <summary>
+                <span class="sp-titre mono">Cache-pot</span>
+                <span class="sp-resume">Large et bas, un mur continu qui se comporte comme un ressort sous la main.</span>
+                <span class="sp-compte mono">1</span>
+              </summary>
+              <p class="p-desc">Le seul de la famille à ne pas être vertical. Sa forme large et basse laisse la paroi presque libre entre la base et le bord, et c'est là que la finesse devient sensible : imprimé en buse 0,6 mm, le mur cède un peu sous les doigts et revient — un effet de ressort, sans que l'objet perde sa tenue.</p>
+              <p class="p-desc">Le tracé continu, lui, se lit à l'œil comme un empilement de strates. C'est la même paroi unique que sur les soliflores, mais posée à plat elle raconte l'impression au lieu de la cacher.</p>
+            </details>
+            <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-relief">
+              <summary>
+                <span class="sp-titre mono">Relief</span>
+                <span class="sp-resume">L'autre façon de faire une surface : un bruit déplace les sommets, l'étanchéité arbitre.</span>
+                <span class="sp-compte mono">2</span>
+              </summary>
+              <p class="p-desc">Les cinq autres contenants tirent leur surface du profil. Celui-ci est le seul à la tirer du maillage — et c'est pour ça qu'il existe.</p>
+              <p class="p-desc">Le point de départ est la même surface loftée, mais lisse. Convertie en maillage, elle reçoit une texture de bruit qui lui sert de carte de hauteur : chaque sommet est déplacé le long de la normale à la surface, d'une valeur lue dans le bruit au point le plus proche. Vers l'extérieur, vers l'intérieur, selon le point.</p>
+              <p class="p-desc">Toute la recherche tient dans cette valeur. Trop faible, le relief ne se sent pas sous la main et l'objet ne raconte rien. Trop forte, la paroi part en porte-à-faux, l'impression laisse des trous, et le vase fuit. <em>L'étanchéité est le juge</em> — c'est la seule fois de la série où le critère n'est pas visuel.</p>
+            </details>
+            <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-boite">
+              <summary>
+                <span class="sp-titre mono">Boîte</span>
+                <span class="sp-resume">L'exception de la série : ici la surface vient du remplissage, pas de la paroi.</span>
+                <span class="sp-compte mono">1</span>
+              </summary>
+              <p class="p-desc">C'est le seul objet de la famille qui n'est pas une paroi unique — et il y a sa place quand même, parce qu'il pose la même question par l'autre bout.</p>
+              <p class="p-desc">Ses couvercles ont un intérieur, donc un remplissage. Au lieu de le couvrir d'une peau lisse comme le fait tout slicer par défaut, il est laissé apparent : le motif choisi est une courbe de Hilbert, une ligne unique qui remplit le plan sans jamais se croiser. Sur le même filament coextrudé que les vases, ça donne un moirage serré que la photo rend mal.</p>
+              <p class="p-desc">Le lettrage est imprimé dans un second filament, sur une A1 équipée de son extension multi-matière. Là encore, rien n'est ajouté après coup : la marque est dans la matière.</p>
+              <div class="p-meta mono"><span>COURBE DE HILBERT</span><span>BAMBU LAB A1</span><span>IMPRESSION MULTI-FILAMENT</span></div>
+            </details>
+          </div>
+        </div>
       </div>
-      <p class="p-desc">Le profil est une étoile, lissée par un loft entre des cercles qu'une rotation décale les uns par rapport aux autres : c'est de là que vient le mouvement en vortex. C'est aussi ce qui tient l'objet debout. Une paroi de 0,6 mm n'a aucune raison d'être rigide ; pliée en cannelures vrillées, elle le devient. Le pli remplace l'épaisseur.</p>
-      <p class="p-desc">Le filament est coextrudé en trois ou quatre couleurs, et c'est l'angle d'impression qui décide de celle qui affleure. De loin, l'objet change de teinte quand on tourne autour. De près, une même face en montre deux à la fois, selon qu'on voit le flanc extérieur ou le flanc intérieur d'une cannelure.</p>
-      <p class="p-desc">Six objets sortent de cette même définition, et chacun en déplace un paramètre. Ils se lisent un par un ci-dessous : ouvrir l'un d'eux change les images du cadre.</p>
-      <div class="sous-projets">
-        <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-soliflore">
-          <summary>
-            <span class="sp-titre mono">Soliflores</span>
-            <span class="sp-resume">Le profil nu, sans variation : trois cols étroits pour une seule tige.</span>
-            <span class="sp-compte mono">1</span>
-          </summary>
-          <p class="p-desc">Le point de départ de la famille : la définition à l'état simple, sans variation ajoutée. Trois soliflores tirés du même profil en étoile, un col assez étroit pour tenir une tige droite sans la serrer.</p>
-          <p class="p-desc">C'est sur eux que la contrainte se voit le mieux. Un col fin et un ventre large, en une seule paroi, c'est exactement le cas où un cylindre lisse s'effondrerait : ce sont les cannelures qui portent le rétrécissement.</p>
-        </details>
-        <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-duo">
-          <summary>
-            <span class="sp-titre mono">Duos</span>
-            <span class="sp-resume">Deux tirages côte à côte, pour rendre visible ce que l'angle fait à la couleur.</span>
-            <span class="sp-compte mono">2</span>
-          </summary>
-          <p class="p-desc">Là où les soliflores montrent le profil, les duos montrent la couleur — et il en faut deux pour ça. Une seule pièce ne prouve rien : c'est la comparaison, à la même heure et sous la même lumière, qui rend l'effet lisible.</p>
-          <p class="p-desc">Le filament est coextrudé sur trois ou quatre pistes. L'angle sous lequel la buse dépose la matière décide de celle qui affleure, si bien que deux objets issus du même rouleau ne renvoient pas la même teinte. Et sur un seul d'entre eux, le flanc extérieur d'une cannelure et son flanc intérieur ne donnent pas la même couleur non plus.</p>
-        </details>
-        <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-trio">
-          <summary>
-            <span class="sp-titre mono">Trio</span>
-            <span class="sp-resume">Une seule variable déplacée : la courbe intermédiaire du loft monte ou descend.</span>
-            <span class="sp-compte mono">1</span>
-          </summary>
-          <p class="p-desc">Les duos comparent deux tirages du même profil ; le trio compare trois profils différents issus de la même architecture. Même hauteur, même nombre de branches, même filament — et une seule variable qu'on déplace : la courbe intermédiaire du loft, qu'on fait monter ou descendre entre la base et le col.</p>
-          <p class="p-desc">Ça suffit à changer complètement la silhouette sans que la famille se défasse. Le filament à dégradé fait le reste : comme la couleur avance avec la longueur imprimée, deux pièces de hauteurs identiques mais de volumes différents ne consomment pas la même matière, et ne sortent jamais de l'imprimante avec le même dégradé.</p>
-        </details>
-        <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-cache-pot">
-          <summary>
-            <span class="sp-titre mono">Cache-pot</span>
-            <span class="sp-resume">Large et bas, un mur continu qui se comporte comme un ressort sous la main.</span>
-            <span class="sp-compte mono">1</span>
-          </summary>
-          <p class="p-desc">Le seul de la famille à ne pas être vertical. Sa forme large et basse laisse la paroi presque libre entre la base et le bord, et c'est là que la finesse devient sensible : imprimé en buse 0,6 mm, le mur cède un peu sous les doigts et revient — un effet de ressort, sans que l'objet perde sa tenue.</p>
-          <p class="p-desc">Le tracé continu, lui, se lit à l'œil comme un empilement de strates. C'est la même paroi unique que sur les soliflores, mais posée à plat elle raconte l'impression au lieu de la cacher.</p>
-        </details>
-        <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-relief">
-          <summary>
-            <span class="sp-titre mono">Relief</span>
-            <span class="sp-resume">L'autre façon de faire une surface : un bruit déplace les sommets, l'étanchéité arbitre.</span>
-            <span class="sp-compte mono">2</span>
-          </summary>
-          <p class="p-desc">Les cinq autres contenants tirent leur surface du profil. Celui-ci est le seul à la tirer du maillage — et c'est pour ça qu'il existe.</p>
-          <p class="p-desc">Le point de départ est la même surface loftée, mais lisse. Convertie en maillage, elle reçoit une texture de bruit qui lui sert de carte de hauteur : chaque sommet est déplacé le long de la normale à la surface, d'une valeur lue dans le bruit au point le plus proche. Vers l'extérieur, vers l'intérieur, selon le point.</p>
-          <p class="p-desc">Toute la recherche tient dans cette valeur. Trop faible, le relief ne se sent pas sous la main et l'objet ne raconte rien. Trop forte, la paroi part en porte-à-faux, l'impression laisse des trous, et le vase fuit. <em>L'étanchéité est le juge</em> — c'est la seule fois de la série où le critère n'est pas visuel.</p>
-        </details>
-        <details class="sous-projet" data-groupe="2-recherche-projets-mode-vase-boite">
-          <summary>
-            <span class="sp-titre mono">Boîte</span>
-            <span class="sp-resume">L'exception de la série : ici la surface vient du remplissage, pas de la paroi.</span>
-            <span class="sp-compte mono">1</span>
-          </summary>
-          <p class="p-desc">C'est le seul objet de la famille qui n'est pas une paroi unique — et il y a sa place quand même, parce qu'il pose la même question par l'autre bout.</p>
-          <p class="p-desc">Ses couvercles ont un intérieur, donc un remplissage. Au lieu de le couvrir d'une peau lisse comme le fait tout slicer par défaut, il est laissé apparent : le motif choisi est une courbe de Hilbert, une ligne unique qui remplit le plan sans jamais se croiser. Sur le même filament coextrudé que les vases, ça donne un moirage serré que la photo rend mal.</p>
-          <p class="p-desc">Le lettrage est imprimé dans un second filament, sur une A1 équipée de son extension multi-matière. Là encore, rien n'est ajouté après coup : la marque est dans la matière.</p>
-          <div class="p-meta mono"><span>COURBE DE HILBERT</span><span>BAMBU LAB A1</span><span>IMPRESSION MULTI-FILAMENT</span></div>
-        </details>
-      </div>
-      <div class="p-meta mono"><span>RHINO</span><span>GRASSHOPPER</span><span>BAMBU STUDIO</span><span>IMPRESSION 3D</span><span>BAMBU LAB A1</span></div>
       <div class="p-note">
         <button class="lien-note" data-note="2-recherche-sujets-formes-generatives-imprimees">
           <img class="p-note-vignette" src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260429_183442768.jpg" alt="" loading="lazy">
@@ -1954,6 +2016,13 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
                     + carte.getAttribute('data-piece') + '"]');
         if (!cible) return;
         montrer(cible);
+        // Une pastille de SOUS-projet amene sa famille, puis ouvre son
+        // paragraphe : le cadre se restreint alors a ses images tout seul,
+        // par l'evenement « toggle ». Rien a declencher de plus ici.
+        var ouvre = carte.getAttribute('data-ouvre');
+        cible.querySelectorAll('.sous-projet').forEach(function (d) {
+          d.open = (!!ouvre && d.getAttribute('data-groupe') === ouvre);
+        });
         cible.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     })();
@@ -1968,16 +2037,27 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     <div class="ff-grid">
       <div class="ff-card" data-note="2-recherche-sujets-formes-generatives-imprimees">
         <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-sujets-formes-generatives-imprimees">01 — Une définition, plusieurs objets</button></div>
+        <p class="carte-resume">Formes génératives imprimées — une même méthode paramétrique, deux familles de pièces.</p>
         <div class="sujet-pieces mono">
           <button class="lien-piece" data-piece="2-recherche-projets-mode-vase">Mode vase</button>
+          <button class="lien-piece lien-sous" data-piece="2-recherche-projets-mode-vase" data-ouvre="2-recherche-projets-mode-vase-soliflore">Soliflores</button>
+          <button class="lien-piece lien-sous" data-piece="2-recherche-projets-mode-vase" data-ouvre="2-recherche-projets-mode-vase-duo">Duos</button>
+          <button class="lien-piece lien-sous" data-piece="2-recherche-projets-mode-vase" data-ouvre="2-recherche-projets-mode-vase-trio">Trio</button>
+          <button class="lien-piece lien-sous" data-piece="2-recherche-projets-mode-vase" data-ouvre="2-recherche-projets-mode-vase-cache-pot">Cache-pot</button>
+          <button class="lien-piece lien-sous" data-piece="2-recherche-projets-mode-vase" data-ouvre="2-recherche-projets-mode-vase-relief">Relief</button>
+          <button class="lien-piece lien-sous" data-piece="2-recherche-projets-mode-vase" data-ouvre="2-recherche-projets-mode-vase-boite">Boîte</button>
           <button class="lien-piece" data-piece="2-recherche-projets-sculptures">Sculptures</button>
+          <button class="lien-piece lien-sous" data-piece="2-recherche-projets-sculptures" data-ouvre="2-recherche-projets-sculptures-anastomose">Anastomose</button>
         </div>
         <p>Définir une géométrie porteuse, la décliner par le calcul, la révéler par l'impression. La même méthode paramétrique produit ici deux familles qui n'ont ni la même échelle ni la même contrainte — mais toujours un seul objet à la sortie, et rien d'ajouté après coup.</p>
-        <p>La première famille rassemble des <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-mode-vase">contenants imprimés d'une seule paroi</button>. Il n'y a pas de second mur derrière le premier : la forme doit se porter elle-même, et l'étanchéité arbitre. Le profil est une étoile lissée par un loft entre cercles pivotés — de là vient le mouvement en vortex, et de là vient aussi la rigidité, puisqu'une paroi de 0,6 mm pliée en cannelures tient debout quand un cylindre lisse s'effondrerait.</p>
-        <p>Chaque contenant déplace ensuite un seul paramètre. Les <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-soliflore">soliflores</button> montrent le profil nu, avec un col étroit là où la paroi unique est la plus exposée. Le <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-trio">trio</button> ne fait varier que la courbe intermédiaire du loft : même hauteur, trois silhouettes, et jamais deux tirages identiques puisque le dégradé du filament avance avec la longueur imprimée. Le <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-relief">relief</button> abandonne le profil et fait naître la surface d'un bruit qui déplace les sommets du maillage — c'est le seul cas où le critère n'est pas visuel mais physique, entre un relief qui se sent sous la main et un porte-à-faux qui fait fuir le vase. La <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-boite">boîte</button>, elle, n'est pas une paroi unique du tout : son couvercle laisse voir son remplissage en courbe de Hilbert, au lieu de le couvrir.</p>
-        <p>Sur toute la famille, la couleur ne se peint pas : elle se calcule. Le filament est <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-coextrusion">coextrudé sur trois ou quatre pistes</button>, et c'est l'angle sous lequel la buse dépose la matière qui décide de celle qui affleure. De loin, l'objet change de teinte quand on tourne autour. De près, une même face en montre deux à la fois, selon qu'on voit le flanc extérieur ou le flanc intérieur d'une cannelure.</p>
-        <p>La seconde famille pose la contrainte inverse. Quand la forme dépasse le volume d'impression, elle est découpée, tirée en parties et remontée : <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-anastomose">Anastomose</button> en est la première, imprimée en PETG transparent. L'assemblage cesse alors d'être un pis-aller de fabrication — c'est lui qui décide où la forme a le droit d'être coupée, et ces lignes-là restent lisibles sur l'objet fini.</p>
-        <p>Les deux familles se rejoignent sur un point : ce qu'on voit à la surface est <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-chemin-de-buse">le chemin de la buse</button>, jamais un décor appliqué dessus.</p>
+        <div class="carte-suite">
+          <p>La première famille rassemble des <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-mode-vase">contenants imprimés d'une seule paroi</button>. Il n'y a pas de second mur derrière le premier : la forme doit se porter elle-même, et l'étanchéité arbitre. Le profil est une étoile lissée par un loft entre cercles pivotés — de là vient le mouvement en vortex, et de là vient aussi la rigidité, puisqu'une paroi de 0,6 mm pliée en cannelures tient debout quand un cylindre lisse s'effondrerait.</p>
+          <p>Chaque contenant déplace ensuite un seul paramètre. Les <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-soliflore">soliflores</button> montrent le profil nu, avec un col étroit là où la paroi unique est la plus exposée. Le <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-trio">trio</button> ne fait varier que la courbe intermédiaire du loft : même hauteur, trois silhouettes, et jamais deux tirages identiques puisque le dégradé du filament avance avec la longueur imprimée. Le <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-relief">relief</button> abandonne le profil et fait naître la surface d'un bruit qui déplace les sommets du maillage — c'est le seul cas où le critère n'est pas visuel mais physique, entre un relief qui se sent sous la main et un porte-à-faux qui fait fuir le vase. La <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-boite">boîte</button>, elle, n'est pas une paroi unique du tout : son couvercle laisse voir son remplissage en courbe de Hilbert, au lieu de le couvrir.</p>
+          <p>Sur toute la famille, la couleur ne se peint pas : elle se calcule. Le filament est <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-coextrusion">coextrudé sur trois ou quatre pistes</button>, et c'est l'angle sous lequel la buse dépose la matière qui décide de celle qui affleure. De loin, l'objet change de teinte quand on tourne autour. De près, une même face en montre deux à la fois, selon qu'on voit le flanc extérieur ou le flanc intérieur d'une cannelure.</p>
+          <p>La seconde famille pose la contrainte inverse. Quand la forme dépasse le volume d'impression, elle est découpée, tirée en parties et remontée : <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-anastomose">Anastomose</button> en est la première, imprimée en PETG transparent. L'assemblage cesse alors d'être un pis-aller de fabrication — c'est lui qui décide où la forme a le droit d'être coupée, et ces lignes-là restent lisibles sur l'objet fini.</p>
+          <p>Les deux familles se rejoignent sur un point : ce qu'on voit à la surface est <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-chemin-de-buse">le chemin de la buse</button>, jamais un décor appliqué dessus.</p>
+        </div>
+        <button class="lire-plus mono" aria-expanded="false">Lire la suite …</button>
         <div class="galerie-source" data-galerie-id="2-recherche-sujets-formes-generatives-imprimees" hidden>
           <span data-groupe="2-recherche-sujets-formes-generatives-imprimees-coextrusion">
             <i data-src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260429_183442768.jpg" data-alt="Une définition, plusieurs objets — Deux tirages du même rouleau, deux teintes : c'est l'angle qui tranche"></i>
@@ -2028,7 +2108,10 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           <button class="lien-piece" data-piece="2-recherche-projets-thalassic-kaftan">Thalassic Kaftan</button>
         </div>
         <p>Conception paramétrique, production digitale, expérimentation physique : trois strates tenues par un même vocabulaire de motifs. Le <button class="lien-galerie" data-galerie="2-recherche-sujets-collection-nassij-thalassic-kaftan">défilé digital</button> en est l'état le plus abouti, du fichier Grasshopper à la vidéo finale.</p>
-        <p>En parallèle, expérimentation physique : perlage et motifs imprimés directement sur tulle, pièces construites sur Grasshopper et pilotées par mon propre outil de slicing. Chaque prototype est un objet autonome autant qu'un état intermédiaire du processus textile.</p>
+        <div class="carte-suite">
+          <p>En parallèle, expérimentation physique : perlage et motifs imprimés directement sur tulle, pièces construites sur Grasshopper et pilotées par mon propre outil de slicing. Chaque prototype est un objet autonome autant qu'un état intermédiaire du processus textile.</p>
+        </div>
+        <button class="lire-plus mono" aria-expanded="false">Lire la suite …</button>
         <div class="galerie-source" data-galerie-id="2-recherche-sujets-collection-nassij" hidden>
           <span data-groupe="2-recherche-sujets-collection-nassij-thalassic-kaftan">
             <i data-src="images/web/2-recherche/projets/thalassic-kaftan/01_broderie-generee-ia.png" data-alt="Collection Nassij — L'image qui a ouvert la recherche — broderie générée, corail et fil d'or"></i>
@@ -2077,7 +2160,10 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           <button class="lien-piece" data-piece="2-recherche-projets-boutons">Boutons</button>
         </div>
         <p>Je travaille en exclusivité avec un atelier de couture marocain qui a plus de cinquante ans d'existence, entre savoir-faire traditionnel (dfina, kaftan, kmiss, jellaba) et ouverture contemporaine. J'y propose des <button class="lien-galerie" data-galerie="2-recherche-sujets-artisanat-numerique-boutons">boutons imprimés en 3D</button> comme alternative aux boutons traditionnels en fil de soie, conçus et produits sur mesure pour chaque tenue selon ses formes, ses couleurs et ses matières.</p>
-        <p>Les boutons sont réalisés en série après un échantillonnage par projet — les outils de présentation et d'échantillonnage sont eux aussi dessinés sur Grasshopper et imprimés en 3D. L'atelier me sollicite aussi pour mettre à l'échelle des graphismes ou choisir des couleurs, en soutien direct au travail des brodeurs.</p>
+        <div class="carte-suite">
+          <p>Les boutons sont réalisés en série après un échantillonnage par projet — les outils de présentation et d'échantillonnage sont eux aussi dessinés sur Grasshopper et imprimés en 3D. L'atelier me sollicite aussi pour mettre à l'échelle des graphismes ou choisir des couleurs, en soutien direct au travail des brodeurs.</p>
+        </div>
+        <button class="lire-plus mono" aria-expanded="false">Lire la suite …</button>
         <div class="galerie-source" data-galerie-id="2-recherche-sujets-artisanat-numerique" hidden>
           <span data-groupe="2-recherche-sujets-artisanat-numerique-boutons">
             <i data-src="images/web/2-recherche/projets/boutons/PXL_20260709_100516708.jpg" data-alt="Artisanat + numérique — Rangée de boutons sur mesure, motifs variés"></i>
@@ -2097,10 +2183,13 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
       <div class="ff-card" data-note="2-recherche-sujets-outils-applications">
         <div class="k mono">04 — Outils + applications</div>
         <p>En parallèle de la fabrication, je développe des outils numériques qui prolongent la même logique : systématiser, transmettre, rendre un savoir-faire réutilisable.</p>
-        <p><em>BridgeLink</em> — application de gestion de tournois pour des clubs de bridge, pilotée gratuitement en test réel avec un club à Casablanca avant une licence payante.</p>
-        <p><em>Kiyani</em> — assistant cognitif pour l'intelligence corporelle, projet personnel en développement, destiné à être commercialisé.</p>
-        <p><em>Creative Memory</em> et <em>FenFuturesTools</em> — mes propres outils de travail (dont un environnement de traitement d'image par IA), pensés comme une base commune plutôt que des scripts jetables, à terme partagés par licence en tokens d'utilisation.</p>
-        <p><em>HedronEquilibre</em> — un jeu d'équilibre et d'empilement en pièces imprimées en 3D, construit sur une géométrie unique déclinable en modules.</p>
+        <div class="carte-suite">
+          <p><em>BridgeLink</em> — application de gestion de tournois pour des clubs de bridge, pilotée gratuitement en test réel avec un club à Casablanca avant une licence payante.</p>
+          <p><em>Kiyani</em> — assistant cognitif pour l'intelligence corporelle, projet personnel en développement, destiné à être commercialisé.</p>
+          <p><em>Creative Memory</em> et <em>FenFuturesTools</em> — mes propres outils de travail (dont un environnement de traitement d'image par IA), pensés comme une base commune plutôt que des scripts jetables, à terme partagés par licence en tokens d'utilisation.</p>
+          <p><em>HedronEquilibre</em> — un jeu d'équilibre et d'empilement en pièces imprimées en 3D, construit sur une géométrie unique déclinable en modules.</p>
+        </div>
+        <button class="lire-plus mono" aria-expanded="false">Lire la suite …</button>
       </div>
       <div class="ff-card" data-note="2-recherche-sujets-production-matiere">
         <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-sujets-production-matiere">05 — Production matière</button></div>
@@ -2108,7 +2197,10 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           <button class="lien-piece" data-piece="2-recherche-projets-tiflik">Tiflik</button>
         </div>
         <p>Conception de moules imprimés en 3D pour des marques qui produisent ensuite leurs pièces en série — bougies, contenants, objets parfumés. Chaque moule est pensé en plusieurs parties démontables pour permettre le tirage en silicone qui sert à la production finale.</p>
-        <p>Collaboration en cours avec <button class="lien-galerie" data-galerie="2-recherche-sujets-production-matiere-tiflik">Tiflik</button> : un moule en trois pièces, imprimé en FDM, pour leurs contenants de bougie parfumée à leur logo.</p>
+        <div class="carte-suite">
+          <p>Collaboration en cours avec <button class="lien-galerie" data-galerie="2-recherche-sujets-production-matiere-tiflik">Tiflik</button> : un moule en trois pièces, imprimé en FDM, pour leurs contenants de bougie parfumée à leur logo.</p>
+        </div>
+        <button class="lire-plus mono" aria-expanded="false">Lire la suite …</button>
         <div class="galerie-source" data-galerie-id="2-recherche-sujets-production-matiere" hidden>
           <span data-groupe="2-recherche-sujets-production-matiere-tiflik">
             <i data-src="images/web/2-recherche/projets/tiflik/PXL_20260504_152604167.MP.jpg" data-alt="Production matière — Moule Tiflik en trois parties, impression FDM"></i>
@@ -2122,8 +2214,11 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           <button class="lien-piece" data-piece="2-recherche-projets-limbs">Limbs</button>
         </div>
         <p>Le résultat visible d'un dispositif scénique ne raconte pas toujours le travail de fabrication qui le porte. Deux exemples.</p>
-        <p>Pour <em>L'aire poids lourd</em>, la conception s'est concentrée sur le praticable — construction, décisions d'assemblage, logistique de montage et démontage — restée volontairement discrète parce qu'une écriture lumière préexistante occupait déjà tout l'espace visuel. <button class="lien-galerie" data-galerie="2-recherche-sujets-scenographie-fabrication-aire-poids-lourd">Le chantier</button>, de l'esquisse au plateau, conçu et fabriqué seul.</p>
-        <p>Pour <em>Starting with the Limbs</em>, <button class="lien-galerie" data-galerie="2-recherche-sujets-scenographie-fabrication-limbs">les essais en atelier</button> précèdent le dispositif final déjà présenté en Commandes — matière, articulation, tenue en mouvement, avant le passage en scène.</p>
+        <div class="carte-suite">
+          <p>Pour <em>L'aire poids lourd</em>, la conception s'est concentrée sur le praticable — construction, décisions d'assemblage, logistique de montage et démontage — restée volontairement discrète parce qu'une écriture lumière préexistante occupait déjà tout l'espace visuel. <button class="lien-galerie" data-galerie="2-recherche-sujets-scenographie-fabrication-aire-poids-lourd">Le chantier</button>, de l'esquisse au plateau, conçu et fabriqué seul.</p>
+          <p>Pour <em>Starting with the Limbs</em>, <button class="lien-galerie" data-galerie="2-recherche-sujets-scenographie-fabrication-limbs">les essais en atelier</button> précèdent le dispositif final déjà présenté en Commandes — matière, articulation, tenue en mouvement, avant le passage en scène.</p>
+        </div>
+        <button class="lire-plus mono" aria-expanded="false">Lire la suite …</button>
         <div class="galerie-source" data-galerie-id="2-recherche-sujets-scenographie-fabrication" hidden>
           <span data-groupe="2-recherche-sujets-scenographie-fabrication-aire-poids-lourd">
             <i data-src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-110930503.jpg" data-alt="Scénographie + fabrication — Praticable en construction"></i>
@@ -2144,7 +2239,10 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           <button class="lien-piece" data-piece="2-recherche-projets-hudhud">Hudhud</button>
         </div>
         <p>Pont entre ateliers locaux et outils numériques avancés : perlage et motifs imprimés directement sur tulle, à partir d'un workflow que j'ai construit moi-même — une image de départ, un <button class="lien-galerie" data-galerie="2-recherche-sujets-textile-fabrication-numerique-hudhud">plugin Grasshopper</button> que j'ai développé pour le systématiser (filtres d'image, disposition des motifs selon la teinte et la luminosité, trajectoires d'impression continues), puis impression 3D en filament flexible directement sur le textile.</p>
-        <p>Ce sont des essais en incréments : gérer au fur et à mesure la qualité des couleurs, la disposition, les formes, l'interprétation de l'image source. Une recherche sur les matériaux biosourcés est aussi en cours, pour rapprocher cette pratique numérique des savoir-faire locaux au Maroc.</p>
+        <div class="carte-suite">
+          <p>Ce sont des essais en incréments : gérer au fur et à mesure la qualité des couleurs, la disposition, les formes, l'interprétation de l'image source. Une recherche sur les matériaux biosourcés est aussi en cours, pour rapprocher cette pratique numérique des savoir-faire locaux au Maroc.</p>
+        </div>
+        <button class="lire-plus mono" aria-expanded="false">Lire la suite …</button>
         <div class="galerie-source" data-galerie-id="2-recherche-sujets-textile-fabrication-numerique" hidden>
           <span data-groupe="2-recherche-sujets-textile-fabrication-numerique">
             <i data-src="images/web/2-recherche/sujets/textile-fabrication-numerique/PXL_20260516_194723132.MP.jpg" data-alt="Textile + fabrication numérique — Perlage imprimé directement sur tulle"></i>
@@ -2202,7 +2300,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     </div>
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.51</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.52</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>
@@ -2328,6 +2426,29 @@ document.querySelectorAll('.slider').forEach(function (slider) {
   } else {
     demarrer();
   }
+});
+
+// ── DEPLIER UNE CARTE DE SUJET ───────────────────────────────────────────────
+// Un seul sujet deplie a la fois : deux articles ouverts sur deux colonnes
+// chacun, c'est le mur qu'on essaie d'eviter. Les autres cartes se replacent
+// toutes seules, la grille s'en charge.
+document.addEventListener('click', function (e) {
+  var bouton = e.target.closest('.lire-plus');
+  if (!bouton) return;
+  var carte = bouton.closest('.ff-card');
+  if (!carte) return;
+  var ouvrir = !carte.classList.contains('ouverte');
+  document.querySelectorAll('.ff-card.ouverte').forEach(function (autre) {
+    if (autre === carte) return;
+    autre.classList.remove('ouverte');
+    var b = autre.querySelector('.lire-plus');
+    if (b) { b.textContent = 'Lire la suite …'; b.setAttribute('aria-expanded', 'false'); }
+  });
+  carte.classList.toggle('ouverte', ouvrir);
+  bouton.textContent = ouvrir ? 'Replier' : 'Lire la suite …';
+  bouton.setAttribute('aria-expanded', ouvrir ? 'true' : 'false');
+  // en repliant, la carte peut remonter au-dessus du regard : on la ramene
+  if (!ouvrir) carte.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 });
 
 // ── LES SOUS-PROJETS PILOTENT LE CADRE ───────────────────────────────────────

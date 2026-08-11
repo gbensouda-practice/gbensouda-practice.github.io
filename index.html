@@ -242,9 +242,13 @@
   /* La reglette : le meme objet partout sur le site veut dire la meme chose,
      ou tu es dans une serie. Dans les vignettes elle monte en haut a droite,
      le bas etant occupe par le voile qui porte le titre. */
+  /* Elle se replie plutot que de pousser la page : une serie de 37 images
+     tenait sur une seule ligne de 626 px, ce qui elargissait le document
+     entier et faisait dezoomer le telephone. */
   .slider-dots {
     position: absolute; top: 12px; right: 13px;
     display: flex; gap: 3px; z-index: 4;
+    flex-wrap: wrap; max-width: 100%;
   }
   .slider-dot {
     width: 14px; height: 2px; border: none; padding: 0; cursor: pointer;
@@ -378,7 +382,9 @@
     display: flex; gap: 10px; margin-top: 12px;
     font-size: 10.5px; line-height: 1.45; color: #8A918B;
   }
-  .regle-mots span { flex: 1 1 0; text-align: center; }
+  /* min-width:0 : sans lui, une etape au nom long (« patronage Marvelous
+     Designer ») refuse de retrecir et elargit le document sur telephone. */
+  .regle-mots span { flex: 1 1 0; min-width: 0; overflow-wrap: break-word; text-align: center; }
   .regle-mots span:first-child { text-align: left; }
   .regle-mots span:last-child { text-align: right; color: #C9CDC9; }
 
@@ -681,8 +687,12 @@
     .cmd-titre { font-size: 13px; }
 
     .ff-media { grid-template-columns: 1fr; gap: 14px; }
-    .ff-marge { flex-direction: row; justify-content: space-between; align-items: baseline; }
+    .ff-marge { flex-direction: row; justify-content: space-between; align-items: baseline;
+                flex-wrap: wrap; }
     .ff-legende { font-size: 10px; max-width: 60%; }
+    /* La reglette prend sa propre ligne, sur toute la largeur : les traits
+       gardent leur taille et se replient, au lieu de s'ecraser a 2 px. */
+    .ff-marge .slider-dots { flex: 1 1 100%; justify-content: flex-start; min-width: 0; }
     .ff-nassij-slider { grid-column: 1; grid-row: 1; }
     .ff-marge { grid-row: 2; }
   }
@@ -2004,7 +2014,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     </div>
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.44</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.45</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>

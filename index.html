@@ -2202,7 +2202,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     </div>
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.50</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.51</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>
@@ -2660,6 +2660,18 @@ document.querySelectorAll('.lien-galerie').forEach(function (lien) {
     e.stopPropagation();
     var bloc = img.closest('.thumb, .ff-nassij-slider');
     var imgs = bloc ? Array.from(bloc.querySelectorAll('.sujet, img')) : [img];
+    // Si un sous-projet est ouvert, la visionneuse ne doit pas ressortir la
+    // serie entiere : le lecteur a demande CE contenant-la, pas la famille.
+    var pieceOuverte = img.closest('.ff-piece');
+    var ouvert = pieceOuverte && pieceOuverte.querySelector('.sous-projet[open]');
+    if (ouvert) {
+      var g = ouvert.getAttribute('data-groupe');
+      var restreint = imgs.filter(function (i) {
+        var v = i.closest('.vue');
+        return v && v.getAttribute('data-groupe') === g;
+      });
+      if (restreint.length) imgs = restreint;
+    }
     var carte = img.closest('.cmd-carte, .ff-nassij');
     var t = carte && carte.querySelector('.cmd-titre, .p-title');
     var contexte = {

@@ -213,7 +213,7 @@
   .cmd-annee { font-style: normal; opacity: .7; flex: none; }
   .cmd-titre { font-size: 15px; line-height: 1.3; font-weight: 500; }
   .cmd-resume {
-    font-size: 12.5px; line-height: 1.5; color: #C7CBC4;
+    font-size: 12.5px; line-height: 1.5; color: var(--line);
     max-height: 0; opacity: 0; overflow: hidden;
     transition: max-height .3s var(--e-out), opacity .2s ease-out .06s;
   }
@@ -314,7 +314,7 @@
   .ff-tagline {
     font-family: 'Newsreader', serif; font-weight: 300; font-style: italic;
     font-size: clamp(19px, 2.4vw, 28px);
-    max-width: 740px; margin-bottom: 96px; color: #C9CDC9;
+    max-width: 740px; margin-bottom: 96px; color: var(--line);
     line-height: 1.5; padding-bottom: 4px;
   }
 
@@ -331,7 +331,7 @@
   }
   .ff-legende {
     font-size: 10.5px; line-height: 1.6; letter-spacing: .03em;
-    color: #6F766F; transition: opacity .28s ease;
+    color: var(--grey); transition: opacity .28s ease;
   }
   /* la reglette quitte l'image : plus rien n'est dessine sur les photos */
   .ff-marge .slider-dots { position: static; top: auto; right: auto; }
@@ -386,7 +386,7 @@
      phrase, puis « Lire la suite ». Le texte replie reste dans la page —
      Google le lit, Ctrl+F le trouve — il est seulement masque. */
   .p-resume {
-    font-size: 17px; line-height: 1.6; color: #C9CDC9;
+    font-size: 17px; line-height: 1.6; color: var(--line);
     max-width: 62ch; margin-bottom: 4px;
   }
   .p-repli { display: none; }
@@ -460,7 +460,7 @@
      Designer ») refuse de retrecir et elargit le document sur telephone. */
   .regle-mots span { flex: 1 1 0; min-width: 0; overflow-wrap: break-word; text-align: center; }
   .regle-mots span:first-child { text-align: left; }
-  .regle-mots span:last-child { text-align: right; color: #C9CDC9; }
+  .regle-mots span:last-child { text-align: right; color: var(--line); }
 
   /* ── CHARNIERE DES NOTES ── */
   .notes-charniere {
@@ -517,7 +517,7 @@
     background-size: 0% 1px; padding-bottom: 1px;
     transition: color .18s ease, background-size .34s var(--e-out);
   }
-  .p-note-compte { font-size: 10.5px; color: #6F766F; letter-spacing: .04em; }
+  .p-note-compte { font-size: 10.5px; color: var(--grey); letter-spacing: .04em; }
   @media (hover: hover) and (pointer: fine) {
     .lien-note:hover .p-note-vignette { filter: none; opacity: 1; }
     .lien-note:hover .p-note-texte .k { background-size: 100% 1px; color: #A8C4DC; }
@@ -587,7 +587,7 @@
   }
   /* Un sous-projet se distingue de sa famille sans changer de nature : meme
      pastille, un cran plus discrete, et un tiret qui dit l'appartenance. */
-  .lien-sous { border-style: dashed; color: #6F766F; }
+  .lien-sous { border-style: dashed; color: var(--grey); }
   .lien-sous::after { content: ''; }
   /* Une piece au repos est cachee par le script, jamais par le CSS : sans
      JavaScript, elles restent toutes visibles au lieu que la section se vide. */
@@ -600,7 +600,7 @@
      grille et se lit en deux colonnes — les autres cartes descendent d'elles
      memes, c'est la grille qui s'en charge. */
   .carte-resume {
-    font-size: 15px; color: #C9CDC9; line-height: 1.55;
+    font-size: 15px; color: var(--line); line-height: 1.55;
     margin: -4px 0 16px; max-width: 62ch;
   }
   .carte-suite { display: none; }
@@ -701,7 +701,7 @@
   .lightbox video { display: none; }
   .lightbox-close {
     position: absolute; top: 20px; right: 24px;
-    font-size: 28px; color: #C9CDC9; cursor: pointer;
+    font-size: 28px; color: var(--line); cursor: pointer;
     background: none; border: none; line-height: 1;
     opacity: .7; transition: opacity .15s, transform .16s var(--e-out);
   }
@@ -730,8 +730,8 @@
     display: grid; gap: 4px; pointer-events: none;
   }
   .lb-titre { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--paper); }
-  .lb-legende { font-size: 13.5px; line-height: 1.45; color: #C7CBC4; max-width: 62ch; }
-  .lb-tags { margin-top: 3px; font-size: 9.5px; letter-spacing: .09em; color: #6E7570; }
+  .lb-legende { font-size: 13.5px; line-height: 1.45; color: var(--line); max-width: 62ch; }
+  .lb-tags { margin-top: 3px; font-size: 9.5px; letter-spacing: .09em; color: var(--grey); }
 
   /* ── MINI NAV ── */
   .mini-nav {

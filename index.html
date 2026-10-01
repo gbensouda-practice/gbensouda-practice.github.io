@@ -87,8 +87,11 @@
     line-height: .95; letter-spacing: -.018em;
     margin-bottom: 28px;
   }
+  /* 760 et non 640 : l'accroche d'une phrase (664 px a 20 px) passait a la
+     ligne sur ordinateur pour un seul mot. Une accroche plus longue repassera
+     a la ligne a 760 — voulu, au-dela la ligne devient trop longue a lire. */
   .hero-sub {
-    max-width: 640px; font-size: clamp(17px, 2vw, 20px);
+    max-width: 760px; font-size: clamp(17px, 2vw, 20px);
     color: #2B2F2C; line-height: 1.55;
   }
   .hero-sub .accent { color: var(--blue); }
@@ -2844,7 +2847,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
     <!-- AUTO:PIED_SIGNATURE:FIN -->
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.82</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.83</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>

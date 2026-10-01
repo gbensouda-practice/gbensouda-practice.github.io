@@ -166,6 +166,14 @@
     transition: opacity .2s ease-out, transform .28s var(--e-out);
   }
   .cmd-texte.on { opacity: 1; transform: none; }
+  /* Pour qui, avec qui : sous le texte, avec ses vrais liens. Le bandeau est
+     la seule surface de la grille ou un lien se clique sans gener. */
+  .cmd-credits-bandeau {
+    margin-top: 5px; font-size: 10.5px; letter-spacing: .03em; color: var(--grey);
+    max-width: 78ch; opacity: 0; transition: opacity .2s ease-out;
+  }
+  .cmd-credits-bandeau.on { opacity: 1; }
+  .cmd-credits-bandeau .lien-externe { color: var(--blue); }
 
   /* ── COMMANDES : GRILLE ── */
   .cmd-grille {
@@ -221,6 +229,13 @@
     transition: max-height .3s var(--e-out), opacity .2s ease-out .06s;
   }
   .cmd-carte.lue .cmd-resume { max-height: 6em; opacity: 1; }
+  /* les credits, en texte seul : la vignette entiere ouvre deja la visionneuse */
+  .cmd-credits {
+    font-size: 9.5px; letter-spacing: .04em; line-height: 1.45; color: #9BA5AC;
+    max-height: 0; opacity: 0; overflow: hidden;
+    transition: max-height .3s var(--e-out), opacity .2s ease-out .06s;
+  }
+  .cmd-carte.lue .cmd-credits { max-height: 4.5em; opacity: 1; }
 
   /* ── VUE : l'image entiere, centree, jamais recadree ── */
   .thumb {
@@ -392,6 +407,11 @@
     font-size: 17px; line-height: 1.6; color: var(--line);
     max-width: 62ch; margin-bottom: 4px;
   }
+  .p-credits {
+    font-size: 11px; letter-spacing: .03em; color: var(--blue-nuit);
+    max-width: 62ch; margin-top: 6px;
+  }
+  .p-credits .lien-externe { color: var(--paper); }
   .p-repli { display: none; }
   .ff-piece.depliee .p-repli { display: block; }
   .p-lire { margin-top: 12px; }
@@ -773,6 +793,8 @@
   .lb-titre { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--paper); }
   .lb-legende { font-size: 13.5px; line-height: 1.45; color: var(--line); max-width: 62ch; }
   .lb-tags { margin-top: 3px; font-size: 9.5px; letter-spacing: .09em; color: var(--grey); }
+  .lb-credits { font-size: 10.5px; letter-spacing: .03em; color: var(--grey); max-width: 90ch; }
+  .lb-credits:empty { display: none; }
 
   /* ── MINI NAV ── */
   .mini-nav {
@@ -828,7 +850,13 @@
     /* sur une case etroite : le titre, et rien d'autre.
        Le resume est deja dans le bandeau, qui suit le defilement. */
     .cmd-bloc { padding: 40px 12px 11px; }
-    .cmd-carte:not([data-grand]) .cmd-resume { display: none; }
+    .cmd-carte:not([data-grand]) .cmd-resume,
+    .cmd-carte:not([data-grand]) .cmd-credits { display: none; }
+    /* colle en haut d'un petit ecran : deux lignes de credits, pas plus */
+    .cmd-credits-bandeau {
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
     /* la rubrique ne tient pas sur 150 px : on garde l'annee, qui date */
     .cmd-carte:not([data-grand]) .cmd-rub-mot { display: none; }
     .cmd-rubrique { justify-content: flex-end; }
@@ -895,6 +923,7 @@
     <span class="lb-titre mono" id="lb-titre"></span>
     <span class="lb-legende" id="lb-legende"></span>
     <span class="lb-tags mono" id="lb-tags"></span>
+    <span class="lb-credits mono" id="lb-credits"></span>
   </div>
 </div>
 
@@ -960,10 +989,11 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
       <div class="cmd-lecture">
         <div class="cmd-tags mono"></div>
         <p class="cmd-texte"></p>
+        <p class="cmd-credits-bandeau mono"></p>
       </div>
     </div>
     <div class="cmd-grille">
-      <article class="cmd-carte" data-grand="1" data-ops="concevoir,systematiser,fabriquer,experimenter" data-tags="Danse, Fabrication, Biomimétisme, Grasshopper" data-texte="Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer. Formes organiques et biomimétiques développées par modélisation paramétrique, conçues pour interagir avec le corps dansant et redéfinir la présence de l'objet sur scène.">
+      <article class="cmd-carte" data-grand="1" data-ops="concevoir,systematiser,fabriquer,experimenter" data-tags="Danse, Fabrication, Biomimétisme, Grasshopper" data-texte="Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer. Formes organiques et biomimétiques développées par modélisation paramétrique, conçues pour interagir avec le corps dansant et redéfinir la présence de l'objet sur scène." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://www.cielautremaison.com/about&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;cie L'Autre Maison&lt;/a&gt; · Annie Hanauer · photos de scène Gwendal Le Flem" data-credits-texte="cie L'Autre Maison · Annie Hanauer · photos de scène Gwendal Le Flem">
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
@@ -994,11 +1024,12 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
               <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Scénographie &amp; spectacle vivant</b><i class="cmd-annee">2025</i></span>
               <span class="cmd-titre">Dispositifs scéniques — <em>Starting with the Limbs</em>, cie L'Autre Maison</span>
               <span class="cmd-resume">Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer.</span>
+              <span class="cmd-credits mono">cie L'Autre Maison · Annie Hanauer · photos de scène Gwendal Le Flem</span>
             </div>
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-grand="1" data-ops="concevoir,fabriquer,experimenter" data-tags="Unity, VR, Musique" data-texte="Expérience immersive en réalité virtuelle pour la première de l'album Photophobia à Kampnagel, Hambourg. Un vidéoclip permettant d'évoluer dans un monde de mangrove imaginé pour trois pistes (Pandemonium, In Short, Self-Abolition) — du marécage futuriste sombre à un espace kaléidoscopique. Avec Sanni Est (direction artistique, concept &amp; musique) et alpharats (programming &amp; VFX).">
+      <article class="cmd-carte" data-grand="1" data-ops="concevoir,fabriquer,experimenter" data-tags="Unity, VR, Musique" data-texte="Expérience immersive en réalité virtuelle pour la première de l'album Photophobia à Kampnagel, Hambourg. Un vidéoclip permettant d'évoluer dans un monde de mangrove imaginé pour trois pistes (Pandemonium, In Short, Self-Abolition) — du marécage futuriste sombre à un espace kaléidoscopique. Avec Sanni Est (direction artistique, concept &amp; musique) et alpharats (programming &amp; VFX)." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://www.instagram.com/sanniest/?hl=fr&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Sanni Est&lt;/a&gt; · alpharats · Kampnagel, Hambourg" data-credits-texte="Sanni Est · alpharats · Kampnagel, Hambourg">
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
@@ -1029,11 +1060,12 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
               <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Scénographie &amp; spectacle vivant</b><i class="cmd-annee">2022</i></span>
               <span class="cmd-titre">Environnement VR — <em>Photophobia</em>, Sanni Est</span>
               <span class="cmd-resume">Expérience immersive en réalité virtuelle pour la première de l'album Photophobia à Kampnagel, Hambourg.</span>
+              <span class="cmd-credits mono">Sanni Est · alpharats · Kampnagel, Hambourg</span>
             </div>
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-grand="1" data-ops="concevoir,transmettre" data-tags="Film, Résine, Néon, Pompidou-Metz" data-texte="Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film. Dessins de sculptures en résine, sculptures néon et plans pour les artisans peintres et sculpteurs. Exposé au Centre Pompidou-Metz, 2022. Photo Marc Domage. — Via Atelier 20point12.">
+      <article class="cmd-carte" data-grand="1" data-ops="concevoir,transmettre" data-tags="Film, Résine, Néon, Pompidou-Metz" data-texte="Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film. Dessins de sculptures en résine, sculptures néon et plans pour les artisans peintres et sculpteurs. Exposé au Centre Pompidou-Metz, 2022. Photo Marc Domage. — Via Atelier 20point12." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://www.instagram.com/pierrepauze/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Pierre Pauze&lt;/a&gt; · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt; · photo d'exposition Marc Domage" data-credits-texte="Pierre Pauze · via Atelier 20point12 · photo d'exposition Marc Domage">
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
@@ -1056,11 +1088,12 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
               <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Luxe &amp; production</b><i class="cmd-annee">2020</i></span>
               <span class="cmd-titre">Set design — <em>Mass</em>, film de Pierre Pauze</span>
               <span class="cmd-resume">Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film.</span>
+              <span class="cmd-credits mono">Pierre Pauze · via Atelier 20point12 · photo d'exposition Marc Domage</span>
             </div>
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre" data-tags="Rhino, ZBrush, PLA, CNC, Laser, Impression 3D, Prusa" data-texte="Modélisations et usinage pour un décor de vitrine. Formes conçues pour être imprimées en atelier ou pour du fraisage numérique bois ou polystyrène. Réalisation de plans CNC bois et polystyrène, découpe laser. Suivi d'impressions 3D PLA. — Via Atelier 20point12.">
+      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre" data-tags="Rhino, ZBrush, PLA, CNC, Laser, Impression 3D, Prusa" data-texte="Modélisations et usinage pour un décor de vitrine. Formes conçues pour être imprimées en atelier ou pour du fraisage numérique bois ou polystyrène. Réalisation de plans CNC bois et polystyrène, découpe laser. Suivi d'impressions 3D PLA. — Via Atelier 20point12." data-credits="Hermès · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt;" data-credits-texte="Hermès · via Atelier 20point12">
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
@@ -1087,11 +1120,12 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
               <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Luxe &amp; production</b><i class="cmd-annee">2019</i></span>
               <span class="cmd-titre">Vitrines Hermès France H19</span>
               <span class="cmd-resume">Modélisations et usinage pour un décor de vitrine.</span>
+              <span class="cmd-credits mono">Hermès · via Atelier 20point12</span>
             </div>
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,systematiser,fabriquer,transmettre" data-tags="Rhino, Grasshopper, SLA, CNC" data-texte="Modélisations et usinage pour un décor de vitrine. Travail sur Rhino, ZBrush et définitions Grasshopper pour impression 3D PLA et SLA, CNC polystyrène. Plans d'usinage numérique bois, polystyrène et découpe laser. — Via Atelier 20point12.">
+      <article class="cmd-carte" data-ops="concevoir,systematiser,fabriquer,transmettre" data-tags="Rhino, Grasshopper, SLA, CNC" data-texte="Modélisations et usinage pour un décor de vitrine. Travail sur Rhino, ZBrush et définitions Grasshopper pour impression 3D PLA et SLA, CNC polystyrène. Plans d'usinage numérique bois, polystyrène et découpe laser. — Via Atelier 20point12." data-credits="Hermès · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt;" data-credits-texte="Hermès · via Atelier 20point12">
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
@@ -1122,11 +1156,12 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
               <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Luxe &amp; production</b><i class="cmd-annee">2021</i></span>
               <span class="cmd-titre">Vitrines Hermès France H21</span>
               <span class="cmd-resume">Modélisations et usinage pour un décor de vitrine.</span>
+              <span class="cmd-credits mono">Hermès · via Atelier 20point12</span>
             </div>
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,transmettre" data-tags="Bois CNC, LED, Stratifié, Miroir sans tain" data-texte="Design, modélisation et édition de plans de fabrication en CNC. Structure interne réalisée à la découpe CNC. Matériaux : bois, PLA, LED, stratifié résine, miroir sans tain. — Via Atelier 20point12.">
+      <article class="cmd-carte" data-ops="concevoir,transmettre" data-tags="Bois CNC, LED, Stratifié, Miroir sans tain" data-texte="Design, modélisation et édition de plans de fabrication en CNC. Structure interne réalisée à la découpe CNC. Matériaux : bois, PLA, LED, stratifié résine, miroir sans tain. — Via Atelier 20point12." data-credits="Watches &amp;amp; Wonders · &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.instagram.com/pierrepauze/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Pierre Pauze&lt;/a&gt; · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt;" data-credits-texte="Watches &amp; Wonders · Pierre Pauze · via Atelier 20point12">
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
@@ -1153,11 +1188,12 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
               <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Luxe &amp; production</b><i class="cmd-annee">2020</i></span>
               <span class="cmd-titre">Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze</span>
               <span class="cmd-resume">Design, modélisation et édition de plans de fabrication en CNC.</span>
+              <span class="cmd-credits mono">Watches &amp; Wonders · Pierre Pauze · via Atelier 20point12</span>
             </div>
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre" data-tags="Scénographie, Sculpture, Installation" data-texte="Conception et modélisation 3D pour la présentation d'une installation vidéo de Sabrina Ratté durant le salon Watches and Wonders 2022 à Genève. Conception et plans d'esquisse pour la sculpture centrale et les alcôves comprenant les sculptures 3D. Prototype de sculpture cinétique réalisé par Animatronix. — Via Atelier 20point12.">
+      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre" data-tags="Scénographie, Sculpture, Installation" data-texte="Conception et modélisation 3D pour la présentation d'une installation vidéo de Sabrina Ratté durant le salon Watches and Wonders 2022 à Genève. Conception et plans d'esquisse pour la sculpture centrale et les alcôves comprenant les sculptures 3D. Prototype de sculpture cinétique réalisé par Animatronix. — Via Atelier 20point12." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://sabrinaratte.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Sabrina Ratté&lt;/a&gt; · Hermès / Watches &amp;amp; Wonders · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt; · prototype Animatronix · photos Alicia Dubuis, Galerie Charlot" data-credits-texte="Sabrina Ratté · Hermès / Watches &amp; Wonders · via Atelier 20point12 · prototype Animatronix · photos Alicia Dubuis, Galerie Charlot">
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
@@ -1188,11 +1224,12 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
               <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Scénographie &amp; spectacle vivant</b><i class="cmd-annee">2022</i></span>
               <span class="cmd-titre">Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders</span>
               <span class="cmd-resume">Conception et modélisation 3D pour la présentation d'une installation vidéo de Sabrina Ratté durant le salon Watches and Wonders 2022 à Genève.</span>
+              <span class="cmd-credits mono">Sabrina Ratté · Hermès / Watches &amp; Wonders · via Atelier 20point12 · prototype Animatronix · photos Alicia Dubuis, Galerie Charlot</span>
             </div>
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,systematiser,transmettre" data-tags="Grasshopper, Rhino, Mobilier" data-texte="Modélisation pour une collection de mobilier. Création d'une définition Grasshopper pour un modèle évolutif et adaptatif. Conseil en design — Saket Sethi Design, 2023.">
+      <article class="cmd-carte" data-ops="concevoir,systematiser,transmettre" data-tags="Grasshopper, Rhino, Mobilier" data-texte="Modélisation pour une collection de mobilier. Création d'une définition Grasshopper pour un modèle évolutif et adaptatif. Conseil en design — Saket Sethi Design, 2023." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://saketsethiparis.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Saket Sethi Design&lt;/a&gt;" data-credits-texte="Saket Sethi Design">
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
@@ -1223,11 +1260,12 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
               <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Luxe &amp; production</b><i class="cmd-annee">2023</i></span>
               <span class="cmd-titre">Collection mobilier paramétrique — Saket Sethi Design</span>
               <span class="cmd-resume">Modélisation pour une collection de mobilier.</span>
+              <span class="cmd-credits mono">Saket Sethi Design</span>
             </div>
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre,experimenter" data-tags="Grasshopper, Rhino, Midjourney, Photoshop, Impression 3D, Filament flexible" data-texte="Un caftan en mousseline orange. Le motif est paramétrique, conçu sur Grasshopper, et imprimé en filament flexible argenté directement sur chaque pièce du vêtement, avant l'assemblage. L'atelier a ensuite souligné le tracé par un pailletage et réalisé les finitions. Un gilet en brocart doré. Chaque fleur part d'une image générée, retouchée, puis mise en typologies sous Rhino ; son contour est imprimé en filament flexible sur un textile à trame large, qui ne s'effiloche plus une fois découpé. Les fleurs sont ensuite composées et assemblées à la main sur la pièce.">
+      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre,experimenter" data-tags="Grasshopper, Rhino, Midjourney, Photoshop, Impression 3D, Filament flexible" data-texte="Un caftan en mousseline orange. Le motif est paramétrique, conçu sur Grasshopper, et imprimé en filament flexible argenté directement sur chaque pièce du vêtement, avant l'assemblage. L'atelier a ensuite souligné le tracé par un pailletage et réalisé les finitions. Un gilet en brocart doré. Chaque fleur part d'une image générée, retouchée, puis mise en typologies sous Rhino ; son contour est imprimé en filament flexible sur un textile à trame large, qui ne s'effiloche plus une fois découpé. Les fleurs sont ensuite composées et assemblées à la main sur la pièce." data-credits="Atelier de couture Zaa" data-credits-texte="Atelier de couture Zaa">
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue" data-groupe="1-commandes-ornements-imprimes-mousseline">
@@ -1274,11 +1312,12 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
               <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Mode</b><i class="cmd-annee">2024</i></span>
               <span class="cmd-titre">Ornements imprimés — deux pièces pour l'atelier Zaa</span>
               <span class="cmd-resume">Le motif imprimé en 3D directement sur l'étoffe, puis repris à la main par l'atelier.</span>
+              <span class="cmd-credits mono">Atelier de couture Zaa</span>
             </div>
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,systematiser,fabriquer,transmettre" data-tags="Grasshopper, Impression 3D, Filament, Résine, Passementerie" data-texte="Sur les dfina, caftans et jellabas, les boutons se montent traditionnellement à la main en fil de soie tressé — l'aqad. L'impression 3D ne le remplace pas : elle ouvre une autre voie, pour certaines pièces, surtout les grandes tenues. Chaque bouton est dessiné pour une tenue et une seule — forme, motif, couleur, matière — accordé au tissu au lieu d'être choisi dans un catalogue. Une fois quelques échantillons validés sur le vêtement, la série part.">
+      <article class="cmd-carte" data-ops="concevoir,systematiser,fabriquer,transmettre" data-tags="Grasshopper, Impression 3D, Filament, Résine, Passementerie" data-texte="Sur les dfina, caftans et jellabas, les boutons se montent traditionnellement à la main en fil de soie tressé — l'aqad. L'impression 3D ne le remplace pas : elle ouvre une autre voie, pour certaines pièces, surtout les grandes tenues. Chaque bouton est dessiné pour une tenue et une seule — forme, motif, couleur, matière — accordé au tissu au lieu d'être choisi dans un catalogue. Une fois quelques échantillons validés sur le vêtement, la série part." data-credits="Atelier de couture Zaa" data-credits-texte="Atelier de couture Zaa">
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue" data-groupe="1-commandes-passementerie-imprimee-boutons">
@@ -1317,11 +1356,12 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
               <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Mode</b><i class="cmd-annee">2026</i></span>
               <span class="cmd-titre">Passementerie imprimée</span>
               <span class="cmd-resume">Des boutons de caftan imprimés en 3D, dessinés pour une tenue et une seule.</span>
+              <span class="cmd-credits mono">Atelier de couture Zaa</span>
             </div>
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,systematiser,fabriquer,experimenter" data-tags="Rhino, Grasshopper, Bambu Studio, Impression 3D" data-texte="Une famille de vases imprimés d'une seule paroi continue : la buse ne s'arrête pas entre la base et le col, et tout ce qu'on voit à la surface est son tracé. Le profil en étoile, vrillé par un loft entre cercles pivotés, rend rigide une paroi de 0,6 mm. Le filament est coextrudé en trois ou quatre couleurs : c'est l'angle d'impression qui décide de celle qui affleure, et l'objet change de teinte quand on tourne autour.">
+      <article class="cmd-carte" data-ops="concevoir,systematiser,fabriquer,experimenter" data-tags="Rhino, Grasshopper, Bambu Studio, Impression 3D" data-texte="Une famille de vases imprimés d'une seule paroi continue : la buse ne s'arrête pas entre la base et le col, et tout ce qu'on voit à la surface est son tracé. Le profil en étoile, vrillé par un loft entre cercles pivotés, rend rigide une paroi de 0,6 mm. Le filament est coextrudé en trois ou quatre couleurs : c'est l'angle d'impression qui décide de celle qui affleure, et l'objet change de teinte quand on tourne autour." data-credits="FenFutures — projet personnel" data-credits-texte="FenFutures — projet personnel">
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue" data-groupe="1-commandes-vortex-fleuris">
@@ -1368,6 +1408,7 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
               <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Objet</b><i class="cmd-annee">2026</i></span>
               <span class="cmd-titre">Vortex</span>
               <span class="cmd-resume">Des vases d'une seule paroi : le pli remplace l'épaisseur, l'angle décide de la couleur.</span>
+              <span class="cmd-credits mono">FenFutures — projet personnel</span>
             </div>
           </div>
         </div>
@@ -2201,7 +2242,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
         </span>
       </div>
     </div>
-    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-masques" data-rotation="1" data-reveal>
+    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-masques" data-rotation="1" data-credits-texte="Masterclass Body Architecture 2.0, Filippo Nassetti · PAACADEMY" data-reveal>
       <div class="ff-media">
         <div class="ff-marge">
           <p class="ff-legende mono"></p>
@@ -2238,6 +2279,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
         <span class="p-year">2023</span>
       </div>
       <p class="p-resume">Trois logiques génératives posées sur une même tête : des lamelles, une érosion, un empilement de sphères.</p>
+      <p class="p-credits mono">Masterclass Body Architecture 2.0, Filippo Nassetti · PAACADEMY</p>
       <div class="p-repli">
         <p class="p-desc">Trois masques développés pendant <em>Body Architecture 2.0</em>, la masterclass de Filippo Nassetti (PAACADEMY, février 2023) — le même workshop que le Thalassic Kaftan.</p>
         <p class="p-desc">Chacun pose une logique de génération différente sur la même tête : des lamelles qui suivent le crâne, une érosion qui creuse le visage, un empilement de sphères qui finit par recouvrir le corps entier.</p>
@@ -2448,7 +2490,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
         </span>
       </div>
     </div>
-    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-tiflik" data-reveal>
+    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-tiflik" data-credits-texte="Tiflik" data-reveal>
       <div class="ff-media">
         <div class="ff-marge">
           <p class="ff-legende mono"></p>
@@ -2462,6 +2504,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
       <div class="p-head mono">
         <span class="p-title">Tiflik</span>
       </div>
+      <p class="p-credits mono"><a class="lien-externe" href="https://www.tiflik.ma" target="_blank" rel="noopener noreferrer">Tiflik</a></p>
       <div class="p-repli">
       </div>
       <button class="lire-plus p-lire mono" aria-expanded="false">Lire la suite …</button>
@@ -2479,7 +2522,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
         </span>
       </div>
     </div>
-    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-motifs-broderie-main" data-reveal>
+    <div class="ff-nassij ff-piece" data-piece="2-recherche-projets-motifs-broderie-main" data-credits-texte="Atelier de couture Zaa" data-reveal>
       <div class="ff-media">
         <div class="ff-marge">
           <p class="ff-legende mono"></p>
@@ -2504,6 +2547,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
         <span class="p-year">2024</span>
       </div>
       <p class="p-resume">Un motif généré puis mis à l'échelle et en couleur, pour que les brodeuses l'interprètent à la main.</p>
+      <p class="p-credits mono">Atelier de couture Zaa</p>
       <div class="p-repli">
         <p class="p-desc">Kaftans brodés main à partir d'un motif généré numériquement puis retravaillé pour servir de plan de broderie à l'atelier. Le motif de départ — ici une texture florale continue — est corrigé en couleur et en échelle avant d'être transmis aux brodeuses, qui l'interprètent à la main, point par point. La même méthode que celle développée pour mes recherches de motifs de broderie, appliquée ici à une pièce commandée.</p>
         <div class="p-meta mono"><span>MIDJOURNEY</span><span>PHOTOSHOP</span><span>BRODERIE</span></div>
@@ -3007,7 +3051,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
     <!-- AUTO:PIED_SIGNATURE:FIN -->
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.86</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.87</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>
@@ -3271,7 +3315,8 @@ document.querySelectorAll('video.sujet').forEach(function (v) {
   var pastilles = bandeau.querySelectorAll('.cmd-ops span');
   var zoneTags = bandeau.querySelector('.cmd-tags');
   var zoneTexte = bandeau.querySelector('.cmd-texte');
-  var lue = null;
+  var zoneCredits = bandeau.querySelector('.cmd-credits-bandeau');
+  var lue = null, attente = null;
 
   // Demo unique : au premier passage de la bande, les pastilles s'allument
   // en vague puis s'eteignent - meme animation qu'au survol d'une carte,
@@ -3320,12 +3365,30 @@ document.querySelectorAll('video.sujet').forEach(function (v) {
     }
     zoneTexte.textContent = carte ? (carte.getAttribute('data-texte') || '') : '';
     zoneTexte.classList.toggle('on', !!carte);
+    if (zoneCredits) {
+      // HTML fabrique par construire.py, chaque morceau deja echappe
+      var cr = carte ? (carte.getAttribute('data-credits') || '') : '';
+      zoneCredits.innerHTML = cr;
+      zoneCredits.classList.toggle('on', !!cr);
+    }
   }
 
   if (AU_SURVOL) {
-    cartes.forEach(function (c) { c.addEventListener('mouseenter', function () { lire(c); }); });
+    // Un court delai avant de changer de carte : pour aller cliquer un lien
+    // de credits dans le bandeau, le pointeur remonte en traversant d'autres
+    // cartes. Sans delai, le bandeau changeait en chemin et le lien vise
+    // n'etait plus la a l'arrivee. Un survol qui s'attarde change toujours.
+    cartes.forEach(function (c) {
+      c.addEventListener('mouseenter', function () {
+        clearTimeout(attente);
+        attente = setTimeout(function () { lire(c); }, lue ? 140 : 0);
+      });
+      c.addEventListener('mouseleave', function () { clearTimeout(attente); });
+    });
     var section = document.getElementById('projets');
-    if (section) section.addEventListener('mouseleave', function () { lire(null); });
+    if (section) section.addEventListener('mouseleave', function () {
+      clearTimeout(attente); lire(null);
+    });
   } else {
     var choisir = function () {
       var ligne = window.innerHeight * 0.45, gagnante = null, ecartMin = Infinity;
@@ -3440,6 +3503,7 @@ document.querySelectorAll('.lien-galerie').forEach(function (lien) {
   var lbTitre = document.getElementById('lb-titre');
   var lbLeg = document.getElementById('lb-legende');
   var lbTags = document.getElementById('lb-tags');
+  var lbCredits = document.getElementById('lb-credits');
   var lbPoints = document.getElementById('lb-points');
   var lbPrec = document.getElementById('lb-prec');
   var lbSuiv = document.getElementById('lb-suiv');
@@ -3454,6 +3518,7 @@ document.querySelectorAll('.lien-galerie').forEach(function (lien) {
     contexte = contexte || {};
     lbTitre.textContent = contexte.titre || '';
     lbTags.textContent = contexte.tags || '';
+    lbCredits.textContent = contexte.credits || '';
     poserPoints();
     lb.classList.toggle('seule', galerie.length < 2);
     afficher(lbIndex);
@@ -3551,7 +3616,9 @@ document.querySelectorAll('.lien-galerie').forEach(function (lien) {
       titre: t ? t.textContent.trim() : '',
       tags: carte ? (carte.getAttribute('data-tags') || '').split(',')
                       .map(function (s) { return s.trim().toUpperCase(); })
-                      .filter(Boolean).join('   ') : ''
+                      .filter(Boolean).join('   ') : '',
+      // en texte seul : un lien ici disputerait le clic a la photo
+      credits: carte ? (carte.getAttribute('data-credits-texte') || '') : ''
     };
     ouvrir(imgs.map(function (el) {
       var estVideo = el.tagName === 'VIDEO';

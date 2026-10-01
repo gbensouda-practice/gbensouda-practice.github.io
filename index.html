@@ -747,11 +747,12 @@
   .lightbox.nav-visible .lb-nav, .lb-nav:focus-visible { opacity: 1; }
   .lightbox.seule .lb-nav { display: none; }
   /* Pas de survol (telephone, tablette) : toujours visibles, plus discrets,
-     de part et d'autre de la reglette — sous le pouce. */
+     aux deux bouts de la reglette — sous le pouce. Remontes de 18 px : au ras
+     de la reglette, ils mordaient sur un titre de cartouche de deux lignes. */
   @media (hover: none) {
     .lb-nav {
       top: auto; margin-top: 0; opacity: 1;
-      bottom: calc(var(--lb-points-bas) + 1px - 30px);
+      bottom: calc(var(--lb-points-bas) + 18px - 30px);
     }
     .lb-nav::before { width: 28px; height: 28px; opacity: .6; }
     .lb-prec { left: 8px; }
@@ -2760,7 +2761,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
     <!-- AUTO:PIED_SIGNATURE:FIN -->
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.76</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.77</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>

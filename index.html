@@ -7,12 +7,12 @@
 <meta property="og:url" content="https://ghalibensouda.com/">
 <meta property="og:title" content="Ghali Bensouda — Designer de dispositifs">
 <meta property="og:description" content="Designer de dispositifs et fabricant numérique — de la définition paramétrique à l'objet fabriqué. Marseille / Paris / remote.">
-<meta property="og:image" content="https://ghalibensouda.com/images/web/1-commandes/hermes-holiday-windows/01_vitrine-finale.jpg">
+<meta property="og:image" content="https://ghalibensouda.com/images/web/1-commandes/starting-with-the-limbs/dispositif1.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:locale" content="fr_FR">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Ghali Bensouda — Designer de dispositifs">
-<meta name="twitter:image" content="https://ghalibensouda.com/images/web/1-commandes/hermes-holiday-windows/01_vitrine-finale.jpg">
+<meta name="twitter:image" content="https://ghalibensouda.com/images/web/1-commandes/starting-with-the-limbs/dispositif1.jpg">
 <meta name="google-site-verification" content="HgqpZFQvXOk7zdPx5-Gdnly5u2AavWid60S6rM3E75E">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="canonical" href="https://ghalibensouda.com/">
@@ -722,6 +722,43 @@
   .lb-point:active { transform: scaleY(2); }
   .lb-point.actif { background: rgba(255,255,255,.92); }
 
+  /* Les deux ronds : places par rapport a l'ECRAN, jamais a la photo, pour
+     qu'ils restent au meme endroit quelle que soit sa taille. Le bouton fait
+     60 px, le rond visible 34 : un clic un peu a cote change d'image au lieu
+     de tomber sur le fond, qui ferme la galerie. Ils sont toujours cliquables,
+     meme effaces — approcher le bord les fait reapparaitre. */
+  .lightbox { --lb-points-bas: 104px; }
+  .lb-nav {
+    position: absolute; top: 50%; z-index: 4;
+    width: 60px; height: 60px; margin-top: -30px;
+    border: none; padding: 0; background: none; cursor: pointer;
+    display: grid; place-items: center;
+    opacity: 0; transition: opacity .18s ease-out;
+  }
+  .lb-nav::before {
+    content: ''; width: 34px; height: 34px; border-radius: 50%;
+    background: var(--paper); box-shadow: 0 2px 14px rgba(0,0,0,.35);
+    opacity: .82; transition: opacity .15s ease, transform .16s var(--e-out);
+  }
+  .lb-nav:hover::before { opacity: 1; }
+  .lb-nav:active::before { transform: scale(.9); }
+  .lb-prec { left: 12px; }
+  .lb-suiv { right: 12px; }
+  .lightbox.nav-visible .lb-nav, .lb-nav:focus-visible { opacity: 1; }
+  .lightbox.seule .lb-nav { display: none; }
+  /* Pas de survol (telephone, tablette) : toujours visibles, plus discrets,
+     de part et d'autre de la reglette — sous le pouce. */
+  @media (hover: none) {
+    .lb-nav {
+      top: auto; margin-top: 0; opacity: 1;
+      bottom: calc(var(--lb-points-bas) + 1px - 30px);
+    }
+    .lb-nav::before { width: 28px; height: 28px; opacity: .6; }
+    .lb-prec { left: 8px; }
+    .lb-suiv { right: 8px; }
+    .lb-points { max-width: calc(100% - 150px); flex-wrap: wrap; justify-content: center; row-gap: 8px; }
+  }
+
   /* le cartouche : le bandeau de lecture qui te suit en plein ecran */
   .lb-cartouche {
     position: absolute; left: 0; right: 0; bottom: 0;
@@ -823,7 +860,8 @@
     }
     .lb-cartouche { padding: 14px 18px 18px; min-height: 82px; }
     .lb-legende { font-size: 12.5px; }
-    .lb-points { bottom: 96px; }
+    .lightbox { --lb-points-bas: 96px; }
+    .lb-points { bottom: var(--lb-points-bas); }
     .lightbox img, .lightbox video { max-height: 68vh; }
   }
 
@@ -846,6 +884,8 @@
   <button class="lightbox-close" id="lb-close" aria-label="Fermer">×</button>
   <img id="lb-img" src="" alt="">
   <video id="lb-video" src="" controls loop playsinline></video>
+  <button class="lb-nav lb-prec" id="lb-prec" aria-label="Image précédente"></button>
+  <button class="lb-nav lb-suiv" id="lb-suiv" aria-label="Image suivante"></button>
   <div class="lb-points" id="lb-points"></div>
   <div class="lb-cartouche">
     <span class="lb-titre mono" id="lb-titre"></span>
@@ -866,17 +906,17 @@
 <header class="hero">
   <div class="wrap">
     <!-- AUTO:HERO_SURTITRE:DEBUT -->
-    <div class="eyebrow mono">Designer de dispositifs · Fabrication numérique · Scénographie</div>
+
     <!-- AUTO:HERO_SURTITRE:FIN -->
     <h1 class="name">Ghali<br>Bensouda</h1>
     <p class="hero-sub"><!-- AUTO:ACCROCHE:DEBUT -->
-<span class="accent">Je fais le lien entre modélisation paramétrique et savoir-faire artisanal.</span> Scénographies, décors et pièces textiles, fabriqués en collaboration avec des ateliers en France et au Maroc. Marseille et Paris : en atelier et/ou en remote.
+<span class="accent">Computational design pour la scénographie, le décor et les pièces textiles.</span>
     <!-- AUTO:ACCROCHE:FIN --></p>
     <!-- AUTO:HERO_META:DEBUT -->
     <div class="hero-meta mono">
       <div>
         <strong>Basé à</strong>
-        Marseille / Paris en présentiel, remote privilégié
+        Marseille · Paris · Casablanca<br>remote privilégié
       </div>
       <div>
         <strong>Outils</strong>
@@ -919,7 +959,124 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
       </div>
     </div>
     <div class="cmd-grille">
-      <article class="cmd-carte" data-grand="1" data-ops="concevoir,fabriquer,transmettre" data-tags="Rhino, ZBrush, PLA, CNC, Laser, Impression 3D, Prusa" data-texte="Modélisations et usinage pour un décor de vitrine. Formes conçues pour être imprimées en atelier ou pour du fraisage numérique bois ou polystyrène. Réalisation de plans CNC bois et polystyrène, découpe laser. Suivi d'impressions 3D PLA. — Via Atelier 20point12.">
+      <article class="cmd-carte" data-grand="1" data-ops="concevoir,systematiser,fabriquer,experimenter" data-tags="Danse, Fabrication, Biomimétisme, Grasshopper" data-texte="Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer. Formes organiques et biomimétiques développées par modélisation paramétrique, conçues pour interagir avec le corps dansant et redéfinir la présence de l'objet sur scène.">
+        <div class="thumb slider">
+          <div class="slider-track">
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif1.jpg" loading="lazy" width="1600" height="998" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique en situation" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/pxl-20250613-113842873.png" loading="lazy" width="1600" height="1200" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Pxl 20250613 113842873" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif2.jpg" loading="lazy" width="1600" height="1004" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique — vue 2" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/pxl-20250615-162211608.png" loading="lazy" width="1600" height="1200" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Pxl 20250615 162211608" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif3.jpg" loading="lazy" width="1600" height="1003" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique — vue 3" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/pxl-20250615-162300172.png" loading="lazy" width="1600" height="1200" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Pxl 20250615 162300172" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif4.jpg" loading="lazy" width="1600" height="1007" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique — vue 4" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif5.jpg" loading="lazy" width="1600" height="995" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique — vue 5" onerror="this.style.opacity='0'">
+            </div>
+          </div>
+          <div class="slider-dots">
+            <button class="slider-dot active" aria-label="Image 1"></button>
+            <button class="slider-dot" aria-label="Image 2"></button>
+            <button class="slider-dot" aria-label="Image 3"></button>
+            <button class="slider-dot" aria-label="Image 4"></button>
+            <button class="slider-dot" aria-label="Image 5"></button>
+            <button class="slider-dot" aria-label="Image 6"></button>
+            <button class="slider-dot" aria-label="Image 7"></button>
+            <button class="slider-dot" aria-label="Image 8"></button>
+          </div>
+          <div class="cmd-calque" aria-hidden="true">
+            <div class="cmd-bloc">
+              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Scénographie &amp; spectacle vivant</b><i class="cmd-annee">2025</i></span>
+              <span class="cmd-titre">Dispositifs scéniques — <em>Starting with the Limbs</em>, cie L'Autre Maison</span>
+              <span class="cmd-resume">Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer.</span>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="cmd-carte" data-grand="1" data-ops="concevoir,fabriquer,experimenter" data-tags="Unity, VR, Musique" data-texte="Expérience immersive en réalité virtuelle pour la première de l'album Photophobia à Kampnagel, Hambourg. Un vidéoclip permettant d'évoluer dans un monde de mangrove imaginé pour trois pistes (Pandemonium, In Short, Self-Abolition) — du marécage futuriste sombre à un espace kaléidoscopique. Avec Sanni Est (direction artistique, concept &amp; musique) et alpharats (programming &amp; VFX).">
+        <div class="thumb slider">
+          <div class="slider-track">
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/photophobia-vr/01_scene-mangrove.jpg" loading="lazy" width="1600" height="724" alt="Environnement VR — Photophobia, Sanni Est — Scène de mangrove" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/photophobia-vr/02_premiere-kampnagel.jpg" loading="lazy" width="568" height="503" alt="Environnement VR — Photophobia, Sanni Est — Première à Kampnagel, Hambourg" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/photophobia-vr/03_premiere-public.jpg" loading="lazy" width="199" height="564" alt="Environnement VR — Photophobia, Sanni Est — Public de la première" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/photophobia-vr/04_modele3d-poisson.jpg" loading="lazy" width="785" height="572" alt="Environnement VR — Photophobia, Sanni Est — Modèle 3D du poisson" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/photophobia-vr/05_texture-kaleidoscope.jpg" loading="lazy" width="1307" height="578" alt="Environnement VR — Photophobia, Sanni Est — Texture kaléidoscopique" onerror="this.style.opacity='0'">
+            </div>
+          </div>
+          <div class="slider-dots">
+            <button class="slider-dot active" aria-label="Image 1"></button>
+            <button class="slider-dot" aria-label="Image 2"></button>
+            <button class="slider-dot" aria-label="Image 3"></button>
+            <button class="slider-dot" aria-label="Image 4"></button>
+            <button class="slider-dot" aria-label="Image 5"></button>
+          </div>
+          <div class="cmd-calque" aria-hidden="true">
+            <div class="cmd-bloc">
+              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Scénographie &amp; spectacle vivant</b><i class="cmd-annee">2022</i></span>
+              <span class="cmd-titre">Environnement VR — <em>Photophobia</em>, Sanni Est</span>
+              <span class="cmd-resume">Expérience immersive en réalité virtuelle pour la première de l'album Photophobia à Kampnagel, Hambourg.</span>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="cmd-carte" data-grand="1" data-ops="concevoir,transmettre" data-tags="Film, Résine, Néon, Pompidou-Metz" data-texte="Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film. Dessins de sculptures en résine, sculptures néon et plans pour les artisans peintres et sculpteurs. Exposé au Centre Pompidou-Metz, 2022. Photo Marc Domage. — Via Atelier 20point12.">
+        <div class="thumb slider">
+          <div class="slider-track">
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/mass-set-design/01_expo-pompidou-metz.jpg" loading="lazy" width="896" height="672" alt="Set design — Mass, film de Pierre Pauze — Exposition au Centre Pompidou-Metz" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/mass-set-design/02_tournage-decor.jpg" loading="lazy" width="1149" height="862" alt="Set design — Mass, film de Pierre Pauze — Décor pendant le tournage" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/mass-set-design/03_sculpture-resine.jpg" loading="lazy" width="626" height="470" alt="Set design — Mass, film de Pierre Pauze — Sculpture en résine" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/mass-set-design/04_atelier-cnc.png" loading="lazy" width="630" height="473" alt="Set design — Mass, film de Pierre Pauze — Usinage CNC à l'atelier" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/mass-set-design/05_atelier-cnc-detail.jpg" loading="lazy" width="568" height="426" alt="Set design — Mass, film de Pierre Pauze — Usinage CNC — détail" onerror="this.style.opacity='0'">
+            </div>
+          </div>
+          <div class="slider-dots">
+            <button class="slider-dot active" aria-label="Image 1"></button>
+            <button class="slider-dot" aria-label="Image 2"></button>
+            <button class="slider-dot" aria-label="Image 3"></button>
+            <button class="slider-dot" aria-label="Image 4"></button>
+            <button class="slider-dot" aria-label="Image 5"></button>
+          </div>
+          <div class="cmd-calque" aria-hidden="true">
+            <div class="cmd-bloc">
+              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Luxe &amp; production</b><i class="cmd-annee">2020</i></span>
+              <span class="cmd-titre">Set design — <em>Mass</em>, film de Pierre Pauze</span>
+              <span class="cmd-resume">Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film.</span>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre" data-tags="Rhino, ZBrush, PLA, CNC, Laser, Impression 3D, Prusa" data-texte="Modélisations et usinage pour un décor de vitrine. Formes conçues pour être imprimées en atelier ou pour du fraisage numérique bois ou polystyrène. Réalisation de plans CNC bois et polystyrène, découpe laser. Suivi d'impressions 3D PLA. — Via Atelier 20point12.">
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
@@ -1048,44 +1205,15 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-grand="1" data-ops="concevoir,transmettre" data-tags="Film, Résine, Néon, Pompidou-Metz" data-texte="Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film. Dessins de sculptures en résine, sculptures néon et plans pour les artisans peintres et sculpteurs. Exposé au Centre Pompidou-Metz, 2022. Photo Marc Domage. — Via Atelier 20point12.">
-        <div class="thumb slider">
-          <div class="slider-track">
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/mass-set-design/01_expo-pompidou-metz.jpg" loading="lazy" width="896" height="672" alt="Set design — Mass, film de Pierre Pauze — Exposition au Centre Pompidou-Metz" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/mass-set-design/02_tournage-decor.jpg" loading="lazy" width="1149" height="862" alt="Set design — Mass, film de Pierre Pauze — Décor pendant le tournage" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/mass-set-design/03_sculpture-resine.jpg" loading="lazy" width="626" height="470" alt="Set design — Mass, film de Pierre Pauze — Sculpture en résine" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/mass-set-design/04_atelier-cnc.png" loading="lazy" width="630" height="473" alt="Set design — Mass, film de Pierre Pauze — Usinage CNC à l'atelier" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/mass-set-design/05_atelier-cnc-detail.jpg" loading="lazy" width="568" height="426" alt="Set design — Mass, film de Pierre Pauze — Usinage CNC — détail" onerror="this.style.opacity='0'">
-            </div>
-          </div>
-          <div class="slider-dots">
-            <button class="slider-dot active" aria-label="Image 1"></button>
-            <button class="slider-dot" aria-label="Image 2"></button>
-            <button class="slider-dot" aria-label="Image 3"></button>
-            <button class="slider-dot" aria-label="Image 4"></button>
-            <button class="slider-dot" aria-label="Image 5"></button>
-          </div>
-          <div class="cmd-calque" aria-hidden="true">
-            <div class="cmd-bloc">
-              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Luxe &amp; production</b><i class="cmd-annee">2020</i></span>
-              <span class="cmd-titre">Set design — <em>Mass</em>, film de Pierre Pauze</span>
-              <span class="cmd-resume">Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film.</span>
-            </div>
-          </div>
-        </div>
-      </article>
       <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre" data-tags="Scénographie, Sculpture, Installation" data-texte="Conception et modélisation 3D pour la présentation d'une installation vidéo de Sabrina Ratté durant le salon Watches and Wonders 2022 à Genève. Conception et plans d'esquisse pour la sculpture centrale et les alcôves comprenant les sculptures 3D. Prototype de sculpture cinétique réalisé par Animatronix. — Via Atelier 20point12.">
         <div class="thumb slider">
           <div class="slider-track">
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/HERMES_Watches-Wonders_2022.04.02_AliciaDubuis_02_2000.jpg" loading="lazy" width="1600" height="1066" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — La sculpture suspendue devant l'installation vidéo de Sabrina Ratté — Watches &amp; Wonders, Genève 2022 (photo Alicia Dubuis)" onerror="this.style.opacity='0'">
+            </div>
+            <div class="vue">
+              <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/Art-galeriecharlot-3654.jpg" loading="lazy" width="1600" height="1136" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Une alcôve : la montre posée dans le paysage vidéo (photo Galerie Charlot)" onerror="this.style.opacity='0'">
+            </div>
             <div class="vue">
               <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/01_scenographie-rendu.jpg" loading="lazy" width="1600" height="1200" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Rendu de la scénographie" onerror="this.style.opacity='0'">
             </div>
@@ -1094,12 +1222,6 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
             </div>
             <div class="vue">
               <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/03_sculpture-himalaya-plan.png" loading="lazy" width="922" height="691" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Plan de la sculpture Himalaya" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/Art-galeriecharlot-3654.jpg" loading="lazy" width="1600" height="1136" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — Art galeriecharlot 3654" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/HERMES_Watches-Wonders_2022.04.02_AliciaDubuis_02_2000.jpg" loading="lazy" width="1600" height="1066" alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — HERMES Watches Wonders 2022.04.02 AliciaDubuis 02 2000" onerror="this.style.opacity='0'">
             </div>
           </div>
           <div class="slider-dots">
@@ -1114,53 +1236,6 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
               <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Scénographie &amp; spectacle vivant</b><i class="cmd-annee">2022</i></span>
               <span class="cmd-titre">Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders</span>
               <span class="cmd-resume">Conception et modélisation 3D pour la présentation d'une installation vidéo de Sabrina Ratté durant le salon Watches and Wonders 2022 à Genève.</span>
-            </div>
-          </div>
-        </div>
-      </article>
-      <article class="cmd-carte" data-grand="1" data-ops="concevoir,systematiser,fabriquer,experimenter" data-tags="Danse, Fabrication, Biomimétisme, Grasshopper" data-texte="Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer. Formes organiques et biomimétiques développées par modélisation paramétrique, conçues pour interagir avec le corps dansant et redéfinir la présence de l'objet sur scène.">
-        <div class="thumb slider">
-          <div class="slider-track">
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif1.jpg" loading="lazy" width="1600" height="998" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique en situation" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/pxl-20250613-113842873.png" loading="lazy" width="1600" height="1200" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Pxl 20250613 113842873" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif2.jpg" loading="lazy" width="1600" height="1004" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique — vue 2" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/pxl-20250615-162211608.png" loading="lazy" width="1600" height="1200" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Pxl 20250615 162211608" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif3.jpg" loading="lazy" width="1600" height="1003" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique — vue 3" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/pxl-20250615-162300172.png" loading="lazy" width="1600" height="1200" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Pxl 20250615 162300172" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif4.jpg" loading="lazy" width="1600" height="1007" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique — vue 4" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif5.jpg" loading="lazy" width="1600" height="995" alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Dispositif scénique — vue 5" onerror="this.style.opacity='0'">
-            </div>
-          </div>
-          <div class="slider-dots">
-            <button class="slider-dot active" aria-label="Image 1"></button>
-            <button class="slider-dot" aria-label="Image 2"></button>
-            <button class="slider-dot" aria-label="Image 3"></button>
-            <button class="slider-dot" aria-label="Image 4"></button>
-            <button class="slider-dot" aria-label="Image 5"></button>
-            <button class="slider-dot" aria-label="Image 6"></button>
-            <button class="slider-dot" aria-label="Image 7"></button>
-            <button class="slider-dot" aria-label="Image 8"></button>
-          </div>
-          <div class="cmd-calque" aria-hidden="true">
-            <div class="cmd-bloc">
-              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Scénographie &amp; spectacle vivant</b><i class="cmd-annee">Danse</i></span>
-              <span class="cmd-titre">Dispositifs scéniques — <em>Starting with the Limbs</em>, cie L'Autre Maison</span>
-              <span class="cmd-resume">Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer.</span>
             </div>
           </div>
         </div>
@@ -1200,42 +1275,7 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,fabriquer,experimenter" data-tags="Unity, VR, Musique" data-texte="Expérience immersive en réalité virtuelle pour la première de l'album Photophobia à Kampnagel, Hambourg. Un vidéoclip permettant d'évoluer dans un monde de mangrove imaginé pour trois pistes (Pandemonium, In Short, Self-Abolition) — du marécage futuriste sombre à un espace kaléidoscopique. Avec Sanni Est (direction artistique, concept &amp; musique) et alpharats (programming &amp; VFX).">
-        <div class="thumb slider">
-          <div class="slider-track">
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/photophobia-vr/01_scene-mangrove.jpg" loading="lazy" width="1600" height="724" alt="Environnement VR — Photophobia, Sanni Est — Scène de mangrove" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/photophobia-vr/02_premiere-kampnagel.jpg" loading="lazy" width="568" height="503" alt="Environnement VR — Photophobia, Sanni Est — Première à Kampnagel, Hambourg" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/photophobia-vr/03_premiere-public.jpg" loading="lazy" width="199" height="564" alt="Environnement VR — Photophobia, Sanni Est — Public de la première" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/photophobia-vr/04_modele3d-poisson.jpg" loading="lazy" width="785" height="572" alt="Environnement VR — Photophobia, Sanni Est — Modèle 3D du poisson" onerror="this.style.opacity='0'">
-            </div>
-            <div class="vue">
-              <img class="sujet" src="images/web/1-commandes/photophobia-vr/05_texture-kaleidoscope.jpg" loading="lazy" width="1307" height="578" alt="Environnement VR — Photophobia, Sanni Est — Texture kaléidoscopique" onerror="this.style.opacity='0'">
-            </div>
-          </div>
-          <div class="slider-dots">
-            <button class="slider-dot active" aria-label="Image 1"></button>
-            <button class="slider-dot" aria-label="Image 2"></button>
-            <button class="slider-dot" aria-label="Image 3"></button>
-            <button class="slider-dot" aria-label="Image 4"></button>
-            <button class="slider-dot" aria-label="Image 5"></button>
-          </div>
-          <div class="cmd-calque" aria-hidden="true">
-            <div class="cmd-bloc">
-              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Scénographie &amp; spectacle vivant</b><i class="cmd-annee">2022</i></span>
-              <span class="cmd-titre">Environnement VR — <em>Photophobia</em>, Sanni Est</span>
-              <span class="cmd-resume">Expérience immersive en réalité virtuelle pour la première de l'album Photophobia à Kampnagel, Hambourg.</span>
-            </div>
-          </div>
-        </div>
-      </article>
-      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre,experimenter" data-tags="" data-texte="Ce caftan explore la rencontre entre conception algorithmique et artisanat marocain. J'ai conçu un motif paramétrique original sur Grasshopper, puis l'ai fabriqué par une succession d'impressions 3D en filament flexible argenté directement sur les différentes pièces du vêtement avant leur assemblage. L'atelier a ensuite souligné ce motif par un travail de pailletage et réalisé les finitions du caftan, faisant dialoguer fabrication numérique et savoir-faire traditionnel.">
+      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre,experimenter" data-tags="" data-texte="Ce caftan explore la rencontre entre conception algorithmique et artisanat marocain. J'ai conçu un motif paramétrique original sur Grasshopper, puis l'ai fabriqué par une succession d'impressions 3D en filament flexible argenté directement sur les différentes pièces du vêtement avant leur assemblage. L'atelier de couture Zaa a ensuite souligné ce motif par un travail de pailletage et réalisé les finitions du caftan, faisant dialoguer fabrication numérique et savoir-faire traditionnel.">
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
@@ -1266,7 +1306,7 @@ Conception et fabrication pour des marques de luxe, le cinéma et le spectacle v
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre,experimenter" data-tags="Midjourney, Rhino, Photoshop, Impression 3D" data-texte="Veste en brocart doré ornée de fleurs imprimées en 3D en contour, composées et assemblées à la main. Workflow en plusieurs étapes : génération d'images sur Midjourney, retouche sous Photoshop, mise en plan de broderie et typologies de fleurs sous Rhino, puis impression du contour de chaque fleur en filament flexible sur un textile à trame large, avant assemblage sur la pièce. Commande d'un atelier de couture de luxe au Maroc.">
+      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre,experimenter" data-tags="Midjourney, Rhino, Photoshop, Impression 3D" data-texte="Veste en brocart doré ornée de fleurs imprimées en 3D en contour, composées et assemblées à la main. Workflow en plusieurs étapes : génération d'images sur Midjourney, retouche sous Photoshop, mise en plan de broderie et typologies de fleurs sous Rhino, puis impression du contour de chaque fleur en filament flexible sur un textile à trame large, avant assemblage sur la pièce. Commande de l'atelier de couture Zaa, au Maroc.">
         <div class="thumb slider">
           <div class="slider-track">
             <div class="vue">
@@ -2720,7 +2760,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     <p class="footer-line mono">Ghali Bensouda — Designer de dispositifs &amp; fabricant numérique.</p>
     <!-- AUTO:PIED_SIGNATURE:FIN -->
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.74</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.75</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>
@@ -3154,7 +3194,9 @@ document.querySelectorAll('.lien-galerie').forEach(function (lien) {
   var lbLeg = document.getElementById('lb-legende');
   var lbTags = document.getElementById('lb-tags');
   var lbPoints = document.getElementById('lb-points');
-  var galerie = [], lbIndex = 0, savedY = 0, vus = 0;
+  var lbPrec = document.getElementById('lb-prec');
+  var lbSuiv = document.getElementById('lb-suiv');
+  var galerie = [], lbIndex = 0, savedY = 0, vus = 0, delaiNav = null;
 
   function ouvrir(liste, depart, contexte) {
     if (!liste.length) return;
@@ -3166,6 +3208,7 @@ document.querySelectorAll('.lien-galerie').forEach(function (lien) {
     lbTitre.textContent = contexte.titre || '';
     lbTags.textContent = contexte.tags || '';
     poserPoints();
+    lb.classList.toggle('seule', galerie.length < 2);
     afficher(lbIndex);
     lb.classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -3173,7 +3216,8 @@ document.querySelectorAll('.lien-galerie').forEach(function (lien) {
   }
 
   function fermer() {
-    lb.classList.remove('open');
+    lb.classList.remove('open', 'nav-visible');
+    clearTimeout(delaiNav);
     document.body.style.overflow = '';
     lbImg.src = '';
     lbVid.pause();
@@ -3297,6 +3341,37 @@ document.querySelectorAll('.lien-galerie').forEach(function (lien) {
            : (pieceTitre ? pieceTitre.textContent.trim() : ''),
       tags: ''
     });
+  });
+
+  // Les deux ronds. Celui de droite ne ferme JAMAIS : apres la derniere image
+  // il repart a la premiere. Un bouton de navigation qui ferme ferait perdre
+  // la galerie — exactement ce qu'il est la pour eviter. Le clic sur la photo,
+  // lui, garde son comportement (suivante, puis fermeture quand tout est vu).
+  lbPrec.addEventListener('click', function (e) { e.stopPropagation(); precedente(); });
+  lbSuiv.addEventListener('click', function (e) {
+    e.stopPropagation();
+    vus++;
+    afficher((lbIndex + 1) % galerie.length);
+  });
+
+  // Visibles quand le pointeur est sur la photo OU sur un rond. Le delai
+  // laisse le temps de traverser le fond quand la photo est etroite et le
+  // rond loin, au bord de l'ecran. Le doigt n'a pas de survol : sur ecran
+  // tactile ils sont toujours affiches (CSS, hover: none).
+  function montrerNav(e) {
+    if (e.pointerType === 'touch') return;
+    clearTimeout(delaiNav);
+    lb.classList.add('nav-visible');
+  }
+  function cacherNav(e) {
+    if (e.pointerType === 'touch') return;
+    clearTimeout(delaiNav);
+    delaiNav = setTimeout(function () { lb.classList.remove('nav-visible'); }, 400);
+  }
+  [lbImg, lbVid, lbPrec, lbSuiv].forEach(function (el) {
+    el.addEventListener('pointerenter', montrerNav);
+    el.addEventListener('pointermove', montrerNav);
+    el.addEventListener('pointerleave', cacherNav);
   });
 
   lbImg.addEventListener('click', function (e) { e.stopPropagation(); suivante(); });

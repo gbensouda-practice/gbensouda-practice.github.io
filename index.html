@@ -626,9 +626,47 @@
     font-size: 15px; color: var(--line); line-height: 1.55;
     margin: -4px 0 16px; max-width: 62ch;
   }
-  .carte-suite { display: none; }
-  .ff-card.ouverte { grid-column: 1 / -1; }
-  .ff-card.ouverte .carte-suite { display: block; }
+  /* ── LE PANNEAU D'UN SUJET ──
+     La carte ne se deplie plus : elle prenait toute la largeur, donc quittait
+     sa place et laissait un trou gris a cote de sa voisine. Le sujet s'ouvre
+     maintenant dans un panneau pleine largeur, pose SOUS LA RANGEE de la carte
+     par le script — la carte ne bouge jamais. Photos a gauche, texte entier a
+     droite ; les photos restent a l'ecran pendant qu'on lit (sticky). */
+  .ff-card.deployee { box-shadow: inset 0 -2px 0 var(--corail); }
+  .sujet-panneau {
+    grid-column: 1 / -1; background: var(--ink);
+    padding: 26px 32px 44px;
+  }
+  .sujet-panneau[hidden] { display: none; }
+  .sp-entete {
+    display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap;
+    padding-bottom: 14px; margin-bottom: 26px;
+    border-bottom: 1px solid var(--line-nuit);
+  }
+  .sp-titre { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--blue-nuit); flex: 1 1 auto; }
+  .sp-tout, .sp-fermer {
+    font: inherit; font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase;
+    background: none; border: none; padding: 4px 0; cursor: pointer;
+    color: var(--grey); border-bottom: 1px solid transparent;
+    transition: color .2s ease, border-color .2s ease;
+  }
+  .sp-tout:hover, .sp-fermer:hover { color: var(--corail); border-bottom-color: var(--corail); }
+  .sp-tout[hidden] { display: none; }
+  .sp-corps {
+    display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 44px; align-items: start;
+  }
+  .sp-corps.sans-media { grid-template-columns: minmax(0, 1fr); }
+  .sp-corps.sans-media .sp-texte { max-width: 68ch; }
+  .sujet-panneau .ff-media {
+    clip-path: none; margin-bottom: 0;
+    position: sticky; top: 64px;
+    grid-template-columns: 112px minmax(0, 1fr); gap: 22px;
+  }
+  .sujet-panneau .ff-nassij-slider { --h-media: clamp(300px, 58vh, 560px); }
+  .sp-texte p { font-size: 15px; line-height: 1.65; color: #BABFBA; margin-bottom: 16px; max-width: 62ch; }
+  /* le mot dont les photos sont dans le cadre */
+  .sp-texte .lien-galerie.montre { color: var(--corail); }
   .lire-plus {
     font: inherit; font-size: 10.5px; letter-spacing: .06em;
     text-transform: uppercase; cursor: pointer;
@@ -638,12 +676,11 @@
   }
   .lire-plus:hover { color: var(--corail); border-bottom-color: var(--corail); }
   .lire-plus:focus-visible { outline: 1px solid var(--corail); outline-offset: 3px; }
-  @media (min-width: 901px) {
-    .ff-card.ouverte .carte-suite {
-      columns: 2; column-gap: 48px;
-    }
-    /* une colonne ne doit jamais couper un paragraphe en deux */
-    .ff-card.ouverte .carte-suite p { break-inside: avoid; }
+  @media (max-width: 900px) {
+    .sujet-panneau { padding: 20px 20px 34px; }
+    .sp-corps { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    .sujet-panneau .ff-media { position: static; grid-template-columns: 1fr; gap: 14px; }
+    .sujet-panneau .ff-nassij-slider { --h-media: clamp(260px, 48vh, 400px); }
   }
 
   /* ── MOTS CLIQUABLES : le mot est bleu, sa trace est corail ── */
@@ -2646,14 +2683,6 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           <button class="lien-piece" data-piece="2-recherche-projets-tiflik">Moule — Tiflik</button>
         </div>
         <p>Une définition n'est pas un objet : c'est une règle qui en produit plusieurs. Définir une géométrie porteuse, la décliner par le calcul, la révéler par la fabrication — la même méthode sert ici à quatre échelles qui n'ont ni la même contrainte ni le même destinataire : un vase, une sculpture, un canapé, un moule.</p>
-        <div class="carte-suite">
-          <p>La première famille rassemble des <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-mode-vase">contenants imprimés d'une seule paroi</button>. Il n'y a pas de second mur derrière le premier : la forme doit se porter elle-même, et l'étanchéité arbitre. Le profil est une étoile lissée par un loft entre cercles pivotés — de là vient le mouvement en vortex, et de là vient aussi la rigidité, puisqu'une paroi de 0,6 mm pliée en cannelures tient debout quand un cylindre lisse s'effondrerait.</p>
-          <p>Chaque contenant déplace ensuite un seul paramètre. Les <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-soliflore">soliflores</button> montrent le profil nu, avec un col étroit là où la paroi unique est la plus exposée. Le <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-trio">trio</button> ne fait varier que la courbe intermédiaire du loft : même hauteur, trois silhouettes, et jamais deux tirages identiques puisque le dégradé du filament avance avec la longueur imprimée. Le <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-relief">relief</button> abandonne le profil et fait naître la surface d'un bruit qui déplace les sommets du maillage — c'est le seul cas où le critère n'est pas visuel mais physique, entre un relief qui se sent sous la main et un porte-à-faux qui fait fuir le vase. La <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-boite">boîte</button>, elle, n'est pas une paroi unique du tout : son couvercle laisse voir son remplissage en courbe de Hilbert, au lieu de le couvrir.</p>
-          <p>Sur toute la famille, la couleur ne se peint pas : elle se calcule. Le filament est <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-coextrusion">coextrudé sur trois ou quatre pistes</button>, et c'est l'angle sous lequel la buse dépose la matière qui décide de celle qui affleure. De loin, l'objet change de teinte quand on tourne autour. De près, une même face en montre deux à la fois, selon qu'on voit le flanc extérieur ou le flanc intérieur d'une cannelure.</p>
-          <p>La seconde famille pose la contrainte inverse. Quand la forme dépasse le volume d'impression, elle est découpée, tirée en parties et remontée : <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-anastomose">Anastomose</button> en est la première, imprimée en PETG transparent. L'assemblage cesse alors d'être un pis-aller de fabrication — c'est lui qui décide où la forme a le droit d'être coupée, et ces lignes-là restent lisibles sur l'objet fini.</p>
-          <p>Les deux familles se rejoignent sur un point : ce qu'on voit à la surface est <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-chemin-de-buse">le chemin de la buse</button>, jamais un décor appliqué dessus.</p>
-          <p>La même méthode sert aussi pour d'autres. Pour <a class="lien-externe" href="https://saketsethiparis.com/" target="_blank" rel="noopener noreferrer">Saket Sethi Design</a>, une collection de mobilier part d'<button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-declinaisons">une seule définition Grasshopper, évolutive et adaptative</button> : les déclinaisons d'un canapé en sortent au lieu d'être redessinées une à une. Pour des marques qui produisent en série — bougies, contenants, objets parfumés —, ce sont des moules imprimés, pensés en plusieurs parties démontables pour le tirage en silicone qui sert à la production. Pour <a class="lien-externe" href="https://www.tiflik.ma" target="_blank" rel="noopener noreferrer">Tiflik</a>, <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-tiflik">un moule en trois pièces</button>, imprimé en FDM, pour leurs contenants de bougie parfumée à leur logo.</p>
-        </div>
         <button class="lire-plus mono" aria-expanded="false">Lire la suite …</button>
         <div class="galerie-source" data-galerie-id="2-recherche-sujets-formes-generatives-imprimees" hidden>
           <span data-groupe="2-recherche-sujets-formes-generatives-imprimees-coextrusion">
@@ -2707,6 +2736,121 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           </span>
         </div>
       </div>
+      <div class="sujet-panneau" data-panneau="2-recherche-sujets-formes-generatives-imprimees" data-titre="Une définition, plusieurs objets" hidden>
+        <div class="sp-entete mono">
+          <span class="sp-titre">01 — Une définition, plusieurs objets</span>
+          <button class="sp-tout" hidden>Toutes les photos</button>
+          <button class="sp-fermer" aria-label="Fermer ce sujet">Fermer ×</button>
+        </div>
+        <div class="sp-corps">
+          <div class="ff-media sp-media">
+            <div class="ff-marge">
+              <p class="ff-legende mono"></p>
+              <div class="slider-dots"><button class="slider-dot active" aria-label="Image 1"></button><button class="slider-dot" aria-label="Image 2"></button><button class="slider-dot" aria-label="Image 3"></button><button class="slider-dot" aria-label="Image 4"></button><button class="slider-dot" aria-label="Image 5"></button><button class="slider-dot" aria-label="Image 6"></button><button class="slider-dot" aria-label="Image 7"></button><button class="slider-dot" aria-label="Image 8"></button><button class="slider-dot" aria-label="Image 9"></button><button class="slider-dot" aria-label="Image 10"></button><button class="slider-dot" aria-label="Image 11"></button><button class="slider-dot" aria-label="Image 12"></button><button class="slider-dot" aria-label="Image 13"></button><button class="slider-dot" aria-label="Image 14"></button><button class="slider-dot" aria-label="Image 15"></button><button class="slider-dot" aria-label="Image 16"></button><button class="slider-dot" aria-label="Image 17"></button><button class="slider-dot" aria-label="Image 18"></button><button class="slider-dot" aria-label="Image 19"></button><button class="slider-dot" aria-label="Image 20"></button><button class="slider-dot" aria-label="Image 21"></button><button class="slider-dot" aria-label="Image 22"></button><button class="slider-dot" aria-label="Image 23"></button><button class="slider-dot" aria-label="Image 24"></button><button class="slider-dot" aria-label="Image 25"></button><button class="slider-dot" aria-label="Image 26"></button><button class="slider-dot" aria-label="Image 27"></button><button class="slider-dot" aria-label="Image 28"></button><button class="slider-dot" aria-label="Image 29"></button></div>
+            </div>
+            <div class="ff-nassij-slider slider">
+              <div class="slider-track">
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-coextrusion">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260429_183442768.jpg" loading="lazy" width="1600" height="900" alt="Une définition, plusieurs objets — Deux tirages du même rouleau, deux teintes : c'est l'angle qui tranche" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-coextrusion">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260715_173346298.MP.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Le flanc intérieur d'une cannelure ne renvoie pas ce que renvoie le flanc extérieur" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-coextrusion">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Boite/PXL_20260721_124109180.MP.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Le même filament sur un remplissage de Hilbert : un moirage, pas un dégradé" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-chemin-de-buse">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/PXL_20260424_173227668.MP.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Deux façons de faire une surface sur une seule photo — le profil devant, le bruit derrière" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-chemin-de-buse">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Cache-pot/PXL_20260715_173300388.MP.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Un mur continu, sans reprise : la strate n'est pas cachée, elle est le motif" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-chemin-de-buse">
+                  <img class="sujet" src="images/web/2-recherche/projets/sculptures/anastomose/pxl-20260127-222316950-2.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — L'autre bout du problème — une forme trop grande pour la machine, donc coupée et remontée" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-declinaisons">
+                  <img class="sujet" src="images/web/1-commandes/saket-sethi-mobilier-parametrique/03_declinaisons-grasshopper.jpg" loading="lazy" width="962" height="488" alt="Une définition, plusieurs objets — Cinq canapés sortis de la même définition" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-declinaisons">
+                  <img class="sujet" src="images/web/1-commandes/saket-sethi-mobilier-parametrique/04_structure-mesh.png" loading="lazy" width="732" height="484" alt="Une définition, plusieurs objets — La structure portante et la peau capitonnée, calculées ensemble" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-declinaisons">
+                  <img class="sujet" src="images/web/1-commandes/saket-sethi-mobilier-parametrique/01_sofa-rendu.jpg" loading="lazy" width="1248" height="585" alt="Une définition, plusieurs objets — Une déclinaison, rendue" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-mode-vase">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/PXL_20260424_173227668.MP.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Les deux parois sur une même photo : cannelures vrillées devant, texture en relief derrière" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-mode-vase">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Fleuris/image.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Deux tirages roses et un blanc, en usage" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-mode-vase">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Fleuris/image (1).jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Vase noir, profil vrillé, lys" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-mode-vase">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Fleuris/image (2).jpg" loading="lazy" width="1600" height="1638" alt="Une définition, plusieurs objets — Deux tirages du même profil, dégradé rose-orange" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-mode-vase">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Soliflore/PXL_20260715_173250407.MP.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Trois soliflores, même définition, trois profils" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-mode-vase">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260429_183442768.jpg" loading="lazy" width="1600" height="900" alt="Une définition, plusieurs objets — Deux tirages du même profil — la couleur qui affleure dépend de l'angle d'impression" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-mode-vase">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260715_173346298.MP.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Un seul point de vue, deux couleurs : le flanc intérieur ne renvoie pas ce que renvoie le flanc extérieur" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-mode-vase">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Trio/PXL_20260715_173307446.MP.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Même architecture, même hauteur : seule la courbe intermédiaire du loft change" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-mode-vase">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Cache-pot/PXL_20260715_173300388.MP.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Un mur continu, un effet de strates, une souplesse de ressort au toucher" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-mode-vase">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Relief/PXL_20260321_110027366.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Tenu en main : l'amplitude retenue, celle qui se sent sans que la paroi décroche" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-mode-vase">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Relief/PXL_20260715_173404455.MP.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Le même objet posé — la couleur n'a pas changé, la lumière si" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-mode-vase">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Boite/PXL_20260721_124109180.MP.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Boîte et son couvercle : le remplissage en courbe de Hilbert, laissé apparent au lieu d'être couvert" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-soliflore">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Soliflore/PXL_20260715_173250407.MP.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Trois soliflores, même définition, trois profils" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-trio">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Trio/PXL_20260715_173307446.MP.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Même architecture, même hauteur : seule la courbe intermédiaire du loft change" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-relief">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Relief/PXL_20260321_110027366.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Tenu en main : l'amplitude retenue, celle qui se sent sans que la paroi décroche" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-relief">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Relief/PXL_20260715_173404455.MP.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Le même objet posé — la couleur n'a pas changé, la lumière si" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-boite">
+                  <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Boite/PXL_20260721_124109180.MP.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Boîte et son couvercle : le remplissage en courbe de Hilbert, laissé apparent au lieu d'être couvert" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-anastomose">
+                  <img class="sujet" src="images/web/2-recherche/projets/sculptures/anastomose/pxl-20260127-222316950-2.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — L'échelle : trois pieds, à hauteur d'un lampadaire" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-anastomose">
+                  <img class="sujet" src="images/web/2-recherche/projets/sculptures/anastomose/pxl-20260127-205842238.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Les tronçons, leurs jonctions et la ligne d'index — et la matière qui s'assombrit dans les courbes" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-formes-generatives-imprimees-tiflik">
+                  <img class="sujet" src="images/web/2-recherche/projets/tiflik/PXL_20260504_152604167.MP.jpg" loading="lazy" width="1600" height="2844" alt="Une définition, plusieurs objets — Moule Tiflik en trois parties, impression FDM" onerror="this.style.opacity='0'">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sp-texte">
+            <p>Une définition n'est pas un objet : c'est une règle qui en produit plusieurs. Définir une géométrie porteuse, la décliner par le calcul, la révéler par la fabrication — la même méthode sert ici à quatre échelles qui n'ont ni la même contrainte ni le même destinataire : un vase, une sculpture, un canapé, un moule.</p>
+            <p>La première famille rassemble des <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-mode-vase">contenants imprimés d'une seule paroi</button>. Il n'y a pas de second mur derrière le premier : la forme doit se porter elle-même, et l'étanchéité arbitre. Le profil est une étoile lissée par un loft entre cercles pivotés — de là vient le mouvement en vortex, et de là vient aussi la rigidité, puisqu'une paroi de 0,6 mm pliée en cannelures tient debout quand un cylindre lisse s'effondrerait.</p>
+            <p>Chaque contenant déplace ensuite un seul paramètre. Les <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-soliflore">soliflores</button> montrent le profil nu, avec un col étroit là où la paroi unique est la plus exposée. Le <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-trio">trio</button> ne fait varier que la courbe intermédiaire du loft : même hauteur, trois silhouettes, et jamais deux tirages identiques puisque le dégradé du filament avance avec la longueur imprimée. Le <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-relief">relief</button> abandonne le profil et fait naître la surface d'un bruit qui déplace les sommets du maillage — c'est le seul cas où le critère n'est pas visuel mais physique, entre un relief qui se sent sous la main et un porte-à-faux qui fait fuir le vase. La <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-boite">boîte</button>, elle, n'est pas une paroi unique du tout : son couvercle laisse voir son remplissage en courbe de Hilbert, au lieu de le couvrir.</p>
+            <p>Sur toute la famille, la couleur ne se peint pas : elle se calcule. Le filament est <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-coextrusion">coextrudé sur trois ou quatre pistes</button>, et c'est l'angle sous lequel la buse dépose la matière qui décide de celle qui affleure. De loin, l'objet change de teinte quand on tourne autour. De près, une même face en montre deux à la fois, selon qu'on voit le flanc extérieur ou le flanc intérieur d'une cannelure.</p>
+            <p>La seconde famille pose la contrainte inverse. Quand la forme dépasse le volume d'impression, elle est découpée, tirée en parties et remontée : <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-anastomose">Anastomose</button> en est la première, imprimée en PETG transparent. L'assemblage cesse alors d'être un pis-aller de fabrication — c'est lui qui décide où la forme a le droit d'être coupée, et ces lignes-là restent lisibles sur l'objet fini.</p>
+            <p>Les deux familles se rejoignent sur un point : ce qu'on voit à la surface est <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-chemin-de-buse">le chemin de la buse</button>, jamais un décor appliqué dessus.</p>
+            <p>La même méthode sert aussi pour d'autres. Pour <a class="lien-externe" href="https://saketsethiparis.com/" target="_blank" rel="noopener noreferrer">Saket Sethi Design</a>, une collection de mobilier part d'<button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-declinaisons">une seule définition Grasshopper, évolutive et adaptative</button> : les déclinaisons d'un canapé en sortent au lieu d'être redessinées une à une. Pour des marques qui produisent en série — bougies, contenants, objets parfumés —, ce sont des moules imprimés, pensés en plusieurs parties démontables pour le tirage en silicone qui sert à la production. Pour <a class="lien-externe" href="https://www.tiflik.ma" target="_blank" rel="noopener noreferrer">Tiflik</a>, <button class="lien-galerie" data-galerie="2-recherche-sujets-formes-generatives-imprimees-tiflik">un moule en trois pièces</button>, imprimé en FDM, pour leurs contenants de bougie parfumée à leur logo.</p>
+          </div>
+        </div>
+      </div>
       <div class="ff-card" data-note="2-recherche-sujets-textile-impression-3d">
         <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-sujets-textile-impression-3d">02 — Textile + impression 3D</button></div>
         <p class="carte-resume">Imprimer sur l'étoffe plutôt qu'à côté — et, d'essai en essai, laisser la matière prendre le tissu de plus en plus près.</p>
@@ -2715,13 +2859,6 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           <button class="lien-piece" data-piece="2-recherche-projets-re-former-le-textile">Re-former le textile</button>
         </div>
         <p>Imprimer directement sur l'étoffe, au lieu d'imprimer un objet qu'on coudrait ensuite. Depuis trois ans la question n'a pas changé — comment la matière tient-elle au tissu ? — mais la réponse s'est resserrée : d'un bourrelet dans lequel on coud des perles, jusqu'à <button class="lien-galerie" data-galerie="2-recherche-sujets-textile-impression-3d-perlage">une perle qui se forme autour du fil du tulle</button> et ne peut plus glisser.</p>
-        <div class="carte-suite">
-          <p>Le premier état vient du <button class="lien-galerie" data-galerie="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">Thalassic Kaftan</button>, en 2023. <button class="lien-galerie" data-galerie="2-recherche-sujets-textile-impression-3d-definition">La définition Grasshopper</button> lit une image canal par canal et ne produit pas un volume à trancher : elle produit *<em>directement le parcours de la buse</em>*. Sur du tulle tendu, <button class="lien-galerie" data-galerie="2-recherche-sujets-textile-impression-3d-broderie-imprimee">la broderie imprimée</button> dessine un bourrelet avec le creux où la perle viendra se loger ; les perles y sont ensuite cousues à la main. <button class="lien-galerie" data-galerie="2-recherche-sujets-textile-impression-3d-machine-et-main">La machine pose ce qu'une main ne saurait pas répéter</button> à l'identique sur toute une surface, et la main fait ce qu'aucune buse ne sait faire — enfiler, tendre, arrêter le fil.</p>
-          <p>En 2024, le tissu est pris entre deux passes de matière. <button class="lien-galerie" data-galerie="2-recherche-sujets-textile-impression-3d-contour">Un contour en filament souple</button> fige un voile exactement là où il passe, et nulle part ailleurs : le drapé reprend un millimètre plus loin. Refermé sur lui-même, <button class="lien-galerie" data-galerie="2-recherche-sujets-textile-impression-3d-fleurs">le même contour devient une fleur</button> qu'on découpe au ras de la ligne sans qu'elle s'effiloche. Deux commandes de l'atelier Zaa en sont sorties, <button class="lien-galerie" data-galerie="2-recherche-sujets-textile-impression-3d-commandes-zaa">un caftan en mousseline et un gilet en brocart</button>.</p>
-          <p>En 2026, le perlage imprimé va jusqu'au bout du geste : la perle n'est plus cousue, elle est l'impression. Une définition répartit des familles de perles — diamètre, hauteur, couleur de filament — selon la teinte, la saturation et la luminosité de l'image, et la buse les pose une à une sur le tulle. Le tulle disparaît sur la peau ; il ne reste que le motif.</p>
-          <p>Pour ne plus réécrire cette chaîne à chaque motif, elle est devenue un plugin Grasshopper, <em>hudhud</em> : filtres d'image, dispatching et packing de cercles sur plusieurs couches de l'image, et un composant qui sort le G-code depuis Rhino — trajet continu, tranchage non planaire — sans passer par un slicer.</p>
-          <p>Ce sont des essais en incréments : à chaque tirage se règle une chose et une seule — les couleurs, la densité, la tenue au lavage, l'interprétation de l'image. Une recherche sur les matériaux biosourcés est en cours, pour rapprocher cette pratique des savoir-faire locaux au Maroc. L'objectif n'a jamais été de fabriquer plus vite, mais de donner à un atelier un outil qu'il n'aurait pas eu.</p>
-        </div>
         <button class="lire-plus mono" aria-expanded="false">Lire la suite …</button>
         <div class="galerie-source" data-galerie-id="2-recherche-sujets-textile-impression-3d" hidden>
           <span data-groupe="2-recherche-sujets-textile-impression-3d-machine-et-main">
@@ -2839,6 +2976,324 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           </span>
         </div>
       </div>
+      <div class="sujet-panneau" data-panneau="2-recherche-sujets-textile-impression-3d" data-titre="Textile + impression 3D" hidden>
+        <div class="sp-entete mono">
+          <span class="sp-titre">02 — Textile + impression 3D</span>
+          <button class="sp-tout" hidden>Toutes les photos</button>
+          <button class="sp-fermer" aria-label="Fermer ce sujet">Fermer ×</button>
+        </div>
+        <div class="sp-corps">
+          <div class="ff-media sp-media">
+            <div class="ff-marge">
+              <p class="ff-legende mono"></p>
+              <div class="slider-dots"><button class="slider-dot active" aria-label="Image 1"></button><button class="slider-dot" aria-label="Image 2"></button><button class="slider-dot" aria-label="Image 3"></button><button class="slider-dot" aria-label="Image 4"></button><button class="slider-dot" aria-label="Image 5"></button><button class="slider-dot" aria-label="Image 6"></button><button class="slider-dot" aria-label="Image 7"></button><button class="slider-dot" aria-label="Image 8"></button><button class="slider-dot" aria-label="Image 9"></button><button class="slider-dot" aria-label="Image 10"></button><button class="slider-dot" aria-label="Image 11"></button><button class="slider-dot" aria-label="Image 12"></button><button class="slider-dot" aria-label="Image 13"></button><button class="slider-dot" aria-label="Image 14"></button><button class="slider-dot" aria-label="Image 15"></button><button class="slider-dot" aria-label="Image 16"></button><button class="slider-dot" aria-label="Image 17"></button><button class="slider-dot" aria-label="Image 18"></button><button class="slider-dot" aria-label="Image 19"></button><button class="slider-dot" aria-label="Image 20"></button><button class="slider-dot" aria-label="Image 21"></button><button class="slider-dot" aria-label="Image 22"></button><button class="slider-dot" aria-label="Image 23"></button><button class="slider-dot" aria-label="Image 24"></button><button class="slider-dot" aria-label="Image 25"></button><button class="slider-dot" aria-label="Image 26"></button><button class="slider-dot" aria-label="Image 27"></button><button class="slider-dot" aria-label="Image 28"></button><button class="slider-dot" aria-label="Image 29"></button><button class="slider-dot" aria-label="Image 30"></button><button class="slider-dot" aria-label="Image 31"></button><button class="slider-dot" aria-label="Image 32"></button><button class="slider-dot" aria-label="Image 33"></button><button class="slider-dot" aria-label="Image 34"></button><button class="slider-dot" aria-label="Image 35"></button><button class="slider-dot" aria-label="Image 36"></button><button class="slider-dot" aria-label="Image 37"></button><button class="slider-dot" aria-label="Image 38"></button><button class="slider-dot" aria-label="Image 39"></button><button class="slider-dot" aria-label="Image 40"></button><button class="slider-dot" aria-label="Image 41"></button><button class="slider-dot" aria-label="Image 42"></button><button class="slider-dot" aria-label="Image 43"></button><button class="slider-dot" aria-label="Image 44"></button><button class="slider-dot" aria-label="Image 45"></button><button class="slider-dot" aria-label="Image 46"></button><button class="slider-dot" aria-label="Image 47"></button><button class="slider-dot" aria-label="Image 48"></button><button class="slider-dot" aria-label="Image 49"></button><button class="slider-dot" aria-label="Image 50"></button><button class="slider-dot" aria-label="Image 51"></button><button class="slider-dot" aria-label="Image 52"></button><button class="slider-dot" aria-label="Image 53"></button><button class="slider-dot" aria-label="Image 54"></button><button class="slider-dot" aria-label="Image 55"></button><button class="slider-dot" aria-label="Image 56"></button><button class="slider-dot" aria-label="Image 57"></button><button class="slider-dot" aria-label="Image 58"></button><button class="slider-dot" aria-label="Image 59"></button><button class="slider-dot" aria-label="Image 60"></button><button class="slider-dot" aria-label="Image 61"></button><button class="slider-dot" aria-label="Image 62"></button><button class="slider-dot" aria-label="Image 63"></button><button class="slider-dot" aria-label="Image 64"></button><button class="slider-dot" aria-label="Image 65"></button><button class="slider-dot" aria-label="Image 66"></button><button class="slider-dot" aria-label="Image 67"></button><button class="slider-dot" aria-label="Image 68"></button><button class="slider-dot" aria-label="Image 69"></button><button class="slider-dot" aria-label="Image 70"></button><button class="slider-dot" aria-label="Image 71"></button><button class="slider-dot" aria-label="Image 72"></button><button class="slider-dot" aria-label="Image 73"></button><button class="slider-dot" aria-label="Image 74"></button><button class="slider-dot" aria-label="Image 75"></button><button class="slider-dot" aria-label="Image 76"></button><button class="slider-dot" aria-label="Image 77"></button><button class="slider-dot" aria-label="Image 78"></button><button class="slider-dot" aria-label="Image 79"></button><button class="slider-dot" aria-label="Image 80"></button><button class="slider-dot" aria-label="Image 81"></button><button class="slider-dot" aria-label="Image 82"></button><button class="slider-dot" aria-label="Image 83"></button><button class="slider-dot" aria-label="Image 84"></button><button class="slider-dot" aria-label="Image 85"></button><button class="slider-dot" aria-label="Image 86"></button><button class="slider-dot" aria-label="Image 87"></button><button class="slider-dot" aria-label="Image 88"></button><button class="slider-dot" aria-label="Image 89"></button><button class="slider-dot" aria-label="Image 90"></button><button class="slider-dot" aria-label="Image 91"></button><button class="slider-dot" aria-label="Image 92"></button><button class="slider-dot" aria-label="Image 93"></button><button class="slider-dot" aria-label="Image 94"></button><button class="slider-dot" aria-label="Image 95"></button><button class="slider-dot" aria-label="Image 96"></button><button class="slider-dot" aria-label="Image 97"></button></div>
+            </div>
+            <div class="ff-nassij-slider slider">
+              <div class="slider-track">
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-machine-et-main">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/22_parcours-de-buse-01.jpg" loading="lazy" width="912" height="979" alt="Textile + impression 3D — Ce que la machine sait faire : répéter une trajectoire à l'identique sur toute une surface" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-machine-et-main">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/31_prototype-perles-detail.jpg" loading="lazy" width="557" height="400" alt="Textile + impression 3D — Ce qu'elle ne sait pas faire : enfiler, tendre, arrêter le fil" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-machine-et-main">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/26_prototype-perles-blanc.jpg" loading="lazy" width="414" height="294" alt="Textile + impression 3D — Les deux sur le même morceau d'étoffe" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-commandes-zaa">
+                  <img class="sujet" src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-122934822.jpg" loading="lazy" width="1600" height="2844" alt="Textile + impression 3D — Mousseline — le motif imprimé en argent sur chaque pièce, avant l'assemblage" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-commandes-zaa">
+                  <img class="sujet" src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-122946850-mp.jpg" loading="lazy" width="1600" height="900" alt="Textile + impression 3D — Le tracé de près, pailleté ensuite par l'atelier" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-commandes-zaa">
+                  <img class="sujet" src="images/web/1-commandes/ornements-imprimes/_mémoire-brute/pxl-20240508-215042269.jpg" loading="lazy" width="1600" height="2844" alt="Textile + impression 3D — Gilet — les fleurs composées sur le buste, avant l'assemblage" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-commandes-zaa">
+                  <img class="sujet" src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124259998.jpg" loading="lazy" width="1600" height="2844" alt="Textile + impression 3D — Le gilet fini : fleurs souples et fleurs rigides mêlées" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-perlage">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260516_194829364.NIGHT.jpg" loading="lazy" width="1600" height="1600" alt="Textile + impression 3D — Porté : sur un tulle chair, le motif tient seul et le tissu s'efface" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-perlage">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260516_194723132.MP.jpg" loading="lazy" width="1600" height="1600" alt="Textile + impression 3D — Autre état, sur mousseline mauve — corail, violet et or" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-perlage">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260516_194805237.MP.jpg" loading="lazy" width="1600" height="1600" alt="Textile + impression 3D — Autre état encore, sur mousseline bleu-vert : les mêmes formes, un registre de couleur entier de décalage" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-perlage">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/IMG-20260528-WA0003.jpg" loading="lazy" width="900" height="1600" alt="Textile + impression 3D — À plat, le motif entier : deux oiseaux et leur branche" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-perlage">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260427_121025200.MP.jpg" loading="lazy" width="1600" height="2844" alt="Textile + impression 3D — Le même motif en bleu, posé sur du tulle blanc" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-perlage">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/IMG-20260528-WA0001.jpg" loading="lazy" width="900" height="1600" alt="Textile + impression 3D — De près : la tête en triangles mats, le corps en rondelles bleues et or" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-perlage">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260427_121018672.MP.jpg" loading="lazy" width="1600" height="900" alt="Textile + impression 3D — Les perles seules sur la maille — trois diamètres, trois hauteurs, un dégradé" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-perlage">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/IMG-20260528-WA0004.jpg" loading="lazy" width="1600" height="900" alt="Textile + impression 3D — Une fleur, sur mousseline mauve" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-perlage">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260509_113957208.MP.jpg" loading="lazy" width="1600" height="2844" alt="Textile + impression 3D — La même fleur en pleine lumière : corail, parme et paillettes d'or" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-perlage">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/IMG-20260528-WA0002.jpg" loading="lazy" width="900" height="1600" alt="Textile + impression 3D — Détail : la buse alterne les familles de perles selon la couche de l'image" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-perlage">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260528_113406780.jpg" loading="lazy" width="1600" height="900" alt="Textile + impression 3D — Un registre plus sombre — cuivre et bleu nuit, perles plus larges" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-perlage">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260507_090233295.jpg" loading="lazy" width="1600" height="900" alt="Textile + impression 3D — La définition au travail : chaque famille de perles reçoit sa couche de l'image" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-perlage">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260507_110341482.jpg" loading="lazy" width="1600" height="900" alt="Textile + impression 3D — L'oiseau réduit à des points, avant que la buse ne les traduise en volumes" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/01_broderie-generee-ia.png" loading="lazy" width="1079" height="1049" alt="Textile + impression 3D — L'image qui a ouvert la recherche — broderie générée, corail et fil d'or" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/03_diagramme-identite.jpg" loading="lazy" width="1600" height="923" alt="Textile + impression 3D — Où tombent les images générées — traditionnel / interprété, oriental / marocain" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/02_premier-essai-midjourney.jpg" loading="lazy" width="1024" height="1024" alt="Textile + impression 3D — Premier essai Midjourney — broderie d'or sur organza noir" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/05_variation-caftan-or-01.jpg" loading="lazy" width="624" height="624" alt="Textile + impression 3D — Variation sur la fente centrale — densité du semis" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/06_variation-caftan-or-02.jpg" loading="lazy" width="624" height="624" alt="Textile + impression 3D — Variation sur la fente centrale — motif continu" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/07_variation-caftan-or-03.jpg" loading="lazy" width="624" height="624" alt="Textile + impression 3D — Variation sur la fente centrale — dégradé vers le bas" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/08_planche-materialite.jpg" loading="lazy" width="1600" height="923" alt="Textile + impression 3D — Planche de matérialité — vingt-huit états du même principe" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/09_planche-variations-motif.jpg" loading="lazy" width="1600" height="923" alt="Textile + impression 3D — Variations de motif sur l'épaule et le dos" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/04_planche-zooms.jpg" loading="lazy" width="1600" height="923" alt="Textile + impression 3D — Zooms — ce que devient le détail à cinquante-cinq millimètres" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/10_corail-couleur.jpg" loading="lazy" width="968" height="964" alt="Textile + impression 3D — Recherche d'image source — corail, saturation maximale" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/11_corail-image-source.jpg" loading="lazy" width="1015" height="878" alt="Textile + impression 3D — L'image retenue — le relief lisible en luminosité" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/12_image-source-symetrique.jpg" loading="lazy" width="1600" height="1252" alt="Textile + impression 3D — L'image source symétrisée, prête pour l'échantillonnage" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/13_definition-image-sampler-01.jpg" loading="lazy" width="1359" height="633" alt="Textile + impression 3D — Définition Grasshopper — l'image lue canal par canal" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/14_definition-image-sampler-02.jpg" loading="lazy" width="1429" height="663" alt="Textile + impression 3D — Définition Grasshopper — seuil de contour et attracteurs" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/15_fleuron-contour-01.jpg" loading="lazy" width="588" height="612" alt="Textile + impression 3D — Fleuron obtenu par symétrie — premier seuil" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/16_fleuron-contour-02.jpg" loading="lazy" width="578" height="609" alt="Textile + impression 3D — Fleuron obtenu par symétrie — deuxième seuil" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/17_fleuron-contour-03.jpg" loading="lazy" width="588" height="598" alt="Textile + impression 3D — Fleuron obtenu par symétrie — troisième seuil" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/18_bande-symetrique.jpg" loading="lazy" width="1537" height="346" alt="Textile + impression 3D — Bande symétrique — le motif déroulé en frise" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/19_contours-variante.jpg" loading="lazy" width="1028" height="997" alt="Textile + impression 3D — Courbes de niveau, variante ouverte" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/20_modele-3d-broderie.jpg" loading="lazy" width="968" height="967" alt="Textile + impression 3D — Modèle de la broderie imprimée — perles logées dans le bourrelet" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/21_modele-3d-broderie-couleur.jpg" loading="lazy" width="1600" height="955" alt="Textile + impression 3D — Le même modèle, socle et perles séparés" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/27_courbes-fermees-rhino.jpg" loading="lazy" width="1232" height="660" alt="Textile + impression 3D — Formes fermées, rendues en volume avant impression" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/28_definition-courbes-perles.jpg" loading="lazy" width="1217" height="745" alt="Textile + impression 3D — Définition des courbes de perlage sur le tracé" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/22_parcours-de-buse-01.jpg" loading="lazy" width="912" height="979" alt="Textile + impression 3D — Parcours de buse — le G-code n'est pas un tranchage, c'est une trajectoire" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/23_parcours-de-buse-02.jpg" loading="lazy" width="868" height="931" alt="Textile + impression 3D — Parcours de buse — variante de remplissage" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/24_parcours-de-buse-03.jpg" loading="lazy" width="904" height="970" alt="Textile + impression 3D — Parcours de buse — chemin en vue de dessus" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/25_prototype-tulle-noir.jpg" loading="lazy" width="514" height="480" alt="Textile + impression 3D — Échantillon — impression sur tulle noir tendu" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/26_prototype-perles-blanc.jpg" loading="lazy" width="414" height="294" alt="Textile + impression 3D — Échantillon — perles cousues dans les logements imprimés" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/29_prototype-perles-arcs.jpg" loading="lazy" width="494" height="445" alt="Textile + impression 3D — Essais d'arcs perlés sur tulle, avec la *sfifa* d'origine" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/30_prototype-perles-boucles.jpg" loading="lazy" width="435" height="480" alt="Textile + impression 3D — Boucles perlées, montées à la main sur le tracé imprimé" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/31_prototype-perles-detail.jpg" loading="lazy" width="557" height="400" alt="Textile + impression 3D — Détail de couture — la perle prise dans le bourrelet" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/32_prototype-perles-rangee.jpg" loading="lazy" width="640" height="408" alt="Textile + impression 3D — Rangée de perles imprimée d'un seul trait" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/33_symetrie-forme-de-base.jpg" loading="lazy" width="1557" height="1854" alt="Textile + impression 3D — Recherche de symétrie — la forme de base et ses replis" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/34_patronage-devant.jpg" loading="lazy" width="959" height="1309" alt="Textile + impression 3D — Patronage devant — demi-empiècement, symétrisé" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/35_patronage-dos-rendu.jpg" loading="lazy" width="1469" height="1000" alt="Textile + impression 3D — Patronage dos, posé sur le buste" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/36_plein-et-vide-etude.jpg" loading="lazy" width="740" height="988" alt="Textile + impression 3D — Plein et vide — étude d'une cellule répétable" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/37_plein-et-vide-panneau.png" loading="lazy" width="1202" height="2676" alt="Textile + impression 3D — Le panneau complet, matières attribuées" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/38_plein-et-vide-caftan.png" loading="lazy" width="1600" height="2663" alt="Textile + impression 3D — Le motif reporté sur les pièces du caftan" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/39_materiau-substance.png" loading="lazy" width="544" height="545" alt="Textile + impression 3D — Matière multicouche construite sous Substance Designer" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/40_thalassic-epaules.png" loading="lazy" width="1235" height="555" alt="Textile + impression 3D — Premier montage — empiècement d'épaules" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/41_thalassic-buste.png" loading="lazy" width="589" height="762" alt="Textile + impression 3D — Premier montage — buste et fente centrale" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/42_thalassic-face.png" loading="lazy" width="537" height="776" alt="Textile + impression 3D — Silhouette de face" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/43_thalassic-trois-quarts.png" loading="lazy" width="606" height="923" alt="Textile + impression 3D — Silhouette de trois quarts" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/44_thalassic-dos.png" loading="lazy" width="582" height="923" alt="Textile + impression 3D — Silhouette de dos" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/45_caftan-rendu-dos.jpg" loading="lazy" width="1413" height="1764" alt="Textile + impression 3D — Thalassic Kaftan — rendu Blender, de dos" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/46_caftan-buste-detail.jpg" loading="lazy" width="1380" height="1396" alt="Textile + impression 3D — Buste — or, turquoise et perles sur voile noir" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/47_caftan-manche-detail.jpg" loading="lazy" width="909" height="524" alt="Textile + impression 3D — Poignet brodé" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/48_caftan-bas-detail.jpg" loading="lazy" width="1376" height="759" alt="Textile + impression 3D — Bas de robe — la broderie remonte de l'ourlet" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/49_broderie-matiere-detail.jpg" loading="lazy" width="621" height="433" alt="Textile + impression 3D — La matière de près — fils d'or, remplissages perlés, transparences" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-media="video" data-groupe="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">
+                  <video class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Defile/51_defile-digital.mp4" muted loop playsinline preload="metadata" data-alt="Textile + impression 3D — Le défilé digital — le vêtement porté et marché, rendu sous Blender"></video>
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-definition">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/13_definition-image-sampler-01.jpg" loading="lazy" width="1359" height="633" alt="Textile + impression 3D — Définition Grasshopper — l'image lue canal par canal" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-definition">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/14_definition-image-sampler-02.jpg" loading="lazy" width="1429" height="663" alt="Textile + impression 3D — Définition Grasshopper — seuil de contour et attracteurs" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-definition">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/15_fleuron-contour-01.jpg" loading="lazy" width="588" height="612" alt="Textile + impression 3D — Fleuron obtenu par symétrie — premier seuil" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-definition">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/16_fleuron-contour-02.jpg" loading="lazy" width="578" height="609" alt="Textile + impression 3D — Fleuron obtenu par symétrie — deuxième seuil" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-definition">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/17_fleuron-contour-03.jpg" loading="lazy" width="588" height="598" alt="Textile + impression 3D — Fleuron obtenu par symétrie — troisième seuil" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-definition">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/18_bande-symetrique.jpg" loading="lazy" width="1537" height="346" alt="Textile + impression 3D — Bande symétrique — le motif déroulé en frise" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-definition">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/19_contours-variante.jpg" loading="lazy" width="1028" height="997" alt="Textile + impression 3D — Courbes de niveau, variante ouverte" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-broderie-imprimee">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/20_modele-3d-broderie.jpg" loading="lazy" width="968" height="967" alt="Textile + impression 3D — Modèle de la broderie imprimée — perles logées dans le bourrelet" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-broderie-imprimee">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/21_modele-3d-broderie-couleur.jpg" loading="lazy" width="1600" height="955" alt="Textile + impression 3D — Le même modèle, socle et perles séparés" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-broderie-imprimee">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/27_courbes-fermees-rhino.jpg" loading="lazy" width="1232" height="660" alt="Textile + impression 3D — Formes fermées, rendues en volume avant impression" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-broderie-imprimee">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/28_definition-courbes-perles.jpg" loading="lazy" width="1217" height="745" alt="Textile + impression 3D — Définition des courbes de perlage sur le tracé" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-broderie-imprimee">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/22_parcours-de-buse-01.jpg" loading="lazy" width="912" height="979" alt="Textile + impression 3D — Parcours de buse — le G-code n'est pas un tranchage, c'est une trajectoire" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-broderie-imprimee">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/23_parcours-de-buse-02.jpg" loading="lazy" width="868" height="931" alt="Textile + impression 3D — Parcours de buse — variante de remplissage" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-broderie-imprimee">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/24_parcours-de-buse-03.jpg" loading="lazy" width="904" height="970" alt="Textile + impression 3D — Parcours de buse — chemin en vue de dessus" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-broderie-imprimee">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/25_prototype-tulle-noir.jpg" loading="lazy" width="514" height="480" alt="Textile + impression 3D — Échantillon — impression sur tulle noir tendu" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-broderie-imprimee">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/26_prototype-perles-blanc.jpg" loading="lazy" width="414" height="294" alt="Textile + impression 3D — Échantillon — perles cousues dans les logements imprimés" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-broderie-imprimee">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/29_prototype-perles-arcs.jpg" loading="lazy" width="494" height="445" alt="Textile + impression 3D — Essais d'arcs perlés sur tulle, avec la *sfifa* d'origine" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-broderie-imprimee">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/30_prototype-perles-boucles.jpg" loading="lazy" width="435" height="480" alt="Textile + impression 3D — Boucles perlées, montées à la main sur le tracé imprimé" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-broderie-imprimee">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/31_prototype-perles-detail.jpg" loading="lazy" width="557" height="400" alt="Textile + impression 3D — Détail de couture — la perle prise dans le bourrelet" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-broderie-imprimee">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/32_prototype-perles-rangee.jpg" loading="lazy" width="640" height="408" alt="Textile + impression 3D — Rangée de perles imprimée d'un seul trait" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-contour">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Contour/PXL_20240319_205644415.jpg" loading="lazy" width="1600" height="2844" alt="Textile + impression 3D — Le tracé imprimé sur un voile teint, porté à même l'épaule" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-contour">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Contour/PXL_20240319_205716330.jpg" loading="lazy" width="1600" height="900" alt="Textile + impression 3D — De près : la ligne franchit la couture de l'épaule sans s'interrompre, et le bord droit arrête le motif net" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-fleurs">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Fleurs/PXL_20240506_120020367.jpg" loading="lazy" width="1600" height="2844" alt="Textile + impression 3D — La composition en cours sur le brocart : velours, lamé, tulle et organza, tous tenus par le même contour" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-fleurs">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Fleurs/PXL_20240506_120025415.MP.jpg" loading="lazy" width="1600" height="2844" alt="Textile + impression 3D — Une fleur seule — pétales de lamé découpés au ras de la ligne, cœur de soie froissée" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-fleurs">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Fleurs/PXL_20240506_120033627.MP.jpg" loading="lazy" width="1600" height="2844" alt="Textile + impression 3D — Contours souples et contours rigides sur la même pièce : les uns retombent, les autres tiennent le relief" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-fleurs">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Fleurs/PXL_20240506_120016033.jpg" loading="lazy" width="1600" height="2844" alt="Textile + impression 3D — Assemblage : la fleur est cousue point par point, avec ses rangs de perles" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-fleurs">
+                  <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Fleurs/PXL_20240506_120042836.jpg" loading="lazy" width="1600" height="2844" alt="Textile + impression 3D — Une guirlande de fleurs translucides — le contour reste lisible même quand le tissu ne l'est plus" onerror="this.style.opacity='0'">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sp-texte">
+            <p>Imprimer directement sur l'étoffe, au lieu d'imprimer un objet qu'on coudrait ensuite. Depuis trois ans la question n'a pas changé — comment la matière tient-elle au tissu ? — mais la réponse s'est resserrée : d'un bourrelet dans lequel on coud des perles, jusqu'à <button class="lien-galerie" data-galerie="2-recherche-sujets-textile-impression-3d-perlage">une perle qui se forme autour du fil du tulle</button> et ne peut plus glisser.</p>
+            <p>Le premier état vient du <button class="lien-galerie" data-galerie="2-recherche-sujets-textile-impression-3d-thalassic-kaftan">Thalassic Kaftan</button>, en 2023. <button class="lien-galerie" data-galerie="2-recherche-sujets-textile-impression-3d-definition">La définition Grasshopper</button> lit une image canal par canal et ne produit pas un volume à trancher : elle produit *<em>directement le parcours de la buse</em>*. Sur du tulle tendu, <button class="lien-galerie" data-galerie="2-recherche-sujets-textile-impression-3d-broderie-imprimee">la broderie imprimée</button> dessine un bourrelet avec le creux où la perle viendra se loger ; les perles y sont ensuite cousues à la main. <button class="lien-galerie" data-galerie="2-recherche-sujets-textile-impression-3d-machine-et-main">La machine pose ce qu'une main ne saurait pas répéter</button> à l'identique sur toute une surface, et la main fait ce qu'aucune buse ne sait faire — enfiler, tendre, arrêter le fil.</p>
+            <p>En 2024, le tissu est pris entre deux passes de matière. <button class="lien-galerie" data-galerie="2-recherche-sujets-textile-impression-3d-contour">Un contour en filament souple</button> fige un voile exactement là où il passe, et nulle part ailleurs : le drapé reprend un millimètre plus loin. Refermé sur lui-même, <button class="lien-galerie" data-galerie="2-recherche-sujets-textile-impression-3d-fleurs">le même contour devient une fleur</button> qu'on découpe au ras de la ligne sans qu'elle s'effiloche. Deux commandes de l'atelier Zaa en sont sorties, <button class="lien-galerie" data-galerie="2-recherche-sujets-textile-impression-3d-commandes-zaa">un caftan en mousseline et un gilet en brocart</button>.</p>
+            <p>En 2026, le perlage imprimé va jusqu'au bout du geste : la perle n'est plus cousue, elle est l'impression. Une définition répartit des familles de perles — diamètre, hauteur, couleur de filament — selon la teinte, la saturation et la luminosité de l'image, et la buse les pose une à une sur le tulle. Le tulle disparaît sur la peau ; il ne reste que le motif.</p>
+            <p>Pour ne plus réécrire cette chaîne à chaque motif, elle est devenue un plugin Grasshopper, <em>hudhud</em> : filtres d'image, dispatching et packing de cercles sur plusieurs couches de l'image, et un composant qui sort le G-code depuis Rhino — trajet continu, tranchage non planaire — sans passer par un slicer.</p>
+            <p>Ce sont des essais en incréments : à chaque tirage se règle une chose et une seule — les couleurs, la densité, la tenue au lavage, l'interprétation de l'image. Une recherche sur les matériaux biosourcés est en cours, pour rapprocher cette pratique des savoir-faire locaux au Maroc. L'objectif n'a jamais été de fabriquer plus vite, mais de donner à un atelier un outil qu'il n'aurait pas eu.</p>
+          </div>
+        </div>
+      </div>
       <div class="ff-card" data-note="2-recherche-sujets-defile-avant-le-vetement">
         <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-sujets-defile-avant-le-vetement">03 — Espaces virtuels</button></div>
         <p class="carte-resume">Trois façons de mettre un corps dans l'écran : un masque, un défilé, un monde en réalité virtuelle.</p>
@@ -2847,13 +3302,6 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           <button class="lien-piece" data-piece="2-recherche-projets-masques">Masques — Body Architecture 2.0</button>
         </div>
         <p>Dans l'écran, un corps peut porter ce qui n'existe pas encore, et marcher dans ce qui n'existera jamais. J'y travaille de trois manières : poser une géométrie sur un visage, faire défiler un vêtement avant de le couper, construire un monde dans lequel le spectateur entre.</p>
-        <div class="carte-suite">
-          <p>Les <button class="lien-galerie" data-galerie="2-recherche-sujets-defile-avant-le-vetement-masques">masques</button> viennent de <em>Body Architecture 2.0</em>, la masterclass de Filippo Nassetti (PAACADEMY, 2023), le même workshop que le Thalassic Kaftan. Trois logiques de génération posées sur la même tête : des lamelles qui suivent le crâne, une érosion qui creuse le visage, un empilement de sphères qui finit par recouvrir le corps entier.</p>
-          <p>D'habitude on fabrique une collection, puis on la fait défiler. Ici l'ordre est inversé : <button class="lien-galerie" data-galerie="2-recherche-sujets-defile-avant-le-vetement-defile">le défilé est rendu avant qu'un mètre de tissu ait été coupé</button>, et c'est lui qui sert d'épreuve. Ce n'est pas une vue de présentation, c'est un banc d'essai.</p>
-          <p>La raison est simple : un vêtement ne se juge pas à plat. Les plis, la retombée, la façon dont une broderie accroche la lumière quand le corps se déplace — <button class="lien-galerie" data-galerie="2-recherche-sujets-defile-avant-le-vetement-rendu-fixe">un rendu fixe n'en dit rien</button>, et un patronage encore moins. Poser la pièce sur un personnage animé et la regarder marcher, c'est le premier moment où l'on sait si elle tient. La correction revient alors au fichier, pas à l'atelier : on reprend la densité du motif, la place du plein et du vide, la tombée d'un panneau, et on refait défiler.</p>
-          <p>Et ce que ça ne remplace pas : rien n'a encore été porté. La collection n'a jamais défilé devant personne, et le vêtement reste à couper. Le défilé numérique dit qu'une pièce peut exister ; il ne dit pas ce qu'elle pèse sur une épaule.</p>
-          <p>Pour la première de l'album <em>Photophobia</em> de <a class="lien-externe" href="https://www.instagram.com/sanniest/?hl=fr" target="_blank" rel="noopener noreferrer">Sanni Est</a> à Kampnagel, Hambourg, c'est le spectateur qui entre dans l'écran : <button class="lien-galerie" data-galerie="2-recherche-sujets-defile-avant-le-vetement-photophobia">un monde de mangrove en réalité virtuelle</button>, du marécage futuriste sombre à un espace kaléidoscopique, sur trois pistes de l'album. Avec alpharats pour la programmation et les effets.</p>
-        </div>
         <button class="lire-plus mono" aria-expanded="false">Lire la suite …</button>
         <div class="galerie-source" data-galerie-id="2-recherche-sujets-defile-avant-le-vetement" hidden>
           <span data-groupe="2-recherche-sujets-defile-avant-le-vetement-rendu-fixe">
@@ -2882,6 +3330,81 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           </span>
         </div>
       </div>
+      <div class="sujet-panneau" data-panneau="2-recherche-sujets-defile-avant-le-vetement" data-titre="Espaces virtuels" hidden>
+        <div class="sp-entete mono">
+          <span class="sp-titre">03 — Espaces virtuels</span>
+          <button class="sp-tout" hidden>Toutes les photos</button>
+          <button class="sp-fermer" aria-label="Fermer ce sujet">Fermer ×</button>
+        </div>
+        <div class="sp-corps">
+          <div class="ff-media sp-media">
+            <div class="ff-marge">
+              <p class="ff-legende mono"></p>
+              <div class="slider-dots"><button class="slider-dot active" aria-label="Image 1"></button><button class="slider-dot" aria-label="Image 2"></button><button class="slider-dot" aria-label="Image 3"></button><button class="slider-dot" aria-label="Image 4"></button><button class="slider-dot" aria-label="Image 5"></button><button class="slider-dot" aria-label="Image 6"></button><button class="slider-dot" aria-label="Image 7"></button><button class="slider-dot" aria-label="Image 8"></button><button class="slider-dot" aria-label="Image 9"></button><button class="slider-dot" aria-label="Image 10"></button><button class="slider-dot" aria-label="Image 11"></button><button class="slider-dot" aria-label="Image 12"></button><button class="slider-dot" aria-label="Image 13"></button><button class="slider-dot" aria-label="Image 14"></button><button class="slider-dot" aria-label="Image 15"></button><button class="slider-dot" aria-label="Image 16"></button></div>
+            </div>
+            <div class="ff-nassij-slider slider">
+              <div class="slider-track">
+                <div class="vue" data-groupe="2-recherche-sujets-defile-avant-le-vetement-rendu-fixe">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/42_thalassic-face.png" loading="lazy" width="537" height="776" alt="Espaces virtuels — La silhouette de face, immobile — ce qu'un rendu fixe sait montrer" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-defile-avant-le-vetement-rendu-fixe">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/48_caftan-bas-detail.jpg" loading="lazy" width="1376" height="759" alt="Espaces virtuels — Le bas de robe : c'est là que la retombée se joue, et qu'un rendu fixe ment" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-defile-avant-le-vetement-rendu-fixe">
+                  <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/49_broderie-matiere-detail.jpg" loading="lazy" width="621" height="433" alt="Espaces virtuels — La broderie de près — sa façon d'accrocher la lumière ne se voit qu'en mouvement" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-defile-avant-le-vetement-photophobia">
+                  <img class="sujet" src="images/web/1-commandes/photophobia-vr/01_scene-mangrove.jpg" loading="lazy" width="1600" height="724" alt="Espaces virtuels — La mangrove, et ses créatures" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-defile-avant-le-vetement-photophobia">
+                  <img class="sujet" src="images/web/1-commandes/photophobia-vr/04_modele3d-poisson.jpg" loading="lazy" width="785" height="572" alt="Espaces virtuels — Un poisson ajouré, modélisé comme un objet" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-defile-avant-le-vetement-photophobia">
+                  <img class="sujet" src="images/web/1-commandes/photophobia-vr/05_texture-kaleidoscope.jpg" loading="lazy" width="1307" height="578" alt="Espaces virtuels — La texture de l'espace kaléidoscopique" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-defile-avant-le-vetement-photophobia">
+                  <img class="sujet" src="images/web/1-commandes/photophobia-vr/02_premiere-kampnagel.jpg" loading="lazy" width="568" height="503" alt="Espaces virtuels — Le casque, à la première, Kampnagel" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-defile-avant-le-vetement-photophobia">
+                  <img class="sujet" src="images/web/1-commandes/photophobia-vr/03_premiere-public.jpg" loading="lazy" width="199" height="564" alt="Espaces virtuels — Le public de la première" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-defile-avant-le-vetement-masques">
+                  <img class="sujet" src="images/web/2-recherche/projets/masques/01-thalassic-face.jpg" loading="lazy" width="669" height="745" alt="Espaces virtuels — Thalassic Mask — des lamelles qui suivent le crâne, de face" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-defile-avant-le-vetement-masques">
+                  <img class="sujet" src="images/web/2-recherche/projets/masques/02-thalassic-profil.jpg" loading="lazy" width="696" height="725" alt="Espaces virtuels — Thalassic Mask — de profil" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-defile-avant-le-vetement-masques">
+                  <img class="sujet" src="images/web/2-recherche/projets/masques/03-erosion-face.jpg" loading="lazy" width="669" height="745" alt="Espaces virtuels — Érosion — le visage creusé, de face" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-defile-avant-le-vetement-masques">
+                  <img class="sujet" src="images/web/2-recherche/projets/masques/04-erosion-profil.jpg" loading="lazy" width="696" height="725" alt="Espaces virtuels — Érosion — de profil, la tête réduite à ses strates" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-defile-avant-le-vetement-masques">
+                  <img class="sujet" src="images/web/2-recherche/projets/masques/05-spherepacking-face.jpg" loading="lazy" width="674" height="745" alt="Espaces virtuels — Sphere packing — de face" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-defile-avant-le-vetement-masques">
+                  <img class="sujet" src="images/web/2-recherche/projets/masques/06-spherepacking-profil.jpg" loading="lazy" width="697" height="725" alt="Espaces virtuels — Sphere packing — de profil" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-defile-avant-le-vetement-masques">
+                  <img class="sujet" src="images/web/2-recherche/projets/masques/07-spherepacking-corps.jpg" loading="lazy" width="322" height="675" alt="Espaces virtuels — Sphere packing — le corps entier" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-media="video" data-groupe="2-recherche-sujets-defile-avant-le-vetement-defile">
+                  <video class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Defile/51_defile-digital.mp4" muted loop playsinline preload="metadata" data-alt="Espaces virtuels — Le défilé digital — le vêtement porté et marché, rendu sous Blender"></video>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sp-texte">
+            <p>Dans l'écran, un corps peut porter ce qui n'existe pas encore, et marcher dans ce qui n'existera jamais. J'y travaille de trois manières : poser une géométrie sur un visage, faire défiler un vêtement avant de le couper, construire un monde dans lequel le spectateur entre.</p>
+            <p>Les <button class="lien-galerie" data-galerie="2-recherche-sujets-defile-avant-le-vetement-masques">masques</button> viennent de <em>Body Architecture 2.0</em>, la masterclass de Filippo Nassetti (PAACADEMY, 2023), le même workshop que le Thalassic Kaftan. Trois logiques de génération posées sur la même tête : des lamelles qui suivent le crâne, une érosion qui creuse le visage, un empilement de sphères qui finit par recouvrir le corps entier.</p>
+            <p>D'habitude on fabrique une collection, puis on la fait défiler. Ici l'ordre est inversé : <button class="lien-galerie" data-galerie="2-recherche-sujets-defile-avant-le-vetement-defile">le défilé est rendu avant qu'un mètre de tissu ait été coupé</button>, et c'est lui qui sert d'épreuve. Ce n'est pas une vue de présentation, c'est un banc d'essai.</p>
+            <p>La raison est simple : un vêtement ne se juge pas à plat. Les plis, la retombée, la façon dont une broderie accroche la lumière quand le corps se déplace — <button class="lien-galerie" data-galerie="2-recherche-sujets-defile-avant-le-vetement-rendu-fixe">un rendu fixe n'en dit rien</button>, et un patronage encore moins. Poser la pièce sur un personnage animé et la regarder marcher, c'est le premier moment où l'on sait si elle tient. La correction revient alors au fichier, pas à l'atelier : on reprend la densité du motif, la place du plein et du vide, la tombée d'un panneau, et on refait défiler.</p>
+            <p>Et ce que ça ne remplace pas : rien n'a encore été porté. La collection n'a jamais défilé devant personne, et le vêtement reste à couper. Le défilé numérique dit qu'une pièce peut exister ; il ne dit pas ce qu'elle pèse sur une épaule.</p>
+            <p>Pour la première de l'album <em>Photophobia</em> de <a class="lien-externe" href="https://www.instagram.com/sanniest/?hl=fr" target="_blank" rel="noopener noreferrer">Sanni Est</a> à Kampnagel, Hambourg, c'est le spectateur qui entre dans l'écran : <button class="lien-galerie" data-galerie="2-recherche-sujets-defile-avant-le-vetement-photophobia">un monde de mangrove en réalité virtuelle</button>, du marécage futuriste sombre à un espace kaléidoscopique, sur trois pistes de l'album. Avec alpharats pour la programmation et les effets.</p>
+          </div>
+        </div>
+      </div>
       <div class="ff-card" data-note="2-recherche-sujets-artisanat-numerique">
         <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-sujets-artisanat-numerique">04 — Avec un atelier de couture marocain</button></div>
         <p class="carte-resume">Cinquante ans de dfina, de caftans et de jellabas — et une place pour l'impression 3D à côté de la main, jamais à sa place.</p>
@@ -2891,13 +3414,6 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           <button class="lien-piece" data-piece="2-recherche-projets-motifs-broderie-main">Kaftan — conception de motifs pour broderie main</button>
         </div>
         <p>Depuis 2024, je travaille en exclusivité avec l'atelier de couture Zaa : plus de cinquante ans de dfina, de caftans, de kmiss et de jellabas, coupés et finis selon la tradition. Ce que j'y apporte ne remplace aucun geste de l'atelier ; ça vient à côté. Et les artisans répondent : ils sont souvent force de proposition en retour.</p>
-        <div class="carte-suite">
-          <p>Le cas le plus net, ce sont <button class="lien-galerie" data-galerie="2-recherche-sujets-artisanat-numerique-boutons">les boutons</button>. Sur ces vêtements, ils se montent à la main en fil de soie tressé, l'<em>aqad</em>. L'impression 3D ouvre une autre voie pour certaines pièces, les grandes tenues surtout : un bouton dessiné pour une tenue et une seule, accordé au tissu au lieu d'être choisi dans un catalogue. La porte s'est ouverte parce que l'atelier travaille déjà avec des fournisseurs de textiles très contemporains — le bouton imprimé est arrivé comme une matière de plus dans un vocabulaire qui bougeait déjà.</p>
-          <p>Le choix ne se fait pas sur un écran. <button class="lien-galerie" data-galerie="2-recherche-sujets-artisanat-numerique-instruments">Les instruments du choix</button> sont dessinés sur Grasshopper et imprimés eux aussi : un porte-échantillons qui pivote et libère le bouton qu'on veut essayer, des socles, des bandes d'essai, des réglettes numérotées qui gardent chaque série. Ils s'accumulent dans <button class="lien-galerie" data-galerie="2-recherche-sujets-artisanat-numerique-atelier">mon propre atelier</button>, parce qu'une couleur de filament ne se juge que posée sur le tissu qu'elle doit accompagner.</p>
-          <p>L'atelier me demande aussi des graphismes : <button class="lien-galerie" data-galerie="2-recherche-sujets-artisanat-numerique-motifs-broderie-main">un motif généré, mis à l'échelle et en couleur</button> pour servir de plan aux brodeuses, qui l'interprètent à la main, point par point. Là, le numérique s'arrête au dessin.</p>
-          <p>Les mêmes allers-retours ont donné deux pièces où l'impression touche le vêtement lui-même, <button class="lien-galerie" data-galerie="2-recherche-sujets-artisanat-numerique-commandes-zaa">un caftan en mousseline et un gilet en brocart</button> — leur technique est racontée dans <em>Textile + impression 3D</em>.</p>
-          <p>C'est ce va-et-vient qui m'intéresse le plus : ces techniques ouvrent une porte de plus pour réinterpréter l'artisanat sans en sortir. En dehors des commandes, c'est un de mes principaux leitmotivs.</p>
-        </div>
         <button class="lire-plus mono" aria-expanded="false">Lire la suite …</button>
         <div class="galerie-source" data-galerie-id="2-recherche-sujets-artisanat-numerique" hidden>
           <span data-groupe="2-recherche-sujets-artisanat-numerique-instruments">
@@ -2939,6 +3455,114 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           </span>
         </div>
       </div>
+      <div class="sujet-panneau" data-panneau="2-recherche-sujets-artisanat-numerique" data-titre="Avec un atelier de couture marocain" hidden>
+        <div class="sp-entete mono">
+          <span class="sp-titre">04 — Avec un atelier de couture marocain</span>
+          <button class="sp-tout" hidden>Toutes les photos</button>
+          <button class="sp-fermer" aria-label="Fermer ce sujet">Fermer ×</button>
+        </div>
+        <div class="sp-corps">
+          <div class="ff-media sp-media">
+            <div class="ff-marge">
+              <p class="ff-legende mono"></p>
+              <div class="slider-dots"><button class="slider-dot active" aria-label="Image 1"></button><button class="slider-dot" aria-label="Image 2"></button><button class="slider-dot" aria-label="Image 3"></button><button class="slider-dot" aria-label="Image 4"></button><button class="slider-dot" aria-label="Image 5"></button><button class="slider-dot" aria-label="Image 6"></button><button class="slider-dot" aria-label="Image 7"></button><button class="slider-dot" aria-label="Image 8"></button><button class="slider-dot" aria-label="Image 9"></button><button class="slider-dot" aria-label="Image 10"></button><button class="slider-dot" aria-label="Image 11"></button><button class="slider-dot" aria-label="Image 12"></button><button class="slider-dot" aria-label="Image 13"></button><button class="slider-dot" aria-label="Image 14"></button><button class="slider-dot" aria-label="Image 15"></button><button class="slider-dot" aria-label="Image 16"></button><button class="slider-dot" aria-label="Image 17"></button><button class="slider-dot" aria-label="Image 18"></button><button class="slider-dot" aria-label="Image 19"></button><button class="slider-dot" aria-label="Image 20"></button><button class="slider-dot" aria-label="Image 21"></button><button class="slider-dot" aria-label="Image 22"></button><button class="slider-dot" aria-label="Image 23"></button><button class="slider-dot" aria-label="Image 24"></button><button class="slider-dot" aria-label="Image 25"></button><button class="slider-dot" aria-label="Image 26"></button><button class="slider-dot" aria-label="Image 27"></button></div>
+            </div>
+            <div class="ff-nassij-slider slider">
+              <div class="slider-track">
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-instruments">
+                  <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260715_175518889.MP.jpg" loading="lazy" width="1600" height="2844" alt="Avec un atelier de couture marocain — Le porte-échantillons : il pivote autour de son axe et libère le bouton qu'on veut essayer" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-instruments">
+                  <img class="sujet" src="images/web/2-recherche/projets/atelier/PXL_20260715_175326165.MP.jpg" loading="lazy" width="1600" height="900" alt="Avec un atelier de couture marocain — Neuf motifs montés sur leurs bras, ouverts en éventail pour être comparés d'un geste" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-instruments">
+                  <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260706_140607253.jpg" loading="lazy" width="1600" height="900" alt="Avec un atelier de couture marocain — Une série sortie de l'imprimante, groupée par motif sur ses socles" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-instruments">
+                  <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260704_151248364.jpg" loading="lazy" width="1600" height="900" alt="Avec un atelier de couture marocain — Bande d'essai — impression directe sur le tissu, à côté des boutons cousus" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-instruments">
+                  <img class="sujet" src="images/web/2-recherche/projets/atelier/PXL_20260508_184529736.jpg" loading="lazy" width="1600" height="900" alt="Avec un atelier de couture marocain — Le panier d'échantillons — chaque réglette numérotée garde une série" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-instruments">
+                  <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260709_100516708.jpg" loading="lazy" width="1600" height="2844" alt="Avec un atelier de couture marocain — Et le choix final, sur le vêtement : deux familles côte à côte" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-commandes-zaa">
+                  <img class="sujet" src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-123440392.jpg" loading="lazy" width="1600" height="2844" alt="Avec un atelier de couture marocain — Le caftan en mousseline orange, motif imprimé puis pailleté par l'atelier" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-commandes-zaa">
+                  <img class="sujet" src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124224570.jpg" loading="lazy" width="1600" height="2844" alt="Avec un atelier de couture marocain — Le gilet en brocart doré, fleurs imprimées puis assemblées à la main" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-boutons">
+                  <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260610_140313055.jpg" loading="lazy" width="1600" height="2844" alt="Avec un atelier de couture marocain — Spirales imprimées, accordées au tissu — le dégradé du filament suit celui de l'étoffe" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-boutons">
+                  <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260610_140239002.jpg" loading="lazy" width="1600" height="2844" alt="Avec un atelier de couture marocain — La ligne complète sur la tenue, du col à l'ourlet" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-boutons">
+                  <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260704_111244235.jpg" loading="lazy" width="1600" height="2844" alt="Avec un atelier de couture marocain — Boutons carrés translucides, dégradé rose vers l'or" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-boutons">
+                  <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260704_111238925.jpg" loading="lazy" width="1600" height="2844" alt="Avec un atelier de couture marocain — La même tenue, tulle et lamé : le bouton prend la lumière comme le tissu" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-boutons">
+                  <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260610_135556599.MP.jpg" loading="lazy" width="1600" height="2844" alt="Avec un atelier de couture marocain — Boutons irisés sur un fond de sequins — la couleur bascule selon l'angle" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-boutons">
+                  <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260610_135539565.jpg" loading="lazy" width="1600" height="2844" alt="Avec un atelier de couture marocain — La pièce entière, en atelier" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-boutons">
+                  <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260709_100516708.jpg" loading="lazy" width="1600" height="2844" alt="Avec un atelier de couture marocain — Deux familles de boutons montées côte à côte, pour trancher sur le vêtement" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-boutons">
+                  <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260709_100541963.jpg" loading="lazy" width="1600" height="2844" alt="Avec un atelier de couture marocain — Le détail de la comparaison — motifs ajourés d'un côté, cerclages de l'autre" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-boutons">
+                  <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260715_175518889.MP.jpg" loading="lazy" width="1600" height="2844" alt="Avec un atelier de couture marocain — Le porte-échantillons : il pivote autour de son axe et libère le bouton qu'on veut essayer" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-boutons">
+                  <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260706_140607253.jpg" loading="lazy" width="1600" height="900" alt="Avec un atelier de couture marocain — Une série sortie de l'imprimante, groupée par motif sur ses socles" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-boutons">
+                  <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260704_151248364.jpg" loading="lazy" width="1600" height="900" alt="Avec un atelier de couture marocain — Bande d'essai — impression directe sur le tissu, à côté des boutons cousus" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-atelier">
+                  <img class="sujet" src="images/web/2-recherche/projets/atelier/PXL_20260306_094847207.jpg" loading="lazy" width="1600" height="900" alt="Avec un atelier de couture marocain — Avant : la pièce vide, son parquet et son lustre" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-atelier">
+                  <img class="sujet" src="images/web/2-recherche/projets/atelier/PXL_20260306_095009161.MP.jpg" loading="lazy" width="1600" height="900" alt="Avec un atelier de couture marocain — Après, depuis le même angle : la table de repas devenue établi, les tissus en attente sur l'étagère" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-atelier">
+                  <img class="sujet" src="images/web/2-recherche/projets/atelier/PXL_20260508_184529736.jpg" loading="lazy" width="1600" height="900" alt="Avec un atelier de couture marocain — Le panier d'échantillons — chaque réglette numérotée garde une série, et c'est la seule façon de la retrouver" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-atelier">
+                  <img class="sujet" src="images/web/2-recherche/projets/atelier/PXL_20260508_184541789.jpg" loading="lazy" width="1600" height="2844" alt="Avec un atelier de couture marocain — Le buste des essais : tout ce qui existe déjà, épinglé à hauteur de corps" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-atelier">
+                  <img class="sujet" src="images/web/2-recherche/projets/atelier/PXL_20260715_175326165.MP.jpg" loading="lazy" width="1600" height="900" alt="Avec un atelier de couture marocain — Neuf motifs de boutons montés sur leurs bras, ouverts en éventail pour être comparés d'un geste" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-motifs-broderie-main">
+                  <img class="sujet" src="images/web/2-recherche/projets/motifs-broderie-main/pxl-20240420-122646650.jpg" loading="lazy" width="1600" height="900" alt="Avec un atelier de couture marocain — Le kaftan brodé sur mannequin — le motif floral sur l'empiècement" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-motifs-broderie-main">
+                  <img class="sujet" src="images/web/2-recherche/projets/motifs-broderie-main/pxl-20240420-122720392.jpg" loading="lazy" width="1600" height="2844" alt="Avec un atelier de couture marocain — En pied — la broderie s'arrête à la taille, le brocart prend le relais" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-artisanat-numerique-motifs-broderie-main">
+                  <img class="sujet" src="images/web/2-recherche/projets/motifs-broderie-main/0-0.jpg" loading="lazy" width="1024" height="1024" alt="Avec un atelier de couture marocain — Le motif de départ, généré numériquement" onerror="this.style.opacity='0'">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sp-texte">
+            <p>Depuis 2024, je travaille en exclusivité avec l'atelier de couture Zaa : plus de cinquante ans de dfina, de caftans, de kmiss et de jellabas, coupés et finis selon la tradition. Ce que j'y apporte ne remplace aucun geste de l'atelier ; ça vient à côté. Et les artisans répondent : ils sont souvent force de proposition en retour.</p>
+            <p>Le cas le plus net, ce sont <button class="lien-galerie" data-galerie="2-recherche-sujets-artisanat-numerique-boutons">les boutons</button>. Sur ces vêtements, ils se montent à la main en fil de soie tressé, l'<em>aqad</em>. L'impression 3D ouvre une autre voie pour certaines pièces, les grandes tenues surtout : un bouton dessiné pour une tenue et une seule, accordé au tissu au lieu d'être choisi dans un catalogue. La porte s'est ouverte parce que l'atelier travaille déjà avec des fournisseurs de textiles très contemporains — le bouton imprimé est arrivé comme une matière de plus dans un vocabulaire qui bougeait déjà.</p>
+            <p>Le choix ne se fait pas sur un écran. <button class="lien-galerie" data-galerie="2-recherche-sujets-artisanat-numerique-instruments">Les instruments du choix</button> sont dessinés sur Grasshopper et imprimés eux aussi : un porte-échantillons qui pivote et libère le bouton qu'on veut essayer, des socles, des bandes d'essai, des réglettes numérotées qui gardent chaque série. Ils s'accumulent dans <button class="lien-galerie" data-galerie="2-recherche-sujets-artisanat-numerique-atelier">mon propre atelier</button>, parce qu'une couleur de filament ne se juge que posée sur le tissu qu'elle doit accompagner.</p>
+            <p>L'atelier me demande aussi des graphismes : <button class="lien-galerie" data-galerie="2-recherche-sujets-artisanat-numerique-motifs-broderie-main">un motif généré, mis à l'échelle et en couleur</button> pour servir de plan aux brodeuses, qui l'interprètent à la main, point par point. Là, le numérique s'arrête au dessin.</p>
+            <p>Les mêmes allers-retours ont donné deux pièces où l'impression touche le vêtement lui-même, <button class="lien-galerie" data-galerie="2-recherche-sujets-artisanat-numerique-commandes-zaa">un caftan en mousseline et un gilet en brocart</button> — leur technique est racontée dans <em>Textile + impression 3D</em>.</p>
+            <p>C'est ce va-et-vient qui m'intéresse le plus : ces techniques ouvrent une porte de plus pour réinterpréter l'artisanat sans en sortir. En dehors des commandes, c'est un de mes principaux leitmotivs.</p>
+          </div>
+        </div>
+      </div>
       <div class="ff-card" data-note="2-recherche-sujets-outils-applications">
         <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-sujets-outils-applications">05 — Outils + applications</button></div>
         <p class="carte-resume">Un outil est une pièce qu'on fabrique pour ne plus refaire deux fois la même chose.</p>
@@ -2947,14 +3571,6 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           <button class="lien-piece" data-piece="2-recherche-projets-atelier">L'atelier</button>
         </div>
         <p>Un outil est une pièce qu'on fabrique pour ne plus refaire deux fois la même chose. En parallèle de la fabrication, j'en développe — numériques ou non — qui prolongent la même logique : systématiser, transmettre, rendre un savoir-faire réutilisable, pour moi d'abord, puis pour d'autres.</p>
-        <div class="carte-suite">
-          <p><em>hudhud</em> — un plugin Grasshopper né de la recherche textile, pour ne plus réécrire la chaîne à chaque motif : filtres d'image, dispatching de perles selon les couches de l'image, et un composant qui sort le G-code directement depuis Rhino, sans slicer. Il est raconté dans <em>Textile + impression 3D</em>.</p>
-          <p>Les outils ne sont pas tous des logiciels. <button class="lien-galerie" data-galerie="2-recherche-sujets-outils-applications-instruments">Les instruments du choix</button> — un porte-échantillons qui pivote, des bras ouverts en éventail, des réglettes numérotées — sont dessinés sur Grasshopper et imprimés, pour qu'une couleur se juge sur le tissu et non sur un écran.</p>
-          <p><em>BridgeLink</em> — application de gestion de tournois pour des clubs de bridge, pilotée gratuitement en test réel avec un club à Casablanca avant une licence payante.</p>
-          <p><em>Kiyani</em> — assistant cognitif pour l'intelligence corporelle, projet personnel en développement, destiné à être commercialisé.</p>
-          <p><em>Creative Memory</em> et <em>FenFuturesTools</em> — mes propres outils de travail (dont un environnement de traitement d'image par IA), pensés comme une base commune plutôt que des scripts jetables, à terme partagés par licence en tokens d'utilisation. Creative Memory édite d'ailleurs le contenu de ce site.</p>
-          <p><em>HedronEquilibre</em> — un jeu d'équilibre et d'empilement en pièces imprimées en 3D, construit sur une géométrie unique déclinable en modules.</p>
-        </div>
         <button class="lire-plus mono" aria-expanded="false">Lire la suite …</button>
         <div class="galerie-source" data-galerie-id="2-recherche-sujets-outils-applications" hidden>
           <span data-groupe="2-recherche-sujets-outils-applications-instruments">
@@ -2965,6 +3581,46 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           </span>
         </div>
       </div>
+      <div class="sujet-panneau" data-panneau="2-recherche-sujets-outils-applications" data-titre="Outils + applications" hidden>
+        <div class="sp-entete mono">
+          <span class="sp-titre">05 — Outils + applications</span>
+          <button class="sp-tout" hidden>Toutes les photos</button>
+          <button class="sp-fermer" aria-label="Fermer ce sujet">Fermer ×</button>
+        </div>
+        <div class="sp-corps">
+          <div class="ff-media sp-media">
+            <div class="ff-marge">
+              <p class="ff-legende mono"></p>
+              <div class="slider-dots"><button class="slider-dot active" aria-label="Image 1"></button><button class="slider-dot" aria-label="Image 2"></button><button class="slider-dot" aria-label="Image 3"></button><button class="slider-dot" aria-label="Image 4"></button></div>
+            </div>
+            <div class="ff-nassij-slider slider">
+              <div class="slider-track">
+                <div class="vue" data-groupe="2-recherche-sujets-outils-applications-instruments">
+                  <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260715_175518889.MP.jpg" loading="lazy" width="1600" height="2844" alt="Outils + applications — Le porte-échantillons : il pivote autour de son axe et libère le bouton qu'on veut essayer" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-outils-applications-instruments">
+                  <img class="sujet" src="images/web/2-recherche/projets/atelier/PXL_20260715_175326165.MP.jpg" loading="lazy" width="1600" height="900" alt="Outils + applications — Neuf motifs montés sur leurs bras, ouverts en éventail pour être comparés d'un geste" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-outils-applications-instruments">
+                  <img class="sujet" src="images/web/2-recherche/projets/atelier/PXL_20260508_184529736.jpg" loading="lazy" width="1600" height="900" alt="Outils + applications — Le panier d'échantillons — chaque réglette numérotée garde une série" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-outils-applications-instruments">
+                  <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260706_140607253.jpg" loading="lazy" width="1600" height="900" alt="Outils + applications — Les socles de présentation, imprimés eux aussi" onerror="this.style.opacity='0'">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sp-texte">
+            <p>Un outil est une pièce qu'on fabrique pour ne plus refaire deux fois la même chose. En parallèle de la fabrication, j'en développe — numériques ou non — qui prolongent la même logique : systématiser, transmettre, rendre un savoir-faire réutilisable, pour moi d'abord, puis pour d'autres.</p>
+            <p><em>hudhud</em> — un plugin Grasshopper né de la recherche textile, pour ne plus réécrire la chaîne à chaque motif : filtres d'image, dispatching de perles selon les couches de l'image, et un composant qui sort le G-code directement depuis Rhino, sans slicer. Il est raconté dans <em>Textile + impression 3D</em>.</p>
+            <p>Les outils ne sont pas tous des logiciels. <button class="lien-galerie" data-galerie="2-recherche-sujets-outils-applications-instruments">Les instruments du choix</button> — un porte-échantillons qui pivote, des bras ouverts en éventail, des réglettes numérotées — sont dessinés sur Grasshopper et imprimés, pour qu'une couleur se juge sur le tissu et non sur un écran.</p>
+            <p><em>BridgeLink</em> — application de gestion de tournois pour des clubs de bridge, pilotée gratuitement en test réel avec un club à Casablanca avant une licence payante.</p>
+            <p><em>Kiyani</em> — assistant cognitif pour l'intelligence corporelle, projet personnel en développement, destiné à être commercialisé.</p>
+            <p><em>Creative Memory</em> et <em>FenFuturesTools</em> — mes propres outils de travail (dont un environnement de traitement d'image par IA), pensés comme une base commune plutôt que des scripts jetables, à terme partagés par licence en tokens d'utilisation. Creative Memory édite d'ailleurs le contenu de ce site.</p>
+            <p><em>HedronEquilibre</em> — un jeu d'équilibre et d'empilement en pièces imprimées en 3D, construit sur une géométrie unique déclinable en modules.</p>
+          </div>
+        </div>
+      </div>
       <div class="ff-card" data-note="2-recherche-sujets-scenographie-fabrication">
         <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-sujets-scenographie-fabrication">06 — Scénographie + fabrication</button></div>
         <p class="carte-resume">Ce que le plateau montre est la dernière couche — dessous, des plans, des pièces numérotées, des structures cachées.</p>
@@ -2973,12 +3629,6 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
           <button class="lien-piece" data-piece="2-recherche-projets-limbs">Starting with the Limbs — l'atelier</button>
         </div>
         <p>Dans un décor, une vitrine ou un dispositif scénique, ce qu'on voit est la dernière couche. Mon travail se tient le plus souvent en dessous : transformer une forme en <button class="lien-galerie" data-galerie="2-recherche-sujets-scenographie-fabrication-usinage">fichiers que d'autres vont usiner, mouler ou peindre</button>, et prévoir dès le modèle comment la pièce sera montée, transportée, démontée.</p>
-        <div class="carte-suite">
-          <p>Pour les vitrines Hermès et le décor de <em>Mass</em>, film de <a class="lien-externe" href="https://www.instagram.com/pierrepauze/" target="_blank" rel="noopener noreferrer">Pierre Pauze</a>, menés avec l'<a class="lien-externe" href="https://www.20point12.com/" target="_blank" rel="noopener noreferrer">Atelier 20point12</a>, les formes partent de Rhino et de ZBrush et finissent en plans CNC, en découpe laser, en impressions 3D. <button class="lien-galerie" data-galerie="2-recherche-sujets-scenographie-fabrication-du-modele-a-la-piece">Du modèle à la pièce</button>, l'écart se joue dans la préparation : les épaisseurs, les découpes, ce qui sort d'une machine et ce qui sort d'une autre.</p>
-          <p>Le mobilier lumineux de l'espace VIP de Watches &amp; Wonders montre <button class="lien-galerie" data-galerie="2-recherche-sujets-scenographie-fabrication-structures">ce qu'on ne voit plus une fois le meuble fermé</button> : une structure interne découpée en CNC, nervure par nervure, avant le stratifié, la LED et le miroir sans tain. Pour l'installation de <a class="lien-externe" href="https://sabrinaratte.com/" target="_blank" rel="noopener noreferrer">Sabrina Ratté</a>, les sculptures des alcôves sont <button class="lien-galerie" data-galerie="2-recherche-sujets-scenographie-fabrication-alcoves">passées par le plan avant le tirage</button>.</p>
-          <p><button class="lien-galerie" data-galerie="2-recherche-sujets-scenographie-fabrication-aire-poids-lourd">L'aire poids lourd</button> pose le cas inverse : un praticable conçu et fabriqué seul, qui devait se faire oublier sous une lumière déjà écrite. Tout le travail était dans l'assemblage et la logistique.</p>
-          <p>Pour <button class="lien-galerie" data-galerie="2-recherche-sujets-scenographie-fabrication-limbs">Starting with the Limbs</button>, l'objet est au contraire au centre : des modules que les danseurs portent, poussent, sur lesquels ils s'appuient. Ils ont été cherchés en studio avec eux avant d'être dessinés, puis imprimés et assemblés.</p>
-        </div>
         <button class="lire-plus mono" aria-expanded="false">Lire la suite …</button>
         <div class="galerie-source" data-galerie-id="2-recherche-sujets-scenographie-fabrication" hidden>
           <span data-groupe="2-recherche-sujets-scenographie-fabrication-usinage">
@@ -3025,6 +3675,128 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
             <i data-src="images/web/2-recherche/projets/limbs/pxl-20240904-131206456-mp.jpg" data-alt="Scénographie + fabrication — Essai en studio — une première structure, en ballons"></i>
             <i data-src="images/web/2-recherche/projets/limbs/pxl-20240904-131312353.jpg" data-alt="Scénographie + fabrication — Essai en studio — la structure tenue à bout de bras"></i>
           </span>
+        </div>
+      </div>
+      <div class="sujet-panneau" data-panneau="2-recherche-sujets-scenographie-fabrication" data-titre="Scénographie + fabrication" hidden>
+        <div class="sp-entete mono">
+          <span class="sp-titre">06 — Scénographie + fabrication</span>
+          <button class="sp-tout" hidden>Toutes les photos</button>
+          <button class="sp-fermer" aria-label="Fermer ce sujet">Fermer ×</button>
+        </div>
+        <div class="sp-corps">
+          <div class="ff-media sp-media">
+            <div class="ff-marge">
+              <p class="ff-legende mono"></p>
+              <div class="slider-dots"><button class="slider-dot active" aria-label="Image 1"></button><button class="slider-dot" aria-label="Image 2"></button><button class="slider-dot" aria-label="Image 3"></button><button class="slider-dot" aria-label="Image 4"></button><button class="slider-dot" aria-label="Image 5"></button><button class="slider-dot" aria-label="Image 6"></button><button class="slider-dot" aria-label="Image 7"></button><button class="slider-dot" aria-label="Image 8"></button><button class="slider-dot" aria-label="Image 9"></button><button class="slider-dot" aria-label="Image 10"></button><button class="slider-dot" aria-label="Image 11"></button><button class="slider-dot" aria-label="Image 12"></button><button class="slider-dot" aria-label="Image 13"></button><button class="slider-dot" aria-label="Image 14"></button><button class="slider-dot" aria-label="Image 15"></button><button class="slider-dot" aria-label="Image 16"></button><button class="slider-dot" aria-label="Image 17"></button><button class="slider-dot" aria-label="Image 18"></button><button class="slider-dot" aria-label="Image 19"></button><button class="slider-dot" aria-label="Image 20"></button><button class="slider-dot" aria-label="Image 21"></button><button class="slider-dot" aria-label="Image 22"></button><button class="slider-dot" aria-label="Image 23"></button><button class="slider-dot" aria-label="Image 24"></button><button class="slider-dot" aria-label="Image 25"></button><button class="slider-dot" aria-label="Image 26"></button><button class="slider-dot" aria-label="Image 27"></button><button class="slider-dot" aria-label="Image 28"></button><button class="slider-dot" aria-label="Image 29"></button><button class="slider-dot" aria-label="Image 30"></button><button class="slider-dot" aria-label="Image 31"></button><button class="slider-dot" aria-label="Image 32"></button></div>
+            </div>
+            <div class="ff-nassij-slider slider">
+              <div class="slider-track">
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-usinage">
+                  <img class="sujet" src="images/web/1-commandes/mass-set-design/_atelier/04_atelier-cnc.png" loading="lazy" width="630" height="473" alt="Scénographie + fabrication — Mass — le décor sorti de la CNC, avant peinture" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-usinage">
+                  <img class="sujet" src="images/web/1-commandes/mass-set-design/_atelier/05_atelier-cnc-detail.jpg" loading="lazy" width="568" height="426" alt="Scénographie + fabrication — Mass — la structure sous la peau" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-usinage">
+                  <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/07_bar-atelier.jpg" loading="lazy" width="928" height="572" alt="Scénographie + fabrication — Watches &amp; Wonders — le bar en cours de montage" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-usinage">
+                  <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/_atelier/06_atelier-pieces.jpg" loading="lazy" width="1322" height="992" alt="Scénographie + fabrication — Hermès 2019 — pièces usinées, en attente de finition" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-du-modele-a-la-piece">
+                  <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/03_modele3d-coquillage.jpg" loading="lazy" width="1358" height="1018" alt="Scénographie + fabrication — Hermès 2019 — le coquillage, modélisé" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-du-modele-a-la-piece">
+                  <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/_atelier/02_atelier.jpg" loading="lazy" width="1266" height="950" alt="Scénographie + fabrication — Le même, en cours de finition à l'atelier" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-du-modele-a-la-piece">
+                  <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/04_modele3d-chateau.jpg" loading="lazy" width="1156" height="867" alt="Scénographie + fabrication — Hermès 2019 — le château, modélisé" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-du-modele-a-la-piece">
+                  <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/03_modele3d-creature.jpg" loading="lazy" width="776" height="582" alt="Scénographie + fabrication — Hermès 2021 — le dragon, modélisé" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-du-modele-a-la-piece">
+                  <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/dragon-montage-atelier.jpg" loading="lazy" width="1600" height="849" alt="Scénographie + fabrication — Le dragon au montage, à l'atelier" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-du-modele-a-la-piece">
+                  <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-dragon.jpg" loading="lazy" width="1006" height="1258" alt="Scénographie + fabrication — Puis dans la vitrine" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-du-modele-a-la-piece">
+                  <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/05_modele3d-accessoires.jpg" loading="lazy" width="1112" height="834" alt="Scénographie + fabrication — Hermès 2021 — mains et accessoires, modélisés" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-du-modele-a-la-piece">
+                  <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/mains-moulees-en-serie.jpg" loading="lazy" width="1289" height="966" alt="Scénographie + fabrication — Les mains, moulées en série à l'atelier" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-structures">
+                  <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/01_vip-vue-eclatee.jpg" loading="lazy" width="1167" height="875" alt="Scénographie + fabrication — Vue éclatée — chaque nervure est une pièce de découpe" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-structures">
+                  <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/03_bar-plan-3d.jpg" loading="lazy" width="843" height="632" alt="Scénographie + fabrication — Le bar, plan de fabrication" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-structures">
+                  <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/04_vip-atelier.jpg" loading="lazy" width="1003" height="579" alt="Scénographie + fabrication — La structure assemblée à l'atelier" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-structures">
+                  <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/06_vip-atelier-montage.jpg" loading="lazy" width="742" height="579" alt="Scénographie + fabrication — Montage à l'atelier" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-structures">
+                  <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/08_bar-atelier-detail.jpg" loading="lazy" width="522" height="577" alt="Scénographie + fabrication — Le stratifié posé sur les nervures" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-structures">
+                  <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/10_bar-atelier-finition.jpg" loading="lazy" width="576" height="571" alt="Scénographie + fabrication — Avant fermeture" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-structures">
+                  <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/05_vip-atelier-detail.jpg" loading="lazy" width="768" height="576" alt="Scénographie + fabrication — Les nervures, éclairées par la LED" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-alcoves">
+                  <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/03_sculpture-himalaya-plan.png" loading="lazy" width="922" height="691" alt="Scénographie + fabrication — Le plan d'une sculpture d'alcôve" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-alcoves">
+                  <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/02_sculpture-impression-3d.jpg" loading="lazy" width="1102" height="826" alt="Scénographie + fabrication — La sculpture imprimée en 3D" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-aire-poids-lourd">
+                  <img class="sujet" src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-110930503.jpg" loading="lazy" width="1600" height="900" alt="Scénographie + fabrication — Les praticables en place, avant la représentation" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-aire-poids-lourd">
+                  <img class="sujet" src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-144453920.jpg" loading="lazy" width="1600" height="900" alt="Scénographie + fabrication — Deux interprètes sur le praticable" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-aire-poids-lourd">
+                  <img class="sujet" src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-145734025.jpg" loading="lazy" width="1600" height="900" alt="Scénographie + fabrication — Un interprète seul en lumière ; le praticable reste en retrait" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-aire-poids-lourd">
+                  <img class="sujet" src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-131926747.jpg" loading="lazy" width="1600" height="900" alt="Scénographie + fabrication — Le plateau dans le noir" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-limbs">
+                  <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20250615-162255914.png" loading="lazy" width="1600" height="1200" alt="Scénographie + fabrication — Un module seul — nœuds imprimés, reliés par des tubes" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-limbs">
+                  <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20250613-113842873.png" loading="lazy" width="1600" height="1200" alt="Scénographie + fabrication — Le même module, une autre face" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-limbs">
+                  <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20250615-162211608.png" loading="lazy" width="1600" height="1200" alt="Scénographie + fabrication — De biais : l'ouverture qui laisse passer un bras" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-limbs">
+                  <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20250615-162300172.png" loading="lazy" width="1600" height="1200" alt="Scénographie + fabrication — De dessus, la structure à plat" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-limbs">
+                  <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20240904-131134711-mp.jpg" loading="lazy" width="1600" height="900" alt="Scénographie + fabrication — Essai en studio, septembre 2024" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-limbs">
+                  <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20240904-131206456-mp.jpg" loading="lazy" width="1600" height="2844" alt="Scénographie + fabrication — Essai en studio — une première structure, en ballons" onerror="this.style.opacity='0'">
+                </div>
+                <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-limbs">
+                  <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20240904-131312353.jpg" loading="lazy" width="1600" height="2844" alt="Scénographie + fabrication — Essai en studio — la structure tenue à bout de bras" onerror="this.style.opacity='0'">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sp-texte">
+            <p>Dans un décor, une vitrine ou un dispositif scénique, ce qu'on voit est la dernière couche. Mon travail se tient le plus souvent en dessous : transformer une forme en <button class="lien-galerie" data-galerie="2-recherche-sujets-scenographie-fabrication-usinage">fichiers que d'autres vont usiner, mouler ou peindre</button>, et prévoir dès le modèle comment la pièce sera montée, transportée, démontée.</p>
+            <p>Pour les vitrines Hermès et le décor de <em>Mass</em>, film de <a class="lien-externe" href="https://www.instagram.com/pierrepauze/" target="_blank" rel="noopener noreferrer">Pierre Pauze</a>, menés avec l'<a class="lien-externe" href="https://www.20point12.com/" target="_blank" rel="noopener noreferrer">Atelier 20point12</a>, les formes partent de Rhino et de ZBrush et finissent en plans CNC, en découpe laser, en impressions 3D. <button class="lien-galerie" data-galerie="2-recherche-sujets-scenographie-fabrication-du-modele-a-la-piece">Du modèle à la pièce</button>, l'écart se joue dans la préparation : les épaisseurs, les découpes, ce qui sort d'une machine et ce qui sort d'une autre.</p>
+            <p>Le mobilier lumineux de l'espace VIP de Watches &amp; Wonders montre <button class="lien-galerie" data-galerie="2-recherche-sujets-scenographie-fabrication-structures">ce qu'on ne voit plus une fois le meuble fermé</button> : une structure interne découpée en CNC, nervure par nervure, avant le stratifié, la LED et le miroir sans tain. Pour l'installation de <a class="lien-externe" href="https://sabrinaratte.com/" target="_blank" rel="noopener noreferrer">Sabrina Ratté</a>, les sculptures des alcôves sont <button class="lien-galerie" data-galerie="2-recherche-sujets-scenographie-fabrication-alcoves">passées par le plan avant le tirage</button>.</p>
+            <p><button class="lien-galerie" data-galerie="2-recherche-sujets-scenographie-fabrication-aire-poids-lourd">L'aire poids lourd</button> pose le cas inverse : un praticable conçu et fabriqué seul, qui devait se faire oublier sous une lumière déjà écrite. Tout le travail était dans l'assemblage et la logistique.</p>
+            <p>Pour <button class="lien-galerie" data-galerie="2-recherche-sujets-scenographie-fabrication-limbs">Starting with the Limbs</button>, l'objet est au contraire au centre : des modules que les danseurs portent, poussent, sur lesquels ils s'appuient. Ils ont été cherchés en studio avec eux avant d'être dessinés, puis imprimés et assemblés.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -3083,7 +3855,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     <p class="footer-line mono">Ghali Bensouda — Computational designer et fabrication.</p>
     <!-- AUTO:PIED_SIGNATURE:FIN -->
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.90</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.91</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>
@@ -3121,8 +3893,10 @@ document.querySelectorAll('.slider').forEach(function (slider) {
   var dots = Array.prototype.slice.call(cadre.querySelectorAll('.slider-dot'));
   var legende = cadre.querySelector('.ff-legende');
   var piece = slider.closest('.ff-nassij');
+  var panneau = slider.closest('.sujet-panneau');
   var titrePiece = piece && piece.querySelector('.p-title')
-                 ? piece.querySelector('.p-title').textContent : '';
+                 ? piece.querySelector('.p-title').textContent
+                 : (panneau ? panneau.getAttribute('data-titre') || '' : '');
   var cur = 0, timer = null;
 
   function majReglette() {
@@ -3193,9 +3967,19 @@ document.querySelectorAll('.slider').forEach(function (slider) {
   // ajoute ni retire du DOM : on change la selection, la reglette suit, et
   // passer null rend a la piece la totalite de ses images.
   slider.filtrerGroupe = function (groupe) {
+    // Sans groupe : toutes les photos, mais chacune UNE fois. Un sujet qui
+    // cite la meme photo sous deux mots la porte deux fois (une par groupe,
+    // pour pouvoir filtrer) — l'ensemble ne doit pas la montrer deux fois.
+    var vues = {};
     var choix = groupe
       ? toutes.filter(function (s) { return s.getAttribute('data-groupe') === groupe; })
-      : toutes;
+      : toutes.filter(function (s) {
+          var m = s.querySelector('.sujet');
+          var cle = m ? m.getAttribute('src') : Math.random();
+          if (vues[cle]) return false;
+          vues[cle] = true;
+          return true;
+        });
     if (!choix.length) choix = toutes;      // un sous-projet sans photo ne vide pas le cadre
     slides = choix;
     cur = 0;
@@ -3234,29 +4018,130 @@ document.querySelectorAll('.slider').forEach(function (slider) {
   }
 });
 
-// ── DEPLIER UNE CARTE DE SUJET ───────────────────────────────────────────────
-// Un seul sujet deplie a la fois : deux articles ouverts sur deux colonnes
-// chacun, c'est le mur qu'on essaie d'eviter. Les autres cartes se replacent
-// toutes seules, la grille s'en charge.
-// Le meme bouton sert aux cartes de sujets et aux grands blocs — seule la
-// classe change. Un sujet deplie referme les autres sujets ; un grand bloc
-// n'a personne a refermer, il n'y en a qu'un d'affiche a la fois.
+// ── LE PANNEAU D'UN SUJET ────────────────────────────────────────────────────
+// Le titre d'une carte, sa vignette et « Lire la suite » ouvrent le meme
+// panneau. Il est deplace SOUS LA RANGEE de la carte : la carte reste a sa
+// place, ses voisines aussi, et la grille ne se troue plus (avant, la carte
+// prenait toute la largeur et sautait a la ligne, laissant une case grise).
+// Un seul ouvert a la fois. Dans le panneau, un mot cliquable change les
+// photos du cadre ; le plein ecran reste a un clic de la photo.
+(function () {
+  var grille = document.querySelector('.ff-grid');
+  if (!grille) return;
+  var ouvert = null;
+
+  function panneauDe(carte) {
+    return grille.querySelector('.sujet-panneau[data-panneau="' +
+                                carte.getAttribute('data-note') + '"]');
+  }
+  // la derniere carte de la meme rangee : meme hauteur dans la page
+  function finDeRangee(carte) {
+    var haut = carte.offsetTop, fin = carte, n = carte.nextElementSibling;
+    while (n) {
+      if (n.classList.contains('ff-card')) {
+        if (n.offsetTop !== haut) break;
+        fin = n;
+      }
+      n = n.nextElementSibling;
+    }
+    return fin;
+  }
+  function placer() {
+    if (!ouvert) return;
+    var fin = finDeRangee(ouvert.carte);
+    if (fin.nextElementSibling !== ouvert.panneau) fin.after(ouvert.panneau);
+  }
+  function bouton(carte, etat) {
+    var b = carte.querySelector('.lire-plus');
+    if (!b) return;
+    b.textContent = etat ? 'Replier' : 'Lire la suite …';
+    b.setAttribute('aria-expanded', etat ? 'true' : 'false');
+  }
+  function montrer(panneau, groupe) {
+    var s = panneau.querySelector('.ff-nassij-slider');
+    if (s && s.filtrerGroupe) s.filtrerGroupe(groupe);
+    if (groupe) panneau.setAttribute('data-montre', groupe);
+    else panneau.removeAttribute('data-montre');
+    panneau.querySelector('.sp-tout').hidden = !groupe;
+    panneau.querySelectorAll('.sp-texte .lien-galerie').forEach(function (l) {
+      l.classList.toggle('montre', !!groupe && l.getAttribute('data-galerie') === groupe);
+    });
+  }
+  function fermer(ramener) {
+    if (!ouvert) return;
+    var carte = ouvert.carte;
+    ouvert.panneau.hidden = true;
+    carte.classList.remove('deployee');
+    bouton(carte, false);
+    ouvert = null;
+    if (ramener) carte.scrollIntoView({ behavior: MOINS_DE_MOUVEMENT ? 'auto' : 'smooth',
+                                        block: 'nearest' });
+  }
+  function ouvrir(carte) {
+    var panneau = panneauDe(carte);
+    if (!panneau) return false;
+    if (ouvert && ouvert.carte === carte) { fermer(true); return true; }
+    fermer(false);
+    ouvert = { carte: carte, panneau: panneau };
+    panneau.hidden = false;
+    carte.classList.add('deployee');
+    bouton(carte, true);
+    placer();
+    montrer(panneau, null);
+    // les photos d'un panneau cache n'ont pas pu etre mesurees : le cadre se
+    // recale sur elles maintenant qu'il a une taille
+    window.dispatchEvent(new Event('resize'));
+    var y = panneau.getBoundingClientRect().top + window.scrollY - 64;
+    window.scrollTo({ top: y, behavior: MOINS_DE_MOUVEMENT ? 'auto' : 'smooth' });
+    return true;
+  }
+
+  grille.querySelectorAll('.ff-card').forEach(function (carte) {
+    if (!panneauDe(carte)) return;
+    // phase de capture : passe AVANT la visionneuse, qui ecoute le document
+    carte.addEventListener('click', function (e) {
+      var cible = e.target.closest('.k .lien-galerie, .k-vignette, .lire-plus');
+      if (!cible || !carte.contains(cible)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      ouvrir(carte);
+    }, true);
+  });
+
+  grille.querySelectorAll('.sujet-panneau').forEach(function (panneau) {
+    panneau.querySelector('.sp-fermer').addEventListener('click', function () { fermer(true); });
+    panneau.querySelector('.sp-tout').addEventListener('click', function () { montrer(panneau, null); });
+    var cadre = panneau.querySelector('.ff-nassij-slider');
+    panneau.addEventListener('click', function (e) {
+      var mot = e.target.closest('.sp-texte .lien-galerie');
+      if (!mot || !cadre) return;
+      var groupe = mot.getAttribute('data-galerie');
+      // seulement si le cadre porte ces photos ; sinon, le plein ecran comme avant
+      if (!cadre.querySelector('.vue[data-groupe="' + groupe + '"]')) return;
+      e.preventDefault();
+      e.stopPropagation();
+      montrer(panneau, groupe);
+    });
+  });
+
+  var enAttente = false;
+  window.addEventListener('resize', function () {
+    if (enAttente || !ouvert) return;
+    enAttente = true;
+    requestAnimationFrame(function () { enAttente = false; placer(); });
+  });
+})();
+
+// ── DEPLIER UN GRAND BLOC ────────────────────────────────────────────────────
+// Le bouton « Lire la suite » des pieces de Recherche. Celui des cartes de
+// sujets est pris en charge par leur panneau, juste au-dessus.
 document.addEventListener('click', function (e) {
   var bouton = e.target.closest('.lire-plus');
   if (!bouton) return;
-  var carte = bouton.closest('.ff-card, .ff-piece');
+  var carte = bouton.closest('.ff-piece');
   if (!carte) return;
-  var piece = carte.classList.contains('ff-piece');
-  var marque = piece ? 'depliee' : 'ouverte';
+  var marque = 'depliee';
   var ouvrir = !carte.classList.contains(marque);
-  if (!piece) {
-    document.querySelectorAll('.ff-card.ouverte').forEach(function (autre) {
-      if (autre === carte) return;
-      autre.classList.remove('ouverte');
-      var b = autre.querySelector('.lire-plus');
-      if (b) { b.textContent = 'Lire la suite …'; b.setAttribute('aria-expanded', 'false'); }
-    });
-  }
   carte.classList.toggle(marque, ouvrir);
   bouton.textContent = ouvrir ? 'Replier' : 'Lire la suite …';
   bouton.setAttribute('aria-expanded', ouvrir ? 'true' : 'false');
@@ -3649,10 +4534,26 @@ document.querySelectorAll('.lien-galerie').forEach(function (lien) {
       });
       if (restreint.length) imgs = restreint;
     }
+    // Dans le panneau d'un sujet : les photos que le cadre montre en ce
+    // moment (celles du mot choisi, ou toutes), chacune une seule fois.
+    var panneau = img.closest('.sujet-panneau');
+    if (panneau) {
+      var groupeMontre = panneau.getAttribute('data-montre');
+      var deja = {};
+      imgs = imgs.filter(function (i) {
+        var v = i.closest('.vue');
+        if (groupeMontre && (!v || v.getAttribute('data-groupe') !== groupeMontre)) return false;
+        var s = i.getAttribute('src');
+        if (deja[s]) return false;
+        deja[s] = true;
+        return true;
+      });
+      if (imgs.indexOf(img) === -1) imgs.unshift(img);
+    }
     var carte = img.closest('.cmd-carte, .ff-nassij');
     var t = carte && carte.querySelector('.cmd-titre, .p-title');
     var contexte = {
-      titre: t ? t.textContent.trim() : '',
+      titre: t ? t.textContent.trim() : (panneau ? panneau.getAttribute('data-titre') || '' : ''),
       tags: carte ? (carte.getAttribute('data-tags') || '').split(',')
                       .map(function (s) { return s.trim().toUpperCase(); })
                       .filter(Boolean).join('   ') : '',

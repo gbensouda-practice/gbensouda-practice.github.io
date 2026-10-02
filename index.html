@@ -643,7 +643,7 @@
     padding-bottom: 14px; margin-bottom: 26px;
     border-bottom: 1px solid var(--line-nuit);
   }
-  .sp-titre { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--blue-nuit); flex: 1 1 auto; }
+  .sp-titre { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--blue-nuit); flex: 1 1 auto; white-space: normal; min-width: 0; }
   .sp-tout, .sp-fermer {
     font: inherit; font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase;
     background: none; border: none; padding: 4px 0; cursor: pointer;
@@ -679,7 +679,9 @@
   @media (max-width: 900px) {
     .sujet-panneau { padding: 20px 20px 34px; }
     .sp-corps { grid-template-columns: minmax(0, 1fr); gap: 24px; }
-    .sujet-panneau .ff-media { position: static; grid-template-columns: 1fr; gap: 14px; }
+    .sujet-panneau .ff-media { position: static; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+    .sujet-panneau .slider-dots { flex-wrap: wrap; row-gap: 8px; }
+    .sp-titre { min-width: 0; flex-basis: 100%; overflow-wrap: anywhere; }
     .sujet-panneau .ff-nassij-slider { --h-media: clamp(260px, 48vh, 400px); }
   }
 
@@ -917,7 +919,9 @@
     .ff-nassij { margin-bottom: 64px; }
     .ff-nassij-slider { --h-media: clamp(280px, 52vh, 420px); }
     .notes-charniere { margin-top: 72px; }
-    .ff-grid { grid-template-columns: 1fr; }
+    /* minmax(0, ...) et non 1fr : un panneau ouvert (reglette de 21 traits,
+       titre en capitales) elargissait la colonne au-dela de l'ecran */
+    .ff-grid { grid-template-columns: minmax(0, 1fr); }
     .ff-card { padding: 28px 24px 30px; }
     .charniere { height: 88px; }
     .cloture { padding: 40px 0 32px; }
@@ -3855,7 +3859,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     <p class="footer-line mono">Ghali Bensouda — Computational designer et fabrication.</p>
     <!-- AUTO:PIED_SIGNATURE:FIN -->
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.91</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.92</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>
@@ -4046,10 +4050,16 @@ document.querySelectorAll('.slider').forEach(function (slider) {
     }
     return fin;
   }
+  // On mesure la rangee panneau CACHE : visible, il occupe une ligne de la
+  // grille et repousse la voisine de droite a la ligne suivante — la rangee
+  // mesuree ne serait plus la vraie (vu sur la carte 01 : le panneau se posait
+  // entre 01 et 02 au lieu d'apres 02).
   function placer() {
     if (!ouvert) return;
+    ouvert.panneau.hidden = true;
     var fin = finDeRangee(ouvert.carte);
     if (fin.nextElementSibling !== ouvert.panneau) fin.after(ouvert.panneau);
+    ouvert.panneau.hidden = false;
   }
   function bouton(carte, etat) {
     var b = carte.querySelector('.lire-plus');
@@ -4083,7 +4093,6 @@ document.querySelectorAll('.slider').forEach(function (slider) {
     if (ouvert && ouvert.carte === carte) { fermer(true); return true; }
     fermer(false);
     ouvert = { carte: carte, panneau: panneau };
-    panneau.hidden = false;
     carte.classList.add('deployee');
     bouton(carte, true);
     placer();

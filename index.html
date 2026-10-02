@@ -762,10 +762,14 @@
   .lightbox-close:active { transform: scale(.92); }
 
   /* la reglette, jamais de fleches */
+  /* La reglette vit DANS le cartouche, juste au-dessus du titre (02/10/2026) :
+     posee a hauteur fixe, elle recouvrait la legende des que le cartouche
+     grandissait (credits, « Voir aussi »). Elle suit maintenant sa hauteur. */
   .lb-points {
-    position: absolute; bottom: 104px; left: 50%; transform: translateX(-50%);
-    display: flex; gap: 3px; z-index: 3;
+    display: flex; gap: 3px; justify-content: center; flex-wrap: wrap; row-gap: 8px;
+    margin-bottom: 10px; pointer-events: auto;
   }
+  .lb-points:empty { display: none; }
   .lb-point {
     width: 16px; height: 2px; border: none; padding: 0; cursor: pointer;
     background: rgba(255,255,255,.24); border-radius: 0;
@@ -780,7 +784,6 @@
      60 px, le rond visible 34 : un clic un peu a cote change d'image au lieu
      de tomber sur le fond, qui ferme la galerie. Ils sont toujours cliquables,
      meme effaces — approcher le bord les fait reapparaitre. */
-  .lightbox { --lb-points-bas: 104px; }
   .lb-nav {
     position: absolute; top: 50%; z-index: 4;
     width: 60px; height: 60px; margin-top: -30px;
@@ -808,7 +811,6 @@
     .lb-nav::before { width: 28px; height: 28px; opacity: .6; }
     .lb-prec { left: 8px; }
     .lb-suiv { right: 8px; }
-    .lb-points { max-width: calc(100% - 48px); flex-wrap: wrap; justify-content: center; row-gap: 8px; }
   }
 
   /* le cartouche : le bandeau de lecture qui te suit en plein ecran */
@@ -937,8 +939,6 @@
     }
     .lb-cartouche { padding: 14px 18px 18px; min-height: 82px; }
     .lb-legende { font-size: 12.5px; }
-    .lightbox { --lb-points-bas: 96px; }
-    .lb-points { bottom: var(--lb-points-bas); }
     .lightbox img, .lightbox video { max-height: 68vh; }
   }
 
@@ -963,8 +963,8 @@
   <video id="lb-video" src="" controls loop playsinline></video>
   <button class="lb-nav lb-prec" id="lb-prec" aria-label="Image précédente"></button>
   <button class="lb-nav lb-suiv" id="lb-suiv" aria-label="Image suivante"></button>
-  <div class="lb-points" id="lb-points"></div>
   <div class="lb-cartouche">
+    <div class="lb-points" id="lb-points"></div>
     <span class="lb-titre mono" id="lb-titre"></span>
     <span class="lb-legende" id="lb-legende"></span>
     <span class="lb-tags mono" id="lb-tags"></span>
@@ -3987,7 +3987,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     <p class="footer-line mono">Ghali Bensouda — Computational designer et fabrication.</p>
     <!-- AUTO:PIED_SIGNATURE:FIN -->
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.97</p>
+      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.98</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>

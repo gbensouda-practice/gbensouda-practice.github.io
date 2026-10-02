@@ -485,20 +485,11 @@
   .regle-mots span:first-child { text-align: left; }
   .regle-mots span:last-child { text-align: right; color: var(--line); }
 
-  /* ── CHARNIERE DES NOTES ── */
-  .notes-charniere {
-    margin: 120px 0 40px; padding-top: 22px;
-    border-top: 1px solid var(--line-nuit);
-    display: flex; align-items: baseline; gap: 24px; flex-wrap: wrap;
-  }
-  .notes-titre {
-    font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
-    color: var(--blue-nuit);
-  }
-  .notes-intro { font-size: 13px; line-height: 1.6; color: #7A817C; max-width: 52ch; }
-
-  /* ── NOTES ── */
-  .ff-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: #22282A; }
+  /* ── NOTES ──
+     Le bandeau « Notes — Le reste du travail… » qui ouvrait la grille est
+     retire (02/10/2026) ; la grille garde la distance qu'il lui donnait. */
+  .ff-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: #22282A;
+             margin-top: 120px; }
   .ff-card { background: var(--ink); padding: 34px 32px 38px; position: relative; }
   /* on annote en marge au lieu de surligner la case */
   .ff-card::before {
@@ -808,18 +799,16 @@
   .lb-suiv { right: 12px; }
   .lightbox.nav-visible .lb-nav, .lb-nav:focus-visible { opacity: 1; }
   .lightbox.seule .lb-nav { display: none; }
-  /* Pas de survol (telephone, tablette) : toujours visibles, plus discrets,
-     aux deux bouts de la reglette — sous le pouce. Remontes de 18 px : au ras
-     de la reglette, ils mordaient sur un titre de cartouche de deux lignes. */
+  /* Pas de survol (telephone, tablette) : toujours visibles, plus discrets.
+     Places un peu AU-DESSUS du milieu de l'ecran, sur les bords (02/10/2026) :
+     en bas, aux deux bouts de la reglette, ils recouvraient les textes du
+     cartouche et se confondaient avec la reglette. */
   @media (hover: none) {
-    .lb-nav {
-      top: auto; margin-top: 0; opacity: 1;
-      bottom: calc(var(--lb-points-bas) + 18px - 30px);
-    }
+    .lb-nav { top: 42%; opacity: 1; }
     .lb-nav::before { width: 28px; height: 28px; opacity: .6; }
     .lb-prec { left: 8px; }
     .lb-suiv { right: 8px; }
-    .lb-points { max-width: calc(100% - 150px); flex-wrap: wrap; justify-content: center; row-gap: 8px; }
+    .lb-points { max-width: calc(100% - 48px); flex-wrap: wrap; justify-content: center; row-gap: 8px; }
   }
 
   /* le cartouche : le bandeau de lecture qui te suit en plein ecran */
@@ -933,7 +922,7 @@
     .ff-tagline { margin-bottom: 56px; }
     .ff-nassij { margin-bottom: 64px; }
     .ff-nassij-slider { --h-media: clamp(280px, 52vh, 420px); }
-    .notes-charniere { margin-top: 72px; }
+    .ff-grid { margin-top: 72px; }
     /* minmax(0, ...) et non 1fr : un panneau ouvert (reglette de 21 traits,
        titre en capitales) elargissait la colonne au-dela de l'ecran */
     .ff-grid { grid-template-columns: minmax(0, 1fr); }
@@ -1141,7 +1130,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-grand="1" data-ops="concevoir,transmettre" data-tags="Film, Résine, Néon, Pompidou-Metz" data-texte="Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film. Dessins de sculptures en résine, sculptures néon et plans pour les artisans peintres et sculpteurs. Exposé au Centre Pompidou-Metz, 2022. Photo Marc Domage. — Via Atelier 20point12." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://www.instagram.com/pierrepauze/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Pierre Pauze&lt;/a&gt; · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt; · photo d'exposition Marc Domage" data-credits-texte="Pierre Pauze · via Atelier 20point12 · photo d'exposition Marc Domage" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scenographie-fabrication&quot; data-groupe=&quot;2-recherche-sujets-scenographie-fabrication-usinage&quot;&gt;06 — Scénographie + fabrication&lt;/button&gt;">
+      <article class="cmd-carte" data-grand="1" data-ops="concevoir,transmettre" data-tags="Film, Résine, Néon, Pompidou-Metz" data-texte="Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film. Dessins de sculptures en résine, sculptures néon et plans pour les artisans peintres et sculpteurs. Exposé au Centre Pompidou-Metz, 2022. Photo Marc Domage." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://www.instagram.com/pierrepauze/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Pierre Pauze&lt;/a&gt; · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt; · photo d'exposition Marc Domage" data-credits-texte="Pierre Pauze · via Atelier 20point12 · photo d'exposition Marc Domage" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scenographie-fabrication&quot; data-groupe=&quot;2-recherche-sujets-scenographie-fabrication-usinage&quot;&gt;06 — Scénographie + fabrication&lt;/button&gt;">
         <div class="galerie-source" data-galerie-id="1-commandes-mass-set-design" hidden>
           <span data-groupe="1-commandes-mass-set-design">
             <i data-src="images/web/1-commandes/mass-set-design/01_expo-pompidou-metz.jpg" data-alt="Set design — Mass, film de Pierre Pauze — Exposition au Centre Pompidou-Metz"></i>
@@ -1177,7 +1166,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre" data-tags="Rhino, ZBrush, PLA, CNC, Laser, Impression 3D, Prusa" data-texte="Modélisations et usinage pour un décor de vitrine. Formes conçues pour être imprimées en atelier ou pour du fraisage numérique bois ou polystyrène. Réalisation de plans CNC bois et polystyrène, découpe laser. Suivi d'impressions 3D PLA. — Via Atelier 20point12." data-credits="Hermès · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt;" data-credits-texte="Hermès · via Atelier 20point12" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scenographie-fabrication&quot; data-groupe=&quot;2-recherche-sujets-scenographie-fabrication-du-modele-a-la-piece&quot;&gt;06 — Scénographie + fabrication&lt;/button&gt;">
+      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre" data-tags="Rhino, ZBrush, PLA, CNC, Laser, Impression 3D, Prusa" data-texte="Modélisations et usinage pour un décor de vitrine. Formes conçues pour être imprimées en atelier ou pour du fraisage numérique bois ou polystyrène. Réalisation de plans CNC bois et polystyrène, découpe laser. Suivi d'impressions 3D PLA." data-credits="Hermès · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt;" data-credits-texte="Hermès · via Atelier 20point12" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scenographie-fabrication&quot; data-groupe=&quot;2-recherche-sujets-scenographie-fabrication-du-modele-a-la-piece&quot;&gt;06 — Scénographie + fabrication&lt;/button&gt;">
         <div class="galerie-source" data-galerie-id="1-commandes-hermes-holiday-windows" hidden>
           <span data-groupe="1-commandes-hermes-holiday-windows">
             <i data-src="images/web/1-commandes/hermes-holiday-windows/01_vitrine-finale.jpg" data-alt="Vitrines Hermès France H19 — Vitrine finale montée"></i>
@@ -1218,7 +1207,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,systematiser,fabriquer,transmettre" data-tags="Rhino, Grasshopper, SLA, CNC" data-texte="Modélisations et usinage pour un décor de vitrine. Travail sur Rhino, ZBrush et définitions Grasshopper pour impression 3D PLA et SLA, CNC polystyrène. Plans d'usinage numérique bois, polystyrène et découpe laser. — Via Atelier 20point12." data-credits="Hermès · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt;" data-credits-texte="Hermès · via Atelier 20point12" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scenographie-fabrication&quot; data-groupe=&quot;2-recherche-sujets-scenographie-fabrication-du-modele-a-la-piece&quot;&gt;06 — Scénographie + fabrication&lt;/button&gt;">
+      <article class="cmd-carte" data-ops="concevoir,systematiser,fabriquer,transmettre" data-tags="Rhino, Grasshopper, SLA, CNC" data-texte="Modélisations et usinage pour un décor de vitrine. Travail sur Rhino, ZBrush et définitions Grasshopper pour impression 3D PLA et SLA, CNC polystyrène. Plans d'usinage numérique bois, polystyrène et découpe laser." data-credits="Hermès · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt;" data-credits-texte="Hermès · via Atelier 20point12" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scenographie-fabrication&quot; data-groupe=&quot;2-recherche-sujets-scenographie-fabrication-du-modele-a-la-piece&quot;&gt;06 — Scénographie + fabrication&lt;/button&gt;">
         <div class="galerie-source" data-galerie-id="1-commandes-hermes-wild-wild-quest" hidden>
           <span data-groupe="1-commandes-hermes-wild-wild-quest">
             <i data-src="images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-dragon.jpg" data-alt="Vitrines Hermès France H21 — Vitrine finale — le dragon et ses cavaliers"></i>
@@ -1264,7 +1253,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,transmettre" data-tags="Bois CNC, LED, Stratifié, Miroir sans tain" data-texte="Design, modélisation et édition de plans de fabrication en CNC. Structure interne réalisée à la découpe CNC. Matériaux : bois, PLA, LED, stratifié résine, miroir sans tain. — Via Atelier 20point12." data-credits="Watches &amp;amp; Wonders · &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.instagram.com/pierrepauze/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Pierre Pauze&lt;/a&gt; · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt;" data-credits-texte="Watches &amp; Wonders · Pierre Pauze · via Atelier 20point12" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scenographie-fabrication&quot; data-groupe=&quot;2-recherche-sujets-scenographie-fabrication-structures&quot;&gt;06 — Scénographie + fabrication&lt;/button&gt;">
+      <article class="cmd-carte" data-ops="concevoir,transmettre" data-tags="Bois CNC, LED, Stratifié, Miroir sans tain" data-texte="Design, modélisation et édition de plans de fabrication en CNC. Structure interne réalisée à la découpe CNC. Matériaux : bois, PLA, LED, stratifié résine, miroir sans tain." data-credits="Watches &amp;amp; Wonders · &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.instagram.com/pierrepauze/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Pierre Pauze&lt;/a&gt; · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt;" data-credits-texte="Watches &amp; Wonders · Pierre Pauze · via Atelier 20point12" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scenographie-fabrication&quot; data-groupe=&quot;2-recherche-sujets-scenographie-fabrication-structures&quot;&gt;06 — Scénographie + fabrication&lt;/button&gt;">
         <div class="galerie-source" data-galerie-id="1-commandes-watches-wonders-mobilier-vip" hidden>
           <span data-groupe="1-commandes-watches-wonders-mobilier-vip">
             <i data-src="images/web/1-commandes/watches-wonders-mobilier-vip/05_vip-atelier-detail.jpg" data-alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — Espace VIP — les nervures éclairées par la LED"></i>
@@ -1305,7 +1294,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre" data-tags="Scénographie, Sculpture, Installation" data-texte="Conception et modélisation 3D pour la présentation d'une installation vidéo de Sabrina Ratté durant le salon Watches and Wonders 2022 à Genève. Conception et plans d'esquisse pour la sculpture centrale et les alcôves comprenant les sculptures 3D. Prototype de sculpture cinétique réalisé par Animatronix. — Via Atelier 20point12." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://sabrinaratte.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Sabrina Ratté&lt;/a&gt; · Hermès / Watches &amp;amp; Wonders · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt; · prototype Animatronix · photos Alicia Dubuis, Galerie Charlot" data-credits-texte="Sabrina Ratté · Hermès / Watches &amp; Wonders · via Atelier 20point12 · prototype Animatronix · photos Alicia Dubuis, Galerie Charlot" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scenographie-fabrication&quot; data-groupe=&quot;2-recherche-sujets-scenographie-fabrication-alcoves&quot;&gt;06 — Scénographie + fabrication&lt;/button&gt;">
+      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre" data-tags="Scénographie, Sculpture, Installation" data-texte="Conception et modélisation 3D pour la présentation d'une installation vidéo de Sabrina Ratté durant le salon Watches and Wonders 2022 à Genève. Conception et plans d'esquisse pour la sculpture centrale et les alcôves comprenant les sculptures 3D. Prototype de sculpture cinétique réalisé par Animatronix." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://sabrinaratte.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Sabrina Ratté&lt;/a&gt; · Hermès / Watches &amp;amp; Wonders · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt; · prototype Animatronix · photos Alicia Dubuis, Galerie Charlot" data-credits-texte="Sabrina Ratté · Hermès / Watches &amp; Wonders · via Atelier 20point12 · prototype Animatronix · photos Alicia Dubuis, Galerie Charlot" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scenographie-fabrication&quot; data-groupe=&quot;2-recherche-sujets-scenographie-fabrication-alcoves&quot;&gt;06 — Scénographie + fabrication&lt;/button&gt;">
         <div class="galerie-source" data-galerie-id="1-commandes-sabrina-ratte-sculpture-cinetique" hidden>
           <span data-groupe="1-commandes-sabrina-ratte-sculpture-cinetique">
             <i data-src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/HERMES_Watches-Wonders_2022.04.02_AliciaDubuis_02_2000.jpg" data-alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — La sculpture suspendue devant l'installation vidéo de Sabrina Ratté — Watches &amp; Wonders, Genève 2022 (photo Alicia Dubuis)"></i>
@@ -1410,7 +1399,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
             <i data-src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124224570.jpg" data-alt="Ornements imprimés — deux pièces pour l'atelier Zaa — Gilet en brocart doré, de face"></i>
             <i data-src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124238652.jpg" data-alt="Ornements imprimés — deux pièces pour l'atelier Zaa — De profil — les fleurs montent sur la manche"></i>
             <i data-src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124247515.jpg" data-alt="Ornements imprimés — deux pièces pour l'atelier Zaa — De dos"></i>
-            <i data-src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124259998.jpg" data-alt="Ornements imprimés — deux pièces pour l'atelier Zaa — De trois quarts — fleurs souples et fleurs rigides mêlées"></i>
+            <i data-src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124259998.jpg" data-alt="Ornements imprimés — deux pièces pour l'atelier Zaa — De trois quarts — les fleurs montent jusqu’à l’épaule"></i>
           </span>
         </div>
         <div class="thumb slider">
@@ -1440,7 +1429,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
               <img class="sujet" src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124247515.jpg" loading="lazy" width="1600" height="2844" alt="Ornements imprimés — deux pièces pour l'atelier Zaa — De dos" onerror="this.style.opacity='0'">
             </div>
             <div class="vue" data-groupe="1-commandes-ornements-imprimes-gilet">
-              <img class="sujet" src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124259998.jpg" loading="lazy" width="1600" height="2844" alt="Ornements imprimés — deux pièces pour l'atelier Zaa — De trois quarts — fleurs souples et fleurs rigides mêlées" onerror="this.style.opacity='0'">
+              <img class="sujet" src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124259998.jpg" loading="lazy" width="1600" height="2844" alt="Ornements imprimés — deux pièces pour l'atelier Zaa — De trois quarts — les fleurs montent jusqu’à l’épaule" onerror="this.style.opacity='0'">
             </div>
           </div>
           <div class="slider-dots">
@@ -2217,7 +2206,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
               </summary>
               <p class="p-desc">Le même geste que le contour sur voile, mais refermé sur lui-même — et cette fois on découpe dedans.</p>
               <p class="p-desc">Chaque fleur est d'abord un dessin : une image générée, retouchée, puis mise en typologies sous Rhino. Le contour de chacune est ensuite imprimé sur un textile à trame large — lamé, tulle, organza, velours. Là où la matière a été déposée, la trame ne bouge plus. On peut alors couper le pétale à ras de la ligne : il ne s'effiloche pas, et la ligne imprimée devient le bord visible. La finition et la structure sont le même trait.</p>
-              <p class="p-desc">Le filament change selon le tissu et selon l'effet voulu. Souple, le pétale continue de tomber et se froisse comme le reste de l'étoffe. Rigide, il garde la courbure qu'on lui donne et tient en relief à quelques millimètres du fond. Sur une même pièce, les deux se mélangent — c'est ce qui fait qu'une composition à plat prend du volume.</p>
+              <p class="p-desc">Le filament change selon le tissu et selon l'effet voulu. Souple, le pétale continue de tomber et se froisse comme le reste de l'étoffe. Rigide, il garde la courbure qu'on lui donne et tient en relief à quelques millimètres du fond. Sur une même pièce, les deux pourront se mêler — c'est ce qui donnera du volume à une composition à plat. Les fleurs rigides attendent encore leur gilet : sur le premier, seules les souples ont été posées.</p>
               <p class="p-desc">Les fleurs sont ensuite composées et assemblées à la main, une par une, sur des pièces uniques : un cœur de soie froissée, un cordon d'or, un rang de perles. C'est un gilet en brocart doré, commandé par un atelier de couture de luxe au Maroc, qui en a reçu la première série complète. La technique, elle, n'y est pas épuisée : elle marche sur tout tissu dont la trame est assez ouverte pour que le filament la traverse.</p>
               <div class="p-meta mono"><span>MIDJOURNEY</span><span>PHOTOSHOP</span><span>RHINO</span><span>IMPRESSION 3D</span><span>FILAMENT FLEXIBLE</span></div>
             </details>
@@ -2816,10 +2805,6 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     <!-- AUTO:RECHERCHE:FIN -->
 
     <!-- AUTO:NOTES:DEBUT -->
-    <div class="notes-charniere">
-      <span class="notes-titre mono">Notes</span>
-      <p class="notes-intro">Le reste du travail : en cours, collaboratif, moins fini. Les mots soulignés ouvrent les photos.</p>
-    </div>
     <div class="ff-grid">
       <div class="ff-card" data-note="2-recherche-sujets-formes-generatives-imprimees">
         <div class="k mono"><button class="lien-galerie k-titre" data-galerie="2-recherche-sujets-formes-generatives-imprimees">01 — Une définition, plusieurs objets</button></div>
@@ -3017,7 +3002,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
             <i data-src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-122934822.jpg" data-alt="Textile + impression 3D — Mousseline — le motif imprimé en argent sur chaque pièce, avant l'assemblage"></i>
             <i data-src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-122946850-mp.jpg" data-alt="Textile + impression 3D — Le tracé de près, pailleté ensuite par l'atelier"></i>
             <i data-src="images/web/1-commandes/ornements-imprimes/_mémoire-brute/pxl-20240508-215042269.jpg" data-alt="Textile + impression 3D — Gilet — les fleurs composées sur le buste, avant l'assemblage"></i>
-            <i data-src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124259998.jpg" data-alt="Textile + impression 3D — Le gilet fini : fleurs souples et fleurs rigides mêlées"></i>
+            <i data-src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124259998.jpg" data-alt="Textile + impression 3D — Le gilet fini"></i>
           </span>
           <span data-groupe="2-recherche-sujets-textile-impression-3d-perlage">
             <i data-src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260516_194829364.NIGHT.jpg" data-alt="Textile + impression 3D — Porté : sur un tulle chair, le motif tient seul et le tissu s'efface"></i>
@@ -3156,7 +3141,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
                   <img class="sujet" src="images/web/1-commandes/ornements-imprimes/_mémoire-brute/pxl-20240508-215042269.jpg" loading="lazy" width="1600" height="2844" alt="Textile + impression 3D — Gilet — les fleurs composées sur le buste, avant l'assemblage" onerror="this.style.opacity='0'">
                 </div>
                 <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-commandes-zaa">
-                  <img class="sujet" src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124259998.jpg" loading="lazy" width="1600" height="2844" alt="Textile + impression 3D — Le gilet fini : fleurs souples et fleurs rigides mêlées" onerror="this.style.opacity='0'">
+                  <img class="sujet" src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124259998.jpg" loading="lazy" width="1600" height="2844" alt="Textile + impression 3D — Le gilet fini" onerror="this.style.opacity='0'">
                 </div>
                 <div class="vue" data-groupe="2-recherche-sujets-textile-impression-3d-perlage">
                   <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260516_194829364.NIGHT.jpg" loading="lazy" width="1600" height="1600" alt="Textile + impression 3D — Porté : sur un tulle chair, le motif tient seul et le tissu s'efface" onerror="this.style.opacity='0'">
@@ -3792,7 +3777,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
             <i data-src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/dragon-montage-atelier.jpg" data-alt="Scénographie + fabrication — Le dragon au montage, à l'atelier"></i>
             <i data-src="images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-dragon.jpg" data-alt="Scénographie + fabrication — Puis dans la vitrine"></i>
             <i data-src="images/web/1-commandes/hermes-wild-wild-quest/05_modele3d-accessoires.jpg" data-alt="Scénographie + fabrication — Hermès 2021 — mains et accessoires, modélisés"></i>
-            <i data-src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/mains-moulees-en-serie.jpg" data-alt="Scénographie + fabrication — Les mains, imprimées en série"></i>
+            <i data-src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/mains-imprimees-resine.jpg" data-alt="Scénographie + fabrication — Les mains, imprimées en résine à l'atelier, en série"></i>
           </span>
           <span data-groupe="2-recherche-sujets-scenographie-fabrication-structures">
             <i data-src="images/web/1-commandes/watches-wonders-mobilier-vip/01_vip-vue-eclatee.jpg" data-alt="Scénographie + fabrication — Vue éclatée — chaque nervure est une pièce de découpe"></i>
@@ -3872,7 +3857,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
                   <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/05_modele3d-accessoires.jpg" loading="lazy" width="1112" height="834" alt="Scénographie + fabrication — Hermès 2021 — mains et accessoires, modélisés" onerror="this.style.opacity='0'">
                 </div>
                 <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-du-modele-a-la-piece">
-                  <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/mains-moulees-en-serie.jpg" loading="lazy" width="1289" height="966" alt="Scénographie + fabrication — Les mains, imprimées en série" onerror="this.style.opacity='0'">
+                  <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/mains-imprimees-resine.jpg" loading="lazy" width="1289" height="966" alt="Scénographie + fabrication — Les mains, imprimées en résine à l'atelier, en série" onerror="this.style.opacity='0'">
                 </div>
                 <div class="vue" data-groupe="2-recherche-sujets-scenographie-fabrication-structures">
                   <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/01_vip-vue-eclatee.jpg" loading="lazy" width="1167" height="875" alt="Scénographie + fabrication — Vue éclatée — chaque nervure est une pièce de découpe" onerror="this.style.opacity='0'">
@@ -4002,7 +3987,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     <p class="footer-line mono">Ghali Bensouda — Computational designer et fabrication.</p>
     <!-- AUTO:PIED_SIGNATURE:FIN -->
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.96</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.97</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>

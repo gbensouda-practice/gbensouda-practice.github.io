@@ -846,7 +846,8 @@
   }
   .lien-sujet:hover { color: var(--corail); }
   .lien-sujet::after { content: ' ↓'; font-size: .85em; opacity: .7; }
-  .cmd-credits-bandeau .voir-aussi { display: inline-block; margin-top: 2px; }
+  .cmd-credits-bandeau .credits-ligne, .cmd-credits-bandeau .voir-aussi { display: block; }
+  .cmd-credits-bandeau .voir-aussi { margin-top: 2px; }
 
   /* ── MINI NAV ── */
   .mini-nav {
@@ -904,9 +905,10 @@
     .cmd-bloc { padding: 40px 12px 11px; }
     .cmd-carte:not([data-grand]) .cmd-resume,
     .cmd-carte:not([data-grand]) .cmd-credits { display: none; }
-    /* colle en haut d'un petit ecran : trois lignes, credits puis « Voir aussi » */
-    .cmd-credits-bandeau {
-      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+    /* colle en haut d'un petit ecran : deux lignes de credits au plus ;
+       « Voir aussi », lui, n'est jamais coupe */
+    .cmd-credits-bandeau .credits-ligne {
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
       overflow: hidden;
     }
     /* la rubrique ne tient pas sur 150 px : on garde l'annee, qui date */
@@ -4000,7 +4002,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     <p class="footer-line mono">Ghali Bensouda — Computational designer et fabrication.</p>
     <!-- AUTO:PIED_SIGNATURE:FIN -->
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.94</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.95</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>
@@ -4465,7 +4467,9 @@ document.querySelectorAll('video.sujet').forEach(function (v) {
       // credits, puis « Voir aussi » sur sa propre ligne
       var cr = carte ? (carte.getAttribute('data-credits') || '') : '';
       var voir = carte ? (carte.getAttribute('data-voir') || '') : '';
-      zoneCredits.innerHTML = cr + (cr && voir ? '<br>' : '') +
+      // deux blocs : sur telephone seuls les credits sont limites en lignes,
+      // « Voir aussi » doit toujours rester visible
+      zoneCredits.innerHTML = (cr ? '<span class="credits-ligne">' + cr + '</span>' : '') +
                               (voir ? '<span class="voir-aussi">' + voir + '</span>' : '');
       zoneCredits.classList.toggle('on', !!(cr || voir));
     }

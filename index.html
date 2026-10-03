@@ -190,8 +190,9 @@
 
   /* ── PROJETS : LES FILTRES (03/10/2026) ──
      Un clic reduit la grille SUR PLACE : rien ne defile. Sous la rangee, une
-     ligne propose l'article du filtre ; il s'ouvre dans un calque de lecture
-     par-dessus la page, et la page est retrouvee telle quelle en le fermant. */
+     ligne propose l'article du filtre ; « Lire l'article » descend au sujet,
+     en bas, et ouvre son panneau. Ghali tient a ce que les articles restent
+     la. « Retour aux projets » ramene exactement ou l'on etait. */
   .cmd-filtres { display: flex; flex-wrap: wrap; gap: 4px 22px; margin: 0 0 16px; }
   .cmd-filtre {
     font: inherit; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase;
@@ -220,21 +221,6 @@
   }
   .lien-article:hover { color: var(--corail); }
 
-  /* ── LE CALQUE DE LECTURE ──
-     Le panneau du sujet y est DEPLACE (pas copie) : ses mots cliquables et son
-     cadre de photos marchent comme dans la grille. Sous la visionneuse. */
-  .lecteur {
-    position: fixed; inset: 0; z-index: 500; overflow-y: auto;
-    overscroll-behavior: contain; background: var(--ink);
-  }
-  .lecteur[hidden] { display: none; }
-  .lecteur .sujet-panneau { max-width: 1100px; margin: 0 auto; min-height: 100%; }
-  .lecteur .sujet-panneau .ff-media { top: 24px; }
-  .lecteur .sp-entete {
-    position: sticky; top: 0; z-index: 5; background: var(--ink);
-    padding-top: 14px; margin-top: -14px;
-  }
-  html.lecture-ouverte { overflow: hidden; }
   .cmd-carte .thumb { aspect-ratio: 4/3; position: relative; }
 
   /* le trait de mesure se trace en haut de la vignette lue */
@@ -270,7 +256,7 @@
   .cmd-rubrique {
     font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
     color: #9BA5AC;
-    display: flex; justify-content: space-between; gap: 12px; align-items: baseline;
+    display: flex; justify-content: flex-end; gap: 12px; align-items: baseline;
   }
   .cmd-annee { font-style: normal; opacity: .7; flex: none; }
   .cmd-titre { font-size: 15px; line-height: 1.3; font-weight: 500; }
@@ -693,7 +679,13 @@
     transition: color .2s ease, border-color .2s ease;
   }
   .sp-tout:hover, .sp-fermer:hover { color: var(--corail); border-bottom-color: var(--corail); }
-  .sp-tout[hidden] { display: none; }
+  .sp-tout[hidden], .sp-retour[hidden] { display: none; }
+  .sp-retour {
+    font: inherit; font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase;
+    background: none; border: none; padding: 4px 0; cursor: pointer;
+    color: var(--blue-nuit); border-bottom: 1px solid var(--corail);
+  }
+  .sp-retour:hover { color: var(--corail); }
   .sp-corps {
     display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
     gap: 44px; align-items: start;
@@ -887,8 +879,7 @@
     text-decoration-thickness: 1px;
   }
   .lien-sujet:hover { color: var(--corail); }
-  /* le sujet s'ouvre par-dessus la page, on n'y descend plus (03/10/2026) */
-  .lien-sujet::after { content: ' →'; font-size: .85em; opacity: .7; }
+  .lien-sujet::after { content: ' ↓'; font-size: .85em; opacity: .7; }
   .cmd-credits-bandeau .credits-ligne, .cmd-credits-bandeau .voir-aussi { display: block; }
   .cmd-credits-bandeau .voir-aussi { margin-top: 2px; }
 
@@ -955,9 +946,7 @@
       overflow: hidden;
     }
     /* la rubrique ne tient pas sur 150 px : on garde l'annee, qui date */
-    .cmd-carte:not([data-grand]) .cmd-rub-mot { display: none; }
     .cmd-rubrique { justify-content: flex-end; }
-    .cmd-carte[data-grand] .cmd-rubrique { justify-content: space-between; }
     .cmd-titre { font-size: 13px; }
 
     .ff-media { grid-template-columns: 1fr; gap: 14px; }
@@ -1152,7 +1141,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
           <div class="cmd-calque" aria-hidden="true">
             <div class="cmd-bloc">
-              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Scénographie &amp; spectacle vivant</b><i class="cmd-annee">2025</i></span>
+              <span class="cmd-rubrique mono"><i class="cmd-annee">2025</i></span>
               <span class="cmd-titre">Dispositifs scéniques — <em>Starting with the Limbs</em>, cie L'Autre Maison</span>
               <span class="cmd-resume">Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer.</span>
               <span class="cmd-credits mono">cie L'Autre Maison · Annie Hanauer · photos de scène Gwendal Le Flem</span>
@@ -1198,7 +1187,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
           <div class="cmd-calque" aria-hidden="true">
             <div class="cmd-bloc">
-              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Scénographie &amp; spectacle vivant</b><i class="cmd-annee">2022</i></span>
+              <span class="cmd-rubrique mono"><i class="cmd-annee">2022</i></span>
               <span class="cmd-titre">Environnement VR — <em>Photophobia</em>, Sanni Est</span>
               <span class="cmd-resume">Expérience immersive en réalité virtuelle pour la première de l'album Photophobia à Kampnagel, Hambourg.</span>
               <span class="cmd-credits mono">Sanni Est · alpharats · Kampnagel, Hambourg</span>
@@ -1264,7 +1253,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
           <div class="cmd-calque" aria-hidden="true">
             <div class="cmd-bloc">
-              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Luxe &amp; production</b><i class="cmd-annee">2020</i></span>
+              <span class="cmd-rubrique mono"><i class="cmd-annee">2020</i></span>
               <span class="cmd-titre">Set design — <em>Mass</em>, film de Pierre Pauze</span>
               <span class="cmd-resume">Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film.</span>
               <span class="cmd-credits mono">Pierre Pauze · via Atelier 20point12 · photo d'exposition Marc Domage</span>
@@ -1315,7 +1304,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
           <div class="cmd-calque" aria-hidden="true">
             <div class="cmd-bloc">
-              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Luxe &amp; production</b><i class="cmd-annee">2019</i></span>
+              <span class="cmd-rubrique mono"><i class="cmd-annee">2019</i></span>
               <span class="cmd-titre">Vitrines Hermès France H19</span>
               <span class="cmd-resume">Modélisations et usinage pour un décor de vitrine.</span>
               <span class="cmd-credits mono">Hermès · via Atelier 20point12 · photos de vitrine Alex Jonas</span>
@@ -1361,7 +1350,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
           <div class="cmd-calque" aria-hidden="true">
             <div class="cmd-bloc">
-              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Luxe &amp; production</b><i class="cmd-annee">2021</i></span>
+              <span class="cmd-rubrique mono"><i class="cmd-annee">2021</i></span>
               <span class="cmd-titre">Vitrines Hermès France H21</span>
               <span class="cmd-resume">Modélisations et usinage pour un décor de vitrine.</span>
               <span class="cmd-credits mono">Hermès · via Atelier 20point12</span>
@@ -1432,7 +1421,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
           <div class="cmd-calque" aria-hidden="true">
             <div class="cmd-bloc">
-              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Luxe &amp; production</b><i class="cmd-annee">2020</i></span>
+              <span class="cmd-rubrique mono"><i class="cmd-annee">2020</i></span>
               <span class="cmd-titre">Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze</span>
               <span class="cmd-resume">Un bar à montres en double courbure et une table à miroir infini, pour l'espace VIP.</span>
               <span class="cmd-credits mono">Watches &amp; Wonders · Pierre Pauze · via Atelier 20point12</span>
@@ -1478,7 +1467,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
           <div class="cmd-calque" aria-hidden="true">
             <div class="cmd-bloc">
-              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Scénographie &amp; spectacle vivant</b><i class="cmd-annee">2022</i></span>
+              <span class="cmd-rubrique mono"><i class="cmd-annee">2022</i></span>
               <span class="cmd-titre">Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders</span>
               <span class="cmd-resume">Scénographie et sculptures pour l'installation vidéo de Sabrina Ratté, Watches &amp; Wonders 2022.</span>
               <span class="cmd-credits mono">Sabrina Ratté · Hermès / Watches &amp; Wonders · via Atelier 20point12 · prototype Animatronix · photos Alicia Dubuis, Galerie Charlot</span>
@@ -1524,7 +1513,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
           <div class="cmd-calque" aria-hidden="true">
             <div class="cmd-bloc">
-              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Luxe &amp; production</b><i class="cmd-annee">2023</i></span>
+              <span class="cmd-rubrique mono"><i class="cmd-annee">2023</i></span>
               <span class="cmd-titre">Collection mobilier paramétrique — Saket Sethi Design</span>
               <span class="cmd-resume">Modélisation pour une collection de mobilier.</span>
               <span class="cmd-credits mono">Saket Sethi Design</span>
@@ -1592,7 +1581,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
           <div class="cmd-calque" aria-hidden="true">
             <div class="cmd-bloc">
-              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Mode</b><i class="cmd-annee">2024</i></span>
+              <span class="cmd-rubrique mono"><i class="cmd-annee">2024</i></span>
               <span class="cmd-titre">Ornements imprimés — deux pièces pour l'atelier Zaa</span>
               <span class="cmd-resume">Le motif imprimé en 3D directement sur l'étoffe, puis repris à la main par l'atelier.</span>
               <span class="cmd-credits mono">Atelier de couture Zaa</span>
@@ -1648,7 +1637,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
           <div class="cmd-calque" aria-hidden="true">
             <div class="cmd-bloc">
-              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Mode</b><i class="cmd-annee">2026</i></span>
+              <span class="cmd-rubrique mono"><i class="cmd-annee">2026</i></span>
               <span class="cmd-titre">Passementerie imprimée</span>
               <span class="cmd-resume">Des boutons de caftan imprimés en 3D, dessinés pour une tenue et une seule.</span>
               <span class="cmd-credits mono">Atelier de couture Zaa</span>
@@ -1726,7 +1715,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
           <div class="cmd-calque" aria-hidden="true">
             <div class="cmd-bloc">
-              <span class="cmd-rubrique mono"><b class="cmd-rub-mot">Objet</b><i class="cmd-annee">2026</i></span>
+              <span class="cmd-rubrique mono"><i class="cmd-annee">2026</i></span>
               <span class="cmd-titre">Vortex</span>
               <span class="cmd-resume">Des vases d'une seule paroi : le pli remplace l'épaisseur, l'angle décide de la couleur.</span>
               <span class="cmd-credits mono">FenFutures — projet personnel</span>
@@ -4548,7 +4537,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     <p class="footer-line mono">Ghali Bensouda — Computational designer et fabrication.</p>
     <!-- AUTO:PIED_SIGNATURE:FIN -->
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.114</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.115</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>
@@ -4766,8 +4755,31 @@ document.querySelectorAll('.slider').forEach(function (slider) {
       l.classList.toggle('montre', !!groupe && l.getAttribute('data-galerie') === groupe);
     });
   }
+  // « Retour aux projets » : pose dans l'entete de chaque panneau, visible
+  // seulement quand on y est descendu depuis la grille Projets (filtre ou
+  // « Voir aussi »). Il ramene a l'endroit exact quitte.
+  var retourY = null;
+  grille.querySelectorAll('.sujet-panneau .sp-entete').forEach(function (entete) {
+    var b = document.createElement('button');
+    b.className = 'sp-retour';
+    b.hidden = true;
+    b.textContent = '↑ Retour aux projets';
+    entete.insertBefore(b, entete.querySelector('.sp-fermer'));
+    b.addEventListener('click', function () {
+      var y = retourY;
+      fermer(false);
+      if (y !== null) window.scrollTo({ top: y, behavior: MOINS_DE_MOUVEMENT ? 'auto' : 'smooth' });
+    });
+  });
+  function poserRetour(panneau, y) {
+    retourY = y;
+    grille.querySelectorAll('.sp-retour').forEach(function (b) { b.hidden = true; });
+    if (panneau && y !== null) panneau.querySelector('.sp-retour').hidden = false;
+  }
+
   function fermer(ramener) {
     if (!ouvert) return;
+    poserRetour(null, null);
     var carte = ouvert.carte;
     ouvert.panneau.hidden = true;
     carte.classList.remove('deployee');
@@ -4806,66 +4818,8 @@ document.querySelectorAll('.slider').forEach(function (slider) {
     }, true);
   });
 
-  // ── LE CALQUE DE LECTURE (03/10/2026) ──────────────────────────────────────
-  // « Lire l'article » (filtres de Projets) et « Voir aussi » ouvrent le sujet
-  // PAR-DESSUS la page au lieu d'y descendre : le visiteur ne quitte jamais
-  // l'endroit ou il etait. Le panneau est deplace dans le calque, puis rendu a
-  // sa place a la fermeture.
-  var lecteur = document.createElement('div');
-  lecteur.className = 'lecteur';
-  lecteur.hidden = true;
-  lecteur.setAttribute('role', 'dialog');
-  lecteur.setAttribute('aria-modal', 'true');
-  document.body.appendChild(lecteur);
-  var enLecture = null, retourFocus = null;
-
-  function quitterLecture() {
-    if (!enLecture) return;
-    var p = enLecture.panneau;
-    p.hidden = true;
-    enLecture.carte.after(p);
-    lecteur.hidden = true;
-    document.documentElement.classList.remove('lecture-ouverte');
-    enLecture = null;
-    if (retourFocus && retourFocus.focus) retourFocus.focus({ preventScroll: true });
-  }
-  window.lireSujet = function (note, groupe) {
-    var carte = grille.querySelector('.ff-card[data-note="' + note + '"]');
-    var panneau = carte && panneauDe(carte);
-    if (!panneau) return false;
-    if (ouvert && ouvert.panneau === panneau) fermer(false);
-    quitterLecture();
-    retourFocus = document.activeElement;
-    enLecture = { carte: carte, panneau: panneau };
-    lecteur.appendChild(panneau);
-    panneau.hidden = false;
-    lecteur.hidden = false;
-    lecteur.setAttribute('aria-label', panneau.getAttribute('data-titre') || '');
-    document.documentElement.classList.add('lecture-ouverte');
-    lecteur.scrollTop = 0;
-    montrer(panneau, groupe && panneau.querySelector('.vue[data-groupe="' + groupe + '"]')
-                     ? groupe : null);
-    // le cadre de photos etait cache : il se recale maintenant qu'il a une taille
-    window.dispatchEvent(new Event('resize'));
-    panneau.querySelector('.sp-fermer').focus({ preventScroll: true });
-    return true;
-  };
-  // un mot qui appelle une piece fait monter le grand bloc, dans la page :
-  // le calque se ferme d'abord, sinon la piece s'ouvrirait derriere lui
-  lecteur.addEventListener('click', function (e) {
-    if (e.target.closest('.lien-piece')) quitterLecture();
-  });
-  document.addEventListener('keydown', function (e) {
-    if (e.key !== 'Escape' || !enLecture) return;
-    if (document.getElementById('lightbox').classList.contains('open')) return;
-    quitterLecture();
-  });
-
   grille.querySelectorAll('.sujet-panneau').forEach(function (panneau) {
-    panneau.querySelector('.sp-fermer').addEventListener('click', function () {
-      if (enLecture && enLecture.panneau === panneau) quitterLecture();
-      else fermer(true);
-    });
+    panneau.querySelector('.sp-fermer').addEventListener('click', function () { fermer(true); });
     panneau.querySelector('.sp-tout').addEventListener('click', function () { montrer(panneau, null); });
     var cadre = panneau.querySelector('.ff-nassij-slider');
     panneau.addEventListener('click', function (e) {
@@ -4889,9 +4843,10 @@ document.querySelectorAll('.slider').forEach(function (slider) {
 
   // « Voir aussi » d'une carte de Projets : descendre au sujet, ouvrir son
   // panneau, et montrer d'emblee les photos de la carte (son groupe).
-  window.ouvrirSujet = function (note, groupe) {
+  window.ouvrirSujet = function (note, groupe, depuisY) {
     var carte = grille.querySelector('.ff-card[data-note="' + note + '"]');
     if (!carte) return;
+    var y0 = (depuisY === undefined) ? null : depuisY;
     if (!ouvert || ouvert.carte !== carte) ouvrir(carte);
     else {
       var y = ouvert.panneau.getBoundingClientRect().top + window.scrollY - 64;
@@ -4900,6 +4855,7 @@ document.querySelectorAll('.slider').forEach(function (slider) {
     if (groupe && ouvert && ouvert.panneau.querySelector('.vue[data-groupe="' + groupe + '"]')) {
       montrer(ouvert.panneau, groupe);
     }
+    if (ouvert) poserRetour(ouvert.panneau, y0);
   };
 })();
 
@@ -4912,9 +4868,10 @@ document.addEventListener('click', function (e) {
   // elle l'avait prise), puis descendre
   var lb = document.getElementById('lightbox');
   if (lb.classList.contains('open')) document.getElementById('lb-close').click();
-  // dans le calque de lecture : la page ne bouge pas (03/10/2026)
-  if (!window.lireSujet(lien.getAttribute('data-note'), lien.getAttribute('data-groupe')))
-    window.ouvrirSujet(lien.getAttribute('data-note'), lien.getAttribute('data-groupe'));
+  // depuis la grille Projets, on retient ou l'on etait : le panneau proposera
+  // d'y revenir. La visionneuse, elle, a deja rendu la page a sa place.
+  window.ouvrirSujet(lien.getAttribute('data-note'), lien.getAttribute('data-groupe'),
+                     window.scrollY);
 });
 
 // ── LES FILTRES DE PROJETS ───────────────────────────────────────────────────

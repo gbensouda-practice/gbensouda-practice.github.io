@@ -184,6 +184,57 @@
   /* une case double est deux fois plus large : sa vignette 4/3 occupe donc
      exactement deux lignes. On le declare, et la grille se referme. */
   .cmd-carte[data-grand] { grid-column: span 2; grid-row: span 2; }
+  .cmd-carte[hidden] { display: none; }
+  /* filtree, la grille rebouche les trous laisses par les cases doubles */
+  .cmd-grille.filtree { grid-auto-flow: row dense; }
+
+  /* ── PROJETS : LES FILTRES (03/10/2026) ──
+     Un clic reduit la grille SUR PLACE : rien ne defile. Sous la rangee, une
+     ligne propose l'article du filtre ; il s'ouvre dans un calque de lecture
+     par-dessus la page, et la page est retrouvee telle quelle en le fermant. */
+  .cmd-filtres { display: flex; flex-wrap: wrap; gap: 4px 22px; margin: 0 0 16px; }
+  .cmd-filtre {
+    font: inherit; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase;
+    background: none; border: none; padding: 4px 0; cursor: pointer;
+    color: var(--grey); border-bottom: 1px solid transparent;
+    transition: color .2s ease, border-color .2s ease;
+  }
+  .cmd-filtre i { font-style: normal; opacity: .55; margin-left: 2px; }
+  .cmd-filtre:hover { color: var(--ink); }
+  .cmd-filtre[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--corail); }
+  .cmd-article {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px;
+    padding: 0 0 18px; animation: tag-entre .26s var(--e-out) both;
+  }
+  .cmd-article[hidden] { display: none; }
+  .cmd-article-titre { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); }
+  .cmd-article-resume {
+    flex: 1 1 32ch; font-family: 'Newsreader', serif; font-style: italic;
+    font-size: 17px; line-height: 1.4; color: var(--ink); max-width: 62ch;
+  }
+  .lien-article {
+    font: inherit; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase;
+    background: none; border: none; padding: 4px 0; cursor: pointer;
+    color: var(--blue); border-bottom: 1px solid var(--corail);
+    transition: color .2s ease;
+  }
+  .lien-article:hover { color: var(--corail); }
+
+  /* ── LE CALQUE DE LECTURE ──
+     Le panneau du sujet y est DEPLACE (pas copie) : ses mots cliquables et son
+     cadre de photos marchent comme dans la grille. Sous la visionneuse. */
+  .lecteur {
+    position: fixed; inset: 0; z-index: 500; overflow-y: auto;
+    overscroll-behavior: contain; background: var(--ink);
+  }
+  .lecteur[hidden] { display: none; }
+  .lecteur .sujet-panneau { max-width: 1100px; margin: 0 auto; min-height: 100%; }
+  .lecteur .sujet-panneau .ff-media { top: 24px; }
+  .lecteur .sp-entete {
+    position: sticky; top: 0; z-index: 5; background: var(--ink);
+    padding-top: 14px; margin-top: -14px;
+  }
+  html.lecture-ouverte { overflow: hidden; }
   .cmd-carte .thumb { aspect-ratio: 4/3; position: relative; }
 
   /* le trait de mesure se trace en haut de la vignette lue */
@@ -1024,6 +1075,31 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
     </div>
 
     <!-- AUTO:COMMANDES:DEBUT -->
+    <div class="cmd-filtres mono" role="group" aria-label="Filtrer les projets">
+      <button class="cmd-filtre" data-filtre="" aria-pressed="true">Tout <i>11</i></button>
+      <button class="cmd-filtre" data-filtre="scene-et-espace" aria-pressed="false">Scène et espace <i>5</i></button>
+      <button class="cmd-filtre" data-filtre="numerique" aria-pressed="false">Numérique <i>1</i></button>
+      <button class="cmd-filtre" data-filtre="objets-et-mobilier" aria-pressed="false">Objets et mobilier <i>6</i></button>
+      <button class="cmd-filtre" data-filtre="textile-et-ornement" aria-pressed="false">Textile et ornement <i>2</i></button>
+    </div>
+    <div class="cmd-articles">
+      <div class="cmd-article" data-cat="scene-et-espace" hidden>
+        <span class="cmd-article-titre mono">Scène et espace</span>
+        <p class="cmd-article-resume">Des dispositifs pour le plateau, la vitrine et le décor — pensés pour tenir, se remonter ailleurs, ou sortir en série.</p>
+        <button class="lien-article mono" data-note="2-recherche-sujets-scene-et-espace">Lire l'article →</button>
+      </div>
+      <div class="cmd-article" data-cat="numerique" hidden>
+        <span class="cmd-article-titre mono">Numérique</span>
+      </div>
+      <div class="cmd-article" data-cat="objets-et-mobilier" hidden>
+        <span class="cmd-article-titre mono">Objets et mobilier</span>
+      </div>
+      <div class="cmd-article" data-cat="textile-et-ornement" hidden>
+        <span class="cmd-article-titre mono">Textile et ornement</span>
+        <p class="cmd-article-resume">Imprimer sur l'étoffe plutôt qu'à côté — et, avec un atelier de couture marocain, trouver une place à l'impression à côté de la main, jamais à sa place.</p>
+        <button class="lien-article mono" data-note="2-recherche-sujets-textile-et-ornement">Lire l'article →</button>
+      </div>
+    </div>
     <div class="cmd-bandeau" data-reveal>
       <div class="cmd-ops mono">
         <span data-op="concevoir">concevoir</span>
@@ -1039,7 +1115,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
       </div>
     </div>
     <div class="cmd-grille">
-      <article class="cmd-carte" data-grand="1" data-ops="concevoir,systematiser,fabriquer,experimenter" data-tags="Danse, Fabrication, Biomimétisme, Grasshopper" data-texte="Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer. Formes organiques et biomimétiques développées par modélisation paramétrique, conçues pour interagir avec le corps dansant et redéfinir la présence de l'objet sur scène." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://www.cielautremaison.com/about&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;cie L'Autre Maison&lt;/a&gt; · Annie Hanauer · photos de scène Gwendal Le Flem" data-credits-texte="cie L'Autre Maison · Annie Hanauer · photos de scène Gwendal Le Flem" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scene-et-espace&quot; data-groupe=&quot;2-recherche-sujets-scene-et-espace-en-scene&quot;&gt;01 — Scène et espace&lt;/button&gt;">
+      <article class="cmd-carte" data-grand="1" data-cats="scene-et-espace" data-ops="concevoir,systematiser,fabriquer,experimenter" data-tags="Danse, Fabrication, Biomimétisme, Grasshopper" data-texte="Conception et fabrication de dispositifs pour la pièce chorégraphique d'Annie Hanauer. Formes organiques et biomimétiques développées par modélisation paramétrique, conçues pour interagir avec le corps dansant et redéfinir la présence de l'objet sur scène." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://www.cielautremaison.com/about&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;cie L'Autre Maison&lt;/a&gt; · Annie Hanauer · photos de scène Gwendal Le Flem" data-credits-texte="cie L'Autre Maison · Annie Hanauer · photos de scène Gwendal Le Flem" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scene-et-espace&quot; data-groupe=&quot;2-recherche-sujets-scene-et-espace-en-scene&quot;&gt;01 — Scène et espace&lt;/button&gt;">
         <div class="galerie-source" data-galerie-id="1-commandes-starting-with-the-limbs" hidden>
           <span data-groupe="1-commandes-starting-with-the-limbs">
             <i data-src="images/web/1-commandes/starting-with-the-limbs/dispositif1.jpg" data-alt="Dispositifs scéniques — Starting with the Limbs, cie L'Autre Maison — Un dispositif passé de main en main"></i>
@@ -1085,7 +1161,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-grand="1" data-ops="concevoir,fabriquer,experimenter" data-tags="Unity, VR, Musique" data-texte="Expérience immersive en réalité virtuelle pour la première de l'album Photophobia à Kampnagel, Hambourg. Un vidéoclip permettant d'évoluer dans un monde de mangrove imaginé pour trois pistes (Pandemonium, In Short, Self-Abolition) — du marécage futuriste sombre à un espace kaléidoscopique. Avec Sanni Est (direction artistique, concept &amp;amp; musique) et alpharats (programming &amp;amp; VFX)." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://www.instagram.com/sanniest/?hl=fr&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Sanni Est&lt;/a&gt; · alpharats · Kampnagel, Hambourg" data-credits-texte="Sanni Est · alpharats · Kampnagel, Hambourg" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-defile-avant-le-vetement&quot; data-groupe=&quot;2-recherche-sujets-defile-avant-le-vetement-photophobia&quot;&gt;04 — Espaces virtuels&lt;/button&gt;">
+      <article class="cmd-carte" data-grand="1" data-cats="numerique" data-ops="concevoir,fabriquer,experimenter" data-tags="Unity, VR, Musique" data-texte="Expérience immersive en réalité virtuelle pour la première de l'album Photophobia à Kampnagel, Hambourg. Un vidéoclip permettant d'évoluer dans un monde de mangrove imaginé pour trois pistes (Pandemonium, In Short, Self-Abolition) — du marécage futuriste sombre à un espace kaléidoscopique. Avec Sanni Est (direction artistique, concept &amp;amp; musique) et alpharats (programming &amp;amp; VFX)." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://www.instagram.com/sanniest/?hl=fr&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Sanni Est&lt;/a&gt; · alpharats · Kampnagel, Hambourg" data-credits-texte="Sanni Est · alpharats · Kampnagel, Hambourg" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-defile-avant-le-vetement&quot; data-groupe=&quot;2-recherche-sujets-defile-avant-le-vetement-photophobia&quot;&gt;04 — Espaces virtuels&lt;/button&gt;">
         <div class="galerie-source" data-galerie-id="1-commandes-photophobia-vr" hidden>
           <span data-groupe="1-commandes-photophobia-vr">
             <i data-src="images/web/1-commandes/photophobia-vr/01_scene-mangrove.jpg" data-alt="Environnement VR — Photophobia, Sanni Est — Scène de mangrove"></i>
@@ -1131,7 +1207,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-grand="1" data-ops="concevoir,transmettre" data-tags="Film, Résine, Néon, Pompidou-Metz" data-texte="Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film. Dessins de sculptures en résine, sculptures néon et plans pour les artisans peintres et sculpteurs. Exposé au Centre Pompidou-Metz, 2022 : une journée de conseil en mise en scène pour l'artiste — séparer les éléments, les poser sur des supports rouges qui contrastent. Photo Marc Domage." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://www.instagram.com/pierrepauze/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Pierre Pauze&lt;/a&gt; · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt; · photo d'exposition Marc Domage" data-credits-texte="Pierre Pauze · via Atelier 20point12 · photo d'exposition Marc Domage" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scene-et-espace&quot; data-groupe=&quot;2-recherche-sujets-scene-et-espace-mass&quot;&gt;01 — Scène et espace&lt;/button&gt;">
+      <article class="cmd-carte" data-grand="1" data-cats="scene-et-espace objets-et-mobilier" data-ops="concevoir,transmettre" data-tags="Film, Résine, Néon, Pompidou-Metz" data-texte="Conception, modélisation et suivi de réalisation pour l'ensemble du décor du film. Dessins de sculptures en résine, sculptures néon et plans pour les artisans peintres et sculpteurs. Exposé au Centre Pompidou-Metz, 2022 : une journée de conseil en mise en scène pour l'artiste — séparer les éléments, les poser sur des supports rouges qui contrastent. Photo Marc Domage." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://www.instagram.com/pierrepauze/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Pierre Pauze&lt;/a&gt; · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt; · photo d'exposition Marc Domage" data-credits-texte="Pierre Pauze · via Atelier 20point12 · photo d'exposition Marc Domage" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scene-et-espace&quot; data-groupe=&quot;2-recherche-sujets-scene-et-espace-mass&quot;&gt;01 — Scène et espace&lt;/button&gt;">
         <div class="galerie-source" data-galerie-id="1-commandes-mass-set-design" hidden>
           <span data-groupe="1-commandes-mass-set-design">
             <i data-src="images/web/1-commandes/mass-set-design/01_expo-pompidou-metz.jpg" data-alt="Set design — Mass, film de Pierre Pauze — Exposition au Centre Pompidou-Metz"></i>
@@ -1197,7 +1273,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre" data-tags="Rhino, ZBrush, PLA, CNC, Laser, Impression 3D, Prusa" data-texte="Modélisations et usinage pour un décor de vitrine. Formes conçues pour être imprimées en atelier ou pour du fraisage numérique bois ou polystyrène. Réalisation de plans CNC bois et polystyrène, découpe laser. Suivi d'impressions 3D PLA." data-credits="Hermès · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt; · photos de vitrine Alex Jonas" data-credits-texte="Hermès · via Atelier 20point12 · photos de vitrine Alex Jonas" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scene-et-espace&quot; data-groupe=&quot;2-recherche-sujets-scene-et-espace-coquillage&quot;&gt;01 — Scène et espace&lt;/button&gt;">
+      <article class="cmd-carte" data-cats="scene-et-espace" data-ops="concevoir,fabriquer,transmettre" data-tags="Rhino, ZBrush, PLA, CNC, Laser, Impression 3D, Prusa" data-texte="Modélisations et usinage pour un décor de vitrine. Formes conçues pour être imprimées en atelier ou pour du fraisage numérique bois ou polystyrène. Réalisation de plans CNC bois et polystyrène, découpe laser. Suivi d'impressions 3D PLA." data-credits="Hermès · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt; · photos de vitrine Alex Jonas" data-credits-texte="Hermès · via Atelier 20point12 · photos de vitrine Alex Jonas" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scene-et-espace&quot; data-groupe=&quot;2-recherche-sujets-scene-et-espace-coquillage&quot;&gt;01 — Scène et espace&lt;/button&gt;">
         <div class="galerie-source" data-galerie-id="1-commandes-hermes-holiday-windows" hidden>
           <span data-groupe="1-commandes-hermes-holiday-windows">
             <i data-src="images/web/1-commandes/hermes-holiday-windows/vitrine-chateau-alex-jonas.jpg" data-alt="Vitrines Hermès France H19 — La vitrine du château, de nuit (photo Alex Jonas)"></i>
@@ -1248,7 +1324,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,systematiser,fabriquer,transmettre" data-tags="Rhino, Grasshopper, SLA, CNC" data-texte="Modélisations et usinage pour un décor de vitrine. Travail sur Rhino, ZBrush et définitions Grasshopper pour impression 3D PLA et SLA, CNC polystyrène. Plans d'usinage numérique bois, polystyrène et découpe laser." data-credits="Hermès · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt;" data-credits-texte="Hermès · via Atelier 20point12" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scene-et-espace&quot; data-groupe=&quot;2-recherche-sujets-scene-et-espace-mains&quot;&gt;01 — Scène et espace&lt;/button&gt;">
+      <article class="cmd-carte" data-cats="scene-et-espace" data-ops="concevoir,systematiser,fabriquer,transmettre" data-tags="Rhino, Grasshopper, SLA, CNC" data-texte="Modélisations et usinage pour un décor de vitrine. Travail sur Rhino, ZBrush et définitions Grasshopper pour impression 3D PLA et SLA, CNC polystyrène. Plans d'usinage numérique bois, polystyrène et découpe laser." data-credits="Hermès · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt;" data-credits-texte="Hermès · via Atelier 20point12" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scene-et-espace&quot; data-groupe=&quot;2-recherche-sujets-scene-et-espace-mains&quot;&gt;01 — Scène et espace&lt;/button&gt;">
         <div class="galerie-source" data-galerie-id="1-commandes-hermes-wild-wild-quest" hidden>
           <span data-groupe="1-commandes-hermes-wild-wild-quest">
             <i data-src="images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-dragon.jpg" data-alt="Vitrines Hermès France H21 — Vitrine finale — le dragon et ses cavaliers"></i>
@@ -1294,7 +1370,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,transmettre" data-tags="Bois CNC, LED, Stratifié, Miroir sans tain" data-texte="Deux meubles lumineux pour l'espace VIP de Watches &amp;amp; Wonders : un bar à montres et une table. Design, modélisation et plans de fabrication. Le bar porte une double courbure, obtenue sans fraisage cinq axes : des pièces imprimées légères donnent la forme, un contreplaqué souple de 3 mm s'y plaque, puis le stratifié. La table est un miroir infini — des anneaux de LED sous un miroir sans tain. Structures internes découpées en CNC." data-credits="Watches &amp;amp; Wonders · &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.instagram.com/pierrepauze/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Pierre Pauze&lt;/a&gt; · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt;" data-credits-texte="Watches &amp; Wonders · Pierre Pauze · via Atelier 20point12">
+      <article class="cmd-carte" data-cats="objets-et-mobilier" data-ops="concevoir,transmettre" data-tags="Bois CNC, LED, Stratifié, Miroir sans tain" data-texte="Deux meubles lumineux pour l'espace VIP de Watches &amp;amp; Wonders : un bar à montres et une table. Design, modélisation et plans de fabrication. Le bar porte une double courbure, obtenue sans fraisage cinq axes : des pièces imprimées légères donnent la forme, un contreplaqué souple de 3 mm s'y plaque, puis le stratifié. La table est un miroir infini — des anneaux de LED sous un miroir sans tain. Structures internes découpées en CNC." data-credits="Watches &amp;amp; Wonders · &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.instagram.com/pierrepauze/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Pierre Pauze&lt;/a&gt; · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt;" data-credits-texte="Watches &amp; Wonders · Pierre Pauze · via Atelier 20point12">
         <div class="galerie-source" data-galerie-id="1-commandes-watches-wonders-mobilier-vip" hidden>
           <span data-groupe="1-commandes-watches-wonders-mobilier-vip">
             <i data-src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-allumee.jpg" data-alt="Mobilier lumineux espace VIP — Watches &amp; Wonders / Pierre Pauze — La table VIP allumée — le miroir infini"></i>
@@ -1364,7 +1440,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre" data-tags="Scénographie, Sculpture, Installation" data-texte="Conception et modélisation 3D pour la présentation d'une installation vidéo de Sabrina Ratté durant le salon Watches and Wonders 2022 à Genève. Conception et plans d'esquisse pour la sculpture centrale et les alcôves comprenant les sculptures 3D. Prototype de sculpture cinétique réalisé par Animatronix." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://sabrinaratte.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Sabrina Ratté&lt;/a&gt; · Hermès / Watches &amp;amp; Wonders · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt; · prototype Animatronix · photos Alicia Dubuis, Galerie Charlot" data-credits-texte="Sabrina Ratté · Hermès / Watches &amp; Wonders · via Atelier 20point12 · prototype Animatronix · photos Alicia Dubuis, Galerie Charlot" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scene-et-espace&quot; data-groupe=&quot;2-recherche-sujets-scene-et-espace-alcoves&quot;&gt;01 — Scène et espace&lt;/button&gt;">
+      <article class="cmd-carte" data-cats="scene-et-espace objets-et-mobilier" data-ops="concevoir,fabriquer,transmettre" data-tags="Scénographie, Sculpture, Installation" data-texte="Conception et modélisation 3D pour la présentation d'une installation vidéo de Sabrina Ratté durant le salon Watches and Wonders 2022 à Genève. Conception et plans d'esquisse pour la sculpture centrale et les alcôves comprenant les sculptures 3D. Prototype de sculpture cinétique réalisé par Animatronix." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://sabrinaratte.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Sabrina Ratté&lt;/a&gt; · Hermès / Watches &amp;amp; Wonders · via &lt;a class=&quot;lien-externe&quot; href=&quot;https://www.20point12.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Atelier 20point12&lt;/a&gt; · prototype Animatronix · photos Alicia Dubuis, Galerie Charlot" data-credits-texte="Sabrina Ratté · Hermès / Watches &amp; Wonders · via Atelier 20point12 · prototype Animatronix · photos Alicia Dubuis, Galerie Charlot" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-scene-et-espace&quot; data-groupe=&quot;2-recherche-sujets-scene-et-espace-alcoves&quot;&gt;01 — Scène et espace&lt;/button&gt;">
         <div class="galerie-source" data-galerie-id="1-commandes-sabrina-ratte-sculpture-cinetique" hidden>
           <span data-groupe="1-commandes-sabrina-ratte-sculpture-cinetique">
             <i data-src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/HERMES_Watches-Wonders_2022.04.02_AliciaDubuis_02_2000.jpg" data-alt="Sculpture cinétique — Sabrina Ratté × Watches &amp; Wonders — La sculpture suspendue devant l'installation vidéo de Sabrina Ratté — Watches &amp; Wonders, Genève 2022 (photo Alicia Dubuis)"></i>
@@ -1410,7 +1486,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,systematiser,transmettre" data-tags="Grasshopper, Rhino, Mobilier" data-texte="Modélisation pour une collection de mobilier. Création d'une définition Grasshopper pour un modèle évolutif et adaptatif. Conseil en design — Saket Sethi Design, 2023." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://saketsethiparis.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Saket Sethi Design&lt;/a&gt;" data-credits-texte="Saket Sethi Design" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-formes-generatives-imprimees&quot; data-groupe=&quot;2-recherche-sujets-formes-generatives-imprimees-declinaisons&quot;&gt;03 — Une définition, plusieurs objets&lt;/button&gt;">
+      <article class="cmd-carte" data-cats="objets-et-mobilier" data-ops="concevoir,systematiser,transmettre" data-tags="Grasshopper, Rhino, Mobilier" data-texte="Modélisation pour une collection de mobilier. Création d'une définition Grasshopper pour un modèle évolutif et adaptatif. Conseil en design — Saket Sethi Design, 2023." data-credits="&lt;a class=&quot;lien-externe&quot; href=&quot;https://saketsethiparis.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;Saket Sethi Design&lt;/a&gt;" data-credits-texte="Saket Sethi Design" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-formes-generatives-imprimees&quot; data-groupe=&quot;2-recherche-sujets-formes-generatives-imprimees-declinaisons&quot;&gt;03 — Une définition, plusieurs objets&lt;/button&gt;">
         <div class="galerie-source" data-galerie-id="1-commandes-saket-sethi-mobilier-parametrique" hidden>
           <span data-groupe="1-commandes-saket-sethi-mobilier-parametrique">
             <i data-src="images/web/1-commandes/saket-sethi-mobilier-parametrique/01_sofa-rendu.jpg" data-alt="Collection mobilier paramétrique — Saket Sethi Design — Sofa — rendu paramétrique"></i>
@@ -1456,7 +1532,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,fabriquer,transmettre,experimenter" data-tags="Grasshopper, Rhino, Midjourney, Photoshop, Impression 3D, Filament flexible" data-texte="Un caftan en mousseline orange. Le motif est paramétrique, conçu sur Grasshopper, et imprimé en filament flexible argenté directement sur chaque pièce du vêtement, avant l'assemblage. L'atelier a ensuite souligné le tracé par un pailletage et réalisé les finitions. Un gilet en brocart doré. Chaque fleur part d'une image générée, retouchée, puis mise en typologies sous Rhino ; son contour est imprimé en filament flexible sur un textile à trame large, qui ne s'effiloche plus une fois découpé. Les fleurs sont ensuite composées et assemblées à la main sur la pièce." data-credits="Atelier de couture Zaa" data-credits-texte="Atelier de couture Zaa" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-textile-et-ornement&quot; data-groupe=&quot;2-recherche-sujets-textile-et-ornement-commandes-zaa&quot;&gt;02 — Textile et ornement&lt;/button&gt;">
+      <article class="cmd-carte" data-cats="textile-et-ornement" data-ops="concevoir,fabriquer,transmettre,experimenter" data-tags="Grasshopper, Rhino, Midjourney, Photoshop, Impression 3D, Filament flexible" data-texte="Un caftan en mousseline orange. Le motif est paramétrique, conçu sur Grasshopper, et imprimé en filament flexible argenté directement sur chaque pièce du vêtement, avant l'assemblage. L'atelier a ensuite souligné le tracé par un pailletage et réalisé les finitions. Un gilet en brocart doré. Chaque fleur part d'une image générée, retouchée, puis mise en typologies sous Rhino ; son contour est imprimé en filament flexible sur un textile à trame large, qui ne s'effiloche plus une fois découpé. Les fleurs sont ensuite composées et assemblées à la main sur la pièce." data-credits="Atelier de couture Zaa" data-credits-texte="Atelier de couture Zaa" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-textile-et-ornement&quot; data-groupe=&quot;2-recherche-sujets-textile-et-ornement-commandes-zaa&quot;&gt;02 — Textile et ornement&lt;/button&gt;">
         <div class="galerie-source" data-galerie-id="1-commandes-ornements-imprimes" hidden>
           <span data-groupe="1-commandes-ornements-imprimes-mousseline">
             <i data-src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-123440392.jpg" data-alt="Ornements imprimés — deux pièces pour l'atelier Zaa — Caftan en mousseline orange, de face"></i>
@@ -1524,7 +1600,7 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,systematiser,fabriquer,transmettre" data-tags="Grasshopper, Impression 3D, Filament, Résine, Passementerie" data-texte="Sur les dfina, caftans et jellabas, les boutons se montent traditionnellement à la main en fil de soie tressé — l'aqad. L'impression 3D ne le remplace pas : elle ouvre une autre voie, pour certaines pièces, surtout les grandes tenues. Chaque bouton est dessiné pour une tenue et une seule — forme, motif, couleur, matière — accordé au tissu au lieu d'être choisi dans un catalogue. Une fois quelques échantillons validés sur le vêtement, la série part." data-credits="Atelier de couture Zaa" data-credits-texte="Atelier de couture Zaa">
+      <article class="cmd-carte" data-cats="objets-et-mobilier textile-et-ornement" data-ops="concevoir,systematiser,fabriquer,transmettre" data-tags="Grasshopper, Impression 3D, Filament, Résine, Passementerie" data-texte="Sur les dfina, caftans et jellabas, les boutons se montent traditionnellement à la main en fil de soie tressé — l'aqad. L'impression 3D ne le remplace pas : elle ouvre une autre voie, pour certaines pièces, surtout les grandes tenues. Chaque bouton est dessiné pour une tenue et une seule — forme, motif, couleur, matière — accordé au tissu au lieu d'être choisi dans un catalogue. Une fois quelques échantillons validés sur le vêtement, la série part." data-credits="Atelier de couture Zaa" data-credits-texte="Atelier de couture Zaa" data-voir="Voir aussi : &lt;button class=&quot;lien-sujet&quot; data-note=&quot;2-recherche-sujets-textile-et-ornement&quot;&gt;02 — Textile et ornement&lt;/button&gt;">
         <div class="galerie-source" data-galerie-id="1-commandes-passementerie-imprimee" hidden>
           <span data-groupe="1-commandes-passementerie-imprimee-boutons">
             <i data-src="images/web/2-recherche/projets/boutons/PXL_20260610_140239002.jpg" data-alt="Passementerie imprimée — Sur un caftan orange — la rangée de boutons suit l'ouverture"></i>
@@ -1575,11 +1651,12 @@ Des dispositifs scéniques, des outils pour les artisans et des mises en valeur,
               <span class="cmd-titre">Passementerie imprimée</span>
               <span class="cmd-resume">Des boutons de caftan imprimés en 3D, dessinés pour une tenue et une seule.</span>
               <span class="cmd-credits mono">Atelier de couture Zaa</span>
+              <span class="cmd-credits cmd-voir mono">Voir aussi : 02 — Textile et ornement</span>
             </div>
           </div>
         </div>
       </article>
-      <article class="cmd-carte" data-ops="concevoir,systematiser,fabriquer,experimenter" data-tags="Rhino, Grasshopper, Bambu Studio, Impression 3D" data-texte="Une famille de vases imprimés d'une seule paroi continue : la buse ne s'arrête pas entre la base et le col, et tout ce qu'on voit à la surface est son tracé. Le profil en étoile, vrillé par un loft entre cercles pivotés, rend rigide une paroi de 0,6 mm. Le filament est coextrudé en trois ou quatre couleurs : c'est l'angle d'impression qui décide de celle qui affleure, et l'objet change de teinte quand on tourne autour." data-credits="FenFutures — projet personnel" data-credits-texte="FenFutures — projet personnel">
+      <article class="cmd-carte" data-cats="objets-et-mobilier" data-ops="concevoir,systematiser,fabriquer,experimenter" data-tags="Rhino, Grasshopper, Bambu Studio, Impression 3D" data-texte="Une famille de vases imprimés d'une seule paroi continue : la buse ne s'arrête pas entre la base et le col, et tout ce qu'on voit à la surface est son tracé. Le profil en étoile, vrillé par un loft entre cercles pivotés, rend rigide une paroi de 0,6 mm. Le filament est coextrudé en trois ou quatre couleurs : c'est l'angle d'impression qui décide de celle qui affleure, et l'objet change de teinte quand on tourne autour." data-credits="FenFutures — projet personnel" data-credits-texte="FenFutures — projet personnel">
         <div class="galerie-source" data-galerie-id="1-commandes-vortex" hidden>
           <span data-groupe="1-commandes-vortex-fleuris">
             <i data-src="images/web/2-recherche/projets/mode-vase/Fleuris/image (2).jpg" data-alt="Vortex — Deux vases en dégradé rose-orange, chrysanthèmes"></i>
@@ -4454,7 +4531,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     <p class="footer-line mono">Ghali Bensouda — Computational designer et fabrication.</p>
     <!-- AUTO:PIED_SIGNATURE:FIN -->
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.109</p>
+      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.110</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>
@@ -4712,8 +4789,66 @@ document.querySelectorAll('.slider').forEach(function (slider) {
     }, true);
   });
 
+  // ── LE CALQUE DE LECTURE (03/10/2026) ──────────────────────────────────────
+  // « Lire l'article » (filtres de Projets) et « Voir aussi » ouvrent le sujet
+  // PAR-DESSUS la page au lieu d'y descendre : le visiteur ne quitte jamais
+  // l'endroit ou il etait. Le panneau est deplace dans le calque, puis rendu a
+  // sa place a la fermeture.
+  var lecteur = document.createElement('div');
+  lecteur.className = 'lecteur';
+  lecteur.hidden = true;
+  lecteur.setAttribute('role', 'dialog');
+  lecteur.setAttribute('aria-modal', 'true');
+  document.body.appendChild(lecteur);
+  var enLecture = null, retourFocus = null;
+
+  function quitterLecture() {
+    if (!enLecture) return;
+    var p = enLecture.panneau;
+    p.hidden = true;
+    enLecture.carte.after(p);
+    lecteur.hidden = true;
+    document.documentElement.classList.remove('lecture-ouverte');
+    enLecture = null;
+    if (retourFocus && retourFocus.focus) retourFocus.focus({ preventScroll: true });
+  }
+  window.lireSujet = function (note, groupe) {
+    var carte = grille.querySelector('.ff-card[data-note="' + note + '"]');
+    var panneau = carte && panneauDe(carte);
+    if (!panneau) return false;
+    if (ouvert && ouvert.panneau === panneau) fermer(false);
+    quitterLecture();
+    retourFocus = document.activeElement;
+    enLecture = { carte: carte, panneau: panneau };
+    lecteur.appendChild(panneau);
+    panneau.hidden = false;
+    lecteur.hidden = false;
+    lecteur.setAttribute('aria-label', panneau.getAttribute('data-titre') || '');
+    document.documentElement.classList.add('lecture-ouverte');
+    lecteur.scrollTop = 0;
+    montrer(panneau, groupe && panneau.querySelector('.vue[data-groupe="' + groupe + '"]')
+                     ? groupe : null);
+    // le cadre de photos etait cache : il se recale maintenant qu'il a une taille
+    window.dispatchEvent(new Event('resize'));
+    panneau.querySelector('.sp-fermer').focus({ preventScroll: true });
+    return true;
+  };
+  // un mot qui appelle une piece fait monter le grand bloc, dans la page :
+  // le calque se ferme d'abord, sinon la piece s'ouvrirait derriere lui
+  lecteur.addEventListener('click', function (e) {
+    if (e.target.closest('.lien-piece')) quitterLecture();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape' || !enLecture) return;
+    if (document.getElementById('lightbox').classList.contains('open')) return;
+    quitterLecture();
+  });
+
   grille.querySelectorAll('.sujet-panneau').forEach(function (panneau) {
-    panneau.querySelector('.sp-fermer').addEventListener('click', function () { fermer(true); });
+    panneau.querySelector('.sp-fermer').addEventListener('click', function () {
+      if (enLecture && enLecture.panneau === panneau) quitterLecture();
+      else fermer(true);
+    });
     panneau.querySelector('.sp-tout').addEventListener('click', function () { montrer(panneau, null); });
     var cadre = panneau.querySelector('.ff-nassij-slider');
     panneau.addEventListener('click', function (e) {
@@ -4752,7 +4887,7 @@ document.querySelectorAll('.slider').forEach(function (slider) {
 })();
 
 document.addEventListener('click', function (e) {
-  var lien = e.target.closest('.lien-sujet');
+  var lien = e.target.closest('.lien-sujet, .lien-article');
   if (!lien || !window.ouvrirSujet) return;
   e.preventDefault();
   e.stopPropagation();
@@ -4760,8 +4895,35 @@ document.addEventListener('click', function (e) {
   // elle l'avait prise), puis descendre
   var lb = document.getElementById('lightbox');
   if (lb.classList.contains('open')) document.getElementById('lb-close').click();
-  window.ouvrirSujet(lien.getAttribute('data-note'), lien.getAttribute('data-groupe'));
+  // dans le calque de lecture : la page ne bouge pas (03/10/2026)
+  if (!window.lireSujet(lien.getAttribute('data-note'), lien.getAttribute('data-groupe')))
+    window.ouvrirSujet(lien.getAttribute('data-note'), lien.getAttribute('data-groupe'));
 });
+
+// ── LES FILTRES DE PROJETS ───────────────────────────────────────────────────
+// Sur place : la grille se reduit, la ligne de l'article apparait, rien ne
+// defile. « Tout » rend la grille entiere.
+(function () {
+  var barre = document.querySelector('.cmd-filtres');
+  var grilleP = document.querySelector('.cmd-grille');
+  if (!barre || !grilleP) return;
+  var cartes = grilleP.querySelectorAll('.cmd-carte');
+  var lignes = document.querySelectorAll('.cmd-article');
+  var boutons = barre.querySelectorAll('.cmd-filtre');
+  barre.addEventListener('click', function (e) {
+    var b = e.target.closest('.cmd-filtre');
+    if (!b) return;
+    var f = b.getAttribute('data-filtre');
+    boutons.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+    cartes.forEach(function (c) {
+      c.hidden = !!f && (' ' + c.getAttribute('data-cats') + ' ').indexOf(' ' + f + ' ') === -1;
+    });
+    lignes.forEach(function (l) { l.hidden = l.getAttribute('data-cat') !== f; });
+    grilleP.classList.toggle('filtree', !!f);
+    // sur telephone, le bandeau suit la carte au milieu de l'ecran : il relit
+    window.dispatchEvent(new Event('scroll'));
+  });
+})();
 
 // ── DEPLIER UN GRAND BLOC ────────────────────────────────────────────────────
 // Le bouton « Lire la suite » des pieces de Recherche. Celui des cartes de
@@ -4955,7 +5117,7 @@ document.querySelectorAll('video.sujet').forEach(function (v) {
       var ligne = window.innerHeight * 0.45, gagnante = null, ecartMin = Infinity;
       cartes.forEach(function (c) {
         var r = c.getBoundingClientRect();
-        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        if (c.hidden || r.bottom < 0 || r.top > window.innerHeight) return;
         var ecart = Math.abs(r.top + r.height / 2 - ligne);
         if (ecart < ecartMin) { ecartMin = ecart; gagnante = c; }
       });

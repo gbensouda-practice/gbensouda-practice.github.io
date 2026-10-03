@@ -887,7 +887,8 @@
     text-decoration-thickness: 1px;
   }
   .lien-sujet:hover { color: var(--corail); }
-  .lien-sujet::after { content: ' ↓'; font-size: .85em; opacity: .7; }
+  /* le sujet s'ouvre par-dessus la page, on n'y descend plus (03/10/2026) */
+  .lien-sujet::after { content: ' →'; font-size: .85em; opacity: .7; }
   .cmd-credits-bandeau .credits-ligne, .cmd-credits-bandeau .voir-aussi { display: block; }
   .cmd-credits-bandeau .voir-aussi { margin-top: 2px; }
 
@@ -4525,7 +4526,7 @@ Après plusieurs années passées à développer des dispositifs pour d'autres, 
     <p class="footer-line mono">Ghali Bensouda — Computational designer et fabrication.</p>
     <!-- AUTO:PIED_SIGNATURE:FIN -->
     <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.111</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.112</p>
     <!-- AUTO:VERSION:FIN -->
   </div>
 </footer>

@@ -242,7 +242,9 @@
   .dp-carte .im img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .45s var(--ease-drawer); }
   .dp-carte:hover .im img { transform: scale(1.03); }
   .dp-carte[data-grand] { grid-column: span 2; grid-row: span 2; align-self: stretch; }
-  .dp-carte[data-grand] .im { aspect-ratio: auto; flex: 1 1 auto; min-height: 0; }
+  /* carree au moins ; a cote de vignettes simples, elle s'allonge pour finir
+     pile avec leur deuxieme rangee */
+  .dp-carte[data-grand] .im { aspect-ratio: 1; flex: 1 0 auto; }
   .dp-carte .ct {
     display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
     font-size: 14px; font-weight: 500; line-height: 1.35; margin-top: 10px; min-height: 2.7em;
@@ -471,7 +473,7 @@
     .v3-pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 14px; }
     /* sur deux colonnes, une case double prend toute la largeur, en carre */
     .dp-carte[data-grand] { grid-row: span 1; }
-    .dp-carte[data-grand] .im { aspect-ratio: 1; flex: none; }
+    .dp-carte[data-grand] .im { flex: none; }
     .v3-une { grid-template-columns: minmax(0, 1fr); gap: 16px; margin-bottom: 36px; padding-bottom: 28px; }
     .sp-corps { grid-template-columns: minmax(0, 1fr); gap: 24px; }
     .ff-media { position: static; grid-template-columns: minmax(0, 1fr); gap: 12px; }
@@ -527,7 +529,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.127</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.128</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>

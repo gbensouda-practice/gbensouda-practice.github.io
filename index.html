@@ -90,7 +90,9 @@
     padding: 22px var(--g) 20px; flex-wrap: wrap; border-bottom: 1px solid var(--line);
     position: relative; z-index: 30; background: var(--paper);
   }
-  .v3-bandeau .nom { font-weight: var(--w-t); font-size: 18px; white-space: nowrap; cursor: default; }
+  .v3-bandeau .qui { display: flex; flex-direction: column; gap: 3px; }
+  .v3-bandeau .nom { font-weight: var(--w-t); font-size: 23px; line-height: 1.1; letter-spacing: -.015em; white-space: nowrap; cursor: default; }
+  .v3-bandeau .sous-titre { font-size: 13px; line-height: 1.3; color: var(--grey); white-space: nowrap; }
   .v3-bandeau h1 {
     font-weight: 500; font-size: clamp(18px, 1.65vw, 23px); line-height: 1.3; max-width: 44ch;
     flex: 1; letter-spacing: -.01em; color: var(--ink); cursor: default;
@@ -118,12 +120,14 @@
   .v3-bandeau:hover .v3-infos, .v3-bandeau:focus-within .v3-infos, .v3-bandeau.ouvert .v3-infos {
     grid-template-rows: 1fr; opacity: 1; pointer-events: auto;
   }
-  .v3-infos dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 24px 32px; padding: 18px var(--g) 22px; }
+  .v3-infos dl {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 260px));
+    justify-content: center; text-align: center; gap: 20px 48px; padding: 20px var(--g) 24px;
+  }
   .v3-infos dt { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); margin-bottom: 6px; }
   .v3-infos dd { font-size: 14px; line-height: 1.5; color: var(--ink-2); }
   .v3-infos dd a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
-  .v3-signature { padding: 0 var(--g) 18px; font-size: 11px; color: var(--grey); letter-spacing: .02em; }
-  @media (max-width: 900px) { .v3-infos dl { grid-template-columns: 1fr 1fr; gap: 16px 20px; } }
+  @media (max-width: 900px) { .v3-infos dl { grid-template-columns: minmax(0, 1fr); gap: 14px; } }
 
   /* ═══════════ LES DEUX PORTES ═══════════ */
   .v3-portes { flex: 1; display: flex; min-height: 520px; }
@@ -224,20 +228,31 @@
     padding: 4px 0; color: var(--blue); border-bottom: 1px solid var(--corail); transition: color .2s ease;
   }
   .lien-article:hover { color: var(--corail); }
-  .v3-pgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 36px 20px; align-items: start; }
-  .v3-pgrid.filtree { grid-auto-flow: row dense; }
-  /* Une vignette est un bouton, et un bouton CENTRE son contenu en hauteur :
-     dans la maquette, une vignette au texte plus court descendait d'autant
-     (le decalage vu par Ghali dans la troisieme colonne). Ici tout part du
-     haut : l'image est toujours en tete de sa case. */
+  /* Six colonnes : une vignette en prend une, une case double (« * » dans
+     1-commandes/_ordre.txt) deux sur deux rangees. Chaque vignette a la meme
+     hauteur de texte (titre sur deux lignes, phrase sur trois), donc les
+     images d'une rangee commencent et finissent a la meme hauteur, et une
+     case double tombe pile sur deux rangees. Une vignette est un bouton, qui
+     centre son contenu en hauteur : tout est donc remis en haut (le decalage
+     de la troisieme colonne, dans la maquette). */
+  .v3-pgrid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 32px 18px; grid-auto-flow: row dense; }
   .dp-carte { display: flex; flex-direction: column; justify-content: flex-start; width: 100%; min-width: 0; }
   .dp-carte[hidden] { display: none; }
-  .dp-carte img, .dp-carte .sans-image { aspect-ratio: 1; object-fit: cover; width: 100%; height: auto; min-height: 0; flex: none; background: var(--paper-2); }
-  /* la case double (« * » dans 1-commandes/_ordre.txt) : dans la grille seulement */
-  .dp-carte[data-grand] { grid-column: span 2; grid-row: span 2; }
-  .dp-carte h3 { font-size: 15px; font-weight: 500; margin-top: 10px; line-height: 1.35; }
-  .dp-carte p { font-size: 14px; color: var(--ink-2); margin-top: 2px; line-height: 1.45; }
-  .dp-carte:hover h3 { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  .dp-carte .im { position: relative; display: block; aspect-ratio: 1; background: var(--paper-2); overflow: hidden; }
+  .dp-carte .im img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .45s var(--ease-drawer); }
+  .dp-carte:hover .im img { transform: scale(1.03); }
+  .dp-carte[data-grand] { grid-column: span 2; grid-row: span 2; align-self: stretch; }
+  .dp-carte[data-grand] .im { aspect-ratio: auto; flex: 1 1 auto; min-height: 0; }
+  .dp-carte .ct {
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+    font-size: 14px; font-weight: 500; line-height: 1.35; margin-top: 10px; min-height: 2.7em;
+  }
+  .dp-carte .cp {
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden;
+    font-size: 13px; line-height: 1.45; color: var(--ink-2); margin-top: 4px; min-height: 4.35em;
+  }
+  .dp-carte:hover .ct { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  @media (max-width: 1250px) { .v3-pgrid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
   /* ── la salle Recherche : la piece en grand, puis la lecture ── */
   .v3-une { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: 32px; align-items: end; margin-bottom: 56px; padding-bottom: 40px; border-bottom: 1px solid var(--line-nuit); width: 100%; }
@@ -454,6 +469,9 @@
     .v3-tranche { writing-mode: horizontal-tb; width: 100%; height: 56px; padding: 0 var(--g); }
     .v3-salle { padding: 24px var(--g) 100px; }
     .v3-pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 14px; }
+    /* sur deux colonnes, une case double prend toute la largeur, en carre */
+    .dp-carte[data-grand] { grid-row: span 1; }
+    .dp-carte[data-grand] .im { aspect-ratio: 1; flex: none; }
     .v3-une { grid-template-columns: minmax(0, 1fr); gap: 16px; margin-bottom: 36px; padding-bottom: 28px; }
     .sp-corps { grid-template-columns: minmax(0, 1fr); gap: 24px; }
     .ff-media { position: static; grid-template-columns: minmax(0, 1fr); gap: 12px; }
@@ -493,7 +511,11 @@
 
 <div class="v3">
   <header class="v3-bandeau">
-    <span class="nom" tabindex="0">Ghali Bensouda</span>
+    <div class="qui"><span class="nom" tabindex="0">Ghali Bensouda</span><span class="sous-titre">
+<!-- AUTO:DP_SOUS_TITRE:DEBUT -->
+      Computational design et fabrication
+<!-- AUTO:DP_SOUS_TITRE:FIN -->
+    </span></div>
     <h1>
 <!-- AUTO:DP_ACCROCHE:DEBUT -->
       Pour la scène, la vitrine et la couture, je dessine la pièce et la façon de la fabriquer.
@@ -505,21 +527,16 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.126</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.127</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
 <!-- AUTO:DP_VOLET:DEBUT -->
       <dl>
-        <div><dt>Disponible</dt><dd>Missions freelance, intermittence du spectacle, portage salarial. Marseille · Paris · remote.</dd></div>
-        <div><dt>Basé à</dt><dd>Marseille · Paris · Casablanca<br>remote privilégié</dd></div>
         <div><dt>Outils</dt><dd>Rhino · Grasshopper · Blender<br>Marvelous Designer · TouchDesigner · MadMapper</dd></div>
         <div><dt>Studios</dt><dd>Synaptic Garden (France)<br>FenFutures (Maroc)</dd></div>
-        <div><dt>Localisation</dt><dd>Marseille / Casablanca</dd></div>
         <div><dt>Formation</dt><dd>Architecte DESA, ESA Paris, 2019</dd></div>
-        <div><dt>Formation continue</dt><dd>TouchDesigner &amp; MadMapper, 2026</dd></div>
       </dl>
-      <p class="v3-signature mono">Ghali Bensouda · Computational designer et fabrication.</p>
 <!-- AUTO:DP_VOLET:FIN -->
     </div></div>
   </header>
@@ -584,17 +601,17 @@
       </div>
     </div>
         <div class="v3-pgrid cmd-grille">
-          <button class="dp-carte cmd-carte" data-go="piece-starting-with-the-limbs" data-grand="1" data-cats="scene-et-vitrine assemblage-et-outillage"><img src="images/web/1-commandes/starting-with-the-limbs/dispositif1.jpg" alt="" loading="lazy" width="1600" height="998"><h3>Dispositifs scéniques · <em>Starting with the Limbs</em>, cie L'Autre Maison <span class="yr">2025</span></h3><p>Des structures qui portent les danseurs et voyagent démontées : coudes imprimés en 3D, tubes PVC.</p></button>
-          <button class="dp-carte cmd-carte" data-go="piece-photophobia-vr" data-grand="1" data-cats="scene-et-vitrine"><img src="images/web/1-commandes/photophobia-vr/01_scene-mangrove.jpg" alt="" loading="lazy" width="1600" height="724"><h3>Environnement VR · <em>Photophobia</em>, Sanni Est <span class="yr">2022</span></h3><p>Toute la 3D d'un clip en réalité virtuelle : un monde de mangrove et ses créatures.</p></button>
-          <button class="dp-carte cmd-carte" data-go="piece-mass-set-design" data-grand="1" data-cats="scene-et-vitrine"><img src="images/web/1-commandes/mass-set-design/01_expo-pompidou-metz.jpg" alt="" loading="lazy" width="896" height="672"><h3>Set design · <em>Mass</em>, film de Pierre Pauze <span class="yr">2020</span></h3><p>Tout le décor d'un film, des dessins de sculptures aux plans pour les artisans.</p></button>
-          <button class="dp-carte cmd-carte" data-go="piece-hermes-holiday-windows" data-cats="scene-et-vitrine"><img src="images/web/1-commandes/hermes-holiday-windows/vitrine-coquillages-alex-jonas.jpg" alt="" loading="lazy" width="911" height="911"><h3>Vitrines Hermès France H19 <span class="yr">2019</span></h3><p>Un coquillage en trois techniques : polystyrène fraisé, collerette imprimée, ailes thermoformées.</p></button>
-          <button class="dp-carte cmd-carte" data-go="piece-hermes-wild-wild-quest" data-cats="scene-et-vitrine"><img src="images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-dragon.jpg" alt="" loading="lazy" width="1006" height="1258"><h3>Vitrines Hermès France H21 <span class="yr">2021</span></h3><p>Un dragon de deux mètres, conçu pour être fraisé et suspendu, tiré en cinq exemplaires.</p></button>
-          <button class="dp-carte cmd-carte" data-go="piece-watches-wonders-mobilier-vip" data-cats="scene-et-vitrine assemblage-et-outillage"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-allumee.jpg" alt="" loading="lazy" width="1600" height="2133"><h3>Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze <span class="yr">2020</span></h3><p>Des bandeaux LED qui se reflètent à l'infini, au cœur de trois meubles pour l'espace VIP.</p></button>
-          <button class="dp-carte cmd-carte" data-go="piece-sabrina-ratte-sculpture-cinetique" data-cats="scene-et-vitrine objets-imprimes"><img src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/HERMES_Watches-Wonders_2022.04.02_AliciaDubuis_02_2000.jpg" alt="" loading="lazy" width="1600" height="1066"><h3>Sculpture cinétique · Sabrina Ratté × Watches &amp; Wonders <span class="yr">2022</span></h3><p>Des cercles de métal qui tournent chacun à leur rythme : l'idée de Sabrina Ratté, rendue réalisable.</p></button>
-          <button class="dp-carte cmd-carte" data-go="piece-saket-sethi-mobilier-parametrique" data-cats="outils-parametriques"><img src="images/web/1-commandes/saket-sethi-mobilier-parametrique/01_sofa-rendu.jpg" alt="" loading="lazy" width="1248" height="585"><h3>Collection mobilier paramétrique · Saket Sethi Design <span class="yr">2023</span></h3><p>Le Twirl Sofa, choisi parmi des variantes calculées : le paramétrique comme outil de décision.</p></button>
-          <button class="dp-carte cmd-carte" data-go="piece-ornements-imprimes" data-cats="textile-et-ornement"><img src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-123440392.jpg" alt="" loading="lazy" width="1600" height="2844"><h3>Ornements imprimés · deux pièces pour l'atelier Zaa <span class="yr">2024</span></h3><p>Le motif imprimé en 3D directement sur l'étoffe : un caftan et un gilet pour l'atelier Zaa.</p></button>
-          <button class="dp-carte cmd-carte" data-go="piece-passementerie-imprimee" data-cats="textile-et-ornement objets-imprimes"><img src="images/web/2-recherche/projets/boutons/PXL_20260610_140239002.jpg" alt="" loading="lazy" width="1600" height="2844"><h3>Passementerie imprimée <span class="yr">2026</span></h3><p>Des boutons de caftan imprimés en 3D, dessinés pour une tenue et une seule.</p></button>
-          <button class="dp-carte cmd-carte" data-go="piece-vortex" data-cats="objets-imprimes"><img src="images/web/2-recherche/projets/mode-vase/Fleuris/image (2).jpg" alt="" loading="lazy" width="1600" height="1638"><h3>Vortex <span class="yr">2026</span></h3><p>Des vases d'une seule paroi : le pli remplace l'épaisseur, l'angle décide de la couleur.</p></button>
+          <button class="dp-carte cmd-carte" data-go="piece-starting-with-the-limbs" data-grand="1" data-cats="scene-et-vitrine assemblage-et-outillage"><span class="im"><img src="images/web/1-commandes/starting-with-the-limbs/dispositif1.jpg" alt="" loading="lazy"></span><span class="ct">Dispositifs scéniques · <em>Starting with the Limbs</em>, cie L'Autre Maison <span class="yr">2025</span></span><span class="cp">Des structures qui portent les danseurs et voyagent démontées : coudes imprimés en 3D, tubes PVC.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-photophobia-vr" data-grand="1" data-cats="scene-et-vitrine"><span class="im"><img src="images/web/1-commandes/photophobia-vr/01_scene-mangrove.jpg" alt="" loading="lazy"></span><span class="ct">Environnement VR · <em>Photophobia</em>, Sanni Est <span class="yr">2022</span></span><span class="cp">Toute la 3D d'un clip en réalité virtuelle : un monde de mangrove et ses créatures.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-mass-set-design" data-grand="1" data-cats="scene-et-vitrine"><span class="im"><img src="images/web/1-commandes/mass-set-design/01_expo-pompidou-metz.jpg" alt="" loading="lazy"></span><span class="ct">Set design · <em>Mass</em>, film de Pierre Pauze <span class="yr">2020</span></span><span class="cp">Tout le décor d'un film, des dessins de sculptures aux plans pour les artisans.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-hermes-holiday-windows" data-cats="scene-et-vitrine"><span class="im"><img src="images/web/1-commandes/hermes-holiday-windows/vitrine-coquillages-alex-jonas.jpg" alt="" loading="lazy"></span><span class="ct">Vitrines Hermès France H19 <span class="yr">2019</span></span><span class="cp">Un coquillage en trois techniques : polystyrène fraisé, collerette imprimée, ailes thermoformées.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-hermes-wild-wild-quest" data-cats="scene-et-vitrine"><span class="im"><img src="images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-dragon.jpg" alt="" loading="lazy"></span><span class="ct">Vitrines Hermès France H21 <span class="yr">2021</span></span><span class="cp">Un dragon de deux mètres, conçu pour être fraisé et suspendu, tiré en cinq exemplaires.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-watches-wonders-mobilier-vip" data-cats="scene-et-vitrine assemblage-et-outillage"><span class="im"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-allumee.jpg" alt="" loading="lazy"></span><span class="ct">Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze <span class="yr">2020</span></span><span class="cp">Des bandeaux LED qui se reflètent à l'infini, au cœur de trois meubles pour l'espace VIP.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-sabrina-ratte-sculpture-cinetique" data-cats="scene-et-vitrine objets-imprimes"><span class="im"><img src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/HERMES_Watches-Wonders_2022.04.02_AliciaDubuis_02_2000.jpg" alt="" loading="lazy"></span><span class="ct">Sculpture cinétique · Sabrina Ratté × Watches &amp; Wonders <span class="yr">2022</span></span><span class="cp">Des cercles de métal qui tournent chacun à leur rythme : l'idée de Sabrina Ratté, rendue réalisable.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-saket-sethi-mobilier-parametrique" data-cats="outils-parametriques"><span class="im"><img src="images/web/1-commandes/saket-sethi-mobilier-parametrique/01_sofa-rendu.jpg" alt="" loading="lazy"></span><span class="ct">Collection mobilier paramétrique · Saket Sethi Design <span class="yr">2023</span></span><span class="cp">Le Twirl Sofa, choisi parmi des variantes calculées : le paramétrique comme outil de décision.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-ornements-imprimes" data-cats="textile-et-ornement"><span class="im"><img src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-123440392.jpg" alt="" loading="lazy"></span><span class="ct">Ornements imprimés · deux pièces pour l'atelier Zaa <span class="yr">2024</span></span><span class="cp">Le motif imprimé en 3D directement sur l'étoffe : un caftan et un gilet pour l'atelier Zaa.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-passementerie-imprimee" data-cats="textile-et-ornement objets-imprimes"><span class="im"><img src="images/web/2-recherche/projets/boutons/PXL_20260610_140239002.jpg" alt="" loading="lazy"></span><span class="ct">Passementerie imprimée <span class="yr">2026</span></span><span class="cp">Des boutons de caftan imprimés en 3D, dessinés pour une tenue et une seule.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-vortex" data-cats="objets-imprimes"><span class="im"><img src="images/web/2-recherche/projets/mode-vase/Fleuris/image (2).jpg" alt="" loading="lazy"></span><span class="ct">Vortex <span class="yr">2026</span></span><span class="cp">Des vases d'une seule paroi : le pli remplace l'épaisseur, l'angle décide de la couleur.</span></button>
         </div>
 <!-- AUTO:DP_PROJETS:FIN -->
       </div>
@@ -3915,7 +3932,7 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
   });
 
   // le volet du bandeau : au survol (CSS), au toucher du nom ou de la phrase
-  bandeau.querySelectorAll('.nom, h1').forEach(function (el) {
+  bandeau.querySelectorAll('.qui, h1').forEach(function (el) {
     el.addEventListener('click', function () { bandeau.classList.toggle('ouvert'); });
   });
 

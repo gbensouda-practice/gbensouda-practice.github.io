@@ -324,6 +324,11 @@
   .ff-nassij-slider .slider-track { display: block; position: relative; transform: none !important; }
   .ff-nassij-slider .slider-track > .vue { position: absolute; inset: 0; aspect-ratio: auto; height: var(--h-media); opacity: 0; filter: blur(3px); transition: opacity .58s ease, filter .58s ease; }
   .ff-nassij-slider .slider-track > .vue.vue-active { position: relative; opacity: 1; filter: blur(0); }
+  /* Les photos du cadre sont empilees : sans ceci, le clic tombait sur la
+     DERNIERE de la pile, invisible, et le plein ecran montrait une autre photo
+     que celle qu'on regardait (vu par Ghali le 05/10/2026). */
+  .ff-nassij-slider .slider-track > .vue { pointer-events: none; }
+  .ff-nassij-slider .slider-track > .vue.vue-active { pointer-events: auto; }
   .ff-nassij-slider > .vue { height: var(--h-media); }
   .ff-nassij-slider::before, .ff-nassij-slider::after { content: ''; position: absolute; width: 14px; height: 14px; border: 1px solid var(--blue-nuit); opacity: .32; pointer-events: none; z-index: 2; }
   .ff-nassij-slider::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
@@ -537,7 +542,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.129</p>
+      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.130</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -3572,32 +3577,19 @@ compter(document);
   }
   function precedente() { afficher((lbIndex - 1 + galerie.length) % galerie.length); }
 
-  // une photo du cadre d'un article : les photos que le cadre montre en ce moment
+  // Une photo du cadre d'un article : cliquer l'agrandit, ELLE SEULE — pas de
+  // serie a faire defiler (demande de Ghali, 05/10/2026). Le cadre, lui,
+  // continue de tourner et ses mots de changer les photos.
   document.addEventListener('click', function (e) {
     var vue = e.target.closest('.vue');
     var img = vue && vue.querySelector('.sujet');
     if (!img) return;
     e.stopPropagation();
-    var bloc = img.closest('.ff-nassij-slider');
-    var imgs = bloc ? Array.from(bloc.querySelectorAll('.sujet')) : [img];
     var art = img.closest('.dp-art');
-    if (art) {
-      var montre = art.getAttribute('data-montre');
-      var deja = {};
-      imgs = imgs.filter(function (i) {
-        var v = i.closest('.vue');
-        if (montre && (!v || v.getAttribute('data-groupe') !== montre)) return false;
-        var s = i.getAttribute('src');
-        if (deja[s]) return false;
-        deja[s] = true;
-        return true;
-      });
-      if (imgs.indexOf(img) === -1) imgs.unshift(img);
-    }
-    ouvrir(imgs.map(function (el) {
-      var estVideo = el.tagName === 'VIDEO';
-      return { src: el.getAttribute('src'), alt: estVideo ? (el.getAttribute('data-alt') || '') : el.alt, video: estVideo };
-    }), imgs.indexOf(img), { titre: art ? art.getAttribute('data-titre') : '' });
+    var estVideo = img.tagName === 'VIDEO';
+    ouvrir([{ src: img.getAttribute('src'),
+              alt: estVideo ? (img.getAttribute('data-alt') || '') : img.alt,
+              video: estVideo }], 0, { titre: art ? art.getAttribute('data-titre') : '' });
   });
 
   // un mot cliquable dont les photos ne sont pas dans le cadre : le plein ecran
@@ -3961,6 +3953,46 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
       film.querySelectorAll('button').forEach(function (b) { milieu.observe(b); });
     }
   }
+
+  // La bande d'images du seuil defile tres lentement, en boucle (demande de
+  // Ghali, 05/10/2026). Elle s'arrete sous la souris, le temps de lire, et
+  // quand on la fait glisser du doigt. Rien ne bouge si le systeme demande
+  // moins de mouvement.
+  (function () {
+    var film = document.querySelector('.v3-film');
+    if (!film || MOINS_DE_MOUVEMENT) return;
+    var originaux = Array.prototype.slice.call(film.children);
+    if (originaux.length < 2) return;
+    originaux.forEach(function (b) {
+      var c = b.cloneNode(true);
+      c.setAttribute('data-copie', '');
+      c.setAttribute('aria-hidden', 'true');
+      c.tabIndex = -1;
+      film.appendChild(c);
+    });
+    var VITESSE = 14;               // pixels par seconde : tres lent
+    var pause = false, reprise = 0, avant = null, x = 0;
+    film.addEventListener('mouseenter', function () { pause = true; });
+    film.addEventListener('mouseleave', function () { pause = false; });
+    film.addEventListener('touchstart', function () { reprise = Date.now() + 4000; }, { passive: true });
+    function boucle(t) {
+      var dt = avant === null ? 0 : Math.min(100, t - avant) / 1000;
+      avant = t;
+      var visible = !portes.classList.contains('dedans') && film.offsetParent !== null;
+      if (visible && !pause && Date.now() > reprise) {
+        // la moitie : la ou les copies commencent, ecart compris
+        var demi = film.children[originaux.length].offsetLeft - film.children[0].offsetLeft;
+        if (Date.now() <= reprise + 50) x = film.scrollLeft;
+        x += VITESSE * dt;
+        if (demi > 0 && x >= demi) x -= demi;
+        film.scrollLeft = x;
+      } else {
+        x = film.scrollLeft;
+      }
+      requestAnimationFrame(boucle);
+    }
+    requestAnimationFrame(boucle);
+  })();
 
   if (arts.length) lire(arts[0].getAttribute('data-article'), null);
   route();

@@ -71,7 +71,7 @@
   img { display: block; max-width: 100%; }
   ul { list-style: none; }
   a:focus-visible, button:focus-visible { outline: 1px solid var(--blue); outline-offset: 3px; }
-  .nuit a:focus-visible, .nuit button:focus-visible, .lightbox button:focus-visible { outline-color: var(--corail); }
+  .nuit a:focus-visible, .nuit button:focus-visible { outline-color: var(--corail); }
   .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
   .mention { font-family: var(--f-mono); }
   .yr { font-family: var(--f-mono); font-size: 12px; font-variant-numeric: tabular-nums; color: var(--grey); white-space: nowrap; font-weight: 400; }
@@ -301,7 +301,9 @@
   .sans-v { margin-top: 14px; font-size: 14px; color: var(--nuit-grey); line-height: 1.7; }
 
   /* ── reprises du site actuel : le cadre de photos, la reglette, la legende ── */
-  .vue { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; cursor: zoom-in; }
+  .vue { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+  /* une photo du cadre qui vient d'une piece ouvre sa page */
+  .vue[data-page] { cursor: pointer; }
   .vue .sujet { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; }
   .slider { position: relative; overflow: hidden; }
   .slider-track { display: flex; flex-wrap: nowrap; width: 100%; transition: transform .35s ease; }
@@ -428,32 +430,6 @@
   .p-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 18px; }
   .p-meta span { font-family: var(--f-mono); font-size: 10.5px; color: var(--blue); border: 1px solid var(--line); padding: 3px 8px; border-radius: 2px; }
 
-  /* ═══════════ LA VISIONNEUSE (reprise telle quelle du site actuel) ═══════════ */
-  .lightbox { display: flex; position: fixed; inset: 0; z-index: 1000; background: rgba(16,19,20,.975); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); align-items: center; justify-content: center; cursor: zoom-out; opacity: 0; visibility: hidden; transition: opacity .2s ease-out, visibility 0s linear .2s; }
-  .lightbox.open { opacity: 1; visibility: visible; transition: opacity .22s ease-out, visibility 0s; }
-  .lightbox img, .lightbox video { max-width: 92vw; max-height: 76vh; object-fit: contain; box-shadow: 0 8px 48px rgba(0,0,0,.5); cursor: default; transform: scale(.975); transition: transform .26s var(--e-out), opacity .16s ease; }
-  .lightbox.open img, .lightbox.open video { transform: scale(1); }
-  .lightbox video { display: none; }
-  .lightbox-close { position: absolute; top: 20px; right: 24px; font-size: 28px; color: var(--line); cursor: pointer; line-height: 1; opacity: .7; transition: opacity .15s; }
-  .lightbox-close:hover { opacity: 1; }
-  .lb-points { display: flex; gap: 3px; justify-content: center; flex-wrap: wrap; row-gap: 8px; margin-bottom: 10px; pointer-events: auto; }
-  .lb-points:empty { display: none; }
-  .lb-point { width: 16px; height: 2px; border: none; padding: 0; cursor: pointer; background: rgba(255,255,255,.24); }
-  .lb-point:hover { background: rgba(255,255,255,.5); }
-  .lb-point.actif { background: rgba(255,255,255,.92); }
-  .lb-nav { position: absolute; top: 50%; z-index: 4; width: 60px; height: 60px; margin-top: -30px; display: grid; place-items: center; opacity: 0; transition: opacity .18s ease-out; }
-  .lb-nav::before { content: ''; width: 34px; height: 34px; border-radius: 50%; background: var(--paper); box-shadow: 0 2px 14px rgba(0,0,0,.35); opacity: .82; }
-  .lb-nav:hover::before { opacity: 1; }
-  .lb-prec { left: 12px; } .lb-suiv { right: 12px; }
-  .lightbox.nav-visible .lb-nav, .lb-nav:focus-visible { opacity: 1; }
-  .lightbox.seule .lb-nav { display: none; }
-  @media (hover: none) { .lb-nav { top: 42%; opacity: 1; } .lb-nav::before { width: 28px; height: 28px; opacity: .6; } .lb-prec { left: 8px; } .lb-suiv { right: 8px; } }
-  .lb-cartouche { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 26px 22px; min-height: 88px; background: linear-gradient(to top, rgba(12,15,16,.96), rgba(12,15,16,0)); display: grid; gap: 4px; pointer-events: none; }
-  .lb-titre { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--paper); }
-  .lb-legende { font-size: 13.5px; line-height: 1.45; color: var(--line); max-width: 62ch; }
-  .lb-tags, .lb-credits, .lb-voir { font-size: 10.5px; letter-spacing: .03em; color: var(--grey); }
-  .lb-tags:empty, .lb-credits:empty, .lb-voir:empty { display: none; }
-
   /* ═══════════ TELEPHONE ═══════════ */
   @media (max-width: 1100px) {
     .v3-lect { grid-template-columns: minmax(0, 1fr); gap: 24px; }
@@ -462,16 +438,26 @@
     .cites-g { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
   @media (max-width: 900px) {
-    .v3-bandeau { padding: 18px var(--g) 22px; gap: 12px; flex-direction: column; align-items: flex-start; }
-    .v3-bandeau .coord { align-items: flex-start; text-align: left; }
+    /* Le bandeau tenait un quart de l'ecran (demande de Ghali, 05/10/2026) :
+       le nom et la version sur une ligne, le sous-titre, la phrase en plus
+       petit, l'e-mail seul. Les villes restent sur ordinateur. */
+    .v3-bandeau { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 12px; padding: 14px var(--g) 14px; align-items: start; }
+    .v3-bandeau .qui { grid-column: 1; grid-row: 1; }
+    .v3-bandeau .nom { font-size: 20px; }
+    .v3-bandeau .sous-titre { font-size: 12px; }
+    .v3-bandeau h1 { grid-column: 1 / -1; grid-row: 2; font-size: 15px; line-height: 1.35; max-width: none; }
+    .v3-bandeau .coord { display: contents; }
+    .v3-bandeau .coord > a { grid-column: 1 / -1; grid-row: 3; font-size: 13px; }
+    .v3-bandeau .coord > span { display: none; }
+    .v3-bandeau .footer-version { grid-column: 2; grid-row: 1; margin-top: 4px; }
     /* Une porte ouverte, le bandeau se replie sur une ligne : le nom et la
        version (qui doit rester visible), pour laisser l'ecran a la lecture.
        Toucher le nom deroule toujours le volet. (demande de Ghali, 05/10/2026) */
-    .v3.dedans .v3-bandeau { flex-direction: row; align-items: center; justify-content: space-between; gap: 12px; padding: 12px var(--g); }
+    .v3.dedans .v3-bandeau { align-items: center; padding: 12px var(--g); }
     .v3.dedans .v3-bandeau h1, .v3.dedans .v3-bandeau .sous-titre,
     .v3.dedans .v3-bandeau .coord > a, .v3.dedans .v3-bandeau .coord > span { display: none; }
     .v3.dedans .v3-bandeau .nom { font-size: 18px; }
-    .v3.dedans .v3-bandeau .footer-version { margin-top: 0; }
+    .v3.dedans .v3-bandeau .footer-version { margin-top: 0; align-self: center; }
     .v3-portes { flex-direction: column; }
     .v3-porte { flex: 0 0 auto; }
     .v3-portes:not(.dedans) .v3-porte:hover { flex-grow: 1; }
@@ -479,7 +465,7 @@
     .v3-portes.dedans .v3-joint { height: 0; }
     .v3-joint::after { background: linear-gradient(to bottom, var(--paper) 0%, rgba(237,238,235,.62) 26%, rgba(20,24,26,.62) 76%, var(--ink) 100%); }
     .v3-seuil { padding: 28px var(--g); }
-    .v3-film { height: 150px; overflow-x: auto; scrollbar-width: none; }
+    .v3-film { height: clamp(260px, 44svh, 400px); overflow-x: auto; scrollbar-width: none; margin-top: 20px; }
     .v3-portes.dedans .v3-porte { flex-basis: 56px; }
     .v3-tranche { writing-mode: horizontal-tb; width: 100%; height: 56px; padding: 0 var(--g); }
     .v3-salle { padding: 24px var(--g) 100px; }
@@ -500,8 +486,6 @@
     .gal-leg, .gal-th { padding-inline: var(--g); }
     .fiche { position: static; padding: 0 var(--g); }
     .gal-nav { display: none; }
-    .lb-cartouche { padding: 14px 18px 18px; min-height: 82px; }
-    .lightbox img, .lightbox video { max-height: 68vh; }
   }
 
   /* ═══════════ OUVERTURE D'UNE PORTE : View Transitions ═══════════ */
@@ -542,7 +526,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.130</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.131</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -763,121 +747,121 @@
                 </div>
                 <div class="ff-nassij-slider slider">
                   <div class="slider-track">
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-coquillage">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-coquillage" data-page="piece-hermes-holiday-windows">
                       <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/vitrine-coquillages-alex-jonas.jpg" loading="lazy" width="911" height="911" alt="Scène et vitrine — En vitrine (photo Alex Jonas)" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-coquillage">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-coquillage" data-page="piece-hermes-holiday-windows">
                       <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/_atelier/coquillage-finition-01.jpg" loading="lazy" width="1600" height="2133" alt="Scène et vitrine — Le coquillage à l'atelier : corps fraisé, collerette imprimée, ailes thermoformées" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-coquillage">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-coquillage" data-page="piece-hermes-holiday-windows">
                       <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/_atelier/coquillage-collerette-imprimee.jpg" loading="lazy" width="1600" height="2133" alt="Scène et vitrine — La collerette, imprimée en PLA" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-coquillage">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-coquillage" data-page="piece-hermes-holiday-windows">
                       <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/_atelier/coquillage-aile-thermoformee.jpg" loading="lazy" width="1600" height="2133" alt="Scène et vitrine — Une aile, thermoformée sur gabarit imprimé" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-coquillage">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-coquillage" data-page="piece-hermes-holiday-windows">
                       <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/_atelier/coquillage-avant-peinture.jpg" loading="lazy" width="1600" height="1200" alt="Scène et vitrine — Les pièces assemblées, avant peinture" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-dragon">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-dragon" data-page="piece-hermes-wild-wild-quest">
                       <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/03_modele3d-creature.jpg" loading="lazy" width="776" height="582" alt="Scène et vitrine — Le modèle : courbe directrice, écailles croissantes puis décroissantes" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-dragon">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-dragon" data-page="piece-hermes-wild-wild-quest">
                       <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/dragon-atelier-03.jpg" loading="lazy" width="1261" height="1261" alt="Scène et vitrine — Le dragon à l'atelier, avant peinture" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-dragon">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-dragon" data-page="piece-hermes-wild-wild-quest">
                       <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/dragon-montage-atelier.jpg" loading="lazy" width="1600" height="849" alt="Scène et vitrine — Monté, avec ses cavaliers" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-dragon">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-dragon" data-page="piece-hermes-wild-wild-quest">
                       <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-dragon.jpg" loading="lazy" width="1006" height="1258" alt="Scène et vitrine — En vitrine" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-mains">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-mains" data-page="piece-hermes-wild-wild-quest">
                       <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/mains-en-serie-02.jpg" loading="lazy" width="1600" height="2133" alt="Scène et vitrine — Les mains, imprimées en résine, alignées pour la finition" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-mains">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-mains" data-page="piece-hermes-wild-wild-quest">
                       <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/main-imprimee-tenant-un-plan.jpg" loading="lazy" width="900" height="1600" alt="Scène et vitrine — Une main qui tient un plan : une variante, donc une conception" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-mains">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-mains" data-page="piece-hermes-wild-wild-quest">
                       <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/mains-prototypes-resine-noire-01.jpg" loading="lazy" width="1600" height="2133" alt="Scène et vitrine — Les premiers prototypes, en résine noire" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-arbres">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-arbres" data-page="piece-hermes-wild-wild-quest">
                       <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/arbre-rendu.jpg" loading="lazy" width="981" height="1054" alt="Scène et vitrine — Un arbre : le tronc, les branches, un nuage" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-arbres">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-arbres" data-page="piece-hermes-wild-wild-quest">
                       <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/arbre-depart-de-branche-01.jpg" loading="lazy" width="576" height="765" alt="Scène et vitrine — Un départ de branche, fixé sur le tronc" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-arbres">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-arbres" data-page="piece-hermes-wild-wild-quest">
                       <img class="sujet" src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/vitrine-arbres-02.jpg" loading="lazy" width="849" height="765" alt="Scène et vitrine — En vitrine" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-sculpture">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-sculpture" data-page="piece-sabrina-ratte-sculpture-cinetique">
                       <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/HERMES_Watches-Wonders_2022.04.02_AliciaDubuis_02_2000.jpg" loading="lazy" width="1600" height="1066" alt="Scène et vitrine — La sculpture devant l'installation vidéo (photo Alicia Dubuis)" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-sculpture">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-sculpture" data-page="piece-sabrina-ratte-sculpture-cinetique">
                       <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/01_scenographie-rendu.jpg" loading="lazy" width="1600" height="1200" alt="Scène et vitrine — Rendu du stand" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-montagnes">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-montagnes" data-page="piece-sabrina-ratte-sculpture-cinetique">
                       <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/03_sculpture-himalaya-plan.png" loading="lazy" width="922" height="691" alt="Scène et vitrine — Le plan d'une montagne" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-montagnes">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-montagnes" data-page="piece-sabrina-ratte-sculpture-cinetique">
                       <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/02_sculpture-impression-3d.jpg" loading="lazy" width="1102" height="826" alt="Scène et vitrine — Une montagne, imprimée en 3D" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-montagnes">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-montagnes" data-page="piece-sabrina-ratte-sculpture-cinetique">
                       <img class="sujet" src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/Art-galeriecharlot-3654.jpg" loading="lazy" width="1600" height="1136" alt="Scène et vitrine — Dans sa vitrine, la montre devant le film (photo Galerie Charlot)" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-bar">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-bar" data-page="piece-watches-wonders-mobilier-vip">
                       <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/bar-a-montres-courbe.jpg" loading="lazy" width="1600" height="1200" alt="Scène et vitrine — Le bar fini" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-bar">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-bar" data-page="piece-watches-wonders-mobilier-vip">
                       <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/bar-pieces-imprimees-rendu.png" loading="lazy" width="1495" height="756" alt="Scène et vitrine — Les pièces imprimées de la double courbure, isolées" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-bar">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-bar" data-page="piece-watches-wonders-mobilier-vip">
                       <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/bar-structure-rendu.jpg" loading="lazy" width="843" height="504" alt="Scène et vitrine — L'ossature CNC et les pièces imprimées" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-bar">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-bar" data-page="piece-watches-wonders-mobilier-vip">
                       <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/bar-atelier-courbe-a01.jpg" loading="lazy" width="1600" height="2133" alt="Scène et vitrine — La courbe plaquée, avant la finition" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-table">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-table" data-page="piece-watches-wonders-mobilier-vip">
                       <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-allumee.jpg" loading="lazy" width="1600" height="2133" alt="Scène et vitrine — Une table allumée : le miroir infini" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-table">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-table" data-page="piece-watches-wonders-mobilier-vip">
                       <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/miroir-infini-structure-01.jpg" loading="lazy" width="1600" height="2133" alt="Scène et vitrine — La structure, avant le miroir" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-table">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-table" data-page="piece-watches-wonders-mobilier-vip">
                       <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-miroir-infini-01.jpg" loading="lazy" width="1600" height="2133" alt="Scène et vitrine — Les bandeaux LED, vus à travers le miroir sans tain" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-mass">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-mass" data-page="piece-mass-set-design">
                       <img class="sujet" src="images/web/1-commandes/mass-set-design/tournage-plateau-rouge.jpg" loading="lazy" width="1600" height="1200" alt="Scène et vitrine — Le décor sur le plateau de tournage" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-mass">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-mass" data-page="piece-mass-set-design">
                       <img class="sujet" src="images/web/1-commandes/mass-set-design/_atelier/structure-contreplaque-01.jpg" loading="lazy" width="1600" height="1200" alt="Scène et vitrine — À l'atelier, la structure sous la peau" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-mass">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-mass" data-page="piece-mass-set-design">
                       <img class="sujet" src="images/web/1-commandes/mass-set-design/_atelier/rocher-peau.jpg" loading="lazy" width="1600" height="2133" alt="Scène et vitrine — Un rocher, sa peau" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-mass">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-mass" data-page="piece-mass-set-design">
                       <img class="sujet" src="images/web/1-commandes/mass-set-design/01_expo-pompidou-metz.jpg" loading="lazy" width="896" height="672" alt="Scène et vitrine — Exposé au Centre Pompidou-Metz (photo Marc Domage)" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-photophobia">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-photophobia" data-page="piece-photophobia-vr">
                       <img class="sujet" src="images/web/1-commandes/photophobia-vr/01_scene-mangrove.jpg" loading="lazy" width="1600" height="724" alt="Scène et vitrine — La mangrove et ses créatures" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-photophobia">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-photophobia" data-page="piece-photophobia-vr">
                       <img class="sujet" src="images/web/1-commandes/photophobia-vr/04_modele3d-poisson.jpg" loading="lazy" width="785" height="572" alt="Scène et vitrine — Un poisson ajouré, modélisé comme un objet" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-photophobia">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-photophobia" data-page="piece-photophobia-vr">
                       <img class="sujet" src="images/web/1-commandes/photophobia-vr/05_texture-kaleidoscope.jpg" loading="lazy" width="1307" height="578" alt="Scène et vitrine — La texture de l'espace kaléidoscopique" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-photophobia">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-photophobia" data-page="piece-photophobia-vr">
                       <img class="sujet" src="images/web/1-commandes/photophobia-vr/02_premiere-kampnagel.jpg" loading="lazy" width="568" height="503" alt="Scène et vitrine — Le casque, à la première" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-aire-poids-lourd">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-aire-poids-lourd" data-page="rpiece-aire-poids-lourd">
                       <img class="sujet" src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-110930503.jpg" loading="lazy" width="1600" height="900" alt="Scène et vitrine — Les praticables en place, avant la représentation" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-aire-poids-lourd">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-aire-poids-lourd" data-page="rpiece-aire-poids-lourd">
                       <img class="sujet" src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-144453920.jpg" loading="lazy" width="1600" height="900" alt="Scène et vitrine — Deux interprètes sur le praticable" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-aire-poids-lourd">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-aire-poids-lourd" data-page="rpiece-aire-poids-lourd">
                       <img class="sujet" src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-145734025.jpg" loading="lazy" width="1600" height="900" alt="Scène et vitrine — Un interprète seul en lumière ; le praticable reste en retrait" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-aire-poids-lourd">
+                    <div class="vue" data-groupe="2-recherche-sujets-scene-et-vitrine-aire-poids-lourd" data-page="rpiece-aire-poids-lourd">
                       <img class="sujet" src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-131926747.jpg" loading="lazy" width="1600" height="900" alt="Scène et vitrine — Le plateau dans le noir" onerror="this.style.opacity='0'">
                     </div>
                   </div>
@@ -983,250 +967,250 @@
                 </div>
                 <div class="ff-nassij-slider slider">
                   <div class="slider-track">
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-bar-courbe">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-bar-courbe" data-page="piece-watches-wonders-mobilier-vip">
                       <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/bar-pieces-imprimees-rendu.png" loading="lazy" width="1495" height="756" alt="Assemblage et outillage — Les quatorze pièces imprimées de la double courbure, isolées" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-bar-courbe">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-bar-courbe" data-page="piece-watches-wonders-mobilier-vip">
                       <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/bar-structure-rendu.jpg" loading="lazy" width="843" height="504" alt="Assemblage et outillage — L'ossature CNC et les pièces imprimées" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-bar-courbe">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-bar-courbe" data-page="piece-watches-wonders-mobilier-vip">
                       <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/bar-atelier-structure.jpg" loading="lazy" width="1600" height="1200" alt="Assemblage et outillage — À l'atelier, la structure montée" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-bar-courbe">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-bar-courbe" data-page="piece-watches-wonders-mobilier-vip">
                       <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/bar-atelier-courbe-a01.jpg" loading="lazy" width="1600" height="2133" alt="Assemblage et outillage — La courbe plaquée, avant la finition" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-bar-courbe">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-bar-courbe" data-page="piece-watches-wonders-mobilier-vip">
                       <img class="sujet" src="images/web/1-commandes/watches-wonders-mobilier-vip/bar-a-montres-courbe.jpg" loading="lazy" width="1600" height="1200" alt="Assemblage et outillage — Le bar fini" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-module">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-module" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20250615-162255914.png" loading="lazy" width="1600" height="1200" alt="Assemblage et outillage — Un module seul : les coudes imprimés, reliés par des tubes" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-module">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-module" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20250613-113842873.png" loading="lazy" width="1600" height="1200" alt="Assemblage et outillage — Le même module, une autre face" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-module">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-module" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20250615-162211608.png" loading="lazy" width="1600" height="1200" alt="Assemblage et outillage — De biais" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-en-scene">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-en-scene" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Repetitions/appui-sur-deux-modules.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Tout le poids sur deux modules" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-en-scene">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-en-scene" data-page="piece-starting-with-the-limbs">
                       <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif2.jpg" loading="lazy" width="1600" height="1004" alt="Assemblage et outillage — Sur scène, les corps et les structures mêlés" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-en-scene">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-en-scene" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Repetitions/assis-sur-un-module.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Assis sur un module" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-en-scene">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-en-scene" data-page="piece-starting-with-the-limbs">
                       <img class="sujet" src="images/web/1-commandes/starting-with-the-limbs/dispositif5.jpg" loading="lazy" width="1600" height="995" alt="Assemblage et outillage — Les dispositifs comme appuis" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-noeud">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-noeud" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Assemblage/noeud-insert-et-vis.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — La vis dans l'insert ; la ligne où les deux moitiés du coude se rejoignent" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-noeud">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-noeud" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Assemblage/tube-enfonce-dans-le-coude.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Le tube entre dans le coude, les inserts attendent les vis" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-noeud">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-noeud" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Assemblage/marquage-e3.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — « E3 » de part et d'autre d'une jonction : le montage se lit sur la pièce" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-noeud">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-noeud" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Assemblage/marquage-d14-et-vis.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — « D14 » : chaque branche dit où elle va" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-noeud">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-noeud" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Assemblage/demi-coude-marque.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Un demi-coude, coupé pour tenir sur le plateau" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-rates">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-rates" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Rates/coude-casse-le-long-des-couches.jpg" loading="lazy" width="1600" height="1719" alt="Assemblage et outillage — La rupture typique : une branche cassée net, le long des couches" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-rates">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-rates" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Rates/impression-supports-arbre.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Deux branches qui montent en parallèle, sur leurs supports en arbre" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-rates">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-rates" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Rates/impression-prusa-xl-branches.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Sur la Prusa XL, la gravité contre les branches" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-prototypage">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-prototypage" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Premices/concept-ia-trois-familles.jpg" loading="lazy" width="1536" height="1024" alt="Assemblage et outillage — Planche de concept générée : substrats, articulations, excroissances" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-prototypage">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-prototypage" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Premices/rendu-substrat-01.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Un substrat ajouré, à l'échelle d'une silhouette" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-prototypage">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-prototypage" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Prototypes/premier-coude-pla-02.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Premiers coudes en PLA, sur des tiges fines" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-prototypage">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-prototypage" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Prototypes/premiere-structure-pla.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Une première structure" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-prototypage">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-prototypage" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Prototypes/essai-danseurs-01.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Premiers essais avec les danseurs" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-prototypage">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-prototypage" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Prototypes/module-face-textile.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Une face fermée en textile, finalement sortie du projet" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-transport">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-transport" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Transport/velo-cargo-residence.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Pendant la résidence : la moitié des modules sur un vélo cargo, avant le plan de démontage" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-transport">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-transport" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Transport/plan-structure-sac.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Le plan d'une structure de sac, nœuds numérotés" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-transport">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-transport" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Transport/structure-de-sac.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — La structure intérieure d'un sac, sur des coudes réguliers" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-transport">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-transport" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Transport/sac-de-transport.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Un des quatre sacs, prêt pour l'avion" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-icebergs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-icebergs" data-page="piece-hermes-holiday-windows">
                       <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/_atelier/vitrine-icebergs-01.jpg" loading="lazy" width="1080" height="1920" alt="Assemblage et outillage — Les icebergs en vitrine, Hermès 2019" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-icebergs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-icebergs" data-page="piece-hermes-holiday-windows">
                       <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/_atelier/vitrine-icebergs-02.jpg" loading="lazy" width="1080" height="1920" alt="Assemblage et outillage — Résine translucide, coulée en série" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-icebergs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-icebergs" data-page="piece-hermes-holiday-windows">
                       <img class="sujet" src="images/web/1-commandes/hermes-holiday-windows/_atelier/icebergs-resine.jpg" loading="lazy" width="1600" height="1200" alt="Assemblage et outillage — Les tirages en résine, à l'atelier" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20250615-162255914.png" loading="lazy" width="1600" height="1200" alt="Assemblage et outillage — Un module seul — les coudes imprimés, reliés par des tubes" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20250613-113842873.png" loading="lazy" width="1600" height="1200" alt="Assemblage et outillage — Le même module, une autre face" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20250615-162211608.png" loading="lazy" width="1600" height="1200" alt="Assemblage et outillage — De biais" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20250615-162300172.png" loading="lazy" width="1600" height="1200" alt="Assemblage et outillage — De dessus" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Premices/concept-ia-trois-familles.jpg" loading="lazy" width="1536" height="1024" alt="Assemblage et outillage — Planche de concept générée — substrats, articulations, excroissances" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Premices/concept-ia-substrat-articulation-excroissance.jpg" loading="lazy" width="1024" height="1024" alt="Assemblage et outillage — Planche de concept générée — les trois familles sur le plateau" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Premices/concept-ia-substrats-01.jpg" loading="lazy" width="1536" height="1024" alt="Assemblage et outillage — Planche de concept générée — des substrats dans le volume de scène" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Premices/concept-ia-croquis-scene.jpg" loading="lazy" width="1536" height="1024" alt="Assemblage et outillage — Planche de concept générée — la scène esquissée" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Premices/concept-ia-articulation.jpg" loading="lazy" width="1024" height="1024" alt="Assemblage et outillage — Planche de concept générée — une articulation entre deux corps" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Premices/concept-ia-scene-sombre.jpg" loading="lazy" width="1536" height="1024" alt="Assemblage et outillage — Image de concept générée — l'ambiance cherchée" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Premices/concept-ia-substrat-grotte.jpg" loading="lazy" width="1024" height="1024" alt="Assemblage et outillage — Image de concept générée — un substrat à l'échelle du corps" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Premices/excroissance-portee-01.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Une excroissance imprimée, portée — premier essai" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Premices/excroissance-portee-02.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — La même, de face" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Premices/rendu-substrat-01.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Rendu d'un substrat ajouré, à l'échelle d'une silhouette" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Premices/rendu-substrat-02.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Le même substrat, de près" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Premices/impression-substrat-prusa-01.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Un substrat ajouré sur le plateau de la Prusa XL" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Premices/impression-substrat-prusa-02.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Le même, vu de côté" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Prototypes/premier-coude-pla-01.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Premier coude, en PLA, sur une tige fine" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Prototypes/premier-coude-pla-02.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Un coude à trois branches" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Prototypes/premier-coude-pla-03.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Le coude et sa tige, désassemblés" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Prototypes/premiere-structure-pla.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Une première structure, coudes et tiges" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Prototypes/essai-danseurs-01.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Premiers essais avec les danseurs, en studio" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Prototypes/essai-danseurs-02.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Une structure portée sur la tête" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Prototypes/essai-danseurs-03.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Le même essai" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Prototypes/module-membrane-irisee-sol.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Un module fermé par une membrane irisée" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Prototypes/module-membrane-irisee.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — La membrane, de près" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Prototypes/module-face-textile.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Une face fermée en textile" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Rates/coude-casse-le-long-des-couches.jpg" loading="lazy" width="1600" height="1719" alt="Assemblage et outillage — Une branche cassée net, le long des couches d'impression" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Rates/impression-supports-arbre.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Deux branches imprimées en parallèle, sur leurs supports en arbre" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Rates/impression-prusa-xl-branches.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Sur la Prusa XL : la gravité contre les branches" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Assemblage/demi-coude-marque.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Un demi-coude, marqué — certains sont coupés en deux pour tenir sur le plateau" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Assemblage/tube-enfonce-dans-le-coude.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Le tube s'enfonce dans le coude ; les inserts attendent les vis" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Assemblage/noeud-insert-et-vis.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Un nœud monté : la vis dans l'insert, la jonction des deux moitiés" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Assemblage/marquage-e3.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Le marquage « E3 » de part et d'autre d'une jonction" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Assemblage/marquage-d14-et-vis.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — « D14 » : chaque branche dit où elle va" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Repetitions/appui-sur-deux-modules.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Tout le poids sur deux modules" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Repetitions/au-sol-avec-un-module.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Au sol, avec un module" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Repetitions/repetition-plateau.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — En répétition, les modules sur le plateau" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Repetitions/assis-sur-un-module.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Assis sur un module" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Transport/velo-cargo-residence.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Pendant la résidence, la moitié des modules sur un vélo cargo — avant le plan de démontage" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Transport/plan-structure-sac.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Le plan d'une structure de sac, nœuds numérotés" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Transport/structure-de-sac.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — La structure intérieure d'un sac, sur le même principe" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Transport/structure-dans-le-sac.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — La structure, dans sa housse" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/Transport/sac-de-transport.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Un des quatre sacs, prêt pour l'avion" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20240904-131134711-mp.jpg" loading="lazy" width="1600" height="900" alt="Assemblage et outillage — Essai en studio, septembre 2024" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20240904-131206456-mp.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Essai en studio — une première structure, en ballons" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs" data-page="rpiece-limbs">
                       <img class="sujet" src="images/web/2-recherche/projets/limbs/pxl-20240904-131312353.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Essai en studio — la structure tenue à bout de bras" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-tiflik">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-tiflik" data-page="rpiece-tiflik">
                       <img class="sujet" src="images/web/2-recherche/projets/tiflik/PXL_20260504_152604167.MP.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Le moule en trois pièces, imprimé en PLA, avec le logo de Tiflik" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-tiflik">
+                    <div class="vue" data-groupe="2-recherche-sujets-assemblage-et-outillage-tiflik" data-page="rpiece-tiflik">
                       <img class="sujet" src="images/web/2-recherche/projets/tiflik/moule-tiflik-assemble.jpg" loading="lazy" width="1600" height="2844" alt="Assemblage et outillage — Les trois pièces emboîtées" onerror="this.style.opacity='0'">
                     </div>
                   </div>
@@ -1366,409 +1350,409 @@
                 </div>
                 <div class="ff-nassij-slider slider">
                   <div class="slider-track">
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-machine-et-main">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-machine-et-main" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/22_parcours-de-buse-01.jpg" loading="lazy" width="912" height="979" alt="Textile et ornement — Ce que la machine sait faire : répéter une trajectoire à l'identique sur toute une surface" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-machine-et-main">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-machine-et-main" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/31_prototype-perles-detail.jpg" loading="lazy" width="557" height="400" alt="Textile et ornement — Ce qu'elle ne sait pas faire : enfiler, tendre, arrêter le fil" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-machine-et-main">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-machine-et-main" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/26_prototype-perles-blanc.jpg" loading="lazy" width="414" height="294" alt="Textile et ornement — Les deux sur le même morceau d'étoffe" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-commandes-zaa">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-commandes-zaa" data-page="piece-ornements-imprimes">
                       <img class="sujet" src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-123440392.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Le caftan en mousseline orange, motif imprimé puis pailleté par l'atelier" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-commandes-zaa">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-commandes-zaa" data-page="piece-ornements-imprimes">
                       <img class="sujet" src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-122934822.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Le motif imprimé en argent sur chaque pièce, avant l'assemblage" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-commandes-zaa">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-commandes-zaa" data-page="piece-ornements-imprimes">
                       <img class="sujet" src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-122946850-mp.jpg" loading="lazy" width="1600" height="900" alt="Textile et ornement — Le tracé de près" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-commandes-zaa">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-commandes-zaa" data-page="piece-ornements-imprimes">
                       <img class="sujet" src="images/web/1-commandes/ornements-imprimes/_mémoire-brute/pxl-20240508-215042269.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Gilet : les fleurs composées sur le buste, avant l'assemblage" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-commandes-zaa">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-commandes-zaa" data-page="piece-ornements-imprimes">
                       <img class="sujet" src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124224570.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Le gilet en brocart doré, fleurs imprimées et cousues" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-commandes-zaa">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-commandes-zaa" data-page="piece-ornements-imprimes">
                       <img class="sujet" src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124259998.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Le gilet fini" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-instruments">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-instruments" data-page="rpiece-boutons">
                       <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260715_175518889.MP.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Le porte-échantillons : il pivote autour de son axe et libère le bouton qu'on veut essayer" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-instruments">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-instruments" data-page="rpiece-atelier">
                       <img class="sujet" src="images/web/2-recherche/projets/atelier/PXL_20260715_175326165.MP.jpg" loading="lazy" width="1600" height="900" alt="Textile et ornement — Neuf motifs montés sur leurs bras, ouverts en éventail pour être comparés d'un geste" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-instruments">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-instruments" data-page="rpiece-boutons">
                       <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260706_140607253.jpg" loading="lazy" width="1600" height="900" alt="Textile et ornement — Une série sortie de l'imprimante, groupée par motif sur ses socles" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-instruments">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-instruments" data-page="rpiece-boutons">
                       <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260704_151248364.jpg" loading="lazy" width="1600" height="900" alt="Textile et ornement — Bande d'essai : impression directe sur le tissu, à côté des boutons cousus" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-instruments">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-instruments" data-page="rpiece-atelier">
                       <img class="sujet" src="images/web/2-recherche/projets/atelier/PXL_20260508_184529736.jpg" loading="lazy" width="1600" height="900" alt="Textile et ornement — Le panier d'échantillons : chaque réglette numérotée garde une série" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-instruments">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-instruments" data-page="rpiece-boutons">
                       <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260709_100516708.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Et le choix final, sur le vêtement : deux familles côte à côte" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-rendu-fixe">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-rendu-fixe" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/42_thalassic-face.png" loading="lazy" width="537" height="776" alt="Textile et ornement — La silhouette de face, immobile : ce qu'un rendu fixe sait montrer" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-rendu-fixe">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-rendu-fixe" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/48_caftan-bas-detail.jpg" loading="lazy" width="1376" height="759" alt="Textile et ornement — Le bas de robe : c'est là que la retombée se joue" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-rendu-fixe">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-rendu-fixe" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/49_broderie-matiere-detail.jpg" loading="lazy" width="621" height="433" alt="Textile et ornement — La broderie de près : sa façon d'accrocher la lumière ne se voit qu'en mouvement" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/01_broderie-generee-ia.png" loading="lazy" width="1079" height="1049" alt="Textile et ornement — L'image qui a ouvert la recherche — broderie générée, corail et fil d'or" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/03_diagramme-identite.jpg" loading="lazy" width="1600" height="923" alt="Textile et ornement — Où tombent les images générées — traditionnel / interprété, oriental / marocain" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/02_premier-essai-midjourney.jpg" loading="lazy" width="1024" height="1024" alt="Textile et ornement — Premier essai Midjourney — broderie d'or sur organza noir" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/05_variation-caftan-or-01.jpg" loading="lazy" width="624" height="624" alt="Textile et ornement — Variation sur la fente centrale — densité du semis" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/06_variation-caftan-or-02.jpg" loading="lazy" width="624" height="624" alt="Textile et ornement — Variation sur la fente centrale — motif continu" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/07_variation-caftan-or-03.jpg" loading="lazy" width="624" height="624" alt="Textile et ornement — Variation sur la fente centrale — dégradé vers le bas" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/08_planche-materialite.jpg" loading="lazy" width="1600" height="923" alt="Textile et ornement — Planche de matérialité — vingt-huit états du même principe" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/09_planche-variations-motif.jpg" loading="lazy" width="1600" height="923" alt="Textile et ornement — Variations de motif sur l'épaule et le dos" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/04_planche-zooms.jpg" loading="lazy" width="1600" height="923" alt="Textile et ornement — Zooms — ce que devient le détail à cinquante-cinq millimètres" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/10_corail-couleur.jpg" loading="lazy" width="968" height="964" alt="Textile et ornement — Recherche d'image source — corail, saturation maximale" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/11_corail-image-source.jpg" loading="lazy" width="1015" height="878" alt="Textile et ornement — L'image retenue — le relief lisible en luminosité" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Identite/12_image-source-symetrique.jpg" loading="lazy" width="1600" height="1252" alt="Textile et ornement — L'image source symétrisée, prête pour l'échantillonnage" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/13_definition-image-sampler-01.jpg" loading="lazy" width="1359" height="633" alt="Textile et ornement — Définition Grasshopper — l'image lue canal par canal" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/14_definition-image-sampler-02.jpg" loading="lazy" width="1429" height="663" alt="Textile et ornement — Définition Grasshopper — seuil de contour et attracteurs" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/15_fleuron-contour-01.jpg" loading="lazy" width="588" height="612" alt="Textile et ornement — Fleuron obtenu par symétrie — premier seuil" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/16_fleuron-contour-02.jpg" loading="lazy" width="578" height="609" alt="Textile et ornement — Fleuron obtenu par symétrie — deuxième seuil" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/17_fleuron-contour-03.jpg" loading="lazy" width="588" height="598" alt="Textile et ornement — Fleuron obtenu par symétrie — troisième seuil" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/18_bande-symetrique.jpg" loading="lazy" width="1537" height="346" alt="Textile et ornement — Bande symétrique — le motif déroulé en frise" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/19_contours-variante.jpg" loading="lazy" width="1028" height="997" alt="Textile et ornement — Courbes de niveau, variante ouverte" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/20_modele-3d-broderie.jpg" loading="lazy" width="968" height="967" alt="Textile et ornement — Modèle de la broderie imprimée — perles logées dans le bourrelet" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/21_modele-3d-broderie-couleur.jpg" loading="lazy" width="1600" height="955" alt="Textile et ornement — Le même modèle, socle et perles séparés" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/27_courbes-fermees-rhino.jpg" loading="lazy" width="1232" height="660" alt="Textile et ornement — Formes fermées, rendues en volume avant impression" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/28_definition-courbes-perles.jpg" loading="lazy" width="1217" height="745" alt="Textile et ornement — Définition des courbes de perlage sur le tracé" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/22_parcours-de-buse-01.jpg" loading="lazy" width="912" height="979" alt="Textile et ornement — Parcours de buse — le G-code n'est pas un tranchage, c'est une trajectoire" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/23_parcours-de-buse-02.jpg" loading="lazy" width="868" height="931" alt="Textile et ornement — Parcours de buse — variante de remplissage" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/24_parcours-de-buse-03.jpg" loading="lazy" width="904" height="970" alt="Textile et ornement — Parcours de buse — chemin en vue de dessus" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/25_prototype-tulle-noir.jpg" loading="lazy" width="514" height="480" alt="Textile et ornement — Échantillon — impression sur tulle noir tendu" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/26_prototype-perles-blanc.jpg" loading="lazy" width="414" height="294" alt="Textile et ornement — Échantillon — perles cousues dans les logements imprimés" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/29_prototype-perles-arcs.jpg" loading="lazy" width="494" height="445" alt="Textile et ornement — Essais d'arcs perlés sur tulle, avec la *sfifa* d'origine" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/30_prototype-perles-boucles.jpg" loading="lazy" width="435" height="480" alt="Textile et ornement — Boucles perlées, montées à la main sur le tracé imprimé" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/31_prototype-perles-detail.jpg" loading="lazy" width="557" height="400" alt="Textile et ornement — Détail de couture — la perle prise dans le bourrelet" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/32_prototype-perles-rangee.jpg" loading="lazy" width="640" height="408" alt="Textile et ornement — Rangée de perles imprimée d'un seul trait" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/33_symetrie-forme-de-base.jpg" loading="lazy" width="1557" height="1854" alt="Textile et ornement — Recherche de symétrie — la forme de base et ses replis" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/34_patronage-devant.jpg" loading="lazy" width="959" height="1309" alt="Textile et ornement — Patronage devant — demi-empiècement, symétrisé" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/35_patronage-dos-rendu.jpg" loading="lazy" width="1469" height="1000" alt="Textile et ornement — Patronage dos, posé sur le buste" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/36_plein-et-vide-etude.jpg" loading="lazy" width="740" height="988" alt="Textile et ornement — Plein et vide — étude d'une cellule répétable" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/37_plein-et-vide-panneau.png" loading="lazy" width="1202" height="2676" alt="Textile et ornement — Le panneau complet, matières attribuées" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/38_plein-et-vide-caftan.png" loading="lazy" width="1600" height="2663" alt="Textile et ornement — Le motif reporté sur les pièces du caftan" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/39_materiau-substance.png" loading="lazy" width="544" height="545" alt="Textile et ornement — Matière multicouche construite sous Substance Designer" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/40_thalassic-epaules.png" loading="lazy" width="1235" height="555" alt="Textile et ornement — Premier montage — empiècement d'épaules" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/41_thalassic-buste.png" loading="lazy" width="589" height="762" alt="Textile et ornement — Premier montage — buste et fente centrale" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/42_thalassic-face.png" loading="lazy" width="537" height="776" alt="Textile et ornement — Silhouette de face" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/43_thalassic-trois-quarts.png" loading="lazy" width="606" height="923" alt="Textile et ornement — Silhouette de trois quarts" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/44_thalassic-dos.png" loading="lazy" width="582" height="923" alt="Textile et ornement — Silhouette de dos" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/45_caftan-rendu-dos.jpg" loading="lazy" width="1413" height="1764" alt="Textile et ornement — Thalassic Kaftan — rendu Blender, de dos" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/46_caftan-buste-detail.jpg" loading="lazy" width="1380" height="1396" alt="Textile et ornement — Buste — or, turquoise et perles sur voile noir" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/47_caftan-manche-detail.jpg" loading="lazy" width="909" height="524" alt="Textile et ornement — Poignet brodé" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/48_caftan-bas-detail.jpg" loading="lazy" width="1376" height="759" alt="Textile et ornement — Bas de robe — la broderie remonte de l'ourlet" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/49_broderie-matiere-detail.jpg" loading="lazy" width="621" height="433" alt="Textile et ornement — La matière de près — fils d'or, remplissages perlés, transparences" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-media="video" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan">
+                    <div class="vue" data-media="video" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan" data-page="rpiece-thalassic-kaftan">
                       <video class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Defile/51_defile-digital.mp4" muted loop playsinline preload="metadata" data-alt="Textile et ornement — Le défilé digital — le vêtement porté et marché, rendu sous Blender"></video>
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-definition">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-definition" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/13_definition-image-sampler-01.jpg" loading="lazy" width="1359" height="633" alt="Textile et ornement — Définition Grasshopper — l'image lue canal par canal" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-definition">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-definition" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/14_definition-image-sampler-02.jpg" loading="lazy" width="1429" height="663" alt="Textile et ornement — Définition Grasshopper — seuil de contour et attracteurs" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-definition">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-definition" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/15_fleuron-contour-01.jpg" loading="lazy" width="588" height="612" alt="Textile et ornement — Fleuron obtenu par symétrie — premier seuil" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-definition">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-definition" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/16_fleuron-contour-02.jpg" loading="lazy" width="578" height="609" alt="Textile et ornement — Fleuron obtenu par symétrie — deuxième seuil" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-definition">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-definition" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/17_fleuron-contour-03.jpg" loading="lazy" width="588" height="598" alt="Textile et ornement — Fleuron obtenu par symétrie — troisième seuil" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-definition">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-definition" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/18_bande-symetrique.jpg" loading="lazy" width="1537" height="346" alt="Textile et ornement — Bande symétrique — le motif déroulé en frise" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-definition">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-definition" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Definition/19_contours-variante.jpg" loading="lazy" width="1028" height="997" alt="Textile et ornement — Courbes de niveau, variante ouverte" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/20_modele-3d-broderie.jpg" loading="lazy" width="968" height="967" alt="Textile et ornement — Modèle de la broderie imprimée — perles logées dans le bourrelet" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/21_modele-3d-broderie-couleur.jpg" loading="lazy" width="1600" height="955" alt="Textile et ornement — Le même modèle, socle et perles séparés" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/27_courbes-fermees-rhino.jpg" loading="lazy" width="1232" height="660" alt="Textile et ornement — Formes fermées, rendues en volume avant impression" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/28_definition-courbes-perles.jpg" loading="lazy" width="1217" height="745" alt="Textile et ornement — Définition des courbes de perlage sur le tracé" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/22_parcours-de-buse-01.jpg" loading="lazy" width="912" height="979" alt="Textile et ornement — Parcours de buse — le G-code n'est pas un tranchage, c'est une trajectoire" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/23_parcours-de-buse-02.jpg" loading="lazy" width="868" height="931" alt="Textile et ornement — Parcours de buse — variante de remplissage" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/24_parcours-de-buse-03.jpg" loading="lazy" width="904" height="970" alt="Textile et ornement — Parcours de buse — chemin en vue de dessus" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/25_prototype-tulle-noir.jpg" loading="lazy" width="514" height="480" alt="Textile et ornement — Échantillon — impression sur tulle noir tendu" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/26_prototype-perles-blanc.jpg" loading="lazy" width="414" height="294" alt="Textile et ornement — Échantillon — perles cousues dans les logements imprimés" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/29_prototype-perles-arcs.jpg" loading="lazy" width="494" height="445" alt="Textile et ornement — Essais d'arcs perlés sur tulle, avec la *sfifa* d'origine" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/30_prototype-perles-boucles.jpg" loading="lazy" width="435" height="480" alt="Textile et ornement — Boucles perlées, montées à la main sur le tracé imprimé" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/31_prototype-perles-detail.jpg" loading="lazy" width="557" height="400" alt="Textile et ornement — Détail de couture — la perle prise dans le bourrelet" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee" data-page="rpiece-thalassic-kaftan">
                       <img class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/32_prototype-perles-rangee.jpg" loading="lazy" width="640" height="408" alt="Textile et ornement — Rangée de perles imprimée d'un seul trait" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-media="video" data-groupe="2-recherche-sujets-textile-et-ornement-defile">
+                    <div class="vue" data-media="video" data-groupe="2-recherche-sujets-textile-et-ornement-defile" data-page="rpiece-thalassic-kaftan">
                       <video class="sujet" src="images/web/2-recherche/projets/thalassic-kaftan/Defile/51_defile-digital.mp4" muted loop playsinline preload="metadata" data-alt="Textile et ornement — Le défilé digital — le vêtement porté et marché, rendu sous Blender"></video>
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-masques">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-masques" data-page="rpiece-masques">
                       <img class="sujet" src="images/web/2-recherche/projets/masques/01-thalassic-face.jpg" loading="lazy" width="669" height="745" alt="Textile et ornement — Thalassic Mask — des lamelles qui suivent le crâne, de face" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-masques">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-masques" data-page="rpiece-masques">
                       <img class="sujet" src="images/web/2-recherche/projets/masques/02-thalassic-profil.jpg" loading="lazy" width="696" height="725" alt="Textile et ornement — Thalassic Mask — de profil" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-masques">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-masques" data-page="rpiece-masques">
                       <img class="sujet" src="images/web/2-recherche/projets/masques/03-erosion-face.jpg" loading="lazy" width="669" height="745" alt="Textile et ornement — Érosion — le visage creusé, de face" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-masques">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-masques" data-page="rpiece-masques">
                       <img class="sujet" src="images/web/2-recherche/projets/masques/04-erosion-profil.jpg" loading="lazy" width="696" height="725" alt="Textile et ornement — Érosion — de profil, la tête réduite à ses strates" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-masques">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-masques" data-page="rpiece-masques">
                       <img class="sujet" src="images/web/2-recherche/projets/masques/05-spherepacking-face.jpg" loading="lazy" width="674" height="745" alt="Textile et ornement — Sphere packing — de face" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-masques">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-masques" data-page="rpiece-masques">
                       <img class="sujet" src="images/web/2-recherche/projets/masques/06-spherepacking-profil.jpg" loading="lazy" width="697" height="725" alt="Textile et ornement — Sphere packing — de profil" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-masques">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-masques" data-page="rpiece-masques">
                       <img class="sujet" src="images/web/2-recherche/projets/masques/07-spherepacking-corps.jpg" loading="lazy" width="322" height="675" alt="Textile et ornement — Sphere packing — le corps entier" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-contour">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-contour" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Contour/PXL_20240319_205644415.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Le tracé imprimé sur un voile teint, porté à même l'épaule" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-contour">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-contour" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Contour/PXL_20240319_205716330.jpg" loading="lazy" width="1600" height="900" alt="Textile et ornement — De près : la ligne franchit la couture de l'épaule sans s'interrompre, et le bord droit arrête le motif net" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-fleurs">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-fleurs" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Fleurs/PXL_20240506_120020367.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — La composition en cours sur le brocart : velours, lamé, tulle et organza, tous tenus par le même contour" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-fleurs">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-fleurs" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Fleurs/PXL_20240506_120025415.MP.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Une fleur seule — pétales de lamé découpés au ras de la ligne, cœur de soie froissée" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-fleurs">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-fleurs" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Fleurs/PXL_20240506_120033627.MP.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Contours souples et contours rigides sur la même pièce : les uns retombent, les autres tiennent le relief" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-fleurs">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-fleurs" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Fleurs/PXL_20240506_120016033.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Assemblage : la fleur est cousue point par point, avec ses rangs de perles" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-fleurs">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-fleurs" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Fleurs/PXL_20240506_120042836.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Une guirlande de fleurs translucides — le contour reste lisible même quand le tissu ne l'est plus" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260516_194829364.NIGHT.jpg" loading="lazy" width="1600" height="1600" alt="Textile et ornement — Porté : sur un tulle chair, le motif tient seul et le tissu s'efface" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260516_194723132.MP.jpg" loading="lazy" width="1600" height="1600" alt="Textile et ornement — Autre état, sur mousseline mauve — corail, violet et or" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260516_194805237.MP.jpg" loading="lazy" width="1600" height="1600" alt="Textile et ornement — Autre état encore, sur mousseline bleu-vert : les mêmes formes, un registre de couleur entier de décalage" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/IMG-20260528-WA0003.jpg" loading="lazy" width="900" height="1600" alt="Textile et ornement — À plat, le motif entier : deux oiseaux et leur branche" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260427_121025200.MP.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Le même motif en bleu, posé sur du tulle blanc" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/IMG-20260528-WA0001.jpg" loading="lazy" width="900" height="1600" alt="Textile et ornement — De près : la tête en triangles mats, le corps en rondelles bleues et or" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260427_121018672.MP.jpg" loading="lazy" width="1600" height="900" alt="Textile et ornement — Les perles seules sur la maille — trois diamètres, trois hauteurs, un dégradé" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/IMG-20260528-WA0004.jpg" loading="lazy" width="1600" height="900" alt="Textile et ornement — Une fleur, sur mousseline mauve" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260509_113957208.MP.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — La même fleur en pleine lumière : corail, parme et paillettes d'or" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/IMG-20260528-WA0002.jpg" loading="lazy" width="900" height="1600" alt="Textile et ornement — Détail : la buse alterne les familles de perles selon la couche de l'image" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260528_113406780.jpg" loading="lazy" width="1600" height="900" alt="Textile et ornement — Un registre plus sombre — cuivre et bleu nuit, perles plus larges" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260507_090233295.jpg" loading="lazy" width="1600" height="900" alt="Textile et ornement — La définition au travail : chaque famille de perles reçoit sa couche de l'image" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-perlage" data-page="rpiece-re-former-le-textile">
                       <img class="sujet" src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260507_110341482.jpg" loading="lazy" width="1600" height="900" alt="Textile et ornement — L'oiseau réduit à des points, avant que la buse ne les traduise en volumes" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons" data-page="rpiece-boutons">
                       <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260610_140313055.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Spirales imprimées, accordées au tissu — le dégradé du filament suit celui de l'étoffe" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons" data-page="rpiece-boutons">
                       <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260610_140239002.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — La ligne complète sur la tenue, du col à l'ourlet" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons" data-page="rpiece-boutons">
                       <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260704_111244235.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Boutons carrés translucides, dégradé rose vers l'or" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons" data-page="rpiece-boutons">
                       <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260704_111238925.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — La même tenue, tulle et lamé : le bouton prend la lumière comme le tissu" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons" data-page="rpiece-boutons">
                       <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260610_135556599.MP.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Boutons irisés sur un fond de sequins — la couleur bascule selon l'angle" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons" data-page="rpiece-boutons">
                       <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260610_135539565.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — La pièce entière, en atelier" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons" data-page="rpiece-boutons">
                       <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260709_100516708.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Deux familles de boutons montées côte à côte, pour trancher sur le vêtement" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons" data-page="rpiece-boutons">
                       <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260709_100541963.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Le détail de la comparaison — motifs ajourés d'un côté, cerclages de l'autre" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons" data-page="rpiece-boutons">
                       <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260715_175518889.MP.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Le porte-échantillons : il pivote autour de son axe et libère le bouton qu'on veut essayer" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons" data-page="rpiece-boutons">
                       <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260706_140607253.jpg" loading="lazy" width="1600" height="900" alt="Textile et ornement — Une série sortie de l'imprimante, groupée par motif sur ses socles" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-boutons" data-page="rpiece-boutons">
                       <img class="sujet" src="images/web/2-recherche/projets/boutons/PXL_20260704_151248364.jpg" loading="lazy" width="1600" height="900" alt="Textile et ornement — Bande d'essai — impression directe sur le tissu, à côté des boutons cousus" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-atelier">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-atelier" data-page="rpiece-atelier">
                       <img class="sujet" src="images/web/2-recherche/projets/atelier/PXL_20260306_094847207.jpg" loading="lazy" width="1600" height="900" alt="Textile et ornement — Avant : la pièce vide, son parquet et son lustre" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-atelier">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-atelier" data-page="rpiece-atelier">
                       <img class="sujet" src="images/web/2-recherche/projets/atelier/PXL_20260306_095009161.MP.jpg" loading="lazy" width="1600" height="900" alt="Textile et ornement — Après, depuis le même angle : la table de repas devenue établi, les tissus en attente sur l'étagère" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-atelier">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-atelier" data-page="rpiece-atelier">
                       <img class="sujet" src="images/web/2-recherche/projets/atelier/PXL_20260508_184529736.jpg" loading="lazy" width="1600" height="900" alt="Textile et ornement — Le panier d'échantillons — chaque réglette numérotée garde une série, et c'est la seule façon de la retrouver" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-atelier">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-atelier" data-page="rpiece-atelier">
                       <img class="sujet" src="images/web/2-recherche/projets/atelier/PXL_20260508_184541789.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — Le buste des essais : tout ce qui existe déjà, épinglé à hauteur de corps" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-atelier">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-atelier" data-page="rpiece-atelier">
                       <img class="sujet" src="images/web/2-recherche/projets/atelier/PXL_20260715_175326165.MP.jpg" loading="lazy" width="1600" height="900" alt="Textile et ornement — Neuf motifs de boutons montés sur leurs bras, ouverts en éventail pour être comparés d'un geste" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-motifs-broderie-main">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-motifs-broderie-main" data-page="rpiece-motifs-broderie-main">
                       <img class="sujet" src="images/web/2-recherche/projets/motifs-broderie-main/pxl-20240420-122646650.jpg" loading="lazy" width="1600" height="900" alt="Textile et ornement — Le kaftan brodé sur mannequin — le motif floral sur l'empiècement" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-motifs-broderie-main">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-motifs-broderie-main" data-page="rpiece-motifs-broderie-main">
                       <img class="sujet" src="images/web/2-recherche/projets/motifs-broderie-main/pxl-20240420-122720392.jpg" loading="lazy" width="1600" height="2844" alt="Textile et ornement — En pied — la broderie s'arrête à la taille, le brocart prend le relais" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-motifs-broderie-main">
+                    <div class="vue" data-groupe="2-recherche-sujets-textile-et-ornement-motifs-broderie-main" data-page="rpiece-motifs-broderie-main">
                       <img class="sujet" src="images/web/2-recherche/projets/motifs-broderie-main/0-0.jpg" loading="lazy" width="1024" height="1024" alt="Textile et ornement — Le motif de départ, généré numériquement" onerror="this.style.opacity='0'">
                     </div>
                   </div>
@@ -1973,46 +1957,46 @@
                 </div>
                 <div class="ff-nassij-slider slider">
                   <div class="slider-track">
-                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-vases">
+                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-vases" data-page="rpiece-mode-vase">
                       <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Fleuris/image (2).jpg" loading="lazy" width="1600" height="1638" alt="Objets imprimés — Deux vases en dégradé rose-orange" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-vases">
+                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-vases" data-page="rpiece-mode-vase">
                       <img class="sujet" src="images/web/2-recherche/projets/mode-vase/PXL_20260424_173227668.MP.jpg" loading="lazy" width="1600" height="2844" alt="Objets imprimés — Rouge et cuivre : cannelures devant, relief derrière" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-vases">
+                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-vases" data-page="rpiece-mode-vase">
                       <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Cache-pot/PXL_20260715_173300388.MP.jpg" loading="lazy" width="1600" height="2844" alt="Objets imprimés — Un mur continu, sans reprise : la strate est le motif" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-vases">
+                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-vases" data-page="rpiece-mode-vase">
                       <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Fleuris/image (1).jpg" loading="lazy" width="1600" height="2844" alt="Objets imprimés — Profil vrillé noir, avec des lys" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-vases">
+                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-vases" data-page="rpiece-mode-vase">
                       <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Fleuris/image.jpg" loading="lazy" width="1600" height="2844" alt="Objets imprimés — Trois tirages en usage" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-coextrusion">
+                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-coextrusion" data-page="rpiece-mode-vase">
                       <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260429_183442768.jpg" loading="lazy" width="1600" height="900" alt="Objets imprimés — Deux tirages du même rouleau, deux teintes : c'est l'angle qui tranche" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-coextrusion">
+                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-coextrusion" data-page="rpiece-mode-vase">
                       <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260715_173346298.MP.jpg" loading="lazy" width="1600" height="2844" alt="Objets imprimés — Le flanc intérieur d'une cannelure ne renvoie pas ce que renvoie le flanc extérieur" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-coextrusion">
+                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-coextrusion" data-page="rpiece-mode-vase">
                       <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Boite/PXL_20260721_124109180.MP.jpg" loading="lazy" width="1600" height="2844" alt="Objets imprimés — Le même filament sur un remplissage en courbe de Hilbert" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-soliflore">
+                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-soliflore" data-page="rpiece-mode-vase">
                       <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Soliflore/PXL_20260715_173250407.MP.jpg" loading="lazy" width="1600" height="2844" alt="Objets imprimés — Trois soliflores, même définition, trois profils" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-trio">
+                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-trio" data-page="rpiece-mode-vase">
                       <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Trio/PXL_20260715_173307446.MP.jpg" loading="lazy" width="1600" height="2844" alt="Objets imprimés — Même architecture, même hauteur : seule la courbe intermédiaire du loft change" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-relief">
+                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-relief" data-page="rpiece-mode-vase">
                       <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Relief/PXL_20260321_110027366.jpg" loading="lazy" width="1600" height="2844" alt="Objets imprimés — Tenu en main : l'amplitude retenue, celle qui se sent sans que la paroi décroche" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-relief">
+                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-relief" data-page="rpiece-mode-vase">
                       <img class="sujet" src="images/web/2-recherche/projets/mode-vase/Relief/PXL_20260715_173404455.MP.jpg" loading="lazy" width="1600" height="2844" alt="Objets imprimés — Le même objet posé — la couleur n'a pas changé, la lumière si" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-anastomose">
+                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-anastomose" data-page="rpiece-sculptures">
                       <img class="sujet" src="images/web/2-recherche/projets/sculptures/anastomose/pxl-20260127-222316950-2.jpg" loading="lazy" width="1600" height="2844" alt="Objets imprimés — L'échelle : trois pieds, à hauteur d'un lampadaire" onerror="this.style.opacity='0'">
                     </div>
-                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-anastomose">
+                    <div class="vue" data-groupe="2-recherche-sujets-objets-imprimes-anastomose" data-page="rpiece-sculptures">
                       <img class="sujet" src="images/web/2-recherche/projets/sculptures/anastomose/pxl-20260127-205842238.jpg" loading="lazy" width="1600" height="2844" alt="Objets imprimés — Les tronçons, leurs jonctions et la ligne d'index — et la matière qui s'assombrit dans les courbes" onerror="this.style.opacity='0'">
                     </div>
                   </div>
@@ -3264,25 +3248,8 @@
 <!-- AUTO:DP_PAGES:FIN -->
 </div>
 
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image en plein écran">
-  <button class="lightbox-close" id="lb-close" aria-label="Fermer">×</button>
-  <img id="lb-img" src="" alt="">
-  <video id="lb-video" src="" controls loop playsinline></video>
-  <button class="lb-nav lb-prec" id="lb-prec" aria-label="Image précédente"></button>
-  <button class="lb-nav lb-suiv" id="lb-suiv" aria-label="Image suivante"></button>
-  <div class="lb-cartouche">
-    <div class="lb-points" id="lb-points"></div>
-    <span class="lb-titre mono" id="lb-titre"></span>
-    <span class="lb-legende" id="lb-legende"></span>
-    <span class="lb-tags mono" id="lb-tags"></span>
-    <span class="lb-credits mono" id="lb-credits"></span>
-    <span class="lb-voir mono" id="lb-voir"></span>
-  </div>
-</div>
-
 <script>
 var VITESSE_SLIDER = 3000;   // valeur pilotee par contenu/reglages.txt
-var lb_el = document.getElementById('lightbox');
 var AU_SURVOL = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 var MOINS_DE_MOUVEMENT = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -3342,7 +3309,7 @@ document.querySelectorAll('.slider').forEach(function (slider) {
     if (slides.length <= 1) return;
     clearInterval(timer);
     slider.classList.add('en-cours');
-    timer = setInterval(function () { if (!lb_el.classList.contains('open')) go(cur + 1); }, VITESSE_SLIDER);
+    timer = setInterval(function () { go(cur + 1); }, VITESSE_SLIDER);
   }
   function arreter() { clearInterval(timer); timer = null; slider.classList.remove('en-cours'); }
   function poserDots() {
@@ -3498,147 +3465,10 @@ compter(document);
   });
 })();
 
-// ── LA VISIONNEUSE (reprise) ─────────────────────────────────────────────────
-(function () {
-  var lb = lb_el;
-  var lbImg = document.getElementById('lb-img');
-  var lbVid = document.getElementById('lb-video');
-  var lbClose = document.getElementById('lb-close');
-  var lbTitre = document.getElementById('lb-titre');
-  var lbLeg = document.getElementById('lb-legende');
-  var lbTags = document.getElementById('lb-tags');
-  var lbCredits = document.getElementById('lb-credits');
-  var lbVoir = document.getElementById('lb-voir');
-  var lbPoints = document.getElementById('lb-points');
-  var lbPrec = document.getElementById('lb-prec');
-  var lbSuiv = document.getElementById('lb-suiv');
-  var galerie = [], lbIndex = 0, vus = 0, delaiNav = null, retourFocus = null;
-
-  function ouvrir(liste, depart, contexte) {
-    if (!liste.length) return;
-    galerie = liste;
-    lbIndex = Math.max(0, depart || 0);
-    vus = 1;
-    contexte = contexte || {};
-    lbTitre.textContent = contexte.titre || '';
-    lbTags.textContent = '';
-    lbCredits.textContent = '';
-    lbVoir.innerHTML = '';
-    poserPoints();
-    lb.classList.toggle('seule', galerie.length < 2);
-    afficher(lbIndex);
-    retourFocus = document.activeElement;
-    lb.classList.add('open');
-    lbClose.focus();
-  }
-  function fermer() {
-    lb.classList.remove('open', 'nav-visible');
-    clearTimeout(delaiNav);
-    lbImg.src = '';
-    lbVid.pause();
-    lbVid.removeAttribute('src');
-    lbVid.load();
-    if (retourFocus && retourFocus.focus) retourFocus.focus({ preventScroll: true });
-  }
-  window.fermerVisionneuse = fermer;
-  function poserPoints() {
-    lbPoints.innerHTML = '';
-    if (galerie.length < 2) return;
-    galerie.forEach(function (_, i) {
-      var b = document.createElement('button');
-      b.className = 'lb-point';
-      b.setAttribute('aria-label', 'Image ' + (i + 1) + ' sur ' + galerie.length);
-      b.addEventListener('click', function (e) { e.stopPropagation(); afficher(i); });
-      lbPoints.appendChild(b);
-    });
-  }
-  function poser(item) {
-    if (item.video) {
-      lbImg.style.display = 'none'; lbImg.src = '';
-      lbVid.style.display = 'block'; lbVid.src = item.src;
-      var p = lbVid.play(); if (p && p.catch) p.catch(function () {});
-    } else {
-      lbVid.pause(); lbVid.style.display = ''; lbVid.removeAttribute('src');
-      lbImg.style.display = ''; lbImg.src = item.src; lbImg.alt = item.alt || '';
-    }
-    lbLeg.textContent = legendeSeule(item.alt, lbTitre.textContent);
-    lbPoints.querySelectorAll('.lb-point').forEach(function (p, i) { p.classList.toggle('actif', i === lbIndex); });
-  }
-  function afficher(n) {
-    lbIndex = n;
-    var item = galerie[lbIndex];
-    if (MOINS_DE_MOUVEMENT) { poser(item); return; }
-    lbImg.style.opacity = 0;
-    setTimeout(function () { poser(item); lbImg.style.opacity = 1; }, 110);
-  }
-  function suivante() {
-    if (vus < galerie.length) { vus++; afficher((lbIndex + 1) % galerie.length); }
-    else { fermer(); }
-  }
-  function precedente() { afficher((lbIndex - 1 + galerie.length) % galerie.length); }
-
-  // Une photo du cadre d'un article : cliquer l'agrandit, ELLE SEULE — pas de
-  // serie a faire defiler (demande de Ghali, 05/10/2026). Le cadre, lui,
-  // continue de tourner et ses mots de changer les photos.
-  document.addEventListener('click', function (e) {
-    var vue = e.target.closest('.vue');
-    var img = vue && vue.querySelector('.sujet');
-    if (!img) return;
-    e.stopPropagation();
-    var art = img.closest('.dp-art');
-    var estVideo = img.tagName === 'VIDEO';
-    ouvrir([{ src: img.getAttribute('src'),
-              alt: estVideo ? (img.getAttribute('data-alt') || '') : img.alt,
-              video: estVideo }], 0, { titre: art ? art.getAttribute('data-titre') : '' });
-  });
-
-  // un mot cliquable dont les photos ne sont pas dans le cadre : le plein ecran
-  document.addEventListener('click', function (e) {
-    var lien = e.target.closest('.lien-galerie');
-    if (!lien) return;
-    e.preventDefault();
-    e.stopPropagation();
-    var source = sourceDe(lien.getAttribute('data-galerie'));
-    if (!source) return;
-    var art = lien.closest('.dp-art');
-    var page = lien.closest('.pg');
-    var titre = art ? art.getAttribute('data-titre')
-              : (page && page.querySelector('.fiche h1') ? page.querySelector('.fiche h1').textContent.trim() : '');
-    ouvrir(Array.from(source.querySelectorAll('i')).map(function (el) {
-      return { src: el.getAttribute('data-src'), alt: el.getAttribute('data-alt'), video: el.hasAttribute('data-video') };
-    }), 0, { titre: titre });
-  });
-
-  lbPrec.addEventListener('click', function (e) { e.stopPropagation(); precedente(); });
-  lbSuiv.addEventListener('click', function (e) { e.stopPropagation(); vus++; afficher((lbIndex + 1) % galerie.length); });
-  function montrerNav(e) { if (e.pointerType === 'touch') return; clearTimeout(delaiNav); lb.classList.add('nav-visible'); }
-  function cacherNav(e) { if (e.pointerType === 'touch') return; clearTimeout(delaiNav); delaiNav = setTimeout(function () { lb.classList.remove('nav-visible'); }, 400); }
-  [lbImg, lbVid, lbPrec, lbSuiv].forEach(function (el) {
-    el.addEventListener('pointerenter', montrerNav);
-    el.addEventListener('pointermove', montrerNav);
-    el.addEventListener('pointerleave', cacherNav);
-  });
-  lbImg.addEventListener('click', function (e) { e.stopPropagation(); suivante(); });
-  lbClose.addEventListener('click', function (e) { e.stopPropagation(); fermer(); });
-  lb.addEventListener('click', function (e) { if (e.target === lb) { e.stopPropagation(); fermer(); } });
-  lbVid.addEventListener('click', function (e) { e.stopPropagation(); });
-  document.addEventListener('keydown', function (e) {
-    if (!lb.classList.contains('open')) return;
-    e.stopImmediatePropagation();
-    if (e.key === 'Escape') fermer();
-    var surVideo = document.activeElement === lbVid;
-    if (e.key === 'ArrowRight' || (e.key === ' ' && !surVideo)) { e.preventDefault(); suivante(); }
-    if (e.key === 'ArrowLeft') { e.preventDefault(); precedente(); }
-  }, true);
-  var x0 = null, y0 = null;
-  lb.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
-  lb.addEventListener('touchend', function (e) {
-    if (x0 === null) return;
-    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
-    if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.8) { dx < 0 ? suivante() : precedente(); }
-    x0 = null;
-  }, { passive: true });
-})();
+// ── UNE PHOTO DU CADRE OUVRE LA PAGE DE SA PIECE ─────────────────────────────
+// Il n'y a plus de visionneuse plein ecran (decision de Ghali, 05/10/2026) :
+// le cadre fait deja defiler les photos. Cliquer celle qu'on voit mene a la
+// piece d'ou elle vient. Le routeur, plus bas, ecoute « data-page ».
 
 // ── LES ARTICLES : un mot souligne change les photos du cadre (repris) ───────
 function montrerArticle(art, groupe) {
@@ -3907,6 +3737,7 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
     }
     if ((b = e.target.closest('[data-sortir]'))) { aller(''); return; }
     if ((b = e.target.closest('[data-go]'))) { aller(b.getAttribute('data-go')); return; }
+    if ((b = e.target.closest('.vue[data-page]'))) { aller(b.getAttribute('data-page')); return; }
     if ((b = e.target.closest('[data-a]'))) {
       if (!b.disabled) aller('article-' + b.getAttribute('data-a'), true);
       return;

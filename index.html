@@ -459,6 +459,14 @@
   @media (max-width: 900px) {
     .v3-bandeau { padding: 18px var(--g) 22px; gap: 12px; flex-direction: column; align-items: flex-start; }
     .v3-bandeau .coord { align-items: flex-start; text-align: left; }
+    /* Une porte ouverte, le bandeau se replie sur une ligne : le nom et la
+       version (qui doit rester visible), pour laisser l'ecran a la lecture.
+       Toucher le nom deroule toujours le volet. (demande de Ghali, 05/10/2026) */
+    .v3.dedans .v3-bandeau { flex-direction: row; align-items: center; justify-content: space-between; gap: 12px; padding: 12px var(--g); }
+    .v3.dedans .v3-bandeau h1, .v3.dedans .v3-bandeau .sous-titre,
+    .v3.dedans .v3-bandeau .coord > a, .v3.dedans .v3-bandeau .coord > span { display: none; }
+    .v3.dedans .v3-bandeau .nom { font-size: 18px; }
+    .v3.dedans .v3-bandeau .footer-version { margin-top: 0; }
     .v3-portes { flex-direction: column; }
     .v3-porte { flex: 0 0 auto; }
     .v3-portes:not(.dedans) .v3-porte:hover { flex-grow: 1; }
@@ -529,7 +537,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.128</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.129</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -3728,6 +3736,7 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
     if (etat.porte === k) return;
     if (k === 'r') poserUne();
     portes.classList.toggle('dedans', !!k);
+    document.querySelector('.v3').classList.toggle('dedans', !!k);
     lesPortes.forEach(function (p) { p.classList.toggle('ici', p.getAttribute('data-porte') === k); });
     etat.porte = k;
     window.scrollTo(0, 0);

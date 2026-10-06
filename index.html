@@ -346,10 +346,15 @@
   .slider-dot.active { background: rgba(237,238,235,.24); }
   .slider-dot.active::after { content: ''; position: absolute; inset: 0; background: var(--blue-nuit); transform-origin: left center; transform: scaleX(0); }
   .slider.en-cours .slider-dot.active::after { transition: transform 3s linear; transform: scaleX(1); }
-  .ff-media { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 20px; align-items: end; position: sticky; top: 20px; }
-  .ff-marge { grid-column: 1; display: flex; flex-direction: column; gap: 14px; padding-bottom: 2px; }
+  /* La legende n'est plus une colonne a gauche de la photo : elle passe
+     dessous, sur une ligne, avec la reglette. La photo prend la place
+     liberee (Ghali, 06/10/2026). */
+  .ff-media { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; align-items: end; position: sticky; top: 20px; }
+  .ff-marge { grid-column: 1; grid-row: 2; display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 20px; max-width: var(--w-media, none); }
+  .ff-marge .ff-legende { flex: 1 1 24ch; min-width: 0; }
+  .ff-marge .slider-dots, .ff-marge .sp-tout { flex: none; }
   .ff-legende { font-size: 10.5px; line-height: 1.6; letter-spacing: .03em; color: var(--grey); transition: opacity .28s ease; }
-  .ff-nassij-slider { --h-media: clamp(300px, 58vh, 560px); grid-column: 2; position: relative; justify-self: start; width: 100%; max-width: var(--w-media, none); }
+  .ff-nassij-slider { --h-media: clamp(300px, 62vh, 620px); grid-column: 1; grid-row: 1; position: relative; justify-self: start; width: 100%; max-width: var(--w-media, none); }
   .ff-nassij-slider .slider-track { display: block; position: relative; transform: none !important; }
   .ff-nassij-slider .slider-track > .vue { position: absolute; inset: 0; aspect-ratio: auto; height: var(--h-media); opacity: 0; filter: blur(3px); transition: opacity .58s ease, filter .58s ease; }
   .ff-nassij-slider .slider-track > .vue.vue-active { position: relative; opacity: 1; filter: blur(0); }
@@ -595,7 +600,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.141</p>
+      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.142</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -3455,7 +3460,12 @@ document.querySelectorAll('.slider').forEach(function (slider) {
     slider.querySelectorAll('.sujet').forEach(function (i) {
       if (i.naturalWidth && i.naturalHeight) max = Math.max(max, h * i.naturalWidth / i.naturalHeight);
     });
-    if (max) slider.style.setProperty('--w-media', Math.ceil(max) + 'px');
+    if (max) {
+      slider.style.setProperty('--w-media', Math.ceil(max) + 'px');
+      // la legende, dessous, ne depasse pas la photo
+      var media = slider.closest('.ff-media');
+      if (media) media.style.setProperty('--w-media', Math.ceil(max) + 'px');
+    }
   }
   var cadres = document.querySelectorAll('.ff-nassij-slider');
   cadres.forEach(function (s) {

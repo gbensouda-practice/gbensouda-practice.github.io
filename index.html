@@ -608,7 +608,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.144</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.145</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -3360,6 +3360,20 @@ document.querySelectorAll('.slider').forEach(function (slider) {
   var art = slider.closest('.dp-art');
   var titre = art ? art.getAttribute('data-titre') || '' : '';
   var cur = 0, timer = null;
+  // Une photo ne se telecharge qu'au moment de passer a l'ecran (avec ses deux
+  // voisines). Sinon, a l'ouverture d'un gros article (Textile et ornement :
+  // plus de cent photos), le navigateur les demandait toutes d'un coup et la
+  // premiere attendait son tour : cadre vide (Ghali, 06/10/2026).
+  if (fondu) {
+    toutes.forEach(function (s) {
+      var im = s.querySelector('img.sujet');
+      if (im && im.getAttribute('src')) { im.setAttribute('data-src', im.getAttribute('src')); im.removeAttribute('src'); }
+    });
+  }
+  function charger(s) {
+    var im = s && s.querySelector('img.sujet[data-src]');
+    if (im && !im.getAttribute('src')) im.setAttribute('src', im.getAttribute('data-src'));
+  }
 
   function majReglette() { if (boiteDots) boiteDots.style.display = slides.length <= 1 ? 'none' : ''; }
   majReglette();
@@ -3369,6 +3383,9 @@ document.querySelectorAll('.slider').forEach(function (slider) {
     if (fondu) {
       toutes.forEach(function (s) { s.classList.remove('vue-active'); });
       slides[cur].classList.add('vue-active');
+      charger(slides[cur]);
+      charger(slides[(cur + 1) % slides.length]);
+      charger(slides[(cur - 1 + slides.length) % slides.length]);
       toutes.forEach(function (s) {
         var v = s.querySelector('video.sujet');
         if (!v) return;
@@ -3431,7 +3448,7 @@ document.querySelectorAll('.slider').forEach(function (slider) {
     var choix = toutes.filter(function (s) {
           if (liste && liste.indexOf(s.getAttribute('data-groupe')) === -1) return false;
           var m = s.querySelector('.sujet');
-          var cle = m ? m.getAttribute('src') : Math.random();
+          var cle = m ? (m.getAttribute('data-src') || m.getAttribute('src')) : Math.random();
           if (vues[cle]) return false;
           vues[cle] = true;
           return true;
@@ -3466,7 +3483,9 @@ document.querySelectorAll('.slider').forEach(function (slider) {
     if (!h) return;
     var max = 0;
     slider.querySelectorAll('.sujet').forEach(function (i) {
-      if (i.naturalWidth && i.naturalHeight) max = Math.max(max, h * i.naturalWidth / i.naturalHeight);
+      // les dimensions ecrites dans la page : la photo n'est peut-etre pas encore chargee
+      var w = i.naturalWidth || +i.getAttribute('width'), hh = i.naturalHeight || +i.getAttribute('height');
+      if (w && hh) max = Math.max(max, h * w / hh);
     });
     if (max) {
       slider.style.setProperty('--w-media', Math.ceil(max) + 'px');

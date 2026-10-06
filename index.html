@@ -117,13 +117,15 @@
     transition: grid-template-rows .35s var(--ease-drawer), opacity .25s ease; pointer-events: none;
   }
   .v3-infos > div { overflow: hidden; min-height: 0; }
-  /* Le survol seulement la ou il y a une souris : sur telephone, un toucher
-     laisse un « survol » colle qui empechait de refermer le volet en
-     retouchant le nom (Ghali, 06/10/2026). La, c'est la classe « ouvert ». */
-  .v3-bandeau.ouvert .v3-infos { grid-template-rows: 1fr; opacity: 1; pointer-events: auto; }
-  @media (hover: hover) and (pointer: fine) {
-    .v3-bandeau:hover .v3-infos, .v3-bandeau:focus-within .v3-infos {
-      grid-template-rows: 1fr; opacity: 1; pointer-events: auto;
+  .v3-bandeau:hover .v3-infos, .v3-bandeau:focus-within .v3-infos, .v3-bandeau.ouvert .v3-infos {
+    grid-template-rows: 1fr; opacity: 1; pointer-events: auto;
+  }
+  /* Ecran tactile : un toucher laisse un « survol » colle qui empechait de
+     refermer le volet en retouchant le nom (Ghali, 06/10/2026). La, seule
+     compte la classe « ouvert », que chaque toucher ouvre ou ferme. */
+  @media (hover: none) and (pointer: coarse) {
+    .v3-bandeau:not(.ouvert):hover .v3-infos, .v3-bandeau:not(.ouvert):focus-within .v3-infos {
+      grid-template-rows: 0fr; opacity: 0; pointer-events: none;
     }
   }
   .v3-infos dl {
@@ -606,7 +608,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.143</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.144</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>

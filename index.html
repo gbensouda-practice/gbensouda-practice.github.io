@@ -158,7 +158,13 @@
     .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 button:hover .chev { transform: translateX(-4px); opacity: 1; }
     .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 .mot { text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 1px; text-underline-offset: .16em; transition: text-decoration-color .2s ease; }
     .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 button:hover .mot { text-decoration-color: currentColor; }
-    .v3-portes.dedans .v3-porte.p.ici .v3-film { margin-top: 18px; height: clamp(180px, var(--h-film-dedans, 34svh), 420px); }
+    /* La bande descend jusqu'aux filtres, seuls en bas de l'ecran : sa hauteur
+       est calculee par le script (--h-film-dedans). Le texte d'introduction
+       passe a cote du titre. Un filtre fait descendre a la grille, et la
+       rangee des filtres reste alors collee en haut (Ghali, 06/10/2026). */
+    .v3-portes.dedans .v3-porte.p.ici .v3-film { margin-top: 18px; height: clamp(180px, var(--h-film-dedans, 50svh), 660px); }
+    .v3-portes.dedans .v3-porte.p.ici .v3-intro { position: absolute; top: 40px; left: 300px; right: var(--g); margin: 0; }
+    .v3-portes.dedans .v3-porte.p.ici .cmd-filtres { position: sticky; top: 0; z-index: 4; background: var(--paper); padding: 10px 0 8px; margin: 0 0 16px; }
   }
   /* le mot de la porte Projets change de couleur au survol de la porte : en plus
      du zoom, il dit qu'on peut cliquer (demande de Ghali, 05/10/2026) */
@@ -589,7 +595,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.137</p>
+      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.138</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -609,17 +615,17 @@
         <h2><button data-entrer="p"><svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M6.5 1.5 3 5l3.5 3.5"/></svg><span class="mot">Projets</span></button></h2>
         <div class="v3-film">
 <!-- AUTO:DP_FILM:DEBUT -->
-          <button data-entrer="p" data-carte="starting-with-the-limbs" aria-label="Dispositifs scéniques · Starting with the Limbs, cie L'Autre Maison, 2025"><img src="images/web/1-commandes/starting-with-the-limbs/dispositif1.jpg" alt="" width="1600" height="998"><span class="calque" aria-hidden="true"><b>Dispositifs scéniques · <em>Starting with the Limbs</em>, cie L'Autre Maison</b><span class="mention">2025</span></span></button>
-          <button data-entrer="p" data-carte="photophobia-vr" aria-label="Environnement VR · Photophobia, Sanni Est, 2022"><img src="images/web/1-commandes/photophobia-vr/01_scene-mangrove.jpg" alt="" width="1600" height="724"><span class="calque" aria-hidden="true"><b>Environnement VR · <em>Photophobia</em>, Sanni Est</b><span class="mention">2022</span></span></button>
-          <button data-entrer="p" data-carte="mass-set-design" aria-label="Set design · Mass, film de Pierre Pauze, 2020"><img src="images/web/1-commandes/mass-set-design/01_expo-pompidou-metz.jpg" alt="" width="896" height="672"><span class="calque" aria-hidden="true"><b>Set design · <em>Mass</em>, film de Pierre Pauze</b><span class="mention">2020</span></span></button>
-          <button data-entrer="p" data-carte="hermes-holiday-windows" aria-label="Vitrines Hermès France H19, 2019"><img src="images/web/1-commandes/hermes-holiday-windows/vitrine-coquillages-alex-jonas.jpg" alt="" width="911" height="911"><span class="calque" aria-hidden="true"><b>Vitrines Hermès France H19</b><span class="mention">2019</span></span></button>
-          <button data-entrer="p" data-carte="hermes-wild-wild-quest" aria-label="Vitrines Hermès France H21, 2021"><img src="images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-dragon.jpg" alt="" width="1006" height="1258"><span class="calque" aria-hidden="true"><b>Vitrines Hermès France H21</b><span class="mention">2021</span></span></button>
-          <button data-entrer="p" data-carte="watches-wonders-mobilier-vip" aria-label="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze, 2020"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-allumee.jpg" alt="" width="1600" height="2133"><span class="calque" aria-hidden="true"><b>Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze</b><span class="mention">2020</span></span></button>
-          <button data-entrer="p" data-carte="sabrina-ratte-sculpture-cinetique" aria-label="Sculpture cinétique · Sabrina Ratté × Watches &amp; Wonders, 2022"><img src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/HERMES_Watches-Wonders_2022.04.02_AliciaDubuis_02_2000.jpg" alt="" width="1600" height="1066"><span class="calque" aria-hidden="true"><b>Sculpture cinétique · Sabrina Ratté × Watches &amp; Wonders</b><span class="mention">2022</span></span></button>
-          <button data-entrer="p" data-carte="saket-sethi-mobilier-parametrique" aria-label="Collection mobilier paramétrique · Saket Sethi Design, 2023"><img src="images/web/1-commandes/saket-sethi-mobilier-parametrique/01_sofa-rendu.jpg" alt="" width="1248" height="585"><span class="calque" aria-hidden="true"><b>Collection mobilier paramétrique · Saket Sethi Design</b><span class="mention">2023</span></span></button>
-          <button data-entrer="p" data-carte="ornements-imprimes" aria-label="Ornements imprimés · deux pièces pour l'atelier Zaa, 2024"><img src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-123440392.jpg" alt="" width="1600" height="2844"><span class="calque" aria-hidden="true"><b>Ornements imprimés · deux pièces pour l'atelier Zaa</b><span class="mention">2024</span></span></button>
-          <button data-entrer="p" data-carte="passementerie-imprimee" aria-label="Passementerie imprimée, 2026"><img src="images/web/2-recherche/projets/boutons/PXL_20260610_140239002.jpg" alt="" width="1600" height="2844"><span class="calque" aria-hidden="true"><b>Passementerie imprimée</b><span class="mention">2026</span></span></button>
-          <button data-entrer="p" data-carte="vortex" aria-label="Vortex, 2026"><img src="images/web/2-recherche/projets/mode-vase/Fleuris/image (2).jpg" alt="" width="1600" height="1638"><span class="calque" aria-hidden="true"><b>Vortex</b><span class="mention">2026</span></span></button>
+          <button data-entrer="p" data-carte="starting-with-the-limbs" aria-label="Dispositifs scéniques · Starting with the Limbs, cie L'Autre Maison, 2025"><img src="images/web/1-commandes/starting-with-the-limbs/dispositif2.jpg" alt="" width="1600" height="1004"><span class="calque" aria-hidden="true"><b>Dispositifs scéniques · <em>Starting with the Limbs</em>, cie L'Autre Maison</b><span class="mention">2025</span></span></button>
+          <button data-entrer="p" data-carte="photophobia-vr" aria-label="Environnement VR · Photophobia, Sanni Est, 2022"><img src="images/web/1-commandes/photophobia-vr/03_premiere-public.jpg" alt="" width="199" height="564"><span class="calque" aria-hidden="true"><b>Environnement VR · <em>Photophobia</em>, Sanni Est</b><span class="mention">2022</span></span></button>
+          <button data-entrer="p" data-carte="mass-set-design" aria-label="Set design · Mass, film de Pierre Pauze, 2020"><img src="images/web/1-commandes/mass-set-design/tournage-plante-sculptee.jpg" alt="" width="1600" height="2133"><span class="calque" aria-hidden="true"><b>Set design · <em>Mass</em>, film de Pierre Pauze</b><span class="mention">2020</span></span></button>
+          <button data-entrer="p" data-carte="hermes-holiday-windows" aria-label="Vitrines Hermès France H19, 2019"><img src="images/web/1-commandes/hermes-holiday-windows/vitrine-chateau-alex-jonas.jpg" alt="" width="911" height="911"><span class="calque" aria-hidden="true"><b>Vitrines Hermès France H19</b><span class="mention">2019</span></span></button>
+          <button data-entrer="p" data-carte="hermes-wild-wild-quest" aria-label="Vitrines Hermès France H21, 2021"><img src="images/web/1-commandes/hermes-wild-wild-quest/02_vitrines-duo.jpg" alt="" width="1570" height="1256"><span class="calque" aria-hidden="true"><b>Vitrines Hermès France H21</b><span class="mention">2021</span></span></button>
+          <button data-entrer="p" data-carte="watches-wonders-mobilier-vip" aria-label="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze, 2020"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-miroir-infini-01.jpg" alt="" width="1600" height="2133"><span class="calque" aria-hidden="true"><b>Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze</b><span class="mention">2020</span></span></button>
+          <button data-entrer="p" data-carte="sabrina-ratte-sculpture-cinetique" aria-label="Sculpture cinétique · Sabrina Ratté × Watches &amp; Wonders, 2022"><img src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/Art-galeriecharlot-3654.jpg" alt="" width="1600" height="1136"><span class="calque" aria-hidden="true"><b>Sculpture cinétique · Sabrina Ratté × Watches &amp; Wonders</b><span class="mention">2022</span></span></button>
+          <button data-entrer="p" data-carte="saket-sethi-mobilier-parametrique" aria-label="Collection mobilier paramétrique · Saket Sethi Design, 2023"><img src="images/web/1-commandes/saket-sethi-mobilier-parametrique/02_twirl-sofa.jpg" alt="" width="988" height="894"><span class="calque" aria-hidden="true"><b>Collection mobilier paramétrique · Saket Sethi Design</b><span class="mention">2023</span></span></button>
+          <button data-entrer="p" data-carte="ornements-imprimes" aria-label="Ornements imprimés · deux pièces pour l'atelier Zaa, 2024"><img src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-122934822.jpg" alt="" width="1600" height="2844"><span class="calque" aria-hidden="true"><b>Ornements imprimés · deux pièces pour l'atelier Zaa</b><span class="mention">2024</span></span></button>
+          <button data-entrer="p" data-carte="passementerie-imprimee" aria-label="Passementerie imprimée, 2026"><img src="images/web/2-recherche/projets/boutons/PXL_20260610_140313055.jpg" alt="" width="1600" height="2844"><span class="calque" aria-hidden="true"><b>Passementerie imprimée</b><span class="mention">2026</span></span></button>
+          <button data-entrer="p" data-carte="vortex" aria-label="Vortex, 2026"><img src="images/web/2-recherche/projets/mode-vase/Fleuris/image (1).jpg" alt="" width="1600" height="2844"><span class="calque" aria-hidden="true"><b>Vortex</b><span class="mention">2026</span></span></button>
 <!-- AUTO:DP_FILM:FIN -->
         </div>
       </div>
@@ -3392,11 +3398,13 @@ document.querySelectorAll('.slider').forEach(function (slider) {
   }
   // Restreindre le cadre aux photos d'un mot ; null rend toutes les photos,
   // chacune une seule fois.
+  // Plusieurs groupes a la fois : ceux d'un paragraphe entier (le cadre suit
+  // la lecture). Une photo citee deux fois ne passe qu'une fois.
   slider.filtrerGroupe = function (groupe) {
     var vues = {};
-    var choix = groupe
-      ? toutes.filter(function (s) { return s.getAttribute('data-groupe') === groupe; })
-      : toutes.filter(function (s) {
+    var liste = Array.isArray(groupe) ? groupe : (groupe ? [groupe] : null);
+    var choix = toutes.filter(function (s) {
+          if (liste && liste.indexOf(s.getAttribute('data-groupe')) === -1) return false;
           var m = s.querySelector('.sujet');
           var cle = m ? m.getAttribute('src') : Math.random();
           if (vues[cle]) return false;
@@ -3556,6 +3564,7 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
     if (!cadre.querySelector('.vue[data-groupe="' + groupe + '"]')) return;   // sinon, plein ecran
     e.preventDefault();
     e.stopPropagation();
+    art.removeAttribute('data-lu');
     montrerArticle(art, groupe);
   });
 });
@@ -3618,6 +3627,62 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
   }, { passive: true });
 })();
 
+// ── LE CADRE SUIT LA LECTURE (ordinateur) ────────────────────────────────────
+// Le cadre ne montre plus toutes les photos de l'article en vrac : il montre
+// celles du paragraphe qui passe au milieu de l'ecran, c'est-a-dire les
+// groupes de ses mots soulignes (Ghali, 06/10/2026). Un paragraphe sans mot
+// garde les photos du precedent ; en haut de l'article, le cadre montre
+// celles du premier paragraphe qui en a. Toucher un mot montre son seul
+// groupe, jusqu'au paragraphe suivant. Sur telephone, rien ne change : le
+// cadre n'est pas a l'ecran pendant la lecture.
+var suivreLecture = (function () {
+  var ordi = matchMedia('(min-width: 901px)');
+  function groupesDe(p, cadre) {
+    var g = [];
+    p.querySelectorAll('.lien-galerie').forEach(function (l) {
+      var x = l.getAttribute('data-galerie');
+      if (g.indexOf(x) === -1 && cadre.querySelector('.vue[data-groupe="' + x + '"]')) g.push(x);
+    });
+    return g;
+  }
+  function montrer(art, p) {
+    var cadre = art.querySelector('.ff-nassij-slider');
+    if (!cadre || !cadre.filtrerGroupe) return;
+    var g = groupesDe(p, cadre);
+    if (!g.length) return;
+    var cle = g.join(' ');
+    if (art.getAttribute('data-lu') === cle) return;
+    art.setAttribute('data-lu', cle);
+    cadre.filtrerGroupe(g);
+    art.removeAttribute('data-montre');
+    var tout = art.querySelector('.sp-tout');
+    if (tout) tout.hidden = true;
+    art.querySelectorAll('.sp-texte .lien-galerie.montre').forEach(function (l) { l.classList.remove('montre'); });
+  }
+  if ('IntersectionObserver' in window) {
+    var obs = new IntersectionObserver(function (es) {
+      if (!ordi.matches) return;
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var art = e.target.closest('.dp-art');
+        if (art && !art.hidden) montrer(art, e.target);
+      });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    document.querySelectorAll('.dp-art .sp-texte p').forEach(function (p) { obs.observe(p); });
+  }
+  // en ouvrant un article : les photos de son premier paragraphe illustre
+  return function (art) {
+    if (!ordi.matches) return;
+    art.removeAttribute('data-lu');
+    var cadre = art.querySelector('.ff-nassij-slider');
+    if (!cadre) return;
+    var ps = art.querySelectorAll('.sp-texte p');
+    for (var i = 0; i < ps.length; i++) {
+      if (groupesDe(ps[i], cadre).length) { montrer(art, ps[i]); return; }
+    }
+  };
+})();
+
 // ── LES FILTRES DE LA SALLE PROJETS (repris) ─────────────────────────────────
 (function () {
   var barre = document.querySelector('.cmd-filtres');
@@ -3636,6 +3701,16 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
     });
     lignes.forEach(function (l) { l.hidden = l.getAttribute('data-cat') !== f; });
     grille.classList.toggle('filtree', !!f);
+    // Sur ordinateur, un filtre (« Tout » compris) descend a la grille : la
+    // rangee des filtres se colle en haut, la ligne de l'article dessous.
+    var porte = barre.closest('.v3-porte');
+    if (matchMedia('(min-width: 901px)').matches && porte && porte.classList.contains('ici')) {
+      // la rangee est collante : on vise ce qui la suit, moins sa hauteur
+      var suite = barre.nextElementSibling || grille;
+      var cible = porte.scrollTop + suite.getBoundingClientRect().top - porte.getBoundingClientRect().top
+        - barre.offsetHeight - 16;
+      porte.scrollTo({ top: Math.max(porte.scrollTop, cible), behavior: MOINS_DE_MOUVEMENT ? 'auto' : 'smooth' });
+    }
   });
 })();
 
@@ -3697,6 +3772,23 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
     unes[tour % unes.length].hidden = false;
     tour++;
   }
+  // Porte Projets ouverte sur ordinateur : la bande prend la hauteur qui
+  // laisse la rangee des filtres juste en bas de l'ecran.
+  function calerBande() {
+    var p = document.querySelector('.v3-porte.p');
+    if (!p) return;
+    if (etat.porte !== 'p' || !matchMedia('(min-width: 901px)').matches) {
+      p.style.removeProperty('--h-film-dedans');
+      return;
+    }
+    var film = p.querySelector('.v3-film');
+    var barre = p.querySelector('.cmd-filtres');
+    if (!film || !barre) return;
+    var haut = film.getBoundingClientRect().top - p.getBoundingClientRect().top;
+    var dispo = p.clientHeight - haut - 28 - barre.offsetHeight - 22;
+    p.style.setProperty('--h-film-dedans', Math.round(dispo) + 'px');
+  }
+  window.addEventListener('resize', function () { calerBande(); });
   function poserPorte(k) {
     if (etat.porte === k) return;
     if (k === 'r') poserUne();
@@ -3707,6 +3799,7 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
     window.scrollTo(0, 0);
     var ici = porteIci();
     if (ici) ici.scrollTop = 0;
+    calerBande();
     // le cadre des articles etait cache : il se recale maintenant qu'il a une taille
     window.dispatchEvent(new Event('resize'));
   }
@@ -3716,7 +3809,9 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
     arts.forEach(function (a) { a.hidden = (a !== art); });
     idx.forEach(function (b) { b.setAttribute('aria-current', b.getAttribute('data-a') === cle ? 'true' : 'false'); });
     window.dispatchEvent(new Event('resize'));
-    montrerArticle(art, groupe && art.querySelector('.vue[data-groupe="' + groupe + '"]') ? groupe : null);
+    var voulu = groupe && art.querySelector('.vue[data-groupe="' + groupe + '"]') ? groupe : null;
+    montrerArticle(art, voulu);
+    if (!voulu) suivreLecture(art);
     etat.article = cle;
     return true;
   }

@@ -94,9 +94,11 @@
   .v3-bandeau .nom { font-weight: var(--w-t); font-size: 23px; line-height: 1.1; letter-spacing: -.015em; white-space: nowrap; cursor: default; }
   .v3-bandeau .sous-titre { font-size: 13px; line-height: 1.3; color: var(--grey); white-space: nowrap; }
   @media (hover: hover) { .v3-bandeau .qui { cursor: pointer; } .v3-bandeau .nom { cursor: inherit; } }
+  /* Plus une phrase : trois metiers separes par des points medians, au centre,
+     en gras, dans la police du nom (Ghali, 07/10/2026). */
   .v3-bandeau h1 {
-    font-weight: 500; font-size: clamp(18px, 1.65vw, 23px); line-height: 1.3; max-width: 44ch;
-    flex: 1; letter-spacing: -.01em; color: var(--ink); cursor: default;
+    font-weight: 600; font-size: clamp(18px, 1.65vw, 23px); line-height: 1.3;
+    flex: 1; letter-spacing: -.01em; color: var(--ink); cursor: default; text-align: center;
   }
   .v3-bandeau .coord {
     display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
@@ -153,6 +155,11 @@
     .v3-portes:not(.dedans) .v3-porte.p { flex-grow: 2; }
     .v3-portes:not(.dedans) .v3-porte.r:hover { flex-grow: 1.45; }
     .v3-portes:not(.dedans) .v3-porte.p:hover { flex-grow: 2.9; }
+    /* La bande de Projets ne bouge pas quand Recherche s'agrandit : son
+       contenu reste accroche au bord droit, a sa largeur d'accueil, et
+       Recherche vient le recouvrir comme un rideau (Ghali, 07/10/2026).
+       Quand c'est Projets qui grandit, il suit la porte (min-width). */
+    .v3-portes:not(.dedans) .v3-porte.p .v3-seuil { position: absolute; top: 0; bottom: 0; right: 0; width: calc((100vw - clamp(90px, 9vw, 150px)) * 2 / 3); min-width: 100%; }
     /* la bande entiere grossit d'un bloc, depuis son coin haut gauche : cadres et photos ensemble */
     .v3-film { transform-origin: left top; transition: transform .45s var(--ease-drawer); }
     .v3-portes:not(.dedans) .v3-porte:hover .v3-film { transform: scale(var(--zoom-survol, 1.06)); }
@@ -506,7 +513,7 @@
     .v3-bandeau .qui { grid-column: 1; grid-row: 1; }
     .v3-bandeau .nom { font-size: 20px; }
     .v3-bandeau .sous-titre { font-size: 12px; }
-    .v3-bandeau h1 { grid-column: 1 / -1; grid-row: 2; font-size: 15px; line-height: 1.35; max-width: none; }
+    .v3-bandeau h1 { grid-column: 1 / -1; grid-row: 2; font-size: 15px; line-height: 1.35; max-width: none; text-align: center; }
     .v3-bandeau .coord { display: contents; }
     .v3-bandeau .coord > a { grid-column: 1 / -1; grid-row: 3; font-size: 13px; text-align: left; justify-self: start; }
     .v3-bandeau .coord > span { display: none; }
@@ -601,6 +608,8 @@
   ::view-transition-old(film-p), ::view-transition-new(film-p) { height: 100%; width: auto; inset: 0 auto auto 0; }
   .v3-porte.r .v3-tranche { view-transition-name: tranche-r; }
   ::view-transition-group(*) { animation-duration: .45s; animation-timing-function: var(--ease-drawer); }
+  /* pendant l'animation, Recherche passe AU-DESSUS de la bande de Projets */
+  ::view-transition-group(porte-r), ::view-transition-group(joint), ::view-transition-group(titre-r), ::view-transition-group(tranche-r) { z-index: 3; }
   ::view-transition-old(titre-p), ::view-transition-new(titre-p), ::view-transition-old(titre-r), ::view-transition-new(titre-r) { height: 100%; width: auto; object-fit: none; object-position: left center; }
   ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .25s; }
   @media (prefers-reduced-motion: reduce) { ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation-duration: .15s !important; } }
@@ -620,7 +629,7 @@
     </span></div>
     <h1>
 <!-- AUTO:DP_ACCROCHE:DEBUT -->
-      Conception de décors, de dispositifs de scène et d'ornements textiles, de l'outil à la pièce finie.
+      Conception de décors · Dispositifs de scène · Ornements textiles
 <!-- AUTO:DP_ACCROCHE:FIN -->
     </h1>
     <div class="coord">
@@ -629,7 +638,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.154</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.155</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>

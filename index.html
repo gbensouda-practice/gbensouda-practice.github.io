@@ -164,7 +164,7 @@
        contenu reste accroche au bord droit, a sa largeur d'accueil, et
        Recherche vient le recouvrir comme un rideau (Ghali, 07/10/2026).
        Quand c'est Projets qui grandit, il suit la porte (min-width). */
-    .v3-portes:not(.dedans) .v3-porte.p .v3-seuil { position: absolute; top: 0; bottom: 0; right: 0; width: calc((100vw - clamp(90px, 9vw, 150px)) * 2 / 3); min-width: 100%; }
+    .v3-portes:not(.dedans) .v3-porte.p .v3-seuil { position: absolute; top: 0; bottom: 0; right: 0; width: calc((100vw - clamp(140px, 15vw, 260px)) * 2 / 3); min-width: 100%; }
     /* la bande entiere grossit d'un bloc, depuis son coin haut gauche : cadres et photos ensemble */
     .v3-film { transform-origin: left top; transition: transform .45s var(--ease-drawer); }
     /* la bande ne grossit plus au survol : elle reste fixe (Ghali, 07/10/2026) */
@@ -195,6 +195,14 @@
     .v3-porte.p .v3-seuil .v3-film { order: 1; margin-top: 0; }
     .v3-porte.p .v3-seuil h2 { order: 2; align-self: flex-end; text-align: right; margin-top: auto; padding-top: 18px; }
     .v3-portes.dedans .v3-porte.p.ici .v3-salle { padding-top: 0; }
+    /* Plus de grille : elle redisait la bande. La bande, la phrase, les
+       categories, puis le texte du projet survole (Ghali, 07/10/2026). */
+    .v3-portes.dedans .v3-porte.p.ici .v3-pgrid, .v3-portes.dedans .v3-porte.p.ici .dp-choisie,
+    .v3-portes.dedans .v3-porte.p.ici .cmd-article { display: none; }
+    .v3-portes.dedans .v3-porte.p.ici .cmd-filtres { position: static; margin-bottom: 10px; }
+    .v3-portes.dedans .v3-porte.p.ici .dp-info { display: block; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-film button.eteinte img { opacity: .2; filter: grayscale(1); }
+    .v3-portes.dedans .v3-porte.p.ici .v3-film button.eteinte .calque { display: none; }
     .v3-portes.dedans .v3-porte.p.ici .cmd-filtres { position: sticky; top: 0; z-index: 4; background: var(--paper); padding: 10px 0 8px; margin: 0 0 16px; }
   }
   /* le mot de la porte Projets change de couleur au survol de la porte : en plus
@@ -204,7 +212,7 @@
 
   /* la charniere du site, couchee entre les deux portes : la matiere en gros plan, en fondu */
   .v3-joint {
-    flex: 0 0 clamp(90px, 9vw, 150px); position: relative;
+    flex: 0 0 clamp(140px, 15vw, 260px); position: relative;
     background: var(--joint-img, none) 46% var(--joint-cadrage, 42%) / var(--joint-zoom, auto 190%) no-repeat;
     transition: flex-basis .45s var(--ease-drawer);
   }
@@ -217,7 +225,8 @@
     .v3-porte.r { order: 1; }
     .v3-joint { order: 2; }
     .v3-porte.p { order: 3; }
-    .v3-joint::after { background: linear-gradient(to left, var(--paper) 0%, rgba(237,238,235,.62) 26%, rgba(20,24,26,.62) 76%, var(--ink) 100%); }
+    /* plus large, et le blanc ne fond que sur le dernier bord (Ghali, 07/10/2026) */
+    .v3-joint::after { background: linear-gradient(to left, var(--paper) 0%, rgba(237,238,235,.28) 12%, rgba(237,238,235,0) 30%, rgba(20,24,26,.35) 72%, var(--ink) 100%); }
   }
 
   .v3-seuil { padding: 36px var(--g); display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; width: 100%; }
@@ -253,7 +262,7 @@
   /* une petite vignette par mot souligne de l'article ; un clic ouvre
      l'article sur ce mot (Ghali, 07/10/2026) */
   .v3-titres .vigs { display: flex; flex-wrap: wrap; gap: 4px; padding: 2px 0 10px; }
-  .v3-titres .vig { width: 34px; height: 34px; background: var(--line-nuit); overflow: hidden; cursor: pointer; }
+  .v3-titres .vig { width: 54px; height: 54px; background: var(--line-nuit); overflow: hidden; cursor: pointer; }
   .v3-titres .vig img { width: 100%; height: 100%; object-fit: cover; opacity: .82; transition: opacity .2s; }
   .v3-titres .vig:hover img { opacity: 1; outline: 1px solid var(--blue-nuit); outline-offset: -1px; }
   @media (prefers-reduced-motion: reduce) { .deroule, .v3-film .calque { transition: opacity .2s ease; } }
@@ -282,6 +291,13 @@
     /* « < Recherche » est colle en haut : une descente vers les articles
        s'arrete sous lui */
     .v3-porte.r.ici .v3-lect { scroll-margin-top: 96px; }
+    /* Le titre et sa phrase font le tampon entre la piece en vedette et les
+       articles (Ghali, 07/10/2026) ; le titre reste colle en haut ensuite. */
+    .v3-porte.r.ici .v3-salle { display: flex; flex-direction: column; }
+    .v3-porte.r.ici .v3-une { order: 1; margin-bottom: 0; border-bottom: 0; padding-bottom: 36px; }
+    .v3-porte.r.ici .v3-salle-tete { order: 2; margin-top: 0; border-top: 1px solid var(--line-nuit); }
+    .v3-porte.r.ici .v3-intro { order: 3; }
+    .v3-porte.r.ici .v3-lect { order: 4; }
   }
   /* le texte d'introduction, en tete de chaque salle, sous le titre (section 8.5) */
   .v3-intro { max-width: 68ch; font-size: 16px; line-height: 1.55; color: var(--ink-2); margin-bottom: 32px; }
@@ -300,6 +316,15 @@
   }
   .cmd-filtre i { font-style: normal; opacity: .55; margin-left: 2px; }
   .cmd-filtre:hover { color: var(--ink); }
+  .v3-film img { transition: opacity .3s ease, filter .3s ease; }
+  .dp-info { display: none; min-height: 128px; }
+  .dp-info-in { animation: info-entre .25s var(--e-out); }
+  @keyframes info-entre { from { opacity: 0; transform: translateY(4px); } }
+  .dp-info-t { font-weight: var(--w-t); font-size: 22px; line-height: 1.2; letter-spacing: -.015em; color: var(--ink); }
+  .dp-info-t .yr { font-family: var(--f-mono); font-size: 11px; letter-spacing: .06em; color: var(--grey); margin-left: 10px; }
+  .dp-info-p { font-style: italic; font-size: 16px; line-height: 1.45; color: var(--ink-2); margin-top: 6px; max-width: 70ch; }
+  .dp-info-l { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-top: 12px; }
+  .dp-info .cmd-article-titre { display: block; margin-bottom: 4px; }
   .cmd-filtre[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--corail); }
   .cmd-article { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; padding: 0 0 22px; }
   .cmd-article[hidden] { display: none; }
@@ -349,6 +374,12 @@
   .v3-une .lire { display: inline-block; margin-top: 18px; font-size: 14px; color: var(--blue-nuit); border-bottom: 1px solid var(--corail); padding-bottom: 2px; }
   .v3-une .lire:hover { color: var(--corail); }
   .v3-une .leg { display: block; font-size: 13px; color: #9BA5AC; margin-top: 10px; }
+  /* La piece en vedette en miroir des articles : le texte a gauche, la photo a
+     droite. On voit que ce n'est pas un article (Ghali, 07/10/2026). */
+  @media (min-width: 901px) {
+    .v3-une { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
+    .v3-une > .ph { order: 2; }
+  }
 
   .v3-lect { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; }
   .v3-index { position: sticky; top: 20px; align-self: start; }
@@ -658,7 +689,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.157</p>
+      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.158</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -3843,10 +3874,11 @@ var suivreLecture = (function () {
   if (!lect) return;
   var ordi = matchMedia('(min-width: 901px)');
   var bloque = 0;
+  // le bas de la vitrine : la ou commencent le titre et sa phrase
   function seuil() {
-    var tete = porte.querySelector('.v3-salle-tete');
-    return porte.scrollTop + lect.getBoundingClientRect().top - porte.getBoundingClientRect().top
-      - (tete ? tete.offsetHeight : 0) - 8;
+    var une = porte.querySelector('.v3-une:not([hidden])');
+    if (!une) return 0;
+    return porte.scrollTop + une.getBoundingClientRect().bottom - porte.getBoundingClientRect().top;
   }
   function glisser(vers) {
     var depart = porte.scrollTop, ecart = vers - depart, t0 = null, duree = MOINS_DE_MOUVEMENT ? 1 : 380;
@@ -3888,16 +3920,72 @@ var suivreLecture = (function () {
     });
     lignes.forEach(function (l) { l.hidden = l.getAttribute('data-cat') !== f; });
     grille.classList.toggle('filtree', !!f);
-    // Sur ordinateur, un filtre (« Tout » compris) descend a la grille : la
-    // rangee des filtres se colle en haut, la ligne de l'article dessous.
-    var porte = barre.closest('.v3-porte');
-    if (matchMedia('(min-width: 901px)').matches && porte && porte.classList.contains('ici')) {
-      // la rangee est collante : on vise ce qui la suit, moins sa hauteur
-      var suite = barre.nextElementSibling || grille;
-      var cible = porte.scrollTop + suite.getBoundingClientRect().top - porte.getBoundingClientRect().top
-        - barre.offsetHeight - 16;
-      porte.scrollTo({ top: Math.max(porte.scrollTop, cible), behavior: MOINS_DE_MOUVEMENT ? 'auto' : 'smooth' });
-    }
+    // ordinateur : la categorie cliquee reste, et la bande glisse jusqu'a son
+    // premier projet
+    fixe = f;
+    griser(f);
+    montrerCategorie(f);
+    if (f && ordi.matches) amener(f);
+  });
+
+  // ── Ordinateur, porte Projets ouverte : plus de grille (Ghali, 07/10/2026).
+  // Survoler une categorie grise, dans la bande, les projets hors categorie,
+  // le temps du survol ; la cliquer fixe le grise. Survoler un projet montre
+  // son texte sous les categories ; il reste jusqu'au projet suivant, ou
+  // jusqu'au survol d'une categorie, qui montre alors l'article de celle-ci.
+  var ordi = matchMedia('(min-width: 901px)');
+  var film = document.querySelector('.v3-porte.p .v3-film');
+  var fixe = '';
+  var info = document.createElement('div');
+  info.className = 'dp-info';
+  info.setAttribute('aria-live', 'polite');
+  barre.parentNode.insertBefore(info, barre.nextSibling);
+  function carteDe(b) { return grille.querySelector('.dp-carte[data-go="piece-' + b.getAttribute('data-carte') + '"]'); }
+  function catsDe(b) { var c = carteDe(b); return c ? (c.getAttribute('data-cats') || '').split(/\s+/) : []; }
+  function griser(f) {
+    if (!film) return;
+    film.querySelectorAll('button[data-carte]').forEach(function (b) {
+      b.classList.toggle('eteinte', !!f && catsDe(b).indexOf(f) === -1);
+    });
+  }
+  function poser(html) { info.innerHTML = html ? '<div class="dp-info-in">' + html + '</div>' : ''; }
+  function montrerCategorie(f) {
+    var l = f && document.querySelector('.cmd-article[data-cat="' + f + '"]');
+    poser(l ? l.innerHTML : '');
+  }
+  function montrerProjet(b) {
+    var c = carteDe(b);
+    if (!c) return;
+    var t = c.querySelector('.ct'), p = c.querySelector('.cp');
+    var liens = '<button class="lien-article" data-go="' + c.getAttribute('data-go') + '">Voir le projet →</button>';
+    catsDe(b).forEach(function (cat) {
+      var l = document.querySelector('.cmd-article[data-cat="' + cat + '"]');
+      var a = l && l.querySelector('.lien-article');
+      var titre = l && l.querySelector('.cmd-article-titre');
+      if (a && titre) liens += '<button class="lien-article" data-article="' + a.getAttribute('data-article') + '">Lire « ' + titre.textContent + ' » →</button>';
+    });
+    poser('<p class="dp-info-t">' + (t ? t.innerHTML : '') + '</p>'
+      + (p ? '<p class="dp-info-p">' + p.innerHTML + '</p>' : '')
+      + '<p class="dp-info-l">' + liens + '</p>');
+  }
+  function amener(f) {
+    var b = Array.prototype.find.call(film.querySelectorAll('button[data-carte]:not([data-copie])'), function (x) { return catsDe(x).indexOf(f) !== -1; });
+    if (b) film.scrollTo({ left: Math.max(0, b.offsetLeft - film.offsetLeft - 8), behavior: MOINS_DE_MOUVEMENT ? 'auto' : 'smooth' });
+  }
+  barre.addEventListener('mouseover', function (e) {
+    var b = e.target.closest('.cmd-filtre');
+    if (!b || !ordi.matches) return;
+    var f = b.getAttribute('data-filtre');
+    griser(f);
+    montrerCategorie(f);
+  });
+  barre.addEventListener('mouseleave', function () {
+    if (!ordi.matches) return;
+    griser(fixe);
+  });
+  if (film) film.addEventListener('mouseover', function (e) {
+    var b = e.target.closest('button[data-carte]');
+    if (b && ordi.matches) montrerProjet(b);
   });
 })();
 
@@ -3974,7 +4062,8 @@ var suivreLecture = (function () {
     var haut = film.getBoundingClientRect().top - p.getBoundingClientRect().top;
     // entre la bande et les filtres : le titre « Projets » et sa phrase
     var entre = barre.getBoundingClientRect().top - film.getBoundingClientRect().bottom;
-    var dispo = p.clientHeight - haut - entre - barre.offsetHeight - 40;
+    var info = p.querySelector('.dp-info');
+    var dispo = p.clientHeight - haut - entre - barre.offsetHeight - (info ? info.offsetHeight + 10 : 0) - 28;
     p.style.setProperty('--h-film-dedans', Math.round(dispo) + 'px');
   }
   window.addEventListener('resize', function () { calerBande(); });
@@ -4260,7 +4349,7 @@ var suivreLecture = (function () {
     film.addEventListener('wheel', function (e) {
       if (!matchMedia('(min-width: 901px)').matches) return;
       var cote = Math.abs(e.deltaX) > Math.abs(e.deltaY);
-      var d = cote ? e.deltaX : (portes.classList.contains('dedans') ? 0 : e.deltaY);
+      var d = cote ? e.deltaX : (portes.classList.contains('dedans') && etat.porte !== 'p' ? 0 : e.deltaY);
       if (!d) return;
       e.preventDefault();
       if (e.deltaMode === 1) d *= 32;

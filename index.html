@@ -625,7 +625,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.152</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.153</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -4121,6 +4121,8 @@ var suivreLecture = (function () {
     el.addEventListener('click', function () {
       if (!tactile.matches && el.classList.contains('qui')) {
         bandeau.classList.remove('ouvert');
+        // le nom garde le focus apres le clic, et le focus tient le volet ouvert
+        if (document.activeElement && bandeau.contains(document.activeElement)) document.activeElement.blur();
         if (etat.porte || etat.page) aller('');
         return;
       }

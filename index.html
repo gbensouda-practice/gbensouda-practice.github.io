@@ -244,6 +244,13 @@
   .v3-salle-tete h2 button:hover .chev { transform: translateX(-4px); opacity: 1; }
   .v3-salle-tete h2 button:hover .mot { text-decoration-color: currentColor; }
   .v3-salle-tete h2 button:focus-visible .chev { opacity: 1; }
+  /* Sur ordinateur, « < Recherche » reste colle en haut pendant qu'on lit un
+     article : le retour aux deux portes reste a portee (Ghali, 06/10/2026).
+     Le sommaire et le cadre photo, colles eux aussi, se calent dessous. */
+  @media (min-width: 901px) {
+    .v3-porte.r.ici .v3-salle-tete { position: sticky; top: 0; z-index: 6; background: var(--nuit); margin: -32px calc(-1 * var(--g)) 14px; padding: 22px var(--g) 12px; }
+    .v3-porte.r.ici .v3-index, .v3-porte.r.ici .ff-media { top: 96px; }
+  }
   /* le texte d'introduction, en tete de chaque salle, sous le titre (section 8.5) */
   .v3-intro { max-width: 68ch; font-size: 16px; line-height: 1.55; color: var(--ink-2); margin-bottom: 32px; }
   .nuit .v3-intro { color: var(--line); }
@@ -617,7 +624,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.150</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.151</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -4105,8 +4112,19 @@ var suivreLecture = (function () {
   });
 
   // le volet du bandeau : au survol (CSS), au toucher du nom ou de la phrase
+  // Avec une souris, le volet s'ouvre deja au survol : un clic sur le nom
+  // ramene a l'accueil, comme le retour d'une porte (Ghali, 06/10/2026). Sur
+  // ecran tactile, le toucher ouvre et ferme le volet, comme avant.
+  var tactile = matchMedia('(hover: none) and (pointer: coarse)');
   bandeau.querySelectorAll('.qui, h1').forEach(function (el) {
-    el.addEventListener('click', function () { bandeau.classList.toggle('ouvert'); });
+    el.addEventListener('click', function () {
+      if (!tactile.matches && el.classList.contains('qui')) {
+        bandeau.classList.remove('ouvert');
+        if (etat.porte || etat.page) aller('');
+        return;
+      }
+      bandeau.classList.toggle('ouvert');
+    });
   });
 
   // sans survol : l'element qui passe au centre de l'ecran se deroule seul

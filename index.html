@@ -290,6 +290,8 @@
   .v3-index button[aria-current="true"] { color: #fff; }
   .v3-index button:hover { color: var(--nuit-txt); }
   .v3-index button[disabled] { opacity: .45; cursor: default; }
+  .v3-index .deroule { display: none; }
+  .vers-sommaire { display: none; }
   .dp-art[hidden] { display: none; }
   .dp-art > h3 { font-weight: var(--w-t); font-size: 40px; line-height: 1.05; letter-spacing: -.02em; margin-bottom: 16px; color: #fff; }
   .dp-art .chapo { font-size: 21px; line-height: 1.38; color: var(--nuit-txt); margin-bottom: 30px; max-width: 46ch; }
@@ -490,11 +492,38 @@
     .v3-pgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 10px; }
     .dp-carte .ct { font-size: 12px; margin-top: 6px; }
     .dp-carte .cp { display: none; }
-    .dp-carte.choisie { order: -1; grid-column: 1 / -1; margin-bottom: 8px; }
-    .dp-carte.choisie .ct { font-size: 16px; min-height: 0; margin-top: 10px; }
-    .dp-carte.choisie .cp { display: -webkit-box; min-height: 0; }
-    .v3-une { grid-template-columns: minmax(0, 1fr); gap: 16px; margin-bottom: 36px; padding-bottom: 28px; }
-    .sp-corps { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+
+    /* La piece en rotation pretait a confusion sur telephone : retiree
+       (Ghali, 06/10/2026). Ses pieces restent atteignables par les articles. */
+    .v3-une, .v3-une[hidden] { display: none; }
+    /* Le sommaire redevient une liste ; la phrase de l'article se deroule
+       quand le titre passe au milieu de l'ecran, comme sur le seuil. */
+    .v3-index { display: block; overflow: visible; }
+    .v3-index button { white-space: normal; border-top: 1px solid var(--line-nuit); font-size: 19px; padding: 10px 0; text-align: left; }
+    .v3-index .t { display: block; }
+    .v3-index .deroule { display: grid; }
+    .v3-index button.proche .deroule { grid-template-rows: 1fr; opacity: 1; }
+    .v3-index .i { display: block; font-style: italic; font-size: 15px; line-height: 1.45; color: var(--line); padding: 4px 0 4px; }
+    .vers-sommaire { display: inline-block; margin-bottom: 18px; font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--blue-nuit); padding: 4px 0; border-bottom: 1px solid var(--corail); }
+    /* Le cadre et le texte dans un meme bloc : le cadre peut alors rester colle
+       en haut de l'ecran pendant qu'on lit (voir « flotte » plus bas). */
+    .sp-corps { display: block; }
+    .sp-corps > .ff-media { margin-bottom: 24px; }
+    .v3-portes.dedans .v3-porte.ici { overflow: clip; }
+    /* Un mot touche alors que le cadre est deja passe au-dessus de l'ecran :
+       le cadre redescend, reduit, le temps de voir la photo, puis remonte
+       quand on continue a lire (Ghali, 06/10/2026). */
+    .ff-media.flotte { position: sticky; top: 10px; z-index: 30; transform: scale(.62); transform-origin: top center; animation: cadre-descend .35s var(--ease-drawer); }
+    .ff-media.flotte .ff-marge { visibility: hidden; }
+    .ff-media.flotte .ff-nassij-slider { box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+    .ff-media.repli { animation: cadre-remonte .3s var(--ease-drawer) forwards; }
+    @keyframes cadre-descend { from { transform: translateY(-115%) scale(.62); } to { transform: scale(.62); } }
+    @keyframes cadre-remonte { from { transform: scale(.62); } to { transform: translateY(-115%) scale(.62); } }
+    /* Projets : la piece touchee en grand, puis les filtres, puis la grille */
+    .dp-choisie .dp-carte { margin-bottom: 24px; }
+    .dp-choisie .dp-carte .ct { font-size: 16px; min-height: 0; margin-top: 10px; }
+    .dp-choisie .dp-carte .cp { display: -webkit-box; min-height: 0; }
+    .v3-pgrid .dp-carte.choisie { display: none; }
     .ff-media { position: static; grid-template-columns: minmax(0, 1fr); gap: 12px; }
     .ff-marge { grid-row: 2; flex-direction: row; justify-content: space-between; align-items: baseline; flex-wrap: wrap; }
     .ff-marge .slider-dots { flex: 1 1 100%; }
@@ -542,7 +571,7 @@
     </span></div>
     <h1>
 <!-- AUTO:DP_ACCROCHE:DEBUT -->
-      Pour la scène, la vitrine et la couture, je dessine la pièce et la façon de la fabriquer.
+      Conception de décors, de dispositifs de scène et d'ornements textiles, de l'outil à la pièce finie.
 <!-- AUTO:DP_ACCROCHE:FIN -->
     </h1>
     <div class="coord">
@@ -551,7 +580,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.133</p>
+      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.134</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -751,11 +780,11 @@
         <div class="v3-lect">
           <nav aria-label="Articles"><ul class="v3-index">
 <!-- AUTO:DP_INDEX:DEBUT -->
-            <li><button data-a="scene-et-vitrine">Scène et vitrine</button></li>
-            <li><button data-a="assemblage-et-outillage">Assemblage et outillage</button></li>
-            <li><button data-a="textile-et-ornement">Textile et ornement</button></li>
-            <li><button data-a="objets-imprimes">Objets imprimés</button></li>
-            <li><button data-a="outils-parametriques" disabled>Outils paramétriques</button></li>
+            <li><button data-a="scene-et-vitrine"><span class="t">Scène et vitrine</span><span class="deroule"><span><span class="i">L'idée d'un artiste ou d'une marque, rendue réalisable : les matériaux, les techniques, les plans.</span></span></span></button></li>
+            <li><button data-a="assemblage-et-outillage"><span class="t">Assemblage et outillage</span><span class="deroule"><span><span class="i">La pièce imprimée qu'on ne voit pas : le nœud qui assemble une structure, le moule qui sort une série.</span></span></span></button></li>
+            <li><button data-a="textile-et-ornement"><span class="t">Textile et ornement</span><span class="deroule"><span><span class="i">Imprimer sur l'étoffe plutôt qu'à côté, et donner à l'impression une place à côté de la main, jamais à sa place.</span></span></span></button></li>
+            <li><button data-a="objets-imprimes"><span class="t">Objets imprimés</span><span class="deroule"><span><span class="i">Quand la pièce imprimée est l'objet lui-même, et que sa surface dit comment il a été fait.</span></span></span></button></li>
+            <li><button data-a="outils-parametriques" disabled><span class="t">Outils paramétriques</span></button></li>
 <!-- AUTO:DP_INDEX:FIN -->
           </ul></nav>
           <div class="v3-texte" aria-live="polite">
@@ -3522,6 +3551,51 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
   });
 });
 
+// ── SUR TELEPHONE : revenir au sommaire, et voir la photo d'un mot ───────────
+(function () {
+  var tel = matchMedia('(max-width: 900px)');
+  document.querySelectorAll('.dp-art').forEach(function (art) {
+    var b = document.createElement('button');
+    b.className = 'vers-sommaire';
+    b.type = 'button';
+    b.textContent = '↑ Sommaire';
+    b.addEventListener('click', function () {
+      var s = document.querySelector('.v3-index');
+      if (s) s.scrollIntoView({ block: 'start', behavior: MOINS_DE_MOUVEMENT ? 'auto' : 'smooth' });
+    });
+    art.insertBefore(b, art.firstChild);
+  });
+  // Un mot touche : si le cadre est deja passe au-dessus de l'ecran, il
+  // redescend, reduit, avec la photo du mot. Il remonte quand on a lu un peu
+  // plus loin, ou quand on le touche (sauf photo qui mene a une piece).
+  var flottant = null, depart = 0;
+  function replier() {
+    var m = flottant;
+    if (!m) return;
+    flottant = null;
+    if (MOINS_DE_MOUVEMENT) { m.classList.remove('flotte'); return; }
+    m.classList.add('repli');
+    setTimeout(function () { m.classList.remove('flotte', 'repli'); }, 300);
+  }
+  document.addEventListener('click', function (e) {
+    if (!tel.matches) return;
+    if (flottant && flottant.contains(e.target) && !e.target.closest('.vue[data-page]')) { replier(); return; }
+    var mot = e.target.closest('.sp-texte .lien-galerie');
+    if (!mot) return;
+    var media = mot.closest('.dp-art') && mot.closest('.dp-art').querySelector('.ff-media');
+    if (!media || !media.querySelector('.vue[data-groupe="' + mot.getAttribute('data-galerie') + '"]')) return;
+    if (media.getBoundingClientRect().top >= 0) return;   // le cadre est a l'ecran
+    if (flottant && flottant !== media) replier();
+    media.classList.remove('repli');
+    media.classList.add('flotte');
+    flottant = media;
+    depart = window.scrollY;
+  }, true);
+  window.addEventListener('scroll', function () {
+    if (flottant && Math.abs(window.scrollY - depart) > window.innerHeight * 0.6) replier();
+  }, { passive: true });
+})();
+
 // ── LES FILTRES DE LA SALLE PROJETS (repris) ─────────────────────────────────
 (function () {
   var barre = document.querySelector('.cmd-filtres');
@@ -3571,9 +3645,26 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
     t.finished.catch(function () {});
   }
   function porteIci() { return document.querySelector('.v3-porte.ici'); }
+  // Sur telephone, la piece touchee dans la bande passe en grand AU-DESSUS des
+  // filtres (Ghali, 06/10/2026) : une copie posee avant eux ; l'originale se
+  // cache dans la grille.
   function choisir(carte) {
+    var barre = document.querySelector('.cmd-filtres');
+    var place = document.querySelector('.dp-choisie');
+    if (!place && barre) {
+      place = document.createElement('div');
+      place.className = 'dp-choisie';
+      barre.parentNode.insertBefore(place, barre);
+    }
+    if (place) place.innerHTML = '';
     document.querySelectorAll('.v3-pgrid .dp-carte').forEach(function (c) {
-      c.classList.toggle('choisie', !!carte && c.getAttribute('data-go') === 'piece-' + carte);
+      var oui = !!carte && c.getAttribute('data-go') === 'piece-' + carte;
+      c.classList.toggle('choisie', oui);
+      if (oui && place) {
+        var copie = c.cloneNode(true);
+        copie.classList.remove('choisie', 'eteinte');
+        place.appendChild(copie);
+      }
     });
   }
 
@@ -3612,7 +3703,9 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
   // trop loin. On attend que la porte ait sa vraie largeur.
   function defilerVersLecture(attendre) {
     setTimeout(function () {
-      var cible = document.querySelector('.v3-lect');
+      // sur telephone, le sommaire est une liste : on descend a l'article
+      var cible = matchMedia('(max-width: 900px)').matches
+        ? document.querySelector('.dp-art:not([hidden])') : document.querySelector('.v3-lect');
       if (cible) cible.scrollIntoView({ block: 'start', behavior: 'auto' });
     }, attendre ? 480 : 0);
   }
@@ -3815,7 +3908,7 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
     var centre = new IntersectionObserver(function (es) {
       es.forEach(function (e) { e.target.classList.toggle('proche', e.isIntersecting); });
     }, { rootMargin: '-42% 0px -42% 0px' });
-    document.querySelectorAll('.v3-titres button').forEach(function (b) { centre.observe(b); });
+    document.querySelectorAll('.v3-titres button, .v3-index button').forEach(function (b) { centre.observe(b); });
     var film = document.querySelector('.v3-film');
     if (film) {
       var milieu = new IntersectionObserver(function (es) {

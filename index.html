@@ -165,45 +165,38 @@
        Recherche vient le recouvrir comme un rideau (Ghali, 07/10/2026).
        Quand c'est Projets qui grandit, il suit la porte (min-width). */
     .v3-portes:not(.dedans) .v3-porte.p .v3-seuil { position: absolute; top: 0; bottom: 0; right: 0; width: calc((100vw - clamp(140px, 15vw, 260px)) * 2 / 3); min-width: 100%; }
-    /* la bande entiere grossit d'un bloc, depuis son coin haut gauche : cadres et photos ensemble */
-    .v3-film { transform-origin: left top; transition: transform .45s var(--ease-drawer); }
-    /* la bande ne grossit plus au survol : elle reste fixe (Ghali, 07/10/2026) */
   }
-  /* Porte Projets ouverte, sur ordinateur : la bande d'images reste en haut,
-     elargie a toute la porte et un peu plus basse, pour laisser voir le debut
-     de la grille. Le passage est un leger dezoom, pas un saut (Ghali,
-     06/10/2026). Le titre devient celui de la salle, avec son chevron. */
   .v3-seuil h2 .chev { display: none; }
   @media (min-width: 901px) {
+    /* La bande garde la meme hauteur a l'accueil et porte Projets ouverte :
+       elle ne se reduit plus en entrant (Ghali, 07/10/2026). La hauteur laisse
+       la place, porte ouverte, au texte du projet, au titre, a sa phrase et
+       aux categories. Le reglage hauteur_bande_images reste un maximum. */
+    .v3-porte.p .v3-film { height: clamp(200px, min(var(--h-film, 54svh), calc(100svh - 500px)), 660px); }
+    /* Le mot « Projets » sous la bande, aligne a droite : en bas a droite de
+       la porte a l'accueil ; porte ouverte, sous la bande et le texte du
+       projet, avec sa phrase, juste au-dessus des categories (07/10/2026). */
+    .v3-porte.p .v3-seuil .v3-film { order: 1; margin-top: 0; }
+    .v3-porte.p .v3-seuil .dp-info { order: 2; }
+    .v3-porte.p .v3-seuil h2 { order: 3; align-self: flex-end; text-align: right; margin-top: auto; padding-top: 18px; }
+    /* Porte Projets ouverte : le titre devient celui de la salle, avec son chevron */
     .v3-portes.dedans .v3-porte.p.ici .v3-seuil { display: flex; flex: none; padding-bottom: 0; }
     .v3-portes.dedans .v3-porte.p.ici .v3-salle-tete { display: none; }
-    .v3-portes.dedans .v3-porte.p.ici .v3-salle { padding-top: 28px; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-salle { padding-top: 0; padding-bottom: 0; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 { margin-top: 0; padding-top: 4px; }
     .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 button { display: inline-flex; align-items: center; gap: 12px; font-size: 44px; line-height: 1.05; }
     .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 .chev { display: block; width: .5em; height: .5em; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; opacity: .45; transition: transform .2s var(--e-out), opacity .2s ease; }
     .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 button:hover .chev { transform: translateX(-4px); opacity: 1; }
     .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 .mot { text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 1px; text-underline-offset: .16em; transition: text-decoration-color .2s ease; }
     .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 button:hover .mot { text-decoration-color: currentColor; }
-    /* La bande descend jusqu'aux filtres, seuls en bas de l'ecran : sa hauteur
-       est calculee par le script (--h-film-dedans). Le texte d'introduction
-       passe a cote du titre. Un filtre fait descendre a la grille, et la
-       rangee des filtres reste alors collee en haut (Ghali, 06/10/2026). */
-    .v3-portes.dedans .v3-porte.p.ici .v3-film { margin-top: 18px; height: clamp(180px, var(--h-film-dedans, 50svh), 660px); }
     .v3-portes.dedans .v3-porte.p.ici .v3-intro { margin: 4px 0 18px auto; text-align: right; max-width: 90ch; }
-    /* Le mot « Projets » passe sous la bande, aligne a droite : en bas a
-       droite de la porte a l'accueil, et, porte ouverte, sous la bande avec sa
-       phrase, juste au-dessus des filtres (Ghali, 07/10/2026). */
-    .v3-porte.p .v3-seuil .v3-film { order: 1; margin-top: 0; }
-    .v3-porte.p .v3-seuil h2 { order: 2; align-self: flex-end; text-align: right; margin-top: auto; padding-top: 18px; }
-    .v3-portes.dedans .v3-porte.p.ici .v3-salle { padding-top: 0; padding-bottom: 0; }
-    /* Plus de grille : elle redisait la bande. La bande, la phrase, les
-       categories, puis le texte du projet survole (Ghali, 07/10/2026). */
+    /* Plus de grille : elle redisait la bande (Ghali, 07/10/2026). */
     .v3-portes.dedans .v3-porte.p.ici .v3-pgrid, .v3-portes.dedans .v3-porte.p.ici .dp-choisie,
     .v3-portes.dedans .v3-porte.p.ici .cmd-article { display: none; }
-    .v3-portes.dedans .v3-porte.p.ici .cmd-filtres { position: static; margin-bottom: 10px; }
-    .v3-portes.dedans .v3-porte.p.ici .dp-info { display: block; }
+    .v3-portes.dedans .v3-porte.p.ici .cmd-filtres { margin: 0 0 12px; }
+    .v3-portes.dedans .v3-porte.p.ici .dp-info { display: block; padding-top: 14px; }
     .v3-portes.dedans .v3-porte.p.ici .v3-film button.eteinte img { opacity: .2; filter: grayscale(1); }
     .v3-portes.dedans .v3-porte.p.ici .v3-film button.eteinte .calque { display: none; }
-    .v3-portes.dedans .v3-porte.p.ici .cmd-filtres { position: sticky; top: 0; z-index: 4; background: var(--paper); padding: 10px 0 8px; margin: 0 0 16px; }
   }
   /* le mot de la porte Projets change de couleur au survol de la porte : en plus
      du zoom, il dit qu'on peut cliquer (demande de Ghali, 05/10/2026) */
@@ -222,6 +215,9 @@
      replie donc sur la droite (Ghali, 06/10/2026). Seul l'ordre a l'ecran
      change ; sur telephone, les portes restent empilees, Projets en haut. */
   @media (min-width: 901px) {
+    /* le titre « Recherche » deborde sur la charniere : il passe au-dessus
+       d'elle, lisible en entier (Ghali, 07/10/2026) */
+    .v3-portes:not(.dedans) .v3-porte.r { overflow: visible; z-index: 2; }
     .v3-porte.r { order: 1; }
     .v3-joint { order: 2; }
     .v3-porte.p { order: 3; }
@@ -656,7 +652,6 @@
   /* la bande garde ses proportions : elle se reduit par la hauteur, calee en
      haut a gauche, et ce qui deborde est coupe */
   ::view-transition-image-pair(film-p) { overflow: hidden; }
-  ::view-transition-old(film-p), ::view-transition-new(film-p) { height: 100%; width: auto; inset: 0 auto auto 0; }
   .v3-porte.r .v3-tranche { view-transition-name: tranche-r; }
   ::view-transition-group(*) { animation-duration: .45s; animation-timing-function: var(--ease-drawer); }
   /* pendant l'animation, Recherche passe AU-DESSUS de la bande de Projets */
@@ -666,7 +661,7 @@
   @media (prefers-reduced-motion: reduce) { ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation-duration: .15s !important; } }
 </style>
 <!-- AUTO:DP_REGLAGES:DEBUT -->
-<style>.v3{--h-film:54svh; --zoom-survol:1.06}</style>
+<style>.v3{--h-film:54svh}</style>
 <!-- AUTO:DP_REGLAGES:FIN -->
 </head>
 <body>
@@ -689,7 +684,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.161</p>
+      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.162</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -3929,7 +3924,10 @@ var suivreLecture = (function () {
   var info = document.createElement('div');
   info.className = 'dp-info';
   info.setAttribute('aria-live', 'polite');
-  barre.parentNode.insertBefore(info, barre.nextSibling);
+  // juste sous la bande : on atteint ses liens sans passer sur les categories
+  var seuilP = film && film.closest('.v3-seuil');
+  if (seuilP) seuilP.insertBefore(info, film.nextSibling);
+  else barre.parentNode.insertBefore(info, barre.nextSibling);
   function carteDe(b) { return grille.querySelector('.dp-carte[data-go="piece-' + b.getAttribute('data-carte') + '"]'); }
   function catsDe(b) { var c = carteDe(b); return c ? (c.getAttribute('data-cats') || '').split(/\s+/) : []; }
   function griser(f) {
@@ -3965,15 +3963,25 @@ var suivreLecture = (function () {
     film.dispatchEvent(new CustomEvent('bande-saut'));
     film.scrollTo({ left: Math.max(0, b.offsetLeft - film.offsetLeft - 8), behavior: MOINS_DE_MOUVEMENT ? 'auto' : 'smooth' });
   }
+  // une categorie ne reagit qu'apres un court arret de la souris : la
+  // traverser en passant n'efface pas le texte du projet
+  var attente = null, survolee = false;
   barre.addEventListener('mouseover', function (e) {
     var b = e.target.closest('.cmd-filtre');
     if (!b || !ordi.matches) return;
-    var f = b.getAttribute('data-filtre');
-    griser(f);
-    montrerCategorie(f);
+    clearTimeout(attente);
+    attente = setTimeout(function () {
+      var f = b.getAttribute('data-filtre');
+      survolee = true;
+      griser(f);
+      montrerCategorie(f);
+    }, 140);
   });
   barre.addEventListener('mouseleave', function () {
     if (!ordi.matches) return;
+    clearTimeout(attente);
+    if (!survolee) return;   // traversee en passant : rien n'a change
+    survolee = false;
     griser(fixe);
     montrerCategorie(fixe);
   });
@@ -4041,26 +4049,6 @@ var suivreLecture = (function () {
     unes[tour % unes.length].hidden = false;
     tour++;
   }
-  // Porte Projets ouverte sur ordinateur : la bande prend la hauteur qui
-  // laisse la rangee des filtres juste en bas de l'ecran.
-  function calerBande() {
-    var p = document.querySelector('.v3-porte.p');
-    if (!p) return;
-    if (etat.porte !== 'p' || !matchMedia('(min-width: 901px)').matches) {
-      p.style.removeProperty('--h-film-dedans');
-      return;
-    }
-    var film = p.querySelector('.v3-film');
-    var barre = p.querySelector('.cmd-filtres');
-    if (!film || !barre) return;
-    var haut = film.getBoundingClientRect().top - p.getBoundingClientRect().top;
-    // entre la bande et les filtres : le titre « Projets » et sa phrase
-    var entre = barre.getBoundingClientRect().top - film.getBoundingClientRect().bottom;
-    var info = p.querySelector('.dp-info');
-    var dispo = p.clientHeight - haut - entre - barre.offsetHeight - (info ? info.offsetHeight + 10 : 0) - 28;
-    p.style.setProperty('--h-film-dedans', Math.round(dispo) + 'px');
-  }
-  window.addEventListener('resize', function () { calerBande(); });
   function poserPorte(k) {
     if (etat.porte === k) return;
     if (k === 'r') poserUne();
@@ -4071,7 +4059,6 @@ var suivreLecture = (function () {
     window.scrollTo(0, 0);
     var ici = porteIci();
     if (ici) ici.scrollTop = 0;
-    calerBande();
     // le cadre des articles etait cache : il se recale maintenant qu'il a une taille
     window.dispatchEvent(new Event('resize'));
   }

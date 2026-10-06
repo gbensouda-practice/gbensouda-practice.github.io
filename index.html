@@ -189,7 +189,15 @@
     .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 button:hover .chev { transform: translateX(-4px); opacity: 1; }
     .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 .mot { text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 1px; text-underline-offset: .16em; transition: text-decoration-color .2s ease; }
     .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 button:hover .mot { text-decoration-color: currentColor; }
-    .v3-portes.dedans .v3-porte.p.ici .v3-intro { margin: 4px 0 18px auto; text-align: right; max-width: 90ch; }
+    /* La phrase sur la rangee du titre, a sa gauche, alignee a gauche : deux
+       lignes equilibrees au lieu de trois en escalier (Ghali, 07/10/2026). */
+    .v3-intro-ligne { display: none; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-seuil { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 56px; align-items: end; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-seuil .v3-film, .v3-portes.dedans .v3-porte.p.ici .v3-seuil .dp-info { grid-column: 1 / -1; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-intro-ligne { display: block; order: 3; margin: 0 0 6px; font-size: 14px; line-height: 1.55; color: var(--ink-2); max-width: 120ch; text-wrap: balance; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 { order: 4; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-salle .v3-intro { display: none; }
+    .v3-portes.dedans .v3-porte.p.ici .cmd-filtres { margin-top: 20px; }
     /* Plus de grille : elle redisait la bande (Ghali, 07/10/2026). */
     .v3-portes.dedans .v3-porte.p.ici .v3-pgrid, .v3-portes.dedans .v3-porte.p.ici .dp-choisie,
     .v3-portes.dedans .v3-porte.p.ici .cmd-article { display: none; }
@@ -684,7 +692,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.163</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.164</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -3927,6 +3935,14 @@ var suivreLecture = (function () {
   // juste sous la bande : on atteint ses liens sans passer sur les categories
   var seuilP = film && film.closest('.v3-seuil');
   if (seuilP) seuilP.insertBefore(info, film.nextSibling);
+  // la phrase de la salle, recopiee sur la rangee du titre (ordinateur)
+  var intro = document.querySelector('.v3-porte.p .v3-salle .v3-intro');
+  if (seuilP && intro && intro.textContent.trim()) {
+    var ligne = document.createElement('p');
+    ligne.className = 'v3-intro-ligne';
+    ligne.innerHTML = intro.innerHTML;
+    seuilP.appendChild(ligne);
+  }
   else barre.parentNode.insertBefore(info, barre.nextSibling);
   function carteDe(b) { return grille.querySelector('.dp-carte[data-go="piece-' + b.getAttribute('data-carte') + '"]'); }
   function catsDe(b) { var c = carteDe(b); return c ? (c.getAttribute('data-cats') || '').split(/\s+/) : []; }

@@ -168,6 +168,8 @@
     .v3-portes:not(.dedans) .v3-porte.p .v3-seuil { position: absolute; top: 0; bottom: 0; right: 0; width: calc((100vw - clamp(140px, 15vw, 260px)) * 2 / 3); min-width: 100%; }
   }
   .v3-seuil h2 .chev { display: none; }
+  /* la copie de la phrase de Projets ne sert que porte ouverte, sur ordinateur */
+  .v3-intro-ligne { display: none; }
   @media (min-width: 901px) {
     /* A l'accueil, la bande a toute sa hauteur (reglage hauteur_bande_images) ;
        porte Projets ouverte, elle descend juste ce qu'il faut pour laisser la
@@ -194,7 +196,6 @@
     .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 button:hover .mot { text-decoration-color: currentColor; }
     /* La phrase sur la rangee du titre, a sa gauche, alignee a gauche : deux
        lignes equilibrees au lieu de trois en escalier (Ghali, 07/10/2026). */
-    .v3-intro-ligne { display: none; }
     .v3-portes.dedans .v3-porte.p.ici .v3-seuil { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 56px; align-items: end; }
     .v3-portes.dedans .v3-porte.p.ici .v3-seuil .v3-film, .v3-portes.dedans .v3-porte.p.ici .v3-seuil .dp-info { grid-column: 1 / -1; }
     .v3-portes.dedans .v3-porte.p.ici .v3-intro-ligne { display: block; order: 3; margin: 0 0 6px; font-size: 14px; line-height: 1.55; color: var(--ink-2); max-width: 120ch; text-wrap: balance; }
@@ -696,7 +697,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.167</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.168</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>

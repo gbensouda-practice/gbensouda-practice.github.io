@@ -144,6 +144,22 @@
     .v3-film { transform-origin: left top; transition: transform .45s var(--ease-drawer); }
     .v3-portes:not(.dedans) .v3-porte:hover .v3-film { transform: scale(var(--zoom-survol, 1.06)); }
   }
+  /* Porte Projets ouverte, sur ordinateur : la bande d'images reste en haut,
+     elargie a toute la porte et un peu plus basse, pour laisser voir le debut
+     de la grille. Le passage est un leger dezoom, pas un saut (Ghali,
+     06/10/2026). Le titre devient celui de la salle, avec son chevron. */
+  .v3-seuil h2 .chev { display: none; }
+  @media (min-width: 901px) {
+    .v3-portes.dedans .v3-porte.p.ici .v3-seuil { display: flex; flex: none; padding-bottom: 0; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-salle-tete { display: none; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-salle { padding-top: 28px; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 button { display: inline-flex; align-items: center; gap: 12px; font-size: 44px; line-height: 1.05; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 .chev { display: block; width: .5em; height: .5em; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; opacity: .45; transition: transform .2s var(--e-out), opacity .2s ease; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 button:hover .chev { transform: translateX(-4px); opacity: 1; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 .mot { text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 1px; text-underline-offset: .16em; transition: text-decoration-color .2s ease; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 button:hover .mot { text-decoration-color: currentColor; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-film { margin-top: 18px; height: clamp(180px, var(--h-film-dedans, 34svh), 420px); }
+  }
   /* le mot de la porte Projets change de couleur au survol de la porte : en plus
      du zoom, il dit qu'on peut cliquer (demande de Ghali, 05/10/2026) */
   .v3-seuil h2 button { transition: color .45s var(--ease-drawer); }
@@ -161,7 +177,7 @@
   .v3-seuil { padding: 36px var(--g); display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; width: 100%; }
   .v3-seuil h2 button, .v3-salle-tete h2 { font-weight: var(--w-t); font-size: var(--s-porte); line-height: .95; letter-spacing: var(--ls-t); }
   .v3-salle-tete h2 { font-size: 44px; line-height: 1.05; }
-  .v3-film { display: flex; gap: 8px; margin-top: 28px; height: clamp(200px, var(--h-film, 54svh), 660px); overflow: hidden; flex-shrink: 0; }
+  .v3-film { display: flex; gap: 8px; margin-top: 28px; height: clamp(200px, var(--h-film, 54svh), 660px); overflow: hidden; flex-shrink: 0; overscroll-behavior-x: contain; }
   .v3-film button { flex: 0 0 auto; height: 100%; position: relative; overflow: hidden; }
   .v3-film img { height: 100%; width: auto; object-fit: cover; aspect-ratio: 3/4; transition: opacity .2s; }
   .v3-film button:hover img { opacity: .85; }
@@ -228,23 +244,22 @@
     padding: 4px 0; color: var(--blue); border-bottom: 1px solid var(--corail); transition: color .2s ease;
   }
   .lien-article:hover { color: var(--corail); }
-  /* Six colonnes : une vignette en prend une, une case double (« * » dans
-     1-commandes/_ordre.txt) deux sur deux rangees. Chaque vignette a la meme
-     hauteur de texte (titre sur deux lignes, phrase sur trois), donc les
-     images d'une rangee commencent et finissent a la meme hauteur, et une
-     case double tombe pile sur deux rangees. Une vignette est un bouton, qui
-     centre son contenu en hauteur : tout est donc remis en haut (le decalage
-     de la troisieme colonne, dans la maquette). */
-  .v3-pgrid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 32px 18px; grid-auto-flow: row dense; }
+  /* Six colonnes, toutes les vignettes de la meme taille : plus de case
+     double (Ghali, 06/10/2026). Chaque vignette a la meme hauteur de texte
+     (titre sur deux lignes, phrase sur trois), donc les images d'une rangee
+     commencent et finissent a la meme hauteur. Une vignette est un bouton,
+     qui centre son contenu en hauteur : tout est donc remis en haut. */
+  .v3-pgrid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 32px 18px; }
   .dp-carte { display: flex; flex-direction: column; justify-content: flex-start; width: 100%; min-width: 0; }
   .dp-carte[hidden] { display: none; }
+  /* Un filtre ne retire plus rien : la grille ne bouge pas, les vignettes
+     hors du filtre s'eteignent sur place (Ghali, 06/10/2026). */
+  .dp-carte { transition: opacity .35s var(--ease-drawer), filter .35s var(--ease-drawer); }
+  .dp-carte.eteinte { opacity: .22; filter: grayscale(1); }
+  .dp-carte.eteinte:hover { opacity: .5; }
   .dp-carte .im { position: relative; display: block; aspect-ratio: 1; background: var(--paper-2); overflow: hidden; }
   .dp-carte .im img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .45s var(--ease-drawer); }
   .dp-carte:hover .im img { transform: scale(1.03); }
-  .dp-carte[data-grand] { grid-column: span 2; grid-row: span 2; align-self: stretch; }
-  /* carree au moins ; a cote de vignettes simples, elle s'allonge pour finir
-     pile avec leur deuxieme rangee */
-  .dp-carte[data-grand] .im { aspect-ratio: 1; flex: 1 0 auto; }
   .dp-carte .ct {
     display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
     font-size: 14px; font-weight: 500; line-height: 1.35; margin-top: 10px; min-height: 2.7em;
@@ -469,10 +484,15 @@
     .v3-portes.dedans .v3-porte { flex-basis: 56px; }
     .v3-tranche { writing-mode: horizontal-tb; width: 100%; height: 56px; padding: 0 var(--g); }
     .v3-salle { padding: 24px var(--g) 100px; }
-    .v3-pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 14px; }
-    /* sur deux colonnes, une case double prend toute la largeur, en carre */
-    .dp-carte[data-grand] { grid-row: span 1; }
-    .dp-carte[data-grand] .im { flex: none; }
+    /* Trois colonnes, le titre seul. La piece touchee dans la bande de
+       l'accueil passe en tete, sur toute la largeur, avec sa phrase : c'est
+       le geste qui choisit, plus le .txt (Ghali, 06/10/2026). */
+    .v3-pgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 10px; }
+    .dp-carte .ct { font-size: 12px; margin-top: 6px; }
+    .dp-carte .cp { display: none; }
+    .dp-carte.choisie { order: -1; grid-column: 1 / -1; margin-bottom: 8px; }
+    .dp-carte.choisie .ct { font-size: 16px; min-height: 0; margin-top: 10px; }
+    .dp-carte.choisie .cp { display: -webkit-box; min-height: 0; }
     .v3-une { grid-template-columns: minmax(0, 1fr); gap: 16px; margin-bottom: 36px; padding-bottom: 28px; }
     .sp-corps { grid-template-columns: minmax(0, 1fr); gap: 24px; }
     .ff-media { position: static; grid-template-columns: minmax(0, 1fr); gap: 12px; }
@@ -496,6 +516,11 @@
   .v3-porte.p .v3-seuil h2, .v3-porte.p .v3-salle-tete h2 { view-transition-name: titre-p; }
   .v3-porte.r .v3-seuil h2, .v3-porte.r .v3-salle-tete h2 { view-transition-name: titre-r; }
   .v3-porte.p .v3-tranche { view-transition-name: tranche-p; }
+  .v3-porte.p .v3-film { view-transition-name: film-p; }
+  /* la bande garde ses proportions : elle se reduit par la hauteur, calee en
+     haut a gauche, et ce qui deborde est coupe */
+  ::view-transition-image-pair(film-p) { overflow: hidden; }
+  ::view-transition-old(film-p), ::view-transition-new(film-p) { height: 100%; width: auto; inset: 0 auto auto 0; }
   .v3-porte.r .v3-tranche { view-transition-name: tranche-r; }
   ::view-transition-group(*) { animation-duration: .45s; animation-timing-function: var(--ease-drawer); }
   ::view-transition-old(titre-p), ::view-transition-new(titre-p), ::view-transition-old(titre-r), ::view-transition-new(titre-r) { height: 100%; width: auto; object-fit: none; object-position: left center; }
@@ -526,7 +551,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.132</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.133</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -543,7 +568,7 @@
   <div class="v3-portes">
     <section class="v3-porte p" data-porte="p">
       <div class="v3-seuil">
-        <h2><button data-entrer="p">Références</button></h2>
+        <h2><button data-entrer="p"><svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M6.5 1.5 3 5l3.5 3.5"/></svg><span class="mot">Projets</span></button></h2>
         <div class="v3-film">
 <!-- AUTO:DP_FILM:DEBUT -->
           <button data-entrer="p" data-carte="starting-with-the-limbs" aria-label="Dispositifs scéniques · Starting with the Limbs, cie L'Autre Maison, 2025"><img src="images/web/1-commandes/starting-with-the-limbs/dispositif1.jpg" alt="" width="1600" height="998"><span class="calque" aria-hidden="true"><b>Dispositifs scéniques · <em>Starting with the Limbs</em>, cie L'Autre Maison</b><span class="mention">2025</span></span></button>
@@ -560,9 +585,9 @@
 <!-- AUTO:DP_FILM:FIN -->
         </div>
       </div>
-      <button class="v3-tranche" data-entrer="p">Références</button>
+      <button class="v3-tranche" data-entrer="p">Projets</button>
       <div class="v3-salle">
-        <div class="v3-salle-tete"><h2><button data-sortir aria-label="Références — revenir aux deux portes"><svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M6.5 1.5 3 5l3.5 3.5"/></svg><span class="mot">Références</span></button></h2></div>
+        <div class="v3-salle-tete"><h2><button data-sortir aria-label="Projets — revenir aux deux portes"><svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M6.5 1.5 3 5l3.5 3.5"/></svg><span class="mot">Projets</span></button></h2></div>
         <p class="v3-intro">
 <!-- AUTO:DP_PROJETS_INTRO:DEBUT -->
           Des dispositifs scéniques, des outils pour les artisans et des mises en valeur, suivis de la conception jusqu’à la réalisation. L’impression 3D en est le plus souvent le cœur ; la CNC et le laser la complètent, au service de techniques et de matériaux traditionnels.
@@ -600,9 +625,9 @@
       </div>
     </div>
         <div class="v3-pgrid cmd-grille">
-          <button class="dp-carte cmd-carte" data-go="piece-starting-with-the-limbs" data-grand="1" data-cats="scene-et-vitrine assemblage-et-outillage"><span class="im"><img src="images/web/1-commandes/starting-with-the-limbs/dispositif1.jpg" alt="" loading="lazy"></span><span class="ct">Dispositifs scéniques · <em>Starting with the Limbs</em>, cie L'Autre Maison <span class="yr">2025</span></span><span class="cp">Des structures qui portent les danseurs et voyagent démontées : coudes imprimés en 3D, tubes PVC.</span></button>
-          <button class="dp-carte cmd-carte" data-go="piece-photophobia-vr" data-grand="1" data-cats="scene-et-vitrine"><span class="im"><img src="images/web/1-commandes/photophobia-vr/01_scene-mangrove.jpg" alt="" loading="lazy"></span><span class="ct">Environnement VR · <em>Photophobia</em>, Sanni Est <span class="yr">2022</span></span><span class="cp">Toute la 3D d'un clip en réalité virtuelle : un monde de mangrove et ses créatures.</span></button>
-          <button class="dp-carte cmd-carte" data-go="piece-mass-set-design" data-grand="1" data-cats="scene-et-vitrine"><span class="im"><img src="images/web/1-commandes/mass-set-design/01_expo-pompidou-metz.jpg" alt="" loading="lazy"></span><span class="ct">Set design · <em>Mass</em>, film de Pierre Pauze <span class="yr">2020</span></span><span class="cp">Tout le décor d'un film, des dessins de sculptures aux plans pour les artisans.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-starting-with-the-limbs" data-cats="scene-et-vitrine assemblage-et-outillage"><span class="im"><img src="images/web/1-commandes/starting-with-the-limbs/dispositif1.jpg" alt="" loading="lazy"></span><span class="ct">Dispositifs scéniques · <em>Starting with the Limbs</em>, cie L'Autre Maison <span class="yr">2025</span></span><span class="cp">Des structures qui portent les danseurs et voyagent démontées : coudes imprimés en 3D, tubes PVC.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-photophobia-vr" data-cats="scene-et-vitrine"><span class="im"><img src="images/web/1-commandes/photophobia-vr/01_scene-mangrove.jpg" alt="" loading="lazy"></span><span class="ct">Environnement VR · <em>Photophobia</em>, Sanni Est <span class="yr">2022</span></span><span class="cp">Toute la 3D d'un clip en réalité virtuelle : un monde de mangrove et ses créatures.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-mass-set-design" data-cats="scene-et-vitrine"><span class="im"><img src="images/web/1-commandes/mass-set-design/01_expo-pompidou-metz.jpg" alt="" loading="lazy"></span><span class="ct">Set design · <em>Mass</em>, film de Pierre Pauze <span class="yr">2020</span></span><span class="cp">Tout le décor d'un film, des dessins de sculptures aux plans pour les artisans.</span></button>
           <button class="dp-carte cmd-carte" data-go="piece-hermes-holiday-windows" data-cats="scene-et-vitrine"><span class="im"><img src="images/web/1-commandes/hermes-holiday-windows/vitrine-coquillages-alex-jonas.jpg" alt="" loading="lazy"></span><span class="ct">Vitrines Hermès France H19 <span class="yr">2019</span></span><span class="cp">Un coquillage en trois techniques : polystyrène fraisé, collerette imprimée, ailes thermoformées.</span></button>
           <button class="dp-carte cmd-carte" data-go="piece-hermes-wild-wild-quest" data-cats="scene-et-vitrine"><span class="im"><img src="images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-dragon.jpg" alt="" loading="lazy"></span><span class="ct">Vitrines Hermès France H21 <span class="yr">2021</span></span><span class="cp">Un dragon de deux mètres, conçu pour être fraisé et suspendu, tiré en cinq exemplaires.</span></button>
           <button class="dp-carte cmd-carte" data-go="piece-watches-wonders-mobilier-vip" data-cats="scene-et-vitrine assemblage-et-outillage"><span class="im"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-allumee.jpg" alt="" loading="lazy"></span><span class="ct">Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze <span class="yr">2020</span></span><span class="cp">Des bandeaux LED qui se reflètent à l'infini, au cœur de trois meubles pour l'espace VIP.</span></button>
@@ -2060,7 +2085,7 @@
 <div hidden>
 <!-- AUTO:DP_PAGES:DEBUT -->
 <template data-page="piece-starting-with-the-limbs" data-id="1-commandes-starting-with-the-limbs">
-  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Références / Dispositifs scéniques · Starting with the Limbs, cie L'Autre Maison</span></div>
+  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Projets / Dispositifs scéniques · Starting with the Limbs, cie L'Autre Maison</span></div>
   <div class="piece">
       <div>
         <div class="gal-main" data-gal>
@@ -2093,7 +2118,7 @@
   </div>
 </template>
 <template data-page="piece-photophobia-vr" data-id="1-commandes-photophobia-vr">
-  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Références / Environnement VR · Photophobia, Sanni Est</span></div>
+  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Projets / Environnement VR · Photophobia, Sanni Est</span></div>
   <div class="piece">
       <div>
         <div class="gal-main" data-gal>
@@ -2126,7 +2151,7 @@
   </div>
 </template>
 <template data-page="piece-mass-set-design" data-id="1-commandes-mass-set-design">
-  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Références / Set design · Mass, film de Pierre Pauze</span></div>
+  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Projets / Set design · Mass, film de Pierre Pauze</span></div>
   <div class="piece">
       <div>
         <div class="gal-main" data-gal>
@@ -2163,7 +2188,7 @@
   </div>
 </template>
 <template data-page="piece-hermes-holiday-windows" data-id="1-commandes-hermes-holiday-windows">
-  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Références / Vitrines Hermès France H19</span></div>
+  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Projets / Vitrines Hermès France H19</span></div>
   <div class="piece">
       <div>
         <div class="gal-main" data-gal>
@@ -2197,7 +2222,7 @@
   </div>
 </template>
 <template data-page="piece-hermes-wild-wild-quest" data-id="1-commandes-hermes-wild-wild-quest">
-  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Références / Vitrines Hermès France H21</span></div>
+  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Projets / Vitrines Hermès France H21</span></div>
   <div class="piece">
       <div>
         <div class="gal-main" data-gal>
@@ -2230,7 +2255,7 @@
   </div>
 </template>
 <template data-page="piece-watches-wonders-mobilier-vip" data-id="1-commandes-watches-wonders-mobilier-vip">
-  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Références / Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze</span></div>
+  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Projets / Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze</span></div>
   <div class="piece">
       <div>
         <div class="gal-main" data-gal>
@@ -2268,7 +2293,7 @@
   </div>
 </template>
 <template data-page="piece-sabrina-ratte-sculpture-cinetique" data-id="1-commandes-sabrina-ratte-sculpture-cinetique">
-  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Références / Sculpture cinétique · Sabrina Ratté × Watches &amp; Wonders</span></div>
+  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Projets / Sculpture cinétique · Sabrina Ratté × Watches &amp; Wonders</span></div>
   <div class="piece">
       <div>
         <div class="gal-main" data-gal>
@@ -2301,7 +2326,7 @@
   </div>
 </template>
 <template data-page="piece-saket-sethi-mobilier-parametrique" data-id="1-commandes-saket-sethi-mobilier-parametrique">
-  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Références / Collection mobilier paramétrique · Saket Sethi Design</span></div>
+  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Projets / Collection mobilier paramétrique · Saket Sethi Design</span></div>
   <div class="piece">
       <div>
         <div class="gal-main" data-gal>
@@ -2333,7 +2358,7 @@
   </div>
 </template>
 <template data-page="piece-ornements-imprimes" data-id="1-commandes-ornements-imprimes">
-  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Références / Ornements imprimés · deux pièces pour l'atelier Zaa</span></div>
+  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Projets / Ornements imprimés · deux pièces pour l'atelier Zaa</span></div>
   <div class="piece">
       <div>
         <div class="gal-main" data-gal>
@@ -2372,7 +2397,7 @@
   </div>
 </template>
 <template data-page="piece-passementerie-imprimee" data-id="1-commandes-passementerie-imprimee">
-  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Références / Passementerie imprimée</span></div>
+  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Projets / Passementerie imprimée</span></div>
   <div class="piece">
       <div>
         <div class="gal-main" data-gal>
@@ -2407,7 +2432,7 @@
   </div>
 </template>
 <template data-page="piece-vortex" data-id="1-commandes-vortex">
-  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Références / Vortex</span></div>
+  <div class="pg-bar"><button class="retour" data-retour><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>Retour</button><span class="fil">Projets / Vortex</span></div>
   <div class="piece">
       <div>
         <div class="gal-main" data-gal>
@@ -3511,7 +3536,7 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
     var f = b.getAttribute('data-filtre');
     boutons.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
     cartes.forEach(function (c) {
-      c.hidden = !!f && (' ' + c.getAttribute('data-cats') + ' ').indexOf(' ' + f + ' ') === -1;
+      c.classList.toggle('eteinte', !!f && (' ' + c.getAttribute('data-cats') + ' ').indexOf(' ' + f + ' ') === -1);
     });
     lignes.forEach(function (l) { l.hidden = l.getAttribute('data-cat') !== f; });
     grille.classList.toggle('filtree', !!f);
@@ -3546,6 +3571,11 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
     t.finished.catch(function () {});
   }
   function porteIci() { return document.querySelector('.v3-porte.ici'); }
+  function choisir(carte) {
+    document.querySelectorAll('.v3-pgrid .dp-carte').forEach(function (c) {
+      c.classList.toggle('choisie', !!carte && c.getAttribute('data-go') === 'piece-' + carte);
+    });
+  }
 
   // la piece en grand de Recherche : la suivante a chaque ouverture (7.2)
   function poserUne() {
@@ -3732,6 +3762,16 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
     var b;
     if ((b = e.target.closest('[data-retour]'))) { retour(); return; }
     if ((b = e.target.closest('[data-entrer]'))) {
+      var carte = b.getAttribute('data-carte');
+      if (b.getAttribute('data-entrer') === 'p' && etat.porte === 'p') {
+        // porte deja ouverte (ordinateur) : une image de la bande ouvre sa
+        // piece, le titre referme la porte
+        aller(carte ? 'piece-' + carte : '');
+        return;
+      }
+      // sur telephone, la piece touchee passe en grand en tete de la grille ;
+      // entrer par le titre, ou sur ordinateur, n'en met aucune en avant
+      choisir(carte && !matchMedia('(min-width: 901px)').matches ? carte : null);
       aller(b.getAttribute('data-entrer') === 'p' ? 'projets' : 'recherche');
       return;
     }
@@ -3787,13 +3827,34 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
 
   // La bande d'images du seuil defile tres lentement, en boucle (demande de
   // Ghali, 05/10/2026). Elle s'arrete sous la souris, le temps de lire, et
-  // quand on la fait glisser du doigt. Rien ne bouge si le systeme demande
-  // moins de mouvement.
+  // quand on la fait glisser du doigt. Rien ne bouge seul si le systeme
+  // demande moins de mouvement. Sur ordinateur, on la fait aussi defiler
+  // soi-meme (Ghali, 06/10/2026) : deux doigts de cote sur le trackpad,
+  // partout ; la molette seulement sur l'accueil — porte ouverte, elle sert
+  // a descendre vers la grille.
   (function () {
     var film = document.querySelector('.v3-film');
-    if (!film || MOINS_DE_MOUVEMENT) return;
+    if (!film) return;
     var originaux = Array.prototype.slice.call(film.children);
     if (originaux.length < 2) return;
+    var boucle_ok = !MOINS_DE_MOUVEMENT;
+    // la moitie : la ou les copies commencent, ecart compris
+    function moitie() {
+      return boucle_ok ? film.children[originaux.length].offsetLeft - film.children[0].offsetLeft : 0;
+    }
+    film.addEventListener('wheel', function (e) {
+      if (!matchMedia('(min-width: 901px)').matches) return;
+      var cote = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+      var d = cote ? e.deltaX : (portes.classList.contains('dedans') ? 0 : e.deltaY);
+      if (!d) return;
+      e.preventDefault();
+      if (e.deltaMode === 1) d *= 32;
+      var demi = moitie();
+      var x = film.scrollLeft + d;
+      if (demi > 0) { if (x < 0) x += demi; else if (x >= demi) x -= demi; }
+      film.scrollLeft = x;
+    }, { passive: false });
+    if (!boucle_ok) return;
     originaux.forEach(function (b) {
       var c = b.cloneNode(true);
       c.setAttribute('data-copie', '');
@@ -3809,10 +3870,11 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
     function boucle(t) {
       var dt = avant === null ? 0 : Math.min(100, t - avant) / 1000;
       avant = t;
-      var visible = !portes.classList.contains('dedans') && film.offsetParent !== null;
+      // la bande continue de defiler porte Projets ouverte ; elle s'arrete
+      // quand elle n'est plus affichee (porte Recherche, telephone)
+      var visible = film.offsetParent !== null;
       if (visible && !pause && Date.now() > reprise) {
-        // la moitie : la ou les copies commencent, ecart compris
-        var demi = film.children[originaux.length].offsetLeft - film.children[0].offsetLeft;
+        var demi = moitie();
         if (Date.now() <= reprise + 50) x = film.scrollLeft;
         x += VITESSE * dt;
         if (demi > 0 && x >= demi) x -= demi;

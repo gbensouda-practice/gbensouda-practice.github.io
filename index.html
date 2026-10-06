@@ -87,7 +87,8 @@
   @media (min-width: 901px) { .v3 { height: 100svh; } .v3-portes { min-height: 0; } .v3-porte { overflow: hidden; } }
   .v3-bandeau {
     display: flex; justify-content: space-between; align-items: center; gap: 40px;
-    padding: 22px var(--g) 20px; flex-wrap: wrap; border-bottom: 1px solid var(--line);
+    /* marges resserrees autour des textes (Ghali, 07/10/2026) */
+    padding: 9px var(--g) 8px; flex-wrap: wrap; border-bottom: 1px solid var(--line);
     position: relative; z-index: 30; background: var(--paper);
   }
   .v3-bandeau .qui { display: flex; flex-direction: column; gap: 3px; }
@@ -101,8 +102,8 @@
     flex: 1; letter-spacing: -.01em; color: var(--ink); cursor: default; text-align: center;
   }
   .v3-bandeau .coord {
-    display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
-    font-size: 13px; line-height: 1.4; color: var(--grey); white-space: nowrap; text-align: right;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 0;
+    font-size: 13px; line-height: 1.3; color: var(--grey); white-space: nowrap; text-align: right;
   }
   .v3-bandeau .mail { color: var(--ink); }
   .v3-bandeau .mail:hover { color: var(--blue); }
@@ -565,7 +566,7 @@
     /* Le bandeau tenait un quart de l'ecran (demande de Ghali, 05/10/2026) :
        le nom et la version sur une ligne, le sous-titre, la phrase en plus
        petit, l'e-mail seul. Les villes restent sur ordinateur. */
-    .v3-bandeau { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 12px; padding: 14px var(--g) 14px; align-items: start; }
+    .v3-bandeau { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; padding: 9px var(--g) 9px; align-items: start; }
     .v3-bandeau .qui { grid-column: 1; grid-row: 1; }
     .v3-bandeau .nom { font-size: 20px; }
     .v3-bandeau .sous-titre { font-size: 12px; }
@@ -577,7 +578,7 @@
     /* Une porte ouverte, le bandeau se replie sur une ligne : le nom et la
        version (qui doit rester visible), pour laisser l'ecran a la lecture.
        Toucher le nom deroule toujours le volet. (demande de Ghali, 05/10/2026) */
-    .v3.dedans .v3-bandeau { align-items: center; padding: 12px var(--g); }
+    .v3.dedans .v3-bandeau { align-items: center; padding: 8px var(--g); }
     .v3.dedans .v3-bandeau h1, .v3.dedans .v3-bandeau .sous-titre,
     .v3.dedans .v3-bandeau .coord > a, .v3.dedans .v3-bandeau .coord > span { display: none; }
     .v3.dedans .v3-bandeau .nom { font-size: 18px; }
@@ -695,7 +696,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.166</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.167</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>

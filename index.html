@@ -513,8 +513,10 @@
     /* Un mot touche alors que le cadre est deja passe au-dessus de l'ecran :
        le cadre redescend, reduit, le temps de voir la photo, puis remonte
        quand on continue a lire (Ghali, 06/10/2026). */
-    .ff-media.flotte { position: sticky; top: 10px; z-index: 30; transform: scale(.62); transform-origin: top center; animation: cadre-descend .35s var(--ease-drawer); }
+    .ff-media.flotte { position: fixed; top: 10px; left: var(--g); right: var(--g); z-index: 30; transform: scale(.62); transform-origin: top center; animation: cadre-descend .35s var(--ease-drawer); }
     .ff-media.flotte .ff-marge { visibility: hidden; }
+    /* le cadre sorti du texte laisse sa place, pour que rien ne bouge */
+    .ff-place { margin-bottom: 24px; }
     .ff-media.flotte .ff-nassij-slider { box-shadow: 0 10px 30px rgba(0,0,0,.45); }
     .ff-media.repli { animation: cadre-remonte .3s var(--ease-drawer) forwards; }
     @keyframes cadre-descend { from { transform: translateY(-115%) scale(.62); } to { transform: scale(.62); } }
@@ -580,7 +582,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.134</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.135</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -3565,6 +3567,8 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
     });
     art.insertBefore(b, art.firstChild);
   });
+  // (Le cadre sort du texte en position fixe et laisse une place de sa
+  // taille : colle au texte, il aurait bute sur la fin de l'article.)
   // Un mot touche : si le cadre est deja passe au-dessus de l'ecran, il
   // redescend, reduit, avec la photo du mot. Il remonte quand on a lu un peu
   // plus loin, ou quand on le touche (sauf photo qui mene a une piece).
@@ -3573,9 +3577,14 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
     var m = flottant;
     if (!m) return;
     flottant = null;
-    if (MOINS_DE_MOUVEMENT) { m.classList.remove('flotte'); return; }
+    function rentrer() {
+      m.classList.remove('flotte', 'repli');
+      var place = m.previousElementSibling;
+      if (place && place.classList.contains('ff-place')) place.remove();
+    }
+    if (MOINS_DE_MOUVEMENT) { rentrer(); return; }
     m.classList.add('repli');
-    setTimeout(function () { m.classList.remove('flotte', 'repli'); }, 300);
+    setTimeout(rentrer, 300);
   }
   document.addEventListener('click', function (e) {
     if (!tel.matches) return;
@@ -3587,6 +3596,12 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
     if (media.getBoundingClientRect().top >= 0) return;   // le cadre est a l'ecran
     if (flottant && flottant !== media) replier();
     media.classList.remove('repli');
+    if (!media.classList.contains('flotte')) {
+      var place = document.createElement('div');
+      place.className = 'ff-place';
+      place.style.height = media.offsetHeight + 'px';
+      media.parentNode.insertBefore(place, media);
+    }
     media.classList.add('flotte');
     flottant = media;
     depart = window.scrollY;

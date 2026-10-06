@@ -194,7 +194,7 @@
        phrase, juste au-dessus des filtres (Ghali, 07/10/2026). */
     .v3-porte.p .v3-seuil .v3-film { order: 1; margin-top: 0; }
     .v3-porte.p .v3-seuil h2 { order: 2; align-self: flex-end; text-align: right; margin-top: auto; padding-top: 18px; }
-    .v3-portes.dedans .v3-porte.p.ici .v3-salle { padding-top: 0; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-salle { padding-top: 0; padding-bottom: 0; }
     /* Plus de grille : elle redisait la bande. La bande, la phrase, les
        categories, puis le texte du projet survole (Ghali, 07/10/2026). */
     .v3-portes.dedans .v3-porte.p.ici .v3-pgrid, .v3-portes.dedans .v3-porte.p.ici .dp-choisie,
@@ -689,7 +689,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.158</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.159</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -3970,7 +3970,10 @@ var suivreLecture = (function () {
   }
   function amener(f) {
     var b = Array.prototype.find.call(film.querySelectorAll('button[data-carte]:not([data-copie])'), function (x) { return catsDe(x).indexOf(f) !== -1; });
-    if (b) film.scrollTo({ left: Math.max(0, b.offsetLeft - film.offsetLeft - 8), behavior: MOINS_DE_MOUVEMENT ? 'auto' : 'smooth' });
+    if (!b) return;
+    // le defilement automatique de la bande se met en retrait le temps du glisse
+    film.dispatchEvent(new CustomEvent('bande-saut'));
+    film.scrollTo({ left: Math.max(0, b.offsetLeft - film.offsetLeft - 8), behavior: MOINS_DE_MOUVEMENT ? 'auto' : 'smooth' });
   }
   barre.addEventListener('mouseover', function (e) {
     var b = e.target.closest('.cmd-filtre');
@@ -3982,6 +3985,7 @@ var suivreLecture = (function () {
   barre.addEventListener('mouseleave', function () {
     if (!ordi.matches) return;
     griser(fixe);
+    montrerCategorie(fixe);
   });
   if (film) film.addEventListener('mouseover', function (e) {
     var b = e.target.closest('button[data-carte]');
@@ -4371,6 +4375,7 @@ var suivreLecture = (function () {
     film.addEventListener('mouseenter', function () { pause = true; });
     film.addEventListener('mouseleave', function () { pause = false; });
     film.addEventListener('touchstart', function () { reprise = Date.now() + 4000; }, { passive: true });
+    film.addEventListener('bande-saut', function () { reprise = Date.now() + 2500; });
     function boucle(t) {
       var dt = avant === null ? 0 : Math.min(100, t - avant) / 1000;
       avant = t;

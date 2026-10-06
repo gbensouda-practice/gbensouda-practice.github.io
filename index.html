@@ -224,6 +224,10 @@
   /* le texte d'introduction, en tete de chaque salle, sous le titre (section 8.5) */
   .v3-intro { max-width: 68ch; font-size: 16px; line-height: 1.55; color: var(--ink-2); margin-bottom: 32px; }
   .nuit .v3-intro { color: var(--line); }
+  /* Sur ordinateur, le texte d'introduction prend toute la largeur, en 14px
+     (la taille des titres de vignettes et du volet) : une seule ligne sur
+     un grand ecran, deux sur un portable (Ghali, 06/10/2026). */
+  @media (min-width: 901px) { .v3-intro { max-width: none; font-size: 14px; } }
 
   /* ── la salle Projets : filtres, ligne de l'article, grille ── */
   .cmd-filtres { display: flex; flex-wrap: wrap; gap: 4px 22px; margin: 0 0 16px; }
@@ -585,7 +589,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.136</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.137</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>

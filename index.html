@@ -168,11 +168,13 @@
   }
   .v3-seuil h2 .chev { display: none; }
   @media (min-width: 901px) {
-    /* La bande garde la meme hauteur a l'accueil et porte Projets ouverte :
-       elle ne se reduit plus en entrant (Ghali, 07/10/2026). La hauteur laisse
-       la place, porte ouverte, au texte du projet, au titre, a sa phrase et
-       aux categories. Le reglage hauteur_bande_images reste un maximum. */
-    .v3-porte.p .v3-film { height: clamp(200px, min(var(--h-film, 54svh), calc(100svh - 450px)), 660px); }
+    /* A l'accueil, la bande a toute sa hauteur (reglage hauteur_bande_images) ;
+       porte Projets ouverte, elle descend juste ce qu'il faut pour laisser la
+       place au texte du projet, au titre, a sa phrase et aux categories. Les
+       deux hauteurs sont fixees d'avance : le passage de l'une a l'autre est
+       un seul dezoom, sans saut (Ghali, 07/10/2026). */
+    .v3-porte.p .v3-film { height: clamp(200px, var(--h-film, 54svh), 660px); }
+    .v3-portes.dedans .v3-porte.p .v3-film { height: clamp(200px, min(var(--h-film, 54svh), calc(100svh - 450px)), 660px); }
     /* Le mot « Projets » sous la bande, aligne a droite : en bas a droite de
        la porte a l'accueil ; porte ouverte, sous la bande et le texte du
        projet, avec sa phrase, juste au-dessus des categories (07/10/2026). */
@@ -659,6 +661,8 @@
   /* la bande garde ses proportions : elle se reduit par la hauteur, calee en
      haut a gauche, et ce qui deborde est coupe */
   ::view-transition-image-pair(film-p) { overflow: hidden; }
+  /* la bande se reduit d'un bloc, photos comprises (pas d'etirement) */
+  ::view-transition-old(film-p), ::view-transition-new(film-p) { height: 100%; width: auto; inset: 0 auto auto 0; }
   .v3-porte.r .v3-tranche { view-transition-name: tranche-r; }
   ::view-transition-group(*) { animation-duration: .45s; animation-timing-function: var(--ease-drawer); }
   /* pendant l'animation, Recherche passe AU-DESSUS de la bande de Projets */
@@ -691,7 +695,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.165</p>
+      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.166</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>

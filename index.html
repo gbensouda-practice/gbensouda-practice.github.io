@@ -187,6 +187,15 @@
   }
   .v3-joint::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to right, var(--paper) 0%, rgba(237,238,235,.62) 26%, rgba(20,24,26,.62) 76%, var(--ink) 100%); }
   .v3-portes.dedans .v3-joint { flex-basis: 0; }
+  /* Sur ordinateur, Recherche a gauche et Projets a droite : Projets se
+     replie donc sur la droite (Ghali, 06/10/2026). Seul l'ordre a l'ecran
+     change ; sur telephone, les portes restent empilees, Projets en haut. */
+  @media (min-width: 901px) {
+    .v3-porte.r { order: 1; }
+    .v3-joint { order: 2; }
+    .v3-porte.p { order: 3; }
+    .v3-joint::after { background: linear-gradient(to left, var(--paper) 0%, rgba(237,238,235,.62) 26%, rgba(20,24,26,.62) 76%, var(--ink) 100%); }
+  }
 
   .v3-seuil { padding: 36px var(--g); display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; width: 100%; }
   .v3-seuil h2 button, .v3-salle-tete h2 { font-weight: var(--w-t); font-size: var(--s-porte); line-height: .95; letter-spacing: var(--ls-t); }
@@ -608,7 +617,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.149</p>
+      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.150</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>

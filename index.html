@@ -526,14 +526,14 @@
     /* Un mot touche alors que le cadre est deja passe au-dessus de l'ecran :
        le cadre redescend, reduit, le temps de voir la photo, puis remonte
        quand on continue a lire (Ghali, 06/10/2026). */
-    .ff-media.flotte { position: fixed; top: 10px; left: var(--g); right: var(--g); z-index: 30; transform: scale(.62); transform-origin: top center; animation: cadre-descend .35s var(--ease-drawer); }
-    .ff-media.flotte .ff-marge { visibility: hidden; }
+    /* Pleine largeur, avec sa reglette et sa legende : on y fait defiler les
+       photos du doigt (Ghali, 06/10/2026 — d'abord reduit a 62 %). */
+    .ff-media.flotte { position: fixed; top: 8px; left: var(--g); right: var(--g); z-index: 30; background: var(--nuit); padding-bottom: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.5); animation: cadre-descend .35s var(--ease-drawer); }
     /* le cadre sorti du texte laisse sa place, pour que rien ne bouge */
     .ff-place { margin-bottom: 24px; }
-    .ff-media.flotte .ff-nassij-slider { box-shadow: 0 10px 30px rgba(0,0,0,.45); }
     .ff-media.repli { animation: cadre-remonte .3s var(--ease-drawer) forwards; }
-    @keyframes cadre-descend { from { transform: translateY(-115%) scale(.62); } to { transform: scale(.62); } }
-    @keyframes cadre-remonte { from { transform: scale(.62); } to { transform: translateY(-115%) scale(.62); } }
+    @keyframes cadre-descend { from { transform: translateY(-110%); } to { transform: none; } }
+    @keyframes cadre-remonte { from { transform: none; } to { transform: translateY(-110%); } }
     /* Projets : la piece touchee en grand, puis les filtres, puis la grille */
     .dp-choisie .dp-carte { margin-bottom: 24px; }
     .dp-choisie .dp-carte .ct { font-size: 16px; min-height: 0; margin-top: 10px; }
@@ -595,7 +595,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.139</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.140</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -3381,6 +3381,18 @@ document.querySelectorAll('.slider').forEach(function (slider) {
     timer = setInterval(function () { go(cur + 1); }, VITESSE_SLIDER);
   }
   function arreter() { clearInterval(timer); timer = null; slider.classList.remove('en-cours'); }
+  // Au doigt, on fait defiler les photos soi-meme : glisser vers la gauche
+  // pour la suivante (Ghali, 06/10/2026).
+  var x0 = null, y0 = 0;
+  slider.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+  slider.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    x0 = null;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) || slides.length < 2) return;
+    arreter();
+    go(cur + (dx < 0 ? 1 : -1));
+  }, { passive: true });
   function poserDots() {
     if (!boiteDots) return;
     boiteDots.innerHTML = '';
@@ -3620,6 +3632,11 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
     }
     media.classList.add('flotte');
     flottant = media;
+    // le cadre est grand : si le mot touche passe dessous, on le redescend
+    // juste sous le cadre
+    var bas = media.getBoundingClientRect().bottom + 14;
+    var haut = mot.getBoundingClientRect().top;
+    if (haut < bas) window.scrollBy(0, haut - bas);
     depart = window.scrollY;
   }, true);
   window.addEventListener('scroll', function () {

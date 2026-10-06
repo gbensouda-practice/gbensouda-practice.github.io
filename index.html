@@ -595,7 +595,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.140</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.141</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -3632,12 +3632,17 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
     }
     media.classList.add('flotte');
     flottant = media;
-    // le cadre est grand : si le mot touche passe dessous, on le redescend
-    // juste sous le cadre
-    var bas = media.getBoundingClientRect().bottom + 14;
-    var haut = mot.getBoundingClientRect().top;
-    if (haut < bas) window.scrollBy(0, haut - bas);
     depart = window.scrollY;
+    // Le cadre est grand : si le mot touche passe dessous, on le redescend
+    // juste sous le cadre. Apres coup : le cadre change de photo (et de
+    // taille) juste apres ce clic.
+    setTimeout(function () {
+      if (flottant !== media) return;
+      var bas = media.getBoundingClientRect().bottom + 14;
+      var haut = mot.getBoundingClientRect().top;
+      if (haut < bas) window.scrollBy(0, haut - bas);
+      depart = window.scrollY;
+    }, 60);
   }, true);
   window.addEventListener('scroll', function () {
     if (flottant && Math.abs(window.scrollY - depart) > window.innerHeight * 0.6) replier();

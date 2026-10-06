@@ -595,7 +595,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.138</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.139</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -3785,7 +3785,7 @@ var suivreLecture = (function () {
     var barre = p.querySelector('.cmd-filtres');
     if (!film || !barre) return;
     var haut = film.getBoundingClientRect().top - p.getBoundingClientRect().top;
-    var dispo = p.clientHeight - haut - 28 - barre.offsetHeight - 22;
+    var dispo = p.clientHeight - haut - 28 - barre.offsetHeight - 40;
     p.style.setProperty('--h-film-dedans', Math.round(dispo) + 'px');
   }
   window.addEventListener('resize', function () { calerBande(); });

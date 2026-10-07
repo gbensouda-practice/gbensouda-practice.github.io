@@ -858,7 +858,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.191</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.192</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>
@@ -4254,7 +4254,8 @@ var suivreLecture = (function () {
     enAttenteE = false;
     if (!pR || !pP || !jointE) return;
     if (!ordiEntete.matches) {
-      bandeau.classList.toggle('nuit', etat.porte === 'r');
+      // etat n'existe pas encore au tout premier appel (chargement)
+      bandeau.classList.toggle('nuit', !!etat && etat.porte === 'r');
       return;
     }
     bandeau.classList.remove('nuit');

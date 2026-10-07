@@ -148,6 +148,37 @@
   .v3-infos dt { font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); flex: none; }
   .v3-infos dd { font-size: 13px; line-height: 1.45; color: var(--ink-2); }
   .v3-infos dd a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+  /* ── L'EN-TETE SANS BANDEAU (consigne du 07/10/2026, validee par Ghali) ──
+     Plus de bande claire posee sur les deux espaces : chaque moitie de
+     l'en-tete a la couleur de l'espace qu'elle surmonte. La limite (--coupe-d,
+     fin du sombre ; --coupe-p, debut du clair : entre les deux, le fondu de la
+     charniere) est recalculee a chaque image par le script : elle suit les
+     portes quand elles s'ouvrent, grossissent ou s'entrouvrent. Chaque texte
+     prend la couleur du fond sur lequel il se trouve (classe sur-nuit). */
+  .v3-bandeau .qui, .v3-bandeau h1, .v3-bandeau .coord, .v3-bandeau .nom, .v3-bandeau .sous-titre,
+  .v3-bandeau .mail, .v3-infos dt, .v3-infos dd { transition: color .45s var(--ease-drawer), opacity .3s ease; }
+  .v3-bandeau .qui.sur-nuit .nom { color: #fff; }
+  .v3-bandeau .qui.sur-nuit .sous-titre, .v3-bandeau .coord.sur-nuit { color: var(--nuit-grey); }
+  .v3-bandeau h1.sur-nuit, .v3-bandeau .coord.sur-nuit .mail { color: var(--nuit-txt); }
+  .v3-infos dl > div.sur-nuit dt { color: var(--blue-nuit); }
+  .v3-infos dl > div.sur-nuit dd { color: #C4C9C4; }
+  .v3-infos dl > div.sur-nuit dd a { color: var(--nuit-txt); }
+  .v3-infos .footer-version.sur-nuit { color: var(--nuit-grey); }
+  @media (min-width: 901px) {
+    .v3-bandeau, .v3-infos {
+      background: linear-gradient(to right, var(--nuit) var(--coupe-d, 30%), var(--paper) var(--coupe-p, 40%));
+      border-bottom: 0;
+    }
+    .v3-infos { box-shadow: 0 14px 24px -18px rgba(20,24,26,.35); }
+    /* la liste des metiers : une information du cote Projets, plus un titre
+       centre a cheval sur la coupe (elle reste le h1 de la page) */
+    .v3-bandeau h1 {
+      position: absolute; left: var(--h1-x, 50%); top: 50%; transform: translateY(-50%);
+      font-weight: 400; font-size: 15px; text-align: left; white-space: nowrap; color: var(--ink-2);
+    }
+    .v3-bandeau h1.cache { opacity: 0; visibility: hidden; }
+  }
   @media (max-width: 900px) {
     .v3-infos dl { flex-direction: column; align-items: stretch; gap: 6px; }
     .v3-infos dt { width: 84px; }
@@ -680,7 +711,14 @@
     .v3-bandeau .qui { grid-column: 1; grid-row: 1; }
     .v3-bandeau .nom { font-size: 20px; }
     .v3-bandeau .sous-titre { font-size: 12px; }
-    .v3-bandeau h1 { grid-column: 1 / -1; grid-row: 2; font-size: 15px; line-height: 1.35; max-width: none; text-align: center; }
+    .v3-bandeau h1 { grid-column: 1 / -1; grid-row: 2; font-size: 15px; font-weight: 400; line-height: 1.35; max-width: none; text-align: left; }
+    /* sur telephone, une seule couleur : celle de l'espace affiche */
+    .v3-bandeau { border-bottom: 0; transition: background-color .45s var(--ease-drawer); }
+    .v3-bandeau.nuit, .v3-bandeau.nuit .v3-infos { background: var(--nuit); }
+    .v3-bandeau.nuit .nom, .v3-bandeau.nuit h1, .v3-bandeau.nuit .mail { color: var(--nuit-txt); }
+    .v3-bandeau.nuit .sous-titre, .v3-bandeau.nuit .coord { color: var(--nuit-grey); }
+    .v3-bandeau.nuit .v3-infos dt { color: var(--blue-nuit); }
+    .v3-bandeau.nuit .v3-infos dd { color: #C4C9C4; }
     .v3-bandeau .coord { display: contents; }
     .v3-bandeau .coord > a { grid-column: 1 / -1; grid-row: 3; font-size: 13px; text-align: left; justify-self: start; }
     .v3-bandeau .coord > span { display: none; }
@@ -815,7 +853,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.185</p>
+      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.186</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>
@@ -4198,6 +4236,58 @@ var suivreLecture = (function () {
 (function () {
   var bandeau = document.querySelector('.v3-bandeau');
   var portes = document.querySelector('.v3-portes');
+  // ── l'en-tete suit la coupe entre les deux espaces (voir le CSS) ──
+  var ordiEntete = matchMedia('(min-width: 901px)');
+  var pR = document.querySelector('.v3-porte.r'), pP = document.querySelector('.v3-porte.p');
+  var jointE = document.querySelector('.v3-joint');
+  var trR = pR && pR.querySelector('.v3-tranche'), trP = pP && pP.querySelector('.v3-tranche');
+  var quiE = bandeau.querySelector('.qui'), h1E = bandeau.querySelector('h1'), coordE = bandeau.querySelector('.coord');
+  var voletE = Array.prototype.slice.call(bandeau.querySelectorAll('.v3-infos dl > div, .v3-infos .footer-version'));
+  var enAttenteE = false;
+  function visible(el) { return el && el.offsetParent !== null && el.getBoundingClientRect().width > 0; }
+  function calerEntete() {
+    enAttenteE = false;
+    if (!pR || !pP || !jointE) return;
+    if (!ordiEntete.matches) {
+      bandeau.classList.toggle('nuit', etat.porte === 'r');
+      return;
+    }
+    bandeau.classList.remove('nuit');
+    var o = bandeau.getBoundingClientRect().left;
+    var r = pR.getBoundingClientRect(), j = jointE.getBoundingClientRect();
+    var d = r.right, p = j.width > 0 ? j.right : r.right;
+    if (visible(trR) && portes.classList.contains('dedans')) d = Math.max(d, trR.getBoundingClientRect().right);
+    if (visible(trP) && portes.classList.contains('dedans')) p = Math.min(p, trP.getBoundingClientRect().left);
+    if (p < d) d = p;
+    bandeau.style.setProperty('--coupe-d', Math.round(d - o) + 'px');
+    bandeau.style.setProperty('--coupe-p', Math.round(p - o) + 'px');
+    var milieu = (d + p) / 2;
+    function cote(el) {
+      if (!el) return;
+      var b = el.getBoundingClientRect();
+      if (!b.width) return;
+      el.classList.toggle('sur-nuit', b.left + b.width / 2 < milieu);
+    }
+    // la liste des metiers : au debut du cote Projets, si la place y est
+    if (h1E && quiE && coordE) {
+      var g = parseFloat(getComputedStyle(bandeau).paddingLeft) || 40;
+      var x = Math.max(p + g, quiE.getBoundingClientRect().right + 40) - o;
+      bandeau.style.setProperty('--h1-x', Math.round(x) + 'px');
+      var place = coordE.getBoundingClientRect().left - o - 32 - x;
+      h1E.classList.toggle('cache', place < h1E.scrollWidth);
+    }
+    [quiE, h1E, coordE].concat(voletE).forEach(cote);
+  }
+  function demanderEntete() { if (!enAttenteE) { enAttenteE = true; requestAnimationFrame(calerEntete); } }
+  if ('ResizeObserver' in window) {
+    var roE = new ResizeObserver(demanderEntete);
+    [pR, pP, jointE, trR, trP, bandeau].forEach(function (el) { if (el) roE.observe(el); });
+  }
+  window.addEventListener('resize', demanderEntete);
+  portes && portes.addEventListener('transitionrun', demanderEntete);
+  portes && portes.addEventListener('transitionend', demanderEntete);
+  bandeau.addEventListener('mouseenter', demanderEntete);
+
   // la photo de la charniere, reprise par la tranche qui s'entrouvre
   var charniere = document.querySelector('.v3-joint');
   if (portes && charniere) ['--joint-img', '--joint-cadrage'].forEach(function (v) {
@@ -4263,6 +4353,7 @@ var suivreLecture = (function () {
     window.scrollTo(0, 0);
     var ici = porteIci();
     if (ici) ici.scrollTop = 0;
+    if (typeof calerEntete === 'function') calerEntete();
     // le cadre des articles etait cache : il se recale maintenant qu'il a une taille
     window.dispatchEvent(new Event('resize'));
   }

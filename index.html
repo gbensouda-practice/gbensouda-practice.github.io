@@ -404,6 +404,8 @@
   .v3-portes:not(.dedans) .v3-titres.tous button:not([disabled]) .deroule { grid-template-rows: 1fr; opacity: 1; }
   .v3-portes:not(.dedans) .v3-titres.tous button:not([disabled]) .n { color: var(--corail); }
   .v3-portes:not(.dedans) .v3-titres.tous .vig { width: 40px; height: 40px; }
+  /* tous ouverts : les vignettes seules, sans la phrase, pour tenir dans l'ecran */
+  .v3-portes:not(.dedans) .v3-titres.tous button:not(:hover) .i { display: none; }
   /* survoler une piece ouvre aussi le tiroir des articles qui la citent */
   .v3-portes:not(.dedans) .v3-titres button.cite .deroule { grid-template-rows: 1fr; opacity: 1; }
   .v3-portes:not(.dedans) .v3-film button.eteinte img { opacity: .2; filter: grayscale(1); }
@@ -922,7 +924,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.204</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.205</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>

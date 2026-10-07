@@ -314,6 +314,37 @@
   .v3-portes.dedans .v3-seuil { display: none; }
   .v3-tranche { display: none; writing-mode: vertical-rl; font-size: 22px; padding: 28px 0; align-items: center; width: 64px; height: 100%; justify-content: flex-start; }
   .v3-portes.dedans .v3-porte:not(.ici) .v3-tranche { display: flex; }
+  /* Sur ordinateur, la porte repliee s'entrouvre au survol : la tranche
+     glisse par-dessus l'espace ouvert (qui ne bouge pas), et la photo de la
+     charniere y reparait, pour dire que les deux espaces restent lies
+     (Ghali, 07/10/2026). */
+  @media (min-width: 901px) {
+    .v3-portes.dedans .v3-porte:not(.ici) { overflow: visible; z-index: 6; }
+    .v3-portes.dedans .v3-porte:not(.ici) .v3-tranche {
+      position: absolute; top: 0; bottom: 0; isolation: isolate; overflow: hidden;
+      transition: width .4s var(--ease-drawer), box-shadow .4s ease, padding .4s var(--ease-drawer);
+    }
+    .v3-portes.dedans .v3-porte.r:not(.ici) .v3-tranche { left: 0; background: var(--nuit); color: var(--nuit-txt); }
+    .v3-portes.dedans .v3-porte.p:not(.ici) .v3-tranche { right: 0; background: var(--paper); }
+    .v3-portes.dedans .v3-porte:not(.ici) .v3-tranche::before {
+      content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0;
+      background: var(--joint-img, none) 46% var(--joint-cadrage, 42%) / cover no-repeat;
+      transition: opacity .4s ease;
+    }
+    .v3-portes.dedans .v3-porte.r:not(.ici) .v3-tranche::before {
+      -webkit-mask-image: linear-gradient(to right, transparent 30%, #000); mask-image: linear-gradient(to right, transparent 30%, #000);
+    }
+    .v3-portes.dedans .v3-porte.p:not(.ici) .v3-tranche::before {
+      -webkit-mask-image: linear-gradient(to left, transparent 30%, #000); mask-image: linear-gradient(to left, transparent 30%, #000);
+    }
+    .v3-portes.dedans .v3-porte:not(.ici) .v3-tranche:hover, .v3-portes.dedans .v3-porte:not(.ici) .v3-tranche:focus-visible {
+      width: 140px; box-shadow: 0 0 44px rgba(20,24,26,.28);
+    }
+    .v3-portes.dedans .v3-porte.r:not(.ici) .v3-tranche:hover { padding-left: 14px; }
+    .v3-portes.dedans .v3-porte.p:not(.ici) .v3-tranche:hover { padding-right: 14px; justify-content: flex-start; }
+    .v3-portes.dedans .v3-porte:not(.ici) .v3-tranche:hover::before { opacity: .7; }
+  }
+  @media (prefers-reduced-motion: reduce) { .v3-tranche, .v3-tranche::before { transition: none !important; } }
   .v3-salle { display: none; padding: 32px var(--g) 120px; }
   .v3-portes.dedans .v3-porte.ici .v3-salle { display: block; }
   .v3-salle-tete { display: flex; align-items: baseline; margin-bottom: 14px; }
@@ -731,7 +762,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.178</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.179</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -4055,6 +4086,12 @@ var suivreLecture = (function () {
 (function () {
   var bandeau = document.querySelector('.v3-bandeau');
   var portes = document.querySelector('.v3-portes');
+  // la photo de la charniere, reprise par la tranche qui s'entrouvre
+  var charniere = document.querySelector('.v3-joint');
+  if (portes && charniere) ['--joint-img', '--joint-cadrage'].forEach(function (v) {
+    var x = charniere.style.getPropertyValue(v);
+    if (x) portes.style.setProperty(v, x);
+  });
   var lesPortes = document.querySelectorAll('.v3-porte');
   var pg = document.querySelector('.pg');
   var arts = document.querySelectorAll('.dp-art');

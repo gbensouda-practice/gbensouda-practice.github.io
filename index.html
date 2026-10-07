@@ -841,6 +841,11 @@
        en haut de l'ecran pendant qu'on lit (voir « flotte » plus bas). */
     .sp-corps { display: block; }
     .sp-corps > .ff-media { margin-bottom: 24px; }
+    /* En lisant un article, le cadre photo reste colle en haut de l'ecran :
+       on fait defiler le texte et on voit a quoi il correspond (Ghali,
+       07/10/2026). Il suit le paragraphe lu, juste sous lui. */
+    .dp-art .sp-corps > .ff-media { position: sticky; top: 0; z-index: 5; background: var(--nuit); padding: 10px 0 8px; margin-bottom: 18px; box-shadow: 0 14px 18px -14px rgba(0,0,0,.6); }
+    .dp-art .ff-nassij-slider { --h-media: clamp(190px, 33svh, 300px); }
     .v3-portes.dedans .v3-porte.ici { overflow: clip; }
     /* Un mot touche alors que le cadre est deja passe au-dessus de l'ecran :
        le cadre redescend, reduit, le temps de voir la photo, puis remonte
@@ -926,7 +931,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.206</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.207</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>
@@ -4057,20 +4062,25 @@ var suivreLecture = (function () {
     if (tout) tout.hidden = true;
     art.querySelectorAll('.sp-texte .lien-galerie.montre').forEach(function (l) { l.classList.remove('montre'); });
   }
-  if ('IntersectionObserver' in window) {
+  // Ordinateur : la ligne de lecture est au milieu de l'ecran. Telephone :
+  // juste sous le cadre colle en haut (un bon tiers de l'ecran).
+  function observer(marge, actif) {
     var obs = new IntersectionObserver(function (es) {
-      if (!ordi.matches) return;
+      if (!actif()) return;
       es.forEach(function (e) {
         if (!e.isIntersecting) return;
         var art = e.target.closest('.dp-art');
         if (art && !art.hidden) montrer(art, e.target);
       });
-    }, { rootMargin: '-45% 0px -45% 0px' });
+    }, { rootMargin: marge });
     document.querySelectorAll('.dp-art .sp-texte p').forEach(function (p) { obs.observe(p); });
+  }
+  if ('IntersectionObserver' in window) {
+    observer('-45% 0px -45% 0px', function () { return ordi.matches; });
+    observer('-55% 0px -38% 0px', function () { return !ordi.matches; });
   }
   // en ouvrant un article : les photos de son premier paragraphe illustre
   return function (art) {
-    if (!ordi.matches) return;
     art.removeAttribute('data-lu');
     var cadre = art.querySelector('.ff-nassij-slider');
     if (!cadre) return;

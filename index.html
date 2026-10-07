@@ -158,6 +158,8 @@
      prend la couleur du fond sur lequel il se trouve (classe sur-nuit). */
   .v3-bandeau .qui, .v3-bandeau h1, .v3-bandeau .coord, .v3-bandeau .nom, .v3-bandeau .sous-titre,
   .v3-bandeau .mail, .v3-infos dt, .v3-infos dd { transition: color .45s var(--ease-drawer), opacity .3s ease; }
+  /* sur le papier, le gris de l'en-tete est fonce pour tenir 4,5:1 (5,4:1) */
+  .v3-bandeau .sous-titre, .v3-bandeau .coord { color: #5B615D; }
   .v3-bandeau .qui.sur-nuit .nom { color: #fff; }
   .v3-bandeau .qui.sur-nuit .sous-titre, .v3-bandeau .coord.sur-nuit { color: var(--nuit-grey); }
   .v3-bandeau h1.sur-nuit, .v3-bandeau .coord.sur-nuit .mail { color: var(--nuit-txt); }
@@ -858,7 +860,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.192</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.193</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>

@@ -76,8 +76,13 @@
   .mention { font-family: var(--f-mono); }
   .yr { font-family: var(--f-mono); font-size: 12px; font-variant-numeric: tabular-nums; color: var(--grey); white-space: nowrap; font-weight: 400; }
   .nuit .yr { color: var(--nuit-grey); }
-  .lien { color: var(--blue); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
-  .nuit .lien { color: var(--blue-nuit); }
+  /* Une seule couleur pour « ceci est une citation » : le corail, dans les
+     deux espaces. Sur fond clair, un corail plus fonce, lisible en petit
+     (contraste 4,9:1 sur le papier ; le corail clair n'y fait que 2,7:1).
+     Hors du bloc :root, que l'onglet Apparence ecrit (Ghali, 07/10/2026). */
+  body { --corail-fonce: #9A5527; --corail-clair: #EDB58C; }
+  .lien { color: var(--corail-fonce); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  .nuit .lien { color: var(--corail); }
   .lien:hover { color: var(--corail); }
   .ico { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex: 0 0 auto; }
   @media (prefers-reduced-motion: reduce) { * { transition-duration: 0s !important; animation-duration: 0s !important; } }
@@ -92,13 +97,13 @@
     position: relative; z-index: 30; background: var(--paper);
   }
   .v3-bandeau .qui { display: flex; flex-direction: column; gap: 3px; }
-  .v3-bandeau .nom { font-weight: var(--w-t); font-size: 23px; line-height: 1.1; letter-spacing: -.015em; white-space: nowrap; cursor: default; }
+  .v3-bandeau .nom { font-weight: var(--w-t); font-size: 27px; line-height: 1.1; letter-spacing: -.015em; white-space: nowrap; cursor: default; }
   .v3-bandeau .sous-titre { font-size: 13px; line-height: 1.3; color: var(--grey); white-space: nowrap; }
   @media (hover: hover) { .v3-bandeau .qui { cursor: pointer; } .v3-bandeau .nom { cursor: inherit; } }
   /* Plus une phrase : trois metiers separes par des points medians, au centre,
      en gras, dans la police du nom (Ghali, 07/10/2026). */
   .v3-bandeau h1 {
-    font-weight: 600; font-size: clamp(18px, 1.65vw, 23px); line-height: 1.3;
+    font-weight: 600; font-size: clamp(15px, 1.25vw, 18px); line-height: 1.3;
     flex: 1; letter-spacing: -.01em; color: var(--ink); cursor: default; text-align: center;
   }
   .v3-bandeau .coord {
@@ -110,8 +115,10 @@
   /* la version et sa pastille : toujours visibles, en tout petit (section 8.3) */
   .v3-bandeau .footer-version {
     display: flex; align-items: center; gap: 6px; margin-top: 3px;
-    font-size: 10px; color: var(--grey); opacity: .6;
+    font-size: 11px; color: var(--grey); opacity: .6;
   }
+  /* la version, au bas du volet plutot que dans l'en-tete (Ghali, 07/10/2026) */
+  .v3-infos .footer-version { justify-content: center; margin: 0; padding: 0 var(--g) 10px; }
   .version-pastille { width: 7px; height: 7px; border-radius: 50%; display: inline-block; flex: none; }
 
   /* le volet : les infos pratiques se deroulent au survol (au toucher sur telephone) */
@@ -138,7 +145,7 @@
     display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 44px; padding: 10px var(--g) 12px;
   }
   .v3-infos dl > div { display: flex; align-items: baseline; gap: 10px; }
-  .v3-infos dt { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); flex: none; }
+  .v3-infos dt { font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); flex: none; }
   .v3-infos dd { font-size: 13px; line-height: 1.45; color: var(--ink-2); }
   .v3-infos dd a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
   @media (max-width: 900px) {
@@ -284,9 +291,9 @@
   }
   .v3-film button:hover .calque, .v3-film button:focus-visible .calque, .v3-film button.proche .calque { transform: none; }
   .v3-film .calque b { font-weight: 500; font-size: 14px; line-height: 1.3; }
-  .v3-film .calque .mention { color: #9BA5AC; font-size: 10px; }
+  .v3-film .calque .mention { color: #9BA5AC; font-size: 11px; }
 
-  .mention { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; }
+  .mention { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
   .deroule { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .35s var(--ease-drawer), opacity .25s ease; }
   .deroule > span { overflow: hidden; min-height: 0; }
   .v3-titres button:hover .deroule, .v3-titres button:focus-visible .deroule, .v3-titres button.proche .deroule { grid-template-rows: 1fr; opacity: 1; }
@@ -299,7 +306,7 @@
   .v3-titres button[disabled] .i { color: var(--nuit-grey); }
   .v3-titres .t { display: block; }
   .v3-titres .i { display: block; font-style: italic; font-size: 15px; line-height: 1.45; color: var(--line); padding-top: 4px; max-width: 48ch; letter-spacing: 0; }
-  .v3-titres .n { display: block; color: var(--blue-nuit); white-space: nowrap; }
+  .v3-titres .n { display: block; color: #9BA5AC; white-space: nowrap; }
   /* une petite vignette par mot souligne de l'article ; un clic ouvre
      l'article sur ce mot (Ghali, 07/10/2026) */
   .v3-titres .vigs { display: flex; flex-wrap: wrap; gap: 4px; padding: 2px 0 10px; }
@@ -393,7 +400,7 @@
   /* ── la salle Projets : filtres, ligne de l'article, grille ── */
   .cmd-filtres { display: flex; flex-wrap: wrap; gap: 4px 22px; margin: 0 0 16px; }
   .cmd-filtre {
-    font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase;
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
     padding: 4px 0; color: var(--grey); border-bottom: 1px solid transparent;
     transition: color .2s ease, border-color .2s ease;
   }
@@ -414,8 +421,8 @@
   .cmd-article-titre { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); }
   .cmd-article-resume { flex: 1 1 32ch; font-style: italic; font-size: 16px; line-height: 1.45; color: var(--ink); max-width: 62ch; }
   .lien-article {
-    font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase;
-    padding: 4px 0; color: var(--blue); border-bottom: 1px solid var(--corail); transition: color .2s ease;
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+    padding: 4px 0; color: var(--corail-fonce); border-bottom: 1px solid var(--corail); transition: color .2s ease;
   }
   .lien-article:hover { color: var(--corail); }
   /* Six colonnes, toutes les vignettes de la meme taille : plus de case
@@ -454,8 +461,8 @@
   .v3-une h3 { font-weight: var(--w-t); font-size: clamp(24px, 2.4vw, 34px); line-height: 1.1; letter-spacing: -.02em; color: var(--paper); }
   .v3-une .mention { display: block; color: #9BA5AC; margin-top: 8px; }
   .v3-une p { font-style: italic; font-size: 16px; line-height: 1.5; color: var(--line); margin-top: 14px; max-width: 40ch; }
-  .v3-une .lire { display: inline-block; margin-top: 18px; font-size: 14px; color: var(--blue-nuit); border-bottom: 1px solid var(--corail); padding-bottom: 2px; }
-  .v3-une .lire:hover { color: var(--corail); }
+  .v3-une .lire { display: inline-block; margin-top: 18px; font-size: 14px; color: var(--corail); border-bottom: 1px solid var(--corail); padding-bottom: 2px; }
+  .v3-une .lire:hover { color: var(--corail-clair); }
   .v3-une .leg { display: block; font-size: 13px; color: #9BA5AC; margin-top: 10px; }
   /* La piece en vedette en miroir des articles : le texte a gauche, la photo a
      droite. On voit que ce n'est pas un article (Ghali, 07/10/2026). */
@@ -481,13 +488,13 @@
   .sp-corps { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 40px; align-items: start; }
   .sp-corps.sans-media { grid-template-columns: minmax(0, 1fr); }
   .sp-texte p { font-size: var(--s-corps); line-height: var(--lh-corps); color: #C4C9C4; margin-bottom: 18px; max-width: 64ch; }
-  .sp-texte .lien-galerie.montre { color: var(--corail); }
+  .sp-texte .lien-galerie.montre { color: var(--corail-clair); background-size: 100% 2px; }
   .sp-tout {
-    font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase;
-    padding: 2px 0; color: var(--blue-nuit); border-bottom: 1px solid var(--corail); align-self: flex-start;
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
+    padding: 2px 0; color: var(--corail); border-bottom: 1px solid var(--corail); align-self: flex-start;
   }
   .sp-tout[hidden] { display: none; }
-  .sp-tout:hover { color: var(--corail); }
+  .sp-tout:hover { color: var(--corail-clair); }
 
   .cites { margin-top: 40px; border-top: 1px solid var(--line-nuit); padding-top: 18px; }
   .cites h4 { font-size: 14px; font-weight: 500; color: var(--nuit-grey); margin-bottom: 14px; }
@@ -523,7 +530,7 @@
   .ff-marge { grid-column: 1; grid-row: 2; display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 20px; max-width: var(--w-media, none); }
   .ff-marge .ff-legende { flex: 1 1 24ch; min-width: 0; }
   .ff-marge .slider-dots, .ff-marge .sp-tout { flex: none; }
-  .ff-legende { font-size: 10.5px; line-height: 1.6; letter-spacing: .03em; color: var(--grey); transition: opacity .28s ease; }
+  .ff-legende { font-size: 11px; line-height: 1.6; letter-spacing: .03em; color: var(--grey); transition: opacity .28s ease; }
   .ff-nassij-slider { --h-media: clamp(300px, 62vh, 620px); grid-column: 1; grid-row: 1; position: relative; justify-self: start; width: 100%; max-width: var(--w-media, none); }
   .ff-nassij-slider .slider-track { display: block; position: relative; transform: none !important; }
   .ff-nassij-slider .slider-track > .vue { position: absolute; inset: 0; aspect-ratio: auto; height: var(--h-media); opacity: 0; filter: blur(3px); transition: opacity .58s ease, filter .58s ease; }
@@ -538,28 +545,33 @@
   .ff-nassij-slider::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
   .ff-nassij-slider::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
 
-  /* les mots : bleu, trace corail ; un lien externe garde son trait continu */
+  /* les mots : corail, la couleur de la citation ; un lien externe (qui
+     n'est pas une citation) reste neutre, avec son trait continu */
   .lien-galerie {
-    font: inherit; padding: 0 0 1px; color: var(--blue-nuit);
+    font: inherit; padding: 0 0 1px; color: var(--corail);
     background-image: linear-gradient(var(--corail), var(--corail)); background-repeat: no-repeat;
     background-position: 0 100%; background-size: 100% 1px;
     transition: color .18s ease, background-size .34s var(--e-out);
   }
-  .lien-galerie .compte { font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .06em; vertical-align: .35em; margin-left: 3px; color: var(--corail); opacity: .85; }
+  .lien-galerie .compte { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .06em; vertical-align: .35em; margin-left: 3px; color: var(--corail); opacity: .85; }
   .lien-externe {
-    color: var(--blue-nuit); background-image: linear-gradient(currentColor, currentColor); background-repeat: no-repeat;
+    color: var(--nuit-txt); background-image: linear-gradient(currentColor, currentColor); background-repeat: no-repeat;
     background-position: 0 100%; background-size: 100% 1px; padding-bottom: 1px;
     transition: color .18s ease, background-size .34s var(--e-out);
   }
   .lien-externe::after { content: ' ↗'; font-size: .82em; opacity: .7; }
-  .lien-piece { font: inherit; color: var(--blue-nuit); text-decoration: underline dashed; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  .lien-piece { font: inherit; color: var(--corail); text-decoration: underline dashed; text-underline-offset: 3px; text-decoration-thickness: 1px; }
   @media (hover: hover) and (pointer: fine) {
-    .lien-galerie:hover { color: #A8C4DC; background-size: 100% 2px; }
-    .lien-externe:hover { color: #A8C4DC; background-size: 100% 2px; }
-    .lien-piece:hover { color: var(--corail); }
+    .lien-galerie:hover { color: var(--corail-clair); background-size: 100% 2px; }
+    .lien-externe:hover { color: #fff; background-size: 100% 2px; }
+    .lien-piece:hover { color: var(--corail-clair); }
   }
   /* sur papier (pages de pieces), l'accent du site reprend la main */
-  .pg:not(.nuit) .lien-galerie, .pg:not(.nuit) .lien-externe, .pg:not(.nuit) .lien-piece { color: var(--blue); }
+  .pg:not(.nuit) .lien-galerie, .pg:not(.nuit) .lien-piece { color: var(--corail-fonce); }
+  .pg:not(.nuit) .lien-externe { color: var(--ink); }
+  @media (hover: hover) and (pointer: fine) {
+    .pg:not(.nuit) .lien-galerie:hover, .pg:not(.nuit) .lien-piece:hover { color: var(--ink); }
+  }
   .galerie-source { display: none; }
   .apercu { position: fixed; left: 0; top: 0; z-index: 2000; pointer-events: none; width: 168px; height: 126px; object-fit: cover; border-radius: 1px; box-shadow: 0 10px 34px rgba(0,0,0,.55); opacity: 0; transition: opacity .18s ease-out; }
   .apercu.visible { opacity: 1; }
@@ -615,7 +627,7 @@
   .sous-projet .sp-titre { font-family: var(--f-mono); font-size: 12px; letter-spacing: .04em; }
   .sous-projet[open] .sp-titre { color: var(--corail); }
   .sous-projet .sp-resume { font-size: 14px; color: var(--grey); line-height: 1.5; flex: 1 1 100%; }
-  .sous-projet .sp-compte { font-family: var(--f-mono); font-size: 10.5px; color: var(--blue); }
+  .sous-projet .sp-compte { font-family: var(--f-mono); font-size: 11px; color: var(--blue); }
   .sous-projet .p-desc { font-size: 14.5px; line-height: 1.6; margin: 0 0 12px; padding-left: 22px; color: var(--ink-2); }
   .sous-projet .regle, .sous-projet .p-meta { margin-left: 22px; }
   .regle { margin: 18px 0 20px; }
@@ -625,12 +637,12 @@
   .regle-axe .tw:last-child { justify-content: flex-end; }
   .regle-axe .tick { display: block; width: 1px; height: 7px; background: var(--grey); }
   .regle-axe .tick.fort { height: 12px; background: var(--blue); }
-  .regle-mots { display: flex; gap: 10px; margin-top: 12px; font-size: 10.5px; line-height: 1.45; color: var(--grey); }
+  .regle-mots { display: flex; gap: 10px; margin-top: 12px; font-size: 11px; line-height: 1.45; color: var(--grey); }
   .regle-mots span { flex: 1 1 0; min-width: 0; overflow-wrap: break-word; text-align: center; }
   .regle-mots span:first-child { text-align: left; }
   .regle-mots span:last-child { text-align: right; color: var(--ink); }
   .p-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 18px; }
-  .p-meta span { font-family: var(--f-mono); font-size: 10.5px; color: var(--blue); border: 1px solid var(--line); padding: 3px 8px; border-radius: 2px; }
+  .p-meta span { font-family: var(--f-mono); font-size: 11px; color: var(--blue); border: 1px solid var(--line); padding: 3px 8px; border-radius: 2px; }
 
   /* ═══════════ TELEPHONE ═══════════ */
   @media (max-width: 1100px) {
@@ -651,7 +663,7 @@
     .v3-bandeau .coord { display: contents; }
     .v3-bandeau .coord > a { grid-column: 1 / -1; grid-row: 3; font-size: 13px; text-align: left; justify-self: start; }
     .v3-bandeau .coord > span { display: none; }
-    .v3-bandeau .footer-version { grid-column: 2; grid-row: 1; margin-top: 4px; }
+
     /* Une porte ouverte, le bandeau se replie sur une ligne : le nom et la
        version (qui doit rester visible), pour laisser l'ecran a la lecture.
        Toucher le nom deroule toujours le volet. (demande de Ghali, 05/10/2026) */
@@ -659,7 +671,7 @@
     .v3.dedans .v3-bandeau h1, .v3.dedans .v3-bandeau .sous-titre,
     .v3.dedans .v3-bandeau .coord > a, .v3.dedans .v3-bandeau .coord > span { display: none; }
     .v3.dedans .v3-bandeau .nom { font-size: 18px; }
-    .v3.dedans .v3-bandeau .footer-version { margin-top: 0; align-self: center; }
+
     .v3-portes { flex-direction: column; }
     .v3-porte { flex: 0 0 auto; }
     .v3-portes:not(.dedans) .v3-porte:hover { flex-grow: 1; }
@@ -692,7 +704,7 @@
     .v3-index .deroule { display: grid; }
     .v3-index button.proche .deroule { grid-template-rows: 1fr; opacity: 1; }
     .v3-index .i { display: block; font-style: italic; font-size: 15px; line-height: 1.45; color: var(--line); padding: 4px 0 4px; }
-    .vers-sommaire { display: inline-block; margin-bottom: 18px; font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--blue-nuit); padding: 4px 0; border-bottom: 1px solid var(--corail); }
+    .vers-sommaire { display: inline-block; margin-bottom: 18px; font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--corail); padding: 4px 0; border-bottom: 1px solid var(--corail); }
     /* Le cadre et le texte dans un meme bloc : le cadre peut alors rester colle
        en haut de l'ecran pendant qu'on lit (voir « flotte » plus bas). */
     .sp-corps { display: block; }
@@ -772,9 +784,6 @@
       <a class="mail" href="mailto:gbensouda@gmail.com">gbensouda@gmail.com</a>
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
-<!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.180</p>
-<!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
 <!-- AUTO:DP_VOLET:DEBUT -->
@@ -784,6 +793,9 @@
         <div><dt>Formation</dt><dd>Architecte DESA, ESA Paris, 2019</dd></div>
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
+<!-- AUTO:VERSION:DEBUT -->
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.181</p>
+<!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>
 
@@ -4196,6 +4208,9 @@ var suivreLecture = (function () {
     var art = document.querySelector('.dp-art[data-article="' + cle + '"]');
     if (!art) return false;
     arts.forEach(function (a) { a.hidden = (a !== art); });
+    // les vignettes des pieces citees, en bas, se chargent des l'ouverture :
+    // en chargement differe, certaines restaient vides a la premiere visite
+    art.querySelectorAll('.cites img[loading="lazy"]').forEach(function (i) { i.loading = 'eager'; });
     idx.forEach(function (b) { b.setAttribute('aria-current', b.getAttribute('data-a') === cle ? 'true' : 'false'); });
     window.dispatchEvent(new Event('resize'));
     var voulu = groupe && art.querySelector('.vue[data-groupe="' + groupe + '"]') ? groupe : null;

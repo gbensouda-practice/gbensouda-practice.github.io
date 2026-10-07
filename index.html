@@ -302,6 +302,12 @@
   .v3-titres button { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 16px; align-items: baseline; width: 100%; padding: 6px 0; }
   .v3-titres .deroule { grid-column: 1 / -1; }
   .v3-titres button:hover { color: #fff; }
+  /* a l'accueil : un article qui ne cite pas la piece survolee s'efface, et
+     les pieces qu'un article ne cite pas s'eteignent dans la bande */
+  .v3-titres button { transition: opacity .3s ease; }
+  .v3-titres button.eteint { opacity: .3; }
+  .v3-portes:not(.dedans) .v3-film button.eteinte img { opacity: .2; filter: grayscale(1); }
+  .v3-portes:not(.dedans) .v3-film button.eteinte .calque { display: none; }
   .v3-titres button[disabled] { color: var(--nuit-grey); cursor: default; }
   .v3-titres button[disabled] .i { color: var(--nuit-grey); }
   .v3-titres .t { display: block; }
@@ -794,7 +800,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.181</p>
+      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.182</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>
@@ -4516,6 +4522,59 @@ var suivreLecture = (function () {
       requestAnimationFrame(boucle);
     }
     requestAnimationFrame(boucle);
+  })();
+
+  // ── A L'ACCUEIL, LE LIEN ENTRE LES DEUX ESPACES SE VOIT (ordinateur) ──
+  // Survoler un article allume, dans la bande de Projets, les pieces qu'il
+  // cite (les autres s'eteignent) et fait glisser la bande jusqu'a la
+  // premiere. Survoler une piece eteint les articles qui ne la citent pas
+  // (critique du 07/10/2026, validee par Ghali). Sur telephone, le tiroir de
+  // chaque titre montre deja ce que l'article cite.
+  (function () {
+    var film = document.querySelector('.v3-porte.p .v3-film');
+    var titres = document.querySelectorAll('.v3-titres button[data-cartes]');
+    if (!film || !titres.length) return;
+    var ordi = matchMedia('(min-width: 901px)');
+    var attente = null;
+    function accueil() { return ordi.matches && !portes.classList.contains('dedans'); }
+    function allumer(cartes) {
+      film.querySelectorAll('button[data-carte]').forEach(function (b) {
+        b.classList.toggle('eteinte', !!cartes && cartes.indexOf(b.getAttribute('data-carte')) === -1);
+      });
+    }
+    titres.forEach(function (t) {
+      t.addEventListener('mouseenter', function () {
+        if (!accueil()) return;
+        var cartes = (t.getAttribute('data-cartes') || '').split(' ').filter(Boolean);
+        clearTimeout(attente);
+        attente = setTimeout(function () {
+          allumer(cartes);
+          var b = Array.prototype.find.call(film.querySelectorAll('button[data-carte]:not([data-copie])'), function (x) {
+            return cartes.indexOf(x.getAttribute('data-carte')) !== -1;
+          });
+          if (b) {
+            film.dispatchEvent(new CustomEvent('bande-saut'));
+            film.scrollTo({ left: Math.max(0, b.offsetLeft - film.offsetLeft - 8), behavior: MOINS_DE_MOUVEMENT ? 'auto' : 'smooth' });
+          }
+        }, 160);
+      });
+    });
+    var liste = document.querySelector('.v3-titres');
+    liste.addEventListener('mouseleave', function () { clearTimeout(attente); if (accueil()) allumer(null); });
+    film.addEventListener('mouseover', function (e) {
+      var b = e.target.closest('button[data-carte]');
+      if (!b || !accueil()) return;
+      var c = b.getAttribute('data-carte');
+      titres.forEach(function (t) {
+        t.classList.toggle('eteint', (' ' + t.getAttribute('data-cartes') + ' ').indexOf(' ' + c + ' ') === -1);
+      });
+    });
+    film.addEventListener('mouseleave', function () { titres.forEach(function (t) { t.classList.remove('eteint'); }); });
+    // en entrant dans une porte, plus rien d'eteint par l'accueil
+    window.addEventListener('hashchange', function () {
+      allumer(null);
+      titres.forEach(function (t) { t.classList.remove('eteint'); });
+    });
   })();
 
   if (arts.length) lire(arts[0].getAttribute('data-article'), null);

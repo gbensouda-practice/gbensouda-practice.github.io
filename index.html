@@ -203,7 +203,10 @@
     }
     .v3-bandeau:hover .v3-infos, .v3-bandeau:focus-within .v3-infos, .v3-bandeau.ouvert .v3-infos { transform: none; }
     .v3-infos > div { width: 100%; padding: 0 var(--g); }
-    .v3-infos dl { padding-top: 0; padding-bottom: 0; }
+    .v3-infos dl { padding-top: 0; padding-bottom: 0; flex-wrap: nowrap; column-gap: 26px; }
+    .v3-infos > div { flex-wrap: nowrap; column-gap: 26px; justify-content: flex-start; }
+    .v3-infos dl > div { gap: 8px; }
+    .v3-infos dd { font-size: 12px; }
     .v3-infos dt { color: var(--blue-nuit); }
     .v3-infos dd { color: #C4C9C4; }
     .v3-infos dd a { color: var(--nuit-txt); }
@@ -910,7 +913,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.200</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.201</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>

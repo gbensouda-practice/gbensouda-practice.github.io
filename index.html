@@ -858,7 +858,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.189</p>
+      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.190</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>
@@ -4261,11 +4261,20 @@ var suivreLecture = (function () {
     var o = bandeau.getBoundingClientRect().left;
     var r = pR.getBoundingClientRect(), j = jointE.getBoundingClientRect();
     var d = r.right, p = j.width > 0 ? j.right : r.right;
-    if (visible(trR) && portes.classList.contains('dedans')) d = Math.max(d, trR.getBoundingClientRect().right);
-    if (visible(trP) && portes.classList.contains('dedans')) p = Math.min(p, trP.getBoundingClientRect().left);
-    if (p < d) d = p;
+    var dedans = portes.classList.contains('dedans');
+    // une tranche qui s'entrouvre deplace la coupe avec elle
+    if (dedans && visible(trR)) { var rr = trR.getBoundingClientRect().right; d = Math.max(d, rr); p = Math.max(p, rr); }
+    if (dedans && visible(trP)) { var pl = trP.getBoundingClientRect().left; p = Math.min(p, pl); d = Math.min(d, pl); }
     bandeau.style.setProperty('--coupe-d', Math.round(d - o) + 'px');
     bandeau.style.setProperty('--coupe-p', Math.round(p - o) + 'px');
+    // La coupe ne passe jamais au travers du nom ni du contact : s'ils la
+    // chevauchent (une porte ouverte, sa voisine en tranche), ils commencent
+    // juste apres elle, et suivent la tranche quand elle s'entrouvre.
+    var W = bandeau.clientWidth, gE = 40;
+    bandeau.style.paddingLeft = ''; bandeau.style.paddingRight = '';
+    gE = parseFloat(getComputedStyle(bandeau).paddingLeft) || 40;
+    if (quiE && d - o > 0 && d - o < W / 2 && d - o > gE - 16) bandeau.style.paddingLeft = Math.round(p - o + 24) + 'px';
+    if (coordE && W - (p - o) > 0 && p - o > W / 2 && W - (p - o) > gE - 16) bandeau.style.paddingRight = Math.round(W - (d - o) + 24) + 'px';
     var milieu = (d + p) / 2;
     function cote(el) {
       if (!el) return;

@@ -243,6 +243,9 @@
     /* le titre « Recherche » deborde sur la charniere : il passe au-dessus
        d'elle, lisible en entier (Ghali, 07/10/2026) */
     .v3-portes:not(.dedans) .v3-porte.r { overflow: visible; z-index: 2; }
+    /* le grain de la porte sombre continue sur la charniere en s'effacant :
+       il s'arretait net au bord de la porte et dessinait un trait */
+    .v3-portes:not(.dedans) .v3-porte.r::before { right: calc(-1 * var(--l-joint)); -webkit-mask-image: linear-gradient(to left, transparent 0, #000 var(--l-joint)); mask-image: linear-gradient(to left, transparent 0, #000 var(--l-joint)); }
     /* la liste des articles deborde un peu sur le cote sombre de la charniere :
        titre et nombre de pieces tiennent sur une ligne (Ghali, 07/10/2026) */
     .v3-portes:not(.dedans) .v3-porte.r .v3-titres { margin-right: calc(-1 * (var(--g) + var(--l-joint) * .55)); }
@@ -726,7 +729,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.176</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.177</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>

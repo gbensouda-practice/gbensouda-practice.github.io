@@ -155,7 +155,9 @@
   }
 
   /* ═══════════ LES DEUX PORTES ═══════════ */
-  .v3-portes { flex: 1; display: flex; min-height: 520px; }
+  /* la largeur de la charniere, reprise par la bande de Projets et la liste
+     des articles (Ghali, 07/10/2026 : plus etroite) */
+  .v3-portes { flex: 1; display: flex; min-height: 520px; --l-joint: clamp(100px, 10vw, 170px); }
   .v3-porte { position: relative; flex: 1 1 0; min-width: 0; overflow: hidden; transition: flex-grow .45s var(--ease-drawer); display: flex; flex-direction: column; }
   .v3-porte.p { background: var(--paper); }
   .v3-porte.r { background: var(--nuit); color: var(--nuit-txt); }
@@ -173,7 +175,7 @@
        contenu reste accroche au bord droit, a sa largeur d'accueil, et
        Recherche vient le recouvrir comme un rideau (Ghali, 07/10/2026).
        Quand c'est Projets qui grandit, il suit la porte (min-width). */
-    .v3-portes:not(.dedans) .v3-porte.p .v3-seuil { position: absolute; top: 0; bottom: 0; right: 0; width: calc((100vw - clamp(140px, 15vw, 260px)) * 2 / 3); min-width: 100%; }
+    .v3-portes:not(.dedans) .v3-porte.p .v3-seuil { position: absolute; top: 0; bottom: 0; right: 0; width: calc((100vw - var(--l-joint)) * 2 / 3); min-width: 100%; }
   }
   .v3-seuil h2 .chev { display: none; }
   /* la copie de la phrase de Projets ne sert que porte ouverte, sur ordinateur */
@@ -228,7 +230,7 @@
 
   /* la charniere du site, couchee entre les deux portes : la matiere en gros plan, en fondu */
   .v3-joint {
-    flex: 0 0 clamp(140px, 15vw, 260px); position: relative;
+    flex: 0 0 var(--l-joint); position: relative;
     background: var(--joint-img, none) 46% var(--joint-cadrage, 42%) / var(--joint-zoom, auto 190%) no-repeat;
     transition: flex-basis .45s var(--ease-drawer);
   }
@@ -243,12 +245,23 @@
     .v3-portes:not(.dedans) .v3-porte.r { overflow: visible; z-index: 2; }
     /* la liste des articles deborde un peu sur le cote sombre de la charniere :
        titre et nombre de pieces tiennent sur une ligne (Ghali, 07/10/2026) */
-    .v3-portes:not(.dedans) .v3-porte.r .v3-titres { margin-right: -64px; }
+    .v3-portes:not(.dedans) .v3-porte.r .v3-titres { margin-right: calc(-1 * (var(--g) + var(--l-joint) * .55)); }
     .v3-porte.r { order: 1; }
     .v3-joint { order: 2; }
     .v3-porte.p { order: 3; }
     /* plus large, et le blanc ne fond que sur le dernier bord (Ghali, 07/10/2026) */
-    .v3-joint::after { background: linear-gradient(to left, var(--paper) 0%, rgba(237,238,235,.28) 12%, rgba(237,238,235,0) 30%, rgba(20,24,26,.35) 72%, var(--ink) 100%); }
+    /* Le fondu n'est plus un voile de blanc pose sur l'image (il donnait un
+       gris terne, et deux aretes nettes) : c'est l'image elle-meme qui devient
+       transparente vers ses deux bords, en courbe douce. Dessous, le fond de
+       chaque porte : sombre a gauche, clair a droite (Ghali, 07/10/2026). */
+    .v3-joint { background: linear-gradient(to right, var(--nuit) 50%, var(--paper) 50%); }
+    .v3-joint::after { display: none; }
+    .v3-joint::before {
+      content: ""; position: absolute; inset: 0;
+      background: var(--joint-img, none) 46% var(--joint-cadrage, 42%) / var(--joint-zoom, auto 190%) no-repeat;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,.18) 7%, rgba(0,0,0,.5) 15%, rgba(0,0,0,.85) 25%, #000 34%, #000 52%, rgba(0,0,0,.82) 63%, rgba(0,0,0,.5) 75%, rgba(0,0,0,.2) 87%, rgba(0,0,0,.05) 95%, transparent 100%);
+              mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,.18) 7%, rgba(0,0,0,.5) 15%, rgba(0,0,0,.85) 25%, #000 34%, #000 52%, rgba(0,0,0,.82) 63%, rgba(0,0,0,.5) 75%, rgba(0,0,0,.2) 87%, rgba(0,0,0,.05) 95%, transparent 100%);
+    }
   }
 
   .v3-seuil { padding: 36px var(--g); display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; width: 100%; }
@@ -713,7 +726,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.175</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.176</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>

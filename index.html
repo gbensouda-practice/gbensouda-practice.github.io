@@ -206,9 +206,12 @@
     /* une seule ligne, version comprise, centree dans la bande ; sur un
        ecran plus etroit, elle se coupe en deux, toujours centree */
     .v3-infos dl { padding-top: 0; padding-bottom: 0; }
-    .v3-infos > div { flex-wrap: wrap; gap: 3px 18px; justify-content: center; padding: 0 20px; }
+    .v3-infos > div { flex-wrap: wrap; gap: 3px 16px; justify-content: center; padding: 0 16px; }
     .v3-infos dl > div { gap: 6px; white-space: nowrap; }
-    .v3-infos dd { font-size: 12px; }
+    /* la version est rangee dans la colonne Formation par le script : si la
+       ligne doit se couper, elles passent ensemble a la ligne */
+    .v3-infos dl > div .footer-version { display: inline-flex; margin-left: 12px; padding: 0; }
+    .v3-infos dd { font-size: 11.5px; }
     /* les colonnes et la version dans un meme flux : la version suit la
        formation, sur la meme ligne */
     .v3-infos > div > dl { display: contents; }
@@ -933,7 +936,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.208</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.209</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>
@@ -4321,6 +4324,13 @@ var suivreLecture = (function () {
 (function () {
   var bandeau = document.querySelector('.v3-bandeau');
   var portes = document.querySelector('.v3-portes');
+  // la version, rangee dans la derniere colonne du volet (Formation) : elle ne
+  // se retrouve jamais seule sur une ligne (Ghali, 08/10/2026)
+  (function () {
+    var fv = bandeau.querySelector('.v3-infos .footer-version');
+    var cols = bandeau.querySelectorAll('.v3-infos dl > div');
+    if (fv && cols.length) cols[cols.length - 1].appendChild(fv);
+  })();
   // ── l'en-tete suit la coupe entre les deux espaces (voir le CSS) ──
   var ordiEntete = matchMedia('(min-width: 901px)');
   var pR = document.querySelector('.v3-porte.r'), pP = document.querySelector('.v3-porte.p');

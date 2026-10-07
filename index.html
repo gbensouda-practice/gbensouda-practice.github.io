@@ -651,6 +651,19 @@
   .slider-dot.active { background: rgba(237,238,235,.24); }
   .slider-dot.active::after { content: ''; position: absolute; inset: 0; background: var(--blue-nuit); transform-origin: left center; transform: scaleX(0); }
   .slider.en-cours .slider-dot.active::after { transition: transform 3s linear; transform: scaleX(1); }
+  /* Dans un article, les barrettes deviennent des vignettes : on voit d'un
+     coup d'oeil toutes les photos du passage, l'atelier compris, sans avoir a
+     les chercher (Ghali, 07/10/2026). Le trait bleu sous la vignette en cours
+     garde le minutage du defilement. */
+  .ff-marge .slider-dots.en-vignettes { flex: 1 1 100%; order: -1; flex-wrap: nowrap; gap: 4px; overflow-x: auto; scrollbar-width: none; padding-bottom: 3px; }
+  .ff-marge .slider-dots.en-vignettes::-webkit-scrollbar { display: none; }
+  .slider-dot.vigc { flex: none; width: 46px; height: 46px; background: var(--line-nuit); opacity: .5; overflow: visible; transition: opacity .2s ease; }
+  .slider-dot.vigc:active { transform: none; }
+  .slider-dot.vigc:hover { background: var(--line-nuit); opacity: .85; }
+  .slider-dot.vigc.active { background: var(--line-nuit); opacity: 1; }
+  .slider-dot.vigc img, .slider-dot.vigc video { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+  .slider-dot.vigc.active::after { inset: auto 0 -3px 0; height: 2px; }
+  @media (max-width: 900px) { .slider-dot.vigc { width: 36px; height: 36px; } }
   /* La legende n'est plus une colonne a gauche de la photo : elle passe
      dessous, sur une ligne, avec la reglette. La photo prend la place
      liberee (Ghali, 06/10/2026). */
@@ -704,6 +717,35 @@
   .apercu { position: fixed; left: 0; top: 0; z-index: 2000; pointer-events: none; width: 168px; height: 126px; object-fit: cover; border-radius: 1px; box-shadow: 0 10px 34px rgba(0,0,0,.55); opacity: 0; transition: opacity .18s ease-out; }
   .apercu.visible { opacity: 1; }
 
+  /* La visionneuse : un clic sur la photo d'un article la montre en grand,
+     avec les autres photos du passage et un lien vers le projet. Elle revient
+     le 07/10/2026 (Ghali) : sans elle, les photos d'atelier restaient
+     invisibles, la page du projet ne montrant que les pieces finies. */
+  .ff-nassij-slider .vue.vue-active { cursor: zoom-in; }
+  .vis { position: fixed; inset: 0; z-index: 3000; background: rgba(14,17,18,.97); color: var(--nuit-txt); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; animation: visIn .22s var(--e-out); }
+  .vis[hidden] { display: none; }
+  @keyframes visIn { from { opacity: 0; } }
+  .vis-haut { display: flex; justify-content: space-between; align-items: center; padding: 14px var(--g); }
+  .vis-count { font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; color: var(--nuit-grey); }
+  .vis-fermer { font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--nuit-txt); padding: 6px 0; }
+  .vis-fermer:hover { color: var(--corail-clair); }
+  .vis-scene { position: relative; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 0 64px; touch-action: pan-y; user-select: none; }
+  .vis-scene img, .vis-scene video { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+  .vis-scene [hidden] { display: none; }
+  .vis-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 48px; height: 64px; display: flex; align-items: center; justify-content: center; color: var(--nuit-txt); opacity: .6; }
+  .vis-nav:hover { opacity: 1; color: var(--corail-clair); }
+  .vis-nav.prev { left: 8px; } .vis-nav.next { right: 8px; }
+  .vis.seule .vis-nav { display: none; }
+  .vis-bas { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; padding: 14px var(--g) 18px; }
+  .vis-leg { font-size: 13px; line-height: 1.5; color: #C4C9C4; max-width: 80ch; }
+  .vis-projet { font-family: var(--f-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--corail); border-bottom: 1px solid var(--corail); padding: 2px 0; }
+  .vis-projet:hover { color: var(--corail-clair); border-color: var(--corail-clair); }
+  .vis-projet[hidden] { display: none; }
+  @media (max-width: 900px) {
+    .vis-scene { padding: 0; }
+    .vis-nav { display: none; }
+  }
+
   /* ═══════════ LA PAGE D'UNE PIECE ═══════════ */
   .pg { position: fixed; inset: 0; z-index: 100; overflow-y: auto; background: var(--paper); color: var(--ink); display: none; overscroll-behavior: contain; }
   .pg.open { display: block; animation: pgIn .32s var(--e-out); }
@@ -726,9 +768,12 @@
   .gal-leg { font-size: 13px; line-height: 1.45; color: var(--grey); margin-top: 10px; min-height: 1.45em; max-width: 70ch; }
   .gal-th { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; scrollbar-width: none; padding: 2px; }
   .gal-th button { flex: 0 0 auto; width: 72px; height: 56px; opacity: .55; transition: opacity .2s; }
-  .gal-th button[hidden] { display: none; }
+  .gal-th button[hidden], .gal-th .gal-sep[hidden] { display: none; }
   .gal-th button[aria-current="true"] { opacity: 1; outline: 1px solid var(--ink); outline-offset: 2px; }
   .gal-th img, .gal-th video { width: 100%; height: 100%; object-fit: cover; }
+  /* les photos citees par un article, que la piece ne montrait pas : apres
+     un intitule « À l'atelier » (Ghali, 07/10/2026) */
+  .gal-sep { flex: none; align-self: center; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--grey); padding: 0 4px 0 14px; border-left: 1px solid var(--line); margin-left: 6px; white-space: nowrap; }
   .gal-vide { min-height: 20px; }
   .fiche { position: sticky; top: 76px; align-self: start; }
   .fiche h1 { font-weight: var(--w-t); font-size: clamp(30px, 3vw, 42px); line-height: 1.08; letter-spacing: -.02em; }
@@ -936,7 +981,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.210</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.211</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>
@@ -2501,7 +2546,7 @@
           <span class="gal-count mono"></span>
         </div>
         <p class="gal-leg"></p>
-        <div class="gal-th"><button data-src="images/web/1-commandes/hermes-holiday-windows/vitrine-coquillages-alex-jonas.jpg" data-alt="Vitrines Hermès France H19 — La vitrine des coquillages (photo Alex Jonas)" aria-label="Photo 1"><img src="images/web/1-commandes/hermes-holiday-windows/vitrine-coquillages-alex-jonas.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-holiday-windows/vitrine-chateau-alex-jonas.jpg" data-alt="Vitrines Hermès France H19 — La vitrine du château, de nuit (photo Alex Jonas)" aria-label="Photo 2"><img src="images/web/1-commandes/hermes-holiday-windows/vitrine-chateau-alex-jonas.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-holiday-windows/03_modele3d-coquillage.jpg" data-alt="Vitrines Hermès France H19 — Modèle 3D du coquillage" aria-label="Photo 3"><img src="images/web/1-commandes/hermes-holiday-windows/03_modele3d-coquillage.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-holiday-windows/04_modele3d-chateau.jpg" data-alt="Vitrines Hermès France H19 — Modèle 3D du château" aria-label="Photo 4"><img src="images/web/1-commandes/hermes-holiday-windows/04_modele3d-chateau.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-holiday-windows/05_modele3d-eventail.jpg" data-alt="Vitrines Hermès France H19 — Modèle 3D de l'éventail, en deux valves" aria-label="Photo 5"><img src="images/web/1-commandes/hermes-holiday-windows/05_modele3d-eventail.jpg" alt="" loading="lazy"></button></div>
+        <div class="gal-th"><button data-src="images/web/1-commandes/hermes-holiday-windows/vitrine-coquillages-alex-jonas.jpg" data-alt="Vitrines Hermès France H19 — La vitrine des coquillages (photo Alex Jonas)" aria-label="Photo 1"><img src="images/web/1-commandes/hermes-holiday-windows/vitrine-coquillages-alex-jonas.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-holiday-windows/vitrine-chateau-alex-jonas.jpg" data-alt="Vitrines Hermès France H19 — La vitrine du château, de nuit (photo Alex Jonas)" aria-label="Photo 2"><img src="images/web/1-commandes/hermes-holiday-windows/vitrine-chateau-alex-jonas.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-holiday-windows/03_modele3d-coquillage.jpg" data-alt="Vitrines Hermès France H19 — Modèle 3D du coquillage" aria-label="Photo 3"><img src="images/web/1-commandes/hermes-holiday-windows/03_modele3d-coquillage.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-holiday-windows/04_modele3d-chateau.jpg" data-alt="Vitrines Hermès France H19 — Modèle 3D du château" aria-label="Photo 4"><img src="images/web/1-commandes/hermes-holiday-windows/04_modele3d-chateau.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-holiday-windows/05_modele3d-eventail.jpg" data-alt="Vitrines Hermès France H19 — Modèle 3D de l'éventail, en deux valves" aria-label="Photo 5"><img src="images/web/1-commandes/hermes-holiday-windows/05_modele3d-eventail.jpg" alt="" loading="lazy"></button><span class="gal-sep mono">À l’atelier</span><button data-src="images/web/1-commandes/hermes-holiday-windows/_atelier/coquillage-finition-01.jpg" data-alt="Scène et vitrine — Le coquillage à l'atelier : corps fraisé, collerette imprimée, ailes thermoformées" aria-label="Photo 6"><img src="images/web/1-commandes/hermes-holiday-windows/_atelier/coquillage-finition-01.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-holiday-windows/_atelier/coquillage-collerette-imprimee.jpg" data-alt="Scène et vitrine — La collerette, imprimée en PLA" aria-label="Photo 7"><img src="images/web/1-commandes/hermes-holiday-windows/_atelier/coquillage-collerette-imprimee.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-holiday-windows/_atelier/coquillage-aile-thermoformee.jpg" data-alt="Scène et vitrine — Une aile, thermoformée sur gabarit imprimé" aria-label="Photo 8"><img src="images/web/1-commandes/hermes-holiday-windows/_atelier/coquillage-aile-thermoformee.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-holiday-windows/_atelier/coquillage-avant-peinture.jpg" data-alt="Scène et vitrine — Les pièces assemblées, avant peinture" aria-label="Photo 9"><img src="images/web/1-commandes/hermes-holiday-windows/_atelier/coquillage-avant-peinture.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-holiday-windows/_atelier/vitrine-icebergs-01-recadree.jpg" data-alt="Assemblage et outillage — Les icebergs en vitrine, Hermès 2019" aria-label="Photo 10"><img src="images/web/1-commandes/hermes-holiday-windows/_atelier/vitrine-icebergs-01-recadree.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-holiday-windows/_atelier/vitrine-icebergs-02-recadree.jpg" data-alt="Assemblage et outillage — Résine translucide, coulée en série" aria-label="Photo 11"><img src="images/web/1-commandes/hermes-holiday-windows/_atelier/vitrine-icebergs-02-recadree.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-holiday-windows/_atelier/icebergs-resine.jpg" data-alt="Assemblage et outillage — Les tirages en résine, à l'atelier" aria-label="Photo 12"><img src="images/web/1-commandes/hermes-holiday-windows/_atelier/icebergs-resine.jpg" alt="" loading="lazy"></button></div>
       </div>
     <div class="fiche">
       <h1>Vitrines Hermès France H19</h1>
@@ -2566,7 +2611,7 @@
           <span class="gal-count mono"></span>
         </div>
         <p class="gal-leg"></p>
-        <div class="gal-th"><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-allumee.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — La table VIP allumée : le miroir infini" aria-label="Photo 1"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-allumee.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-miroir-infini-01.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — Les bandeaux LED, vus à travers le miroir sans tain" aria-label="Photo 2"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-miroir-infini-01.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-miroir-infini-02.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — Le cadre et sa profondeur" aria-label="Photo 3"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-miroir-infini-02.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-de-nuit.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — De nuit" aria-label="Photo 4"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-de-nuit.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/bar-a-montres-courbe.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — Le bar à montres : la double courbure, finie" aria-label="Photo 5"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/bar-a-montres-courbe.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/bar-a-montres-dessus.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — Le dessus du bar, vu de près" aria-label="Photo 6"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/bar-a-montres-dessus.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/05_vip-atelier-detail.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — La table VIP, les bandeaux éclairés" aria-label="Photo 7"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/05_vip-atelier-detail.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/02_bar-rendu-3d.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — Bar : rendu 3D" aria-label="Photo 8"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/02_bar-rendu-3d.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/01_vip-vue-eclatee.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — Mobilier VIP : vue éclatée 3D" aria-label="Photo 9"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/01_vip-vue-eclatee.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/03_bar-plan-3d.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — Bar : plan de fabrication" aria-label="Photo 10"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/03_bar-plan-3d.jpg" alt="" loading="lazy"></button></div>
+        <div class="gal-th"><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-allumee.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — La table VIP allumée : le miroir infini" aria-label="Photo 1"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-allumee.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-miroir-infini-01.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — Les bandeaux LED, vus à travers le miroir sans tain" aria-label="Photo 2"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-miroir-infini-01.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-miroir-infini-02.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — Le cadre et sa profondeur" aria-label="Photo 3"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-miroir-infini-02.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-de-nuit.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — De nuit" aria-label="Photo 4"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-de-nuit.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/bar-a-montres-courbe.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — Le bar à montres : la double courbure, finie" aria-label="Photo 5"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/bar-a-montres-courbe.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/bar-a-montres-dessus.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — Le dessus du bar, vu de près" aria-label="Photo 6"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/bar-a-montres-dessus.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/05_vip-atelier-detail.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — La table VIP, les bandeaux éclairés" aria-label="Photo 7"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/05_vip-atelier-detail.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/02_bar-rendu-3d.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — Bar : rendu 3D" aria-label="Photo 8"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/02_bar-rendu-3d.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/01_vip-vue-eclatee.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — Mobilier VIP : vue éclatée 3D" aria-label="Photo 9"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/01_vip-vue-eclatee.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/03_bar-plan-3d.jpg" data-alt="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze — Bar : plan de fabrication" aria-label="Photo 10"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/03_bar-plan-3d.jpg" alt="" loading="lazy"></button><span class="gal-sep mono">À l’atelier</span><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/bar-pieces-imprimees-rendu.png" data-alt="Scène et vitrine — Les pièces imprimées de la double courbure, isolées" aria-label="Photo 11"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/bar-pieces-imprimees-rendu.png" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/bar-structure-rendu.jpg" data-alt="Scène et vitrine — L'ossature CNC et les pièces imprimées" aria-label="Photo 12"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/bar-structure-rendu.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/bar-atelier-courbe-a01.jpg" data-alt="Scène et vitrine — La courbe plaquée, avant la finition" aria-label="Photo 13"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/bar-atelier-courbe-a01.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/miroir-infini-structure-01.jpg" data-alt="Scène et vitrine — La structure, avant le miroir" aria-label="Photo 14"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/miroir-infini-structure-01.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/miroir-infini-anneaux.jpg" data-alt="Scène et vitrine — Les anneaux du miroir infini, à l'atelier" aria-label="Photo 15"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/miroir-infini-anneaux.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/bar-atelier-structure.jpg" data-alt="Assemblage et outillage — À l'atelier, la structure montée" aria-label="Photo 16"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/bar-atelier-structure.jpg" alt="" loading="lazy"></button></div>
       </div>
     <div class="fiche">
       <h1>Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze</h1>
@@ -2604,7 +2649,7 @@
           <span class="gal-count mono"></span>
         </div>
         <p class="gal-leg"></p>
-        <div class="gal-th"><button data-src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-122934822.jpg" data-alt="Ornements imprimés · deux pièces pour l'atelier Zaa — Le motif imprimé en argent, sur la poitrine" data-groupe="1-commandes-ornements-imprimes-mousseline" aria-label="Photo 1"><img src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-122934822.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-123440392.jpg" data-alt="Ornements imprimés · deux pièces pour l'atelier Zaa — Caftan en mousseline orange, de face" data-groupe="1-commandes-ornements-imprimes-mousseline" aria-label="Photo 2"><img src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-123440392.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-122946850-mp.jpg" data-alt="Ornements imprimés · deux pièces pour l'atelier Zaa — Le tracé de près, souligné de paillettes par l'atelier" data-groupe="1-commandes-ornements-imprimes-mousseline" aria-label="Photo 3"><img src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-122946850-mp.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-123327608.jpg" data-alt="Ornements imprimés · deux pièces pour l'atelier Zaa — De dos" data-groupe="1-commandes-ornements-imprimes-mousseline" aria-label="Photo 4"><img src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-123327608.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124224570.jpg" data-alt="Ornements imprimés · deux pièces pour l'atelier Zaa — Gilet en brocart doré, de face" data-groupe="1-commandes-ornements-imprimes-gilet" aria-label="Photo 5"><img src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124224570.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124238652.jpg" data-alt="Ornements imprimés · deux pièces pour l'atelier Zaa — De profil, les fleurs montent sur la manche" data-groupe="1-commandes-ornements-imprimes-gilet" aria-label="Photo 6"><img src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124238652.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124247515.jpg" data-alt="Ornements imprimés · deux pièces pour l'atelier Zaa — De dos" data-groupe="1-commandes-ornements-imprimes-gilet" aria-label="Photo 7"><img src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124247515.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124259998.jpg" data-alt="Ornements imprimés · deux pièces pour l'atelier Zaa — De trois quarts, les fleurs montent jusqu’à l’épaule" data-groupe="1-commandes-ornements-imprimes-gilet" aria-label="Photo 8"><img src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124259998.jpg" alt="" loading="lazy"></button></div>
+        <div class="gal-th"><button data-src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-122934822.jpg" data-alt="Ornements imprimés · deux pièces pour l'atelier Zaa — Le motif imprimé en argent, sur la poitrine" data-groupe="1-commandes-ornements-imprimes-mousseline" aria-label="Photo 1"><img src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-122934822.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-123440392.jpg" data-alt="Ornements imprimés · deux pièces pour l'atelier Zaa — Caftan en mousseline orange, de face" data-groupe="1-commandes-ornements-imprimes-mousseline" aria-label="Photo 2"><img src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-123440392.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-122946850-mp.jpg" data-alt="Ornements imprimés · deux pièces pour l'atelier Zaa — Le tracé de près, souligné de paillettes par l'atelier" data-groupe="1-commandes-ornements-imprimes-mousseline" aria-label="Photo 3"><img src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-122946850-mp.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-123327608.jpg" data-alt="Ornements imprimés · deux pièces pour l'atelier Zaa — De dos" data-groupe="1-commandes-ornements-imprimes-mousseline" aria-label="Photo 4"><img src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-123327608.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124224570.jpg" data-alt="Ornements imprimés · deux pièces pour l'atelier Zaa — Gilet en brocart doré, de face" data-groupe="1-commandes-ornements-imprimes-gilet" aria-label="Photo 5"><img src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124224570.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124238652.jpg" data-alt="Ornements imprimés · deux pièces pour l'atelier Zaa — De profil, les fleurs montent sur la manche" data-groupe="1-commandes-ornements-imprimes-gilet" aria-label="Photo 6"><img src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124238652.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124247515.jpg" data-alt="Ornements imprimés · deux pièces pour l'atelier Zaa — De dos" data-groupe="1-commandes-ornements-imprimes-gilet" aria-label="Photo 7"><img src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124247515.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124259998.jpg" data-alt="Ornements imprimés · deux pièces pour l'atelier Zaa — De trois quarts, les fleurs montent jusqu’à l’épaule" data-groupe="1-commandes-ornements-imprimes-gilet" aria-label="Photo 8"><img src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124259998.jpg" alt="" loading="lazy"></button><span class="gal-sep mono">Dans la recherche</span><button data-src="images/web/1-commandes/ornements-imprimes/_mémoire-brute/pxl-20240508-215042269.jpg" data-alt="Textile et ornement — Gilet : les fleurs composées sur le buste, avant l'assemblage" aria-label="Photo 9"><img src="images/web/1-commandes/ornements-imprimes/_mémoire-brute/pxl-20240508-215042269.jpg" alt="" loading="lazy"></button></div>
       </div>
     <div class="fiche">
       <h1>Ornements imprimés · deux pièces pour l'atelier Zaa</h1>
@@ -2642,7 +2687,7 @@
           <span class="gal-count mono"></span>
         </div>
         <p class="gal-leg"></p>
-        <div class="gal-th"><button data-src="images/web/1-commandes/mass-set-design/tournage-rocher-brume.jpg" data-alt="Set design · Mass, film de Pierre Pauze — Un rocher dans la brume" aria-label="Photo 1"><img src="images/web/1-commandes/mass-set-design/tournage-rocher-brume.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/mass-set-design/tournage-plateau-rouge.jpg" data-alt="Set design · Mass, film de Pierre Pauze — Le décor sur le plateau de tournage, sous la lumière rouge" aria-label="Photo 2"><img src="images/web/1-commandes/mass-set-design/tournage-plateau-rouge.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/mass-set-design/tournage-plateau-orange.jpg" data-alt="Set design · Mass, film de Pierre Pauze — Le plateau complet, lumière orange" aria-label="Photo 3"><img src="images/web/1-commandes/mass-set-design/tournage-plateau-orange.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/mass-set-design/tournage-plateau-bleu.jpg" data-alt="Set design · Mass, film de Pierre Pauze — La même scène en bleu" aria-label="Photo 4"><img src="images/web/1-commandes/mass-set-design/tournage-plateau-bleu.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/mass-set-design/02_tournage-decor.jpg" data-alt="Set design · Mass, film de Pierre Pauze — Décor pendant le tournage" aria-label="Photo 5"><img src="images/web/1-commandes/mass-set-design/02_tournage-decor.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/mass-set-design/tournage-plante-sculptee.jpg" data-alt="Set design · Mass, film de Pierre Pauze — Une plante sculptée, en contre-jour" aria-label="Photo 6"><img src="images/web/1-commandes/mass-set-design/tournage-plante-sculptee.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/mass-set-design/tournage-cadre-moniteur.jpg" data-alt="Set design · Mass, film de Pierre Pauze — Le décor dans le cadre de la caméra" aria-label="Photo 7"><img src="images/web/1-commandes/mass-set-design/tournage-cadre-moniteur.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/mass-set-design/03_sculpture-resine.jpg" data-alt="Set design · Mass, film de Pierre Pauze — Sculpture en résine" aria-label="Photo 8"><img src="images/web/1-commandes/mass-set-design/03_sculpture-resine.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/mass-set-design/01_expo-pompidou-metz.jpg" data-alt="Set design · Mass, film de Pierre Pauze — Exposition au Centre Pompidou-Metz" aria-label="Photo 9"><img src="images/web/1-commandes/mass-set-design/01_expo-pompidou-metz.jpg" alt="" loading="lazy"></button></div>
+        <div class="gal-th"><button data-src="images/web/1-commandes/mass-set-design/tournage-rocher-brume.jpg" data-alt="Set design · Mass, film de Pierre Pauze — Un rocher dans la brume" aria-label="Photo 1"><img src="images/web/1-commandes/mass-set-design/tournage-rocher-brume.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/mass-set-design/tournage-plateau-rouge.jpg" data-alt="Set design · Mass, film de Pierre Pauze — Le décor sur le plateau de tournage, sous la lumière rouge" aria-label="Photo 2"><img src="images/web/1-commandes/mass-set-design/tournage-plateau-rouge.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/mass-set-design/tournage-plateau-orange.jpg" data-alt="Set design · Mass, film de Pierre Pauze — Le plateau complet, lumière orange" aria-label="Photo 3"><img src="images/web/1-commandes/mass-set-design/tournage-plateau-orange.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/mass-set-design/tournage-plateau-bleu.jpg" data-alt="Set design · Mass, film de Pierre Pauze — La même scène en bleu" aria-label="Photo 4"><img src="images/web/1-commandes/mass-set-design/tournage-plateau-bleu.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/mass-set-design/02_tournage-decor.jpg" data-alt="Set design · Mass, film de Pierre Pauze — Décor pendant le tournage" aria-label="Photo 5"><img src="images/web/1-commandes/mass-set-design/02_tournage-decor.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/mass-set-design/tournage-plante-sculptee.jpg" data-alt="Set design · Mass, film de Pierre Pauze — Une plante sculptée, en contre-jour" aria-label="Photo 6"><img src="images/web/1-commandes/mass-set-design/tournage-plante-sculptee.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/mass-set-design/tournage-cadre-moniteur.jpg" data-alt="Set design · Mass, film de Pierre Pauze — Le décor dans le cadre de la caméra" aria-label="Photo 7"><img src="images/web/1-commandes/mass-set-design/tournage-cadre-moniteur.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/mass-set-design/03_sculpture-resine.jpg" data-alt="Set design · Mass, film de Pierre Pauze — Sculpture en résine" aria-label="Photo 8"><img src="images/web/1-commandes/mass-set-design/03_sculpture-resine.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/mass-set-design/01_expo-pompidou-metz.jpg" data-alt="Set design · Mass, film de Pierre Pauze — Exposition au Centre Pompidou-Metz" aria-label="Photo 9"><img src="images/web/1-commandes/mass-set-design/01_expo-pompidou-metz.jpg" alt="" loading="lazy"></button><span class="gal-sep mono">À l’atelier</span><button data-src="images/web/1-commandes/mass-set-design/_atelier/rendu-decor-avec-silhouette.jpg" data-alt="Scène et vitrine — Le décor dessiné, une silhouette à l'échelle" aria-label="Photo 10"><img src="images/web/1-commandes/mass-set-design/_atelier/rendu-decor-avec-silhouette.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/mass-set-design/_atelier/structure-contreplaque-01.jpg" data-alt="Scène et vitrine — À l'atelier, la structure sous la peau" aria-label="Photo 11"><img src="images/web/1-commandes/mass-set-design/_atelier/structure-contreplaque-01.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/mass-set-design/_atelier/rocher-peau.jpg" data-alt="Scène et vitrine — Un rocher, sa peau" aria-label="Photo 12"><img src="images/web/1-commandes/mass-set-design/_atelier/rocher-peau.jpg" alt="" loading="lazy"></button></div>
       </div>
     <div class="fiche">
       <h1>Set design · <em>Mass</em>, film de Pierre Pauze</h1>
@@ -2679,7 +2724,7 @@
           <span class="gal-count mono"></span>
         </div>
         <p class="gal-leg"></p>
-        <div class="gal-th"><button data-src="images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-dragon.jpg" data-alt="Vitrines Hermès France H21 — Vitrine finale : le dragon et ses cavaliers" aria-label="Photo 1"><img src="images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-dragon.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/vitrine-arbres-02.jpg" data-alt="Vitrines Hermès France H21 — Vitrine finale : les arbres aux nuages, sous l'enseigne" data-groupe="1-commandes-hermes-wild-wild-quest-atelier" aria-label="Photo 2"><img src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/vitrine-arbres-02.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-wild-wild-quest/02_vitrines-duo.jpg" data-alt="Vitrines Hermès France H21 — Vitrines finales, duo de mannequins sous les arbres aux nuages" aria-label="Photo 3"><img src="images/web/1-commandes/hermes-wild-wild-quest/02_vitrines-duo.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-wild-wild-quest/05_modele3d-accessoires.jpg" data-alt="Vitrines Hermès France H21 — Modèle 3D des mains et accessoires" aria-label="Photo 4"><img src="images/web/1-commandes/hermes-wild-wild-quest/05_modele3d-accessoires.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-wild-wild-quest/04_modele3d-champignons.jpg" data-alt="Vitrines Hermès France H21 — Modèle 3D des arbres : troncs tournés, coiffés de nuages" aria-label="Photo 5"><img src="images/web/1-commandes/hermes-wild-wild-quest/04_modele3d-champignons.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-wild-wild-quest/03_modele3d-creature.jpg" data-alt="Vitrines Hermès France H21 — Modèle 3D du dragon" aria-label="Photo 6"><img src="images/web/1-commandes/hermes-wild-wild-quest/03_modele3d-creature.jpg" alt="" loading="lazy"></button></div>
+        <div class="gal-th"><button data-src="images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-dragon.jpg" data-alt="Vitrines Hermès France H21 — Vitrine finale : le dragon et ses cavaliers" aria-label="Photo 1"><img src="images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-dragon.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/vitrine-arbres-02.jpg" data-alt="Vitrines Hermès France H21 — Vitrine finale : les arbres aux nuages, sous l'enseigne" data-groupe="1-commandes-hermes-wild-wild-quest-atelier" aria-label="Photo 2"><img src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/vitrine-arbres-02.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-wild-wild-quest/02_vitrines-duo.jpg" data-alt="Vitrines Hermès France H21 — Vitrines finales, duo de mannequins sous les arbres aux nuages" aria-label="Photo 3"><img src="images/web/1-commandes/hermes-wild-wild-quest/02_vitrines-duo.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-wild-wild-quest/05_modele3d-accessoires.jpg" data-alt="Vitrines Hermès France H21 — Modèle 3D des mains et accessoires" aria-label="Photo 4"><img src="images/web/1-commandes/hermes-wild-wild-quest/05_modele3d-accessoires.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-wild-wild-quest/04_modele3d-champignons.jpg" data-alt="Vitrines Hermès France H21 — Modèle 3D des arbres : troncs tournés, coiffés de nuages" aria-label="Photo 5"><img src="images/web/1-commandes/hermes-wild-wild-quest/04_modele3d-champignons.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-wild-wild-quest/03_modele3d-creature.jpg" data-alt="Vitrines Hermès France H21 — Modèle 3D du dragon" aria-label="Photo 6"><img src="images/web/1-commandes/hermes-wild-wild-quest/03_modele3d-creature.jpg" alt="" loading="lazy"></button><span class="gal-sep mono">À l’atelier</span><button data-src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/dragon-atelier-03.jpg" data-alt="Scène et vitrine — Le dragon à l'atelier, avant peinture" aria-label="Photo 7"><img src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/dragon-atelier-03.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/dragon-montage-atelier.jpg" data-alt="Scène et vitrine — Monté, avec ses cavaliers" aria-label="Photo 8"><img src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/dragon-montage-atelier.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/mains-en-serie-02.jpg" data-alt="Scène et vitrine — Les mains, imprimées en résine, alignées pour la finition" aria-label="Photo 9"><img src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/mains-en-serie-02.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/main-imprimee-tenant-un-plan.jpg" data-alt="Scène et vitrine — Une main qui tient un plan : une variante, donc une conception" aria-label="Photo 10"><img src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/main-imprimee-tenant-un-plan.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/mains-prototypes-resine-noire-01.jpg" data-alt="Scène et vitrine — Les premiers prototypes, en résine noire" aria-label="Photo 11"><img src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/mains-prototypes-resine-noire-01.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/arbre-rendu.jpg" data-alt="Scène et vitrine — Un arbre : le tronc, les branches, un nuage" aria-label="Photo 12"><img src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/arbre-rendu.jpg" alt="" loading="lazy"></button><button data-src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/arbre-depart-de-branche-01.jpg" data-alt="Scène et vitrine — Un départ de branche, fixé sur le tronc" aria-label="Photo 13"><img src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/arbre-depart-de-branche-01.jpg" alt="" loading="lazy"></button></div>
       </div>
     <div class="fiche">
       <h1>Vitrines Hermès France H21</h1>
@@ -3697,6 +3742,29 @@ document.querySelectorAll('.slider').forEach(function (slider) {
   }
 
   function majReglette() { if (boiteDots) boiteDots.style.display = slides.length <= 1 ? 'none' : ''; }
+  if (fondu && boiteDots) boiteDots.classList.add('en-vignettes');
+  // la vignette d'une photo du cadre : la meme image, chargee seulement quand
+  // la rangee la montre (loading="lazy")
+  function apercuDe(s) {
+    var m = s.querySelector('.sujet'), el;
+    if (m && m.tagName === 'VIDEO') {
+      el = document.createElement('video');
+      el.muted = true; el.preload = 'metadata';
+      el.src = m.getAttribute('src');
+    } else {
+      el = document.createElement('img');
+      el.alt = ''; el.loading = 'lazy';
+      if (m) el.src = m.getAttribute('data-src') || m.getAttribute('src') || '';
+    }
+    return el;
+  }
+  // la vignette en cours reste visible dans sa rangee (sans faire bouger la page)
+  function calerVignette() {
+    if (!fondu || !boiteDots || !dots[cur]) return;
+    var d = dots[cur], r = boiteDots;
+    if (d.offsetLeft < r.scrollLeft) r.scrollLeft = d.offsetLeft;
+    else if (d.offsetLeft + d.offsetWidth > r.scrollLeft + r.clientWidth) r.scrollLeft = d.offsetLeft + d.offsetWidth - r.clientWidth;
+  }
   majReglette();
   function go(n) {
     if (!slides.length) return;
@@ -3717,6 +3785,7 @@ document.querySelectorAll('.slider').forEach(function (slider) {
       track.style.transform = 'translateX(-' + (cur * 100) + '%)';
     }
     dots.forEach(function (d, i) { d.classList.toggle('active', i === cur); });
+    calerVignette();
     if (legende) {
       var im = slides[cur].querySelector('.sujet');
       var texte = legendeSeule(im ? (im.getAttribute('alt') || im.getAttribute('data-alt')) : '', titre);
@@ -3750,8 +3819,9 @@ document.querySelectorAll('.slider').forEach(function (slider) {
     if (slides.length > 1) {
       slides.forEach(function (s, i) {
         var b = document.createElement('button');
-        b.className = 'slider-dot' + (i === cur ? ' active' : '');
+        b.className = 'slider-dot' + (fondu ? ' vigc' : '') + (i === cur ? ' active' : '');
         b.setAttribute('aria-label', 'Image ' + (i + 1));
+        if (fondu) b.appendChild(apercuDe(s));
         b.addEventListener('click', function (e) { e.stopPropagation(); arreter(); go(i); });
         boiteDots.appendChild(b);
       });
@@ -3763,6 +3833,8 @@ document.querySelectorAll('.slider').forEach(function (slider) {
   // chacune une seule fois.
   // Plusieurs groupes a la fois : ceux d'un paragraphe entier (le cadre suit
   // la lecture). Une photo citee deux fois ne passe qu'une fois.
+  slider.etat = function () { return { slides: slides, cur: cur }; };
+  slider.aller = function (n) { arreter(); go(n); };
   slider.filtrerGroupe = function (groupe) {
     var vues = {};
     var liste = Array.isArray(groupe) ? groupe : (groupe ? [groupe] : null);
@@ -3906,10 +3978,10 @@ compter(document);
   });
 })();
 
-// ── UNE PHOTO DU CADRE OUVRE LA PAGE DE SA PIECE ─────────────────────────────
-// Il n'y a plus de visionneuse plein ecran (decision de Ghali, 05/10/2026) :
-// le cadre fait deja defiler les photos. Cliquer celle qu'on voit mene a la
-// piece d'ou elle vient. Le routeur, plus bas, ecoute « data-page ».
+// ── UNE PHOTO DU CADRE OUVRE LA VISIONNEUSE ──────────────────────────────────
+// Retiree le 05/10/2026, revenue le 07/10/2026 (Ghali) : cliquer la photo
+// qu'on voit la montre en grand, avec les autres du passage, et un lien vers
+// la piece d'ou elle vient. Voir « LA VISIONNEUSE » dans le routeur, plus bas.
 
 // ── LES ARTICLES : un mot souligne change les photos du cadre (repris) ───────
 // Les vignettes du tiroir d'un titre ne se chargent qu'a son ouverture.
@@ -3988,7 +4060,7 @@ document.querySelectorAll('.dp-art').forEach(function (art) {
   }
   document.addEventListener('click', function (e) {
     if (!tel.matches) return;
-    if (flottant && flottant.contains(e.target) && !e.target.closest('.vue[data-page]')) { replier(); return; }
+    if (flottant && flottant.contains(e.target) && !e.target.closest('.vue')) { replier(); return; }
     var mot = e.target.closest('.sp-texte .lien-galerie');
     if (!mot) return;
     var media = mot.closest('.dp-art') && mot.closest('.dp-art').querySelector('.ff-media');
@@ -4549,6 +4621,7 @@ var suivreLecture = (function () {
       var choix = groupe ? toutes.filter(function (b) { return b.getAttribute('data-groupe') === groupe; }) : [];
       liste = choix.length ? choix : toutes;
       toutes.forEach(function (b) { b.hidden = liste !== toutes && liste.indexOf(b) === -1; });
+      pg.querySelectorAll('.gal-sep').forEach(function (x) { x.hidden = liste !== toutes; });
       poser(0);
       return choix.length > 0;
     }
@@ -4649,6 +4722,7 @@ var suivreLecture = (function () {
     }
     if ((b = e.target.closest('[data-sortir]'))) { aller(''); return; }
     if ((b = e.target.closest('[data-go]'))) { aller(b.getAttribute('data-go')); return; }
+    if ((b = e.target.closest('.ff-nassij-slider .vue'))) { visionneuse.ouvrir(b.closest('.ff-nassij-slider')); return; }
     if ((b = e.target.closest('.vue[data-page]'))) { aller(b.getAttribute('data-page')); return; }
     if ((b = e.target.closest('[data-a]'))) {
       if (!b.disabled) aller('article-' + b.getAttribute('data-a'), true);
@@ -4671,6 +4745,104 @@ var suivreLecture = (function () {
       return;
     }
   });
+  // ── LA VISIONNEUSE ── les photos du cadre en cours, en grand ; « Voir le
+  // projet » mene a la page de la piece d'ou vient la photo, s'il y en a une.
+  var visionneuse = (function () {
+    var v = document.createElement('div');
+    v.className = 'vis';
+    v.hidden = true;
+    v.setAttribute('role', 'dialog');
+    v.setAttribute('aria-modal', 'true');
+    v.setAttribute('aria-label', 'Photos');
+    v.innerHTML = '<div class="vis-haut"><span class="vis-count"></span><button class="vis-fermer" type="button">Fermer ×</button></div>'
+      + '<div class="vis-scene"><img alt=""><video muted loop playsinline controls hidden></video>'
+      + '<button class="vis-nav prev" type="button" aria-label="Photo précédente"></button>'
+      + '<button class="vis-nav next" type="button" aria-label="Photo suivante"></button></div>'
+      + '<div class="vis-bas"><p class="vis-leg"></p><button class="vis-projet" type="button" hidden>Voir le projet →</button></div>';
+    document.body.appendChild(v);
+    // les memes fleches que les pages de pieces
+    ['prev', 'next'].forEach(function (c) {
+      var modele = document.querySelector('template[data-page]');
+      var f = modele && modele.content.querySelector('.gal-nav.' + c + ' svg');
+      var bouton = v.querySelector('.vis-nav.' + c);
+      if (f) bouton.appendChild(f.cloneNode(true)); else bouton.textContent = c === 'prev' ? '‹' : '›';
+    });
+    var img = v.querySelector('img'), vid = v.querySelector('video');
+    var leg = v.querySelector('.vis-leg'), count = v.querySelector('.vis-count'), projet = v.querySelector('.vis-projet');
+    var slider = null, liste = [], k = 0, titre = '', avant = null;
+    function poser(n) {
+      if (!liste.length) return;
+      k = (n + liste.length) % liste.length;
+      var s = liste[k], m = s.querySelector('.sujet');
+      if (m && m.tagName === 'VIDEO') {
+        img.hidden = true; vid.hidden = false; vid.src = m.getAttribute('src');
+        var p = vid.play(); if (p && p.catch) p.catch(function () {});
+      } else {
+        vid.pause(); vid.hidden = true; img.hidden = false;
+        img.src = m ? (m.getAttribute('data-src') || m.getAttribute('src')) : '';
+      }
+      var alt = m ? (m.getAttribute('alt') || m.getAttribute('data-alt') || '') : '';
+      img.alt = alt;
+      leg.textContent = legendeSeule(alt, titre);
+      count.textContent = (k + 1) + ' / ' + liste.length;
+      v.classList.toggle('seule', liste.length < 2);
+      var page = s.getAttribute('data-page');
+      projet.hidden = !page;
+      projet.setAttribute('data-page', page || '');
+      // la photo suivante se prepare
+      var suiv = liste[(k + 1) % liste.length].querySelector('img.sujet');
+      if (suiv) { var pre = new Image(); pre.src = suiv.getAttribute('data-src') || suiv.getAttribute('src') || ''; }
+    }
+    function fermer() {
+      if (v.hidden) return;
+      vid.pause();
+      v.hidden = true;
+      document.documentElement.style.overflow = '';
+      if (slider && slider.aller) slider.aller(k);   // le cadre reprend la ou on s'est arrete
+      if (avant && avant.focus) avant.focus({ preventScroll: true });
+    }
+    function ouvrir(s) {
+      if (!s || !s.etat) return;
+      var e = s.etat();
+      slider = s; liste = e.slides.slice(); titre = '';
+      var art = s.closest('.dp-art');
+      if (art) titre = art.getAttribute('data-titre') || '';
+      avant = document.activeElement;
+      v.hidden = false;
+      document.documentElement.style.overflow = 'hidden';
+      poser(e.cur);
+      v.querySelector('.vis-fermer').focus({ preventScroll: true });
+    }
+    v.querySelector('.vis-fermer').addEventListener('click', fermer);
+    v.querySelector('.vis-nav.prev').addEventListener('click', function () { poser(k - 1); });
+    v.querySelector('.vis-nav.next').addEventListener('click', function () { poser(k + 1); });
+    projet.addEventListener('click', function () {
+      var page = projet.getAttribute('data-page');
+      fermer();
+      if (page) aller(page);
+    });
+    // un clic sur le fond (hors photo et boutons) referme
+    v.addEventListener('click', function (e) {
+      if (e.target === v || e.target.classList.contains('vis-scene') || e.target.classList.contains('vis-bas') || e.target.classList.contains('vis-haut')) fermer();
+    });
+    var x0 = null, y0 = 0;
+    v.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+    v.addEventListener('touchend', function (e) {
+      if (x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+      x0 = null;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) poser(k + (dx < 0 ? 1 : -1));
+      else if (dy > 90 && Math.abs(dy) > Math.abs(dx)) fermer();   // glisser vers le bas referme
+    }, { passive: true });
+    document.addEventListener('keydown', function (e) {
+      if (v.hidden) return;
+      if (e.key === 'Escape') { e.preventDefault(); e.stopImmediatePropagation(); fermer(); }
+      else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); e.stopImmediatePropagation(); poser(k + (e.key === 'ArrowRight' ? 1 : -1)); }
+    }, true);
+    window.addEventListener('popstate', fermer);
+    return { ouvrir: ouvrir, fermer: fermer };
+  })();
+
   document.addEventListener('keydown', function (e) {
     if (!etat.page) return;
     if (e.key === 'Escape') { retour(); return; }

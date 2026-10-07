@@ -422,6 +422,13 @@
   .dp-info-l { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-top: 12px; }
   .dp-info .cmd-article-titre { display: block; margin-bottom: 4px; }
   .cmd-filtre[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--corail); }
+  /* le second filtre, le role : meme dessin que les categories, plus discret */
+  .cmd-roles { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 18px; margin: -6px 0 16px; }
+  .cmd-roles-t { font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); margin-right: 4px; }
+  .cmd-role { font-size: 13px; padding: 3px 0; color: var(--grey); border-bottom: 1px solid transparent; transition: color .2s ease, border-color .2s ease; }
+  .cmd-role i { font-style: normal; font-family: var(--f-mono); font-size: 11px; opacity: .6; margin-left: 2px; }
+  .cmd-role:hover { color: var(--ink); }
+  .cmd-role[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--corail); }
   .cmd-article { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; padding: 0 0 22px; }
   .cmd-article[hidden] { display: none; }
   .cmd-article-titre { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); }
@@ -808,7 +815,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.184</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.185</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>
@@ -872,18 +879,19 @@
         <button class="lien-article mono" data-article="objets-imprimes">Lire l'article →</button>
       </div>
     </div>
+        <div class="cmd-roles" role="group" aria-label="Rôle"><span class="cmd-roles-t">Rôle</span><button class="cmd-role" data-role="concevoir" aria-pressed="false">Concevoir <i>11</i></button><button class="cmd-role" data-role="systematiser" aria-pressed="false">Systématiser <i>5</i></button><button class="cmd-role" data-role="fabriquer" aria-pressed="false">Fabriquer <i>8</i></button><button class="cmd-role" data-role="transmettre" aria-pressed="false">Transmettre <i>8</i></button><button class="cmd-role" data-role="experimenter" aria-pressed="false">Expérimenter <i>4</i></button></div>
         <div class="v3-pgrid cmd-grille">
-          <button class="dp-carte cmd-carte" data-go="piece-starting-with-the-limbs" data-cats="scene-et-vitrine assemblage-et-outillage"><span class="im"><img src="images/web/1-commandes/starting-with-the-limbs/dispositif1.jpg" alt="" loading="lazy"></span><span class="ct">Dispositifs scéniques · <em>Starting with the Limbs</em>, cie L'Autre Maison <span class="yr">2025</span></span><span class="cp">Des structures qui portent les danseurs et voyagent démontées : coudes imprimés en 3D, tubes PVC.</span></button>
-          <button class="dp-carte cmd-carte" data-go="piece-hermes-holiday-windows" data-cats="scene-et-vitrine"><span class="im"><img src="images/web/1-commandes/hermes-holiday-windows/vitrine-coquillages-alex-jonas.jpg" alt="" loading="lazy"></span><span class="ct">Vitrines Hermès France H19 <span class="yr">2019</span></span><span class="cp">Un coquillage en trois techniques : polystyrène fraisé, collerette imprimée, ailes thermoformées.</span></button>
-          <button class="dp-carte cmd-carte" data-go="piece-photophobia-vr" data-cats="scene-et-vitrine"><span class="im"><img src="images/web/1-commandes/photophobia-vr/01_scene-mangrove.jpg" alt="" loading="lazy"></span><span class="ct">Environnement VR · <em>Photophobia</em>, Sanni Est <span class="yr">2022</span></span><span class="cp">Modélisation d'un clip en réalité virtuelle : un monde de mangrove et ses créatures.</span></button>
-          <button class="dp-carte cmd-carte" data-go="piece-watches-wonders-mobilier-vip" data-cats="scene-et-vitrine assemblage-et-outillage"><span class="im"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-allumee.jpg" alt="" loading="lazy"></span><span class="ct">Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze <span class="yr">2020</span></span><span class="cp">Des bandeaux LED qui se reflètent à l'infini, au cœur de trois meubles pour l'espace VIP.</span></button>
-          <button class="dp-carte cmd-carte" data-go="piece-ornements-imprimes" data-cats="textile-et-ornement"><span class="im"><img src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-122934822.jpg" alt="" loading="lazy"></span><span class="ct">Ornements imprimés · deux pièces pour l'atelier Zaa <span class="yr">2024</span></span><span class="cp">Un caftan au motif imprimé en 3D à même l'étoffe, un gilet aux fleurs imprimées ou cousues.</span></button>
-          <button class="dp-carte cmd-carte" data-go="piece-mass-set-design" data-cats="scene-et-vitrine"><span class="im"><img src="images/web/1-commandes/mass-set-design/tournage-rocher-brume.jpg" alt="" loading="lazy"></span><span class="ct">Set design · <em>Mass</em>, film de Pierre Pauze <span class="yr">2020</span></span><span class="cp">Le décor d'un film de Pierre Pauze, des dessins de sculptures aux plans pour les artisans.</span></button>
-          <button class="dp-carte cmd-carte" data-go="piece-hermes-wild-wild-quest" data-cats="scene-et-vitrine"><span class="im"><img src="images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-dragon.jpg" alt="" loading="lazy"></span><span class="ct">Vitrines Hermès France H21 <span class="yr">2021</span></span><span class="cp">Un dragon de deux mètres, conçu pour être fraisé et suspendu, tiré en cinq exemplaires.</span></button>
-          <button class="dp-carte cmd-carte" data-go="piece-saket-sethi-mobilier-parametrique" data-cats="outils-parametriques"><span class="im"><img src="images/web/1-commandes/saket-sethi-mobilier-parametrique/02_twirl-sofa.jpg" alt="" loading="lazy"></span><span class="ct">Collection mobilier paramétrique · Saket Sethi Design <span class="yr">2023</span></span><span class="cp">Le Twirl Sofa, choisi parmi des variantes calculées : le paramétrique comme outil de décision.</span></button>
-          <button class="dp-carte cmd-carte" data-go="piece-sabrina-ratte-sculpture-cinetique" data-cats="scene-et-vitrine objets-imprimes"><span class="im"><img src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/HERMES_Watches-Wonders_2022.04.02_AliciaDubuis_02_2000.jpg" alt="" loading="lazy"></span><span class="ct">Sculpture cinétique · Sabrina Ratté × Watches &amp; Wonders <span class="yr">2022</span></span><span class="cp">Des cercles de métal qui tournent chacun à leur rythme : l'idée de Sabrina Ratté, rendue réalisable.</span></button>
-          <button class="dp-carte cmd-carte" data-go="piece-passementerie-imprimee" data-cats="textile-et-ornement objets-imprimes"><span class="im"><img src="images/web/2-recherche/projets/boutons/PXL_20260610_140313055.jpg" alt="" loading="lazy"></span><span class="ct">Passementerie imprimée <span class="yr">2026</span></span><span class="cp">Des boutons de caftan imprimés en 3D, dessinés pour une tenue et une seule.</span></button>
-          <button class="dp-carte cmd-carte" data-go="piece-vortex" data-cats="objets-imprimes"><span class="im"><img src="images/web/2-recherche/projets/mode-vase/Fleuris/image (2).jpg" alt="" loading="lazy"></span><span class="ct">Vortex <span class="yr">2026</span></span><span class="cp">Des vases d'une seule paroi : le pli remplace l'épaisseur, l'angle décide de la couleur.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-starting-with-the-limbs" data-cats="scene-et-vitrine assemblage-et-outillage" data-ops="concevoir systematiser fabriquer experimenter"><span class="im"><img src="images/web/1-commandes/starting-with-the-limbs/dispositif1.jpg" alt="" loading="lazy"></span><span class="ct">Dispositifs scéniques · <em>Starting with the Limbs</em>, cie L'Autre Maison <span class="yr">2025</span></span><span class="cp">Des structures qui portent les danseurs et voyagent démontées : coudes imprimés en 3D, tubes PVC.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-hermes-holiday-windows" data-cats="scene-et-vitrine" data-ops="concevoir fabriquer transmettre"><span class="im"><img src="images/web/1-commandes/hermes-holiday-windows/vitrine-coquillages-alex-jonas.jpg" alt="" loading="lazy"></span><span class="ct">Vitrines Hermès France H19 <span class="yr">2019</span></span><span class="cp">Un coquillage en trois techniques : polystyrène fraisé, collerette imprimée, ailes thermoformées.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-photophobia-vr" data-cats="scene-et-vitrine" data-ops="concevoir fabriquer experimenter"><span class="im"><img src="images/web/1-commandes/photophobia-vr/01_scene-mangrove.jpg" alt="" loading="lazy"></span><span class="ct">Environnement VR · <em>Photophobia</em>, Sanni Est <span class="yr">2022</span></span><span class="cp">Modélisation d'un clip en réalité virtuelle : un monde de mangrove et ses créatures.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-watches-wonders-mobilier-vip" data-cats="scene-et-vitrine assemblage-et-outillage" data-ops="concevoir transmettre"><span class="im"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-allumee.jpg" alt="" loading="lazy"></span><span class="ct">Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze <span class="yr">2020</span></span><span class="cp">Des bandeaux LED qui se reflètent à l'infini, au cœur de trois meubles pour l'espace VIP.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-ornements-imprimes" data-cats="textile-et-ornement" data-ops="concevoir fabriquer transmettre experimenter"><span class="im"><img src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-122934822.jpg" alt="" loading="lazy"></span><span class="ct">Ornements imprimés · deux pièces pour l'atelier Zaa <span class="yr">2024</span></span><span class="cp">Un caftan au motif imprimé en 3D à même l'étoffe, un gilet aux fleurs imprimées ou cousues.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-mass-set-design" data-cats="scene-et-vitrine" data-ops="concevoir transmettre"><span class="im"><img src="images/web/1-commandes/mass-set-design/tournage-rocher-brume.jpg" alt="" loading="lazy"></span><span class="ct">Set design · <em>Mass</em>, film de Pierre Pauze <span class="yr">2020</span></span><span class="cp">Le décor d'un film de Pierre Pauze, des dessins de sculptures aux plans pour les artisans.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-hermes-wild-wild-quest" data-cats="scene-et-vitrine" data-ops="concevoir systematiser fabriquer transmettre"><span class="im"><img src="images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-dragon.jpg" alt="" loading="lazy"></span><span class="ct">Vitrines Hermès France H21 <span class="yr">2021</span></span><span class="cp">Un dragon de deux mètres, conçu pour être fraisé et suspendu, tiré en cinq exemplaires.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-saket-sethi-mobilier-parametrique" data-cats="outils-parametriques" data-ops="concevoir systematiser transmettre"><span class="im"><img src="images/web/1-commandes/saket-sethi-mobilier-parametrique/02_twirl-sofa.jpg" alt="" loading="lazy"></span><span class="ct">Collection mobilier paramétrique · Saket Sethi Design <span class="yr">2023</span></span><span class="cp">Le Twirl Sofa, choisi parmi des variantes calculées : le paramétrique comme outil de décision.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-sabrina-ratte-sculpture-cinetique" data-cats="scene-et-vitrine objets-imprimes" data-ops="concevoir fabriquer transmettre"><span class="im"><img src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/HERMES_Watches-Wonders_2022.04.02_AliciaDubuis_02_2000.jpg" alt="" loading="lazy"></span><span class="ct">Sculpture cinétique · Sabrina Ratté × Watches &amp; Wonders <span class="yr">2022</span></span><span class="cp">Des cercles de métal qui tournent chacun à leur rythme : l'idée de Sabrina Ratté, rendue réalisable.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-passementerie-imprimee" data-cats="textile-et-ornement objets-imprimes" data-ops="concevoir systematiser fabriquer transmettre"><span class="im"><img src="images/web/2-recherche/projets/boutons/PXL_20260610_140313055.jpg" alt="" loading="lazy"></span><span class="ct">Passementerie imprimée <span class="yr">2026</span></span><span class="cp">Des boutons de caftan imprimés en 3D, dessinés pour une tenue et une seule.</span></button>
+          <button class="dp-carte cmd-carte" data-go="piece-vortex" data-cats="objets-imprimes" data-ops="concevoir systematiser fabriquer experimenter"><span class="im"><img src="images/web/2-recherche/projets/mode-vase/Fleuris/image (2).jpg" alt="" loading="lazy"></span><span class="ct">Vortex <span class="yr">2026</span></span><span class="cp">Des vases d'une seule paroi : le pli remplace l'épaisseur, l'angle décide de la couleur.</span></button>
         </div>
 <!-- AUTO:DP_PROJETS:FIN -->
       </div>
@@ -4042,17 +4050,15 @@ var suivreLecture = (function () {
     if (!b) return;
     var f = b.getAttribute('data-filtre');
     boutons.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-    cartes.forEach(function (c) {
-      c.classList.toggle('eteinte', !!f && (' ' + c.getAttribute('data-cats') + ' ').indexOf(' ' + f + ' ') === -1);
-    });
+    fixe = f;
+    majGrille();
     lignes.forEach(function (l) { l.hidden = l.getAttribute('data-cat') !== f; });
     grille.classList.toggle('filtree', !!f);
     // ordinateur : la categorie cliquee reste, et la bande glisse jusqu'a son
     // premier projet
-    fixe = f;
     griser(f);
     montrerCategorie(f);
-    if (f && ordi.matches) amener(f);
+    if (f && ordi.matches) amener();
   });
 
   // ── Ordinateur, porte Projets ouverte : plus de grille (Ghali, 07/10/2026).
@@ -4069,6 +4075,7 @@ var suivreLecture = (function () {
   // juste sous la bande : on atteint ses liens sans passer sur les categories
   var seuilP = film && film.closest('.v3-seuil');
   if (seuilP) seuilP.insertBefore(info, film.nextSibling);
+  else barre.parentNode.insertBefore(info, barre.nextSibling);
   // la phrase de la salle, recopiee sur la rangee du titre (ordinateur)
   var intro = document.querySelector('.v3-porte.p .v3-salle .v3-intro');
   if (seuilP && intro && intro.textContent.trim()) {
@@ -4077,14 +4084,23 @@ var suivreLecture = (function () {
     ligne.innerHTML = intro.innerHTML;
     seuilP.appendChild(ligne);
   }
-  else barre.parentNode.insertBefore(info, barre.nextSibling);
   function carteDe(b) { return grille.querySelector('.dp-carte[data-go="piece-' + b.getAttribute('data-carte') + '"]'); }
   function catsDe(b) { var c = carteDe(b); return c ? (c.getAttribute('data-cats') || '').split(/\s+/) : []; }
-  function griser(f) {
+  function opsDe(c) { return c ? (c.getAttribute('data-ops') || '').split(/\s+/) : []; }
+  // une piece reste allumee si elle est dans la categorie ET a le role choisis
+  function hors(c, f, r) {
+    return (!!f && (' ' + (c && c.getAttribute('data-cats')) + ' ').indexOf(' ' + f + ' ') === -1)
+      || (!!r && opsDe(c).indexOf(r) === -1);
+  }
+  function griser(f, r) {
+    if (r === undefined) r = role;
     if (!film) return;
     film.querySelectorAll('button[data-carte]').forEach(function (b) {
-      b.classList.toggle('eteinte', !!f && catsDe(b).indexOf(f) === -1);
+      b.classList.toggle('eteinte', hors(carteDe(b), f, r));
     });
+  }
+  function majGrille() {
+    cartes.forEach(function (c) { c.classList.toggle('eteinte', hors(c, fixe, role)); });
   }
   function poser(html) { info.innerHTML = html ? '<div class="dp-info-in">' + html + '</div>' : ''; }
   function montrerCategorie(f) {
@@ -4106,8 +4122,8 @@ var suivreLecture = (function () {
       + (p ? '<p class="dp-info-p">' + p.innerHTML + '</p>' : '')
       + '<p class="dp-info-l">' + liens + '</p>');
   }
-  function amener(f) {
-    var b = Array.prototype.find.call(film.querySelectorAll('button[data-carte]:not([data-copie])'), function (x) { return catsDe(x).indexOf(f) !== -1; });
+  function amener() {
+    var b = Array.prototype.find.call(film.querySelectorAll('button[data-carte]:not([data-copie])'), function (x) { return !hors(carteDe(x), fixe, role); });
     if (!b) return;
     // le defilement automatique de la bande se met en retrait le temps du glisse
     film.dispatchEvent(new CustomEvent('bande-saut'));
@@ -4139,6 +4155,38 @@ var suivreLecture = (function () {
     var b = e.target.closest('button[data-carte]');
     if (b && ordi.matches) montrerProjet(b);
   });
+
+  // ── le second filtre : le role (concevoir, systematiser, fabriquer,
+  // transmettre, experimenter). Il se combine avec la categorie ; recliquer
+  // le meme verbe le retire. Survol : apercu, comme les categories.
+  var role = '';
+  var rangee = document.querySelector('.cmd-roles');
+  if (rangee) {
+    var verbes = rangee.querySelectorAll('.cmd-role');
+    rangee.addEventListener('click', function (e) {
+      var b = e.target.closest('.cmd-role');
+      if (!b) return;
+      var r = b.getAttribute('data-role');
+      role = role === r ? '' : r;
+      verbes.forEach(function (x) { x.setAttribute('aria-pressed', x.getAttribute('data-role') === role ? 'true' : 'false'); });
+      majGrille();
+      griser(fixe, role);
+      if (role && ordi.matches) amener();
+    });
+    var attenteR = null, survoleR = false;
+    rangee.addEventListener('mouseover', function (e) {
+      var b = e.target.closest('.cmd-role');
+      if (!b || !ordi.matches) return;
+      clearTimeout(attenteR);
+      attenteR = setTimeout(function () { survoleR = true; griser(fixe, b.getAttribute('data-role')); }, 140);
+    });
+    rangee.addEventListener('mouseleave', function () {
+      clearTimeout(attenteR);
+      if (!survoleR) return;
+      survoleR = false;
+      griser(fixe, role);
+    });
+  }
 })();
 
 // ── DEUX PORTES ──────────────────────────────────────────────────────────────

@@ -858,7 +858,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.190</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.191</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>
@@ -4273,8 +4273,8 @@ var suivreLecture = (function () {
     var W = bandeau.clientWidth, gE = 40;
     bandeau.style.paddingLeft = ''; bandeau.style.paddingRight = '';
     gE = parseFloat(getComputedStyle(bandeau).paddingLeft) || 40;
-    if (quiE && d - o > 0 && d - o < W / 2 && d - o > gE - 16) bandeau.style.paddingLeft = Math.round(p - o + 24) + 'px';
-    if (coordE && W - (p - o) > 0 && p - o > W / 2 && W - (p - o) > gE - 16) bandeau.style.paddingRight = Math.round(W - (d - o) + 24) + 'px';
+    if (quiE && d - o > gE - 16 && d - o < gE + quiE.offsetWidth + 16) bandeau.style.paddingLeft = Math.round(p - o + 24) + 'px';
+    if (coordE && W - (p - o) > gE - 16 && W - (p - o) < gE + coordE.offsetWidth + 16) bandeau.style.paddingRight = Math.round(W - (d - o) + 24) + 'px';
     var milieu = (d + p) / 2;
     function cote(el) {
       if (!el) return;

@@ -179,6 +179,8 @@
     .v3-bandeau h1 {
       position: absolute; left: var(--h1-x, 50%); top: 50%; transform: translateY(-50%);
       font-weight: 400; font-size: 15px; text-align: left; white-space: nowrap; color: var(--ink-2);
+      /* jamais au-dela du bord droit : cachee, elle elargissait la page */
+      max-width: max(0px, calc(100% - var(--h1-x, 50%))); overflow: hidden;
     }
     .v3-bandeau h1.cache { opacity: 0; visibility: hidden; }
   }
@@ -856,7 +858,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.188</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.189</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>

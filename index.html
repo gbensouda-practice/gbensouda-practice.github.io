@@ -179,13 +179,16 @@
   .v3-infos dl > div.sur-nuit dd a { color: var(--nuit-txt); }
   .v3-infos .footer-version.sur-nuit { color: var(--nuit-grey); }
   @media (min-width: 901px) {
+    /* au-dessus de la charniere, l'en-tete est transparent : la charniere
+       monte derriere lui jusqu'en haut de l'ecran, comme les deux espaces */
     .v3-bandeau {
-      background: linear-gradient(to right, var(--nuit) var(--coupe-d, 30%), var(--paper) var(--coupe-p, 40%));
+      background: linear-gradient(to right, var(--nuit) var(--coupe-d, 30%), transparent var(--coupe-d, 30%), transparent var(--coupe-p, 40%), var(--paper) var(--coupe-p, 40%));
       border-bottom: 0;
     }
     /* l'en-tete deborde d'un pixel sur les portes : sinon une fente d'un
        demi-pixel laisse voir le fond clair de la page sous le cote sombre */
     .v3-bandeau { margin-bottom: -1px; }
+    .v3-portes:not(.dedans) .v3-joint { margin-top: calc(-1 * var(--h-entete, 66px)); }
     /* Le volet prend en entier la couleur de l'endroit d'ou il s'ouvre (le
        nom) : aucun texte n'y chevauche la limite entre les deux espaces. */
     .v3-infos { background: var(--paper); border-bottom: 0; box-shadow: 0 14px 24px -18px rgba(20,24,26,.35); }
@@ -880,7 +883,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.196</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.197</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>
@@ -4288,6 +4291,7 @@ var suivreLecture = (function () {
     // une tranche qui s'entrouvre deplace la coupe avec elle
     if (dedans && visible(trR)) { var rr = trR.getBoundingClientRect().right; d = Math.max(d, rr); p = Math.max(p, rr); }
     if (dedans && visible(trP)) { var pl = trP.getBoundingClientRect().left; p = Math.min(p, pl); d = Math.min(d, pl); }
+    portes.style.setProperty('--h-entete', Math.ceil(bandeau.getBoundingClientRect().height) + 'px');
     bandeau.style.setProperty('--coupe-d', Math.round(d - o) + 'px');
     bandeau.style.setProperty('--coupe-p', Math.round(p - o) + 'px');
     // La coupe ne passe jamais au travers du nom ni du contact : s'ils la

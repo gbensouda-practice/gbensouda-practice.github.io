@@ -294,7 +294,12 @@
   /* le mot de la porte Projets change de couleur au survol de la porte : en plus
      du zoom, il dit qu'on peut cliquer (demande de Ghali, 05/10/2026) */
   .v3-seuil h2 button { transition: color .45s var(--ease-drawer); }
-  .v3-portes:not(.dedans) .v3-porte.p:hover .v3-seuil h2 button { color: var(--blue); }
+  /* le corail, couleur de la citation, fait dialoguer les deux portes a
+     l'accueil (Ghali, 07/10/2026) : le titre survole, le nombre de pieces
+     citees de l'article survole et, en face, les pieces qu'il allume */
+  .v3-portes:not(.dedans) .v3-porte.p:hover .v3-seuil h2 button { color: var(--corail-fonce); }
+  .v3-portes:not(.dedans) .v3-porte.r .v3-seuil h2 button { transition: color .45s var(--ease-drawer); }
+  .v3-portes:not(.dedans) .v3-porte.r .v3-seuil h2 button:hover { color: var(--corail); }
 
   /* la charniere du site, couchee entre les deux portes : la matiere en gros plan, en fondu */
   .v3-joint {
@@ -367,6 +372,12 @@
      les pieces qu'un article ne cite pas s'eteignent dans la bande */
   .v3-titres button { transition: opacity .3s ease; }
   .v3-titres button.eteint { opacity: .3; }
+  .v3-titres .n { transition: color .3s ease; }
+  .v3-portes:not(.dedans) .v3-porte.r .v3-titres button:hover .n,
+  .v3-portes:not(.dedans) .v3-porte.r .v3-titres button.proche .n,
+  .v3-portes:not(.dedans) .v3-porte.r .v3-titres button.cite .n { color: var(--corail); }
+  .v3-portes:not(.dedans) .v3-film button { transition: box-shadow .3s ease; }
+  .v3-portes:not(.dedans) .v3-film button.allumee { box-shadow: inset 0 -3px 0 var(--corail); }
   .v3-portes:not(.dedans) .v3-film button.eteinte img { opacity: .2; filter: grayscale(1); }
   .v3-portes:not(.dedans) .v3-film button.eteinte .calque { display: none; }
   .v3-titres button[disabled] { color: var(--nuit-grey); cursor: default; }
@@ -883,7 +894,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.197</p>
+      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.198</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>
@@ -4733,7 +4744,9 @@ var suivreLecture = (function () {
     function allumer(cartes) {
       parAccueil = !!cartes;
       film.querySelectorAll('button[data-carte]').forEach(function (b) {
-        b.classList.toggle('eteinte', !!cartes && cartes.indexOf(b.getAttribute('data-carte')) === -1);
+        var dedans = !!cartes && cartes.indexOf(b.getAttribute('data-carte')) !== -1;
+        b.classList.toggle('eteinte', !!cartes && !dedans);
+        b.classList.toggle('allumee', dedans);
       });
     }
     titres.forEach(function (t) {
@@ -4760,16 +4773,18 @@ var suivreLecture = (function () {
       if (!b || !accueil()) return;
       var c = b.getAttribute('data-carte');
       titres.forEach(function (t) {
-        t.classList.toggle('eteint', (' ' + t.getAttribute('data-cartes') + ' ').indexOf(' ' + c + ' ') === -1);
+        var cite = (' ' + t.getAttribute('data-cartes') + ' ').indexOf(' ' + c + ' ') !== -1;
+        t.classList.toggle('eteint', !cite);
+        t.classList.toggle('cite', cite);
       });
     });
-    film.addEventListener('mouseleave', function () { titres.forEach(function (t) { t.classList.remove('eteint'); }); });
+    film.addEventListener('mouseleave', function () { titres.forEach(function (t) { t.classList.remove('eteint', 'cite'); }); });
     // en entrant dans une porte, plus rien d'eteint par l'accueil (le grise
     // d'une categorie, dans Projets, n'est pas touche)
     window.addEventListener('hashchange', function () {
       clearTimeout(attente);
       if (parAccueil) allumer(null);
-      titres.forEach(function (t) { t.classList.remove('eteint'); });
+      titres.forEach(function (t) { t.classList.remove('eteint', 'cite'); });
     });
   })();
 

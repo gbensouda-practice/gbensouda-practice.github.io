@@ -192,7 +192,6 @@
     /* Le volet prend en entier la couleur de l'endroit d'ou il s'ouvre (le
        nom) : aucun texte n'y chevauche la limite entre les deux espaces. */
     .v3-infos { background: var(--paper); border-bottom: 0; box-shadow: 0 14px 24px -18px rgba(20,24,26,.35); }
-    .v3-bandeau.volet-nuit .v3-infos { background: var(--nuit); }
     .v3-infos dl { padding-top: 6px; padding-bottom: 8px; }
     /* la liste des metiers : une information du cote Projets, plus un titre
        centre a cheval sur la coupe (elle reste le h1 de la page) */
@@ -378,6 +377,8 @@
   .v3-portes:not(.dedans) .v3-porte.r .v3-titres button.cite .n { color: var(--corail); }
   .v3-portes:not(.dedans) .v3-film button { transition: box-shadow .3s ease; }
   .v3-portes:not(.dedans) .v3-film button.allumee { box-shadow: inset 0 -3px 0 var(--corail); }
+  /* survoler une piece ouvre aussi le tiroir des articles qui la citent */
+  .v3-portes:not(.dedans) .v3-titres button.cite .deroule { grid-template-rows: 1fr; opacity: 1; }
   .v3-portes:not(.dedans) .v3-film button.eteinte img { opacity: .2; filter: grayscale(1); }
   .v3-portes:not(.dedans) .v3-film button.eteinte .calque { display: none; }
   .v3-titres button[disabled] { color: var(--nuit-grey); cursor: default; }
@@ -894,7 +895,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.198</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.199</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>
@@ -4303,8 +4304,9 @@ var suivreLecture = (function () {
     if (dedans && visible(trR)) { var rr = trR.getBoundingClientRect().right; d = Math.max(d, rr); p = Math.max(p, rr); }
     if (dedans && visible(trP)) { var pl = trP.getBoundingClientRect().left; p = Math.min(p, pl); d = Math.min(d, pl); }
     portes.style.setProperty('--h-entete', Math.ceil(bandeau.getBoundingClientRect().height) + 'px');
-    bandeau.style.setProperty('--coupe-d', Math.round(d - o) + 'px');
-    bandeau.style.setProperty('--coupe-p', Math.round(p - o) + 'px');
+    // 2 px de chevauchement avec la charniere : jamais de fente claire
+    bandeau.style.setProperty('--coupe-d', (Math.ceil(d - o) + 2) + 'px');
+    bandeau.style.setProperty('--coupe-p', Math.max(Math.ceil(d - o) + 2, Math.floor(p - o) - 2) + 'px');
     // La coupe ne passe jamais au travers du nom ni du contact : s'ils la
     // chevauchent (une porte ouverte, sa voisine en tranche), ils commencent
     // juste apres elle, et suivent la tranche quand elle s'entrouvre.
@@ -4329,14 +4331,14 @@ var suivreLecture = (function () {
       h1E.classList.toggle('cache', place < h1E.scrollWidth);
     }
     [quiE, h1E, coordE].forEach(cote);
-    var voletNuit = quiE && quiE.classList.contains('sur-nuit');
-    bandeau.classList.toggle('volet-nuit', !!voletNuit);
-    voletE.forEach(function (el) { el.classList.toggle('sur-nuit', !!voletNuit); });
+    // le volet garde son fond clair d'origine : ses textes restent fonces
+    voletE.forEach(function (el) { el.classList.remove('sur-nuit'); });
   }
   function demanderEntete() { if (!enAttenteE) { enAttenteE = true; requestAnimationFrame(calerEntete); } }
   if ('ResizeObserver' in window) {
-    var roE = new ResizeObserver(demanderEntete);
-    [pR, pP, jointE, trR, trP, bandeau].forEach(function (el) { if (el) roE.observe(el); });
+    // dans la meme image que le mouvement des portes (pas une image plus tard)
+    var roE = new ResizeObserver(function () { calerEntete(); });
+    [pR, pP, jointE, trR, trP].forEach(function (el) { if (el) roE.observe(el); });
   }
   window.addEventListener('resize', demanderEntete);
   portes && portes.addEventListener('transitionrun', demanderEntete);
@@ -4776,6 +4778,7 @@ var suivreLecture = (function () {
         var cite = (' ' + t.getAttribute('data-cartes') + ' ').indexOf(' ' + c + ' ') !== -1;
         t.classList.toggle('eteint', !cite);
         t.classList.toggle('cite', cite);
+        if (cite) chargerVignettes(t);
       });
     });
     film.addEventListener('mouseleave', function () { titres.forEach(function (t) { t.classList.remove('eteint', 'cite'); }); });

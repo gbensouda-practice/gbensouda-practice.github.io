@@ -207,6 +207,9 @@
     .v3-infos > div { flex-wrap: wrap; gap: 3px 26px; justify-content: flex-start; }
     .v3-infos dl > div { gap: 8px; }
     .v3-infos dd { font-size: 12px; }
+    /* les colonnes et la version dans un meme flux : la version suit la
+       formation, sur la meme ligne */
+    .v3-infos > div > dl { display: contents; }
     .v3-infos dt { color: var(--blue-nuit); }
     .v3-infos dd { color: #C4C9C4; }
     .v3-infos dd a { color: var(--nuit-txt); }
@@ -913,7 +916,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.202</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.203</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>

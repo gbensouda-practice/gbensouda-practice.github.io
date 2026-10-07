@@ -191,8 +191,23 @@
     .v3-portes:not(.dedans) .v3-joint { margin-top: calc(-1 * var(--h-entete, 66px)); }
     /* Le volet prend en entier la couleur de l'endroit d'ou il s'ouvre (le
        nom) : aucun texte n'y chevauche la limite entre les deux espaces. */
-    .v3-infos { background: var(--paper); border-bottom: 0; box-shadow: 0 14px 24px -18px rgba(20,24,26,.35); }
-    .v3-infos dl { padding-top: 6px; padding-bottom: 8px; }
+    /* Le volet ne pend plus sous l'en-tete, en coupant les deux espaces : il
+       descend du haut de l'ecran DANS l'en-tete, de la fin du nom au bord
+       droit, en noir (Ghali, 07/10/2026). Le nom reste visible : c'est lui
+       qu'on survole. */
+    .v3-infos {
+      top: 0; bottom: -1px; left: var(--volet-x, 280px); right: 0; z-index: 2;
+      background: var(--nuit); border-bottom: 0; box-shadow: none;
+      display: flex; align-items: center; grid-template-rows: none;
+      transform: translateY(-100%); transition: transform .35s var(--ease-drawer), opacity .25s ease;
+    }
+    .v3-bandeau:hover .v3-infos, .v3-bandeau:focus-within .v3-infos, .v3-bandeau.ouvert .v3-infos { transform: none; }
+    .v3-infos > div { width: 100%; padding: 0 var(--g); }
+    .v3-infos dl { padding-top: 0; padding-bottom: 0; }
+    .v3-infos dt { color: var(--blue-nuit); }
+    .v3-infos dd { color: #C4C9C4; }
+    .v3-infos dd a { color: var(--nuit-txt); }
+    .v3-infos .footer-version { color: var(--nuit-grey); opacity: .8; }
     /* la liste des metiers : une information du cote Projets, plus un titre
        centre a cheval sur la coupe (elle reste le h1 de la page) */
     .v3-bandeau h1 {
@@ -895,7 +910,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.199</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.200</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>
@@ -4331,8 +4346,8 @@ var suivreLecture = (function () {
       h1E.classList.toggle('cache', place < h1E.scrollWidth);
     }
     [quiE, h1E, coordE].forEach(cote);
-    // le volet garde son fond clair d'origine : ses textes restent fonces
-    voletE.forEach(function (el) { el.classList.remove('sur-nuit'); });
+    // le volet s'ouvre dans l'en-tete, juste apres le nom
+    if (quiE) bandeau.style.setProperty('--volet-x', Math.round(quiE.getBoundingClientRect().right - o + 28) + 'px');
   }
   function demanderEntete() { if (!enAttenteE) { enAttenteE = true; requestAnimationFrame(calerEntete); } }
   if ('ResizeObserver' in window) {

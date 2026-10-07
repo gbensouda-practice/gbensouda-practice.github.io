@@ -119,6 +119,13 @@
   }
   /* la version, au bas du volet plutot que dans l'en-tete (Ghali, 07/10/2026) */
   .v3-infos .footer-version { justify-content: center; margin: 0; padding: 0 var(--g) 10px; }
+  /* sur ordinateur, la version sur la meme ligne que les colonnes du volet,
+     apres la formation : une ligne de moins (Ghali, 07/10/2026) */
+  @media (min-width: 901px) {
+    .v3-infos > div { display: flex; justify-content: center; align-items: baseline; flex-wrap: wrap; column-gap: 44px; }
+    .v3-infos > div > dl { padding-left: 0; padding-right: 0; }
+    .v3-infos .footer-version { padding: 0; }
+  }
   .version-pastille { width: 7px; height: 7px; border-radius: 50%; display: inline-block; flex: none; }
 
   /* le volet : les infos pratiques se deroulent au survol (au toucher sur telephone) */
@@ -257,8 +264,13 @@
        lignes equilibrees au lieu de trois en escalier (Ghali, 07/10/2026). */
     .v3-portes.dedans .v3-porte.p.ici .v3-seuil { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 56px; align-items: end; }
     .v3-portes.dedans .v3-porte.p.ici .v3-seuil .v3-film, .v3-portes.dedans .v3-porte.p.ici .v3-seuil .dp-info { grid-column: 1 / -1; }
-    .v3-portes.dedans .v3-porte.p.ici .v3-intro-ligne { display: block; order: 3; margin: 0 0 6px; font-size: 14px; line-height: 1.55; color: var(--ink-2); max-width: 120ch; text-wrap: balance; }
-    .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 { order: 4; }
+    /* Le titre et sa phrase en haut, au-dessus de la bande, comme Recherche
+       en face : les deux espaces se repondent (Ghali, 07/10/2026). */
+    .v3-portes.dedans .v3-porte.p.ici .v3-intro-ligne { display: block; order: 1; margin: 0 0 4px; font-size: 14px; line-height: 1.55; color: var(--ink-2); max-width: 120ch; text-wrap: balance; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-seuil h2 { order: 2; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-seuil .v3-film { order: 3; margin-top: 22px; }
+    .v3-portes.dedans .v3-porte.p.ici .v3-seuil .dp-info { order: 4; }
+    .v3-portes.dedans .v3-porte.p.ici .cmd-filtres { margin-top: 6px; }
     .v3-portes.dedans .v3-porte.p.ici .v3-salle .v3-intro { display: none; }
     /* Plus de grille : elle redisait la bande (Ghali, 07/10/2026). */
     .v3-portes.dedans .v3-porte.p.ici .v3-pgrid, .v3-portes.dedans .v3-porte.p.ici .dp-choisie,
@@ -860,7 +872,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.193</p>
+      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.194</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>

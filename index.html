@@ -360,6 +360,17 @@
   @media (min-width: 901px) {
     .v3-porte.r.ici .v3-salle-tete { position: sticky; top: 0; z-index: 6; background: var(--nuit); margin: -32px calc(-1 * var(--g)) 14px; padding: 22px var(--g) 12px; }
     .v3-porte.r.ici .v3-index, .v3-porte.r.ici .ff-media { top: 96px; }
+    /* Plus de barre de defilement grise du navigateur dans les portes
+       ouvertes : ou l'on en est se lit dans le sommaire (Ghali, 07/10/2026). */
+    .v3-portes.dedans .v3-porte.ici { scrollbar-width: none; }
+    .v3-portes.dedans .v3-porte.ici::-webkit-scrollbar { display: none; }
+    /* sous le titre de l'article en cours, un trait corail se remplit au fil de
+       la lecture (--lu, de 0 a 1, pose par le script) */
+    .v3-index button { position: relative; }
+    .v3-index button[aria-current="true"]::after {
+      content: ""; position: absolute; left: 0; bottom: -1px; height: 2px;
+      width: calc(var(--lu, 0) * 100%); background: var(--corail);
+    }
     /* « < Recherche » est colle en haut : une descente vers les articles
        s'arrete sous lui */
     .v3-porte.r.ici .v3-lect { scroll-margin-top: 96px; }
@@ -762,7 +773,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.179</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.180</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>
@@ -3963,6 +3974,33 @@ var suivreLecture = (function () {
     if (e.deltaY > 0 && y < s - 4) { e.preventDefault(); glisser(s); }
     else if (e.deltaY < 0 && y > 4 && y <= s + 4) { e.preventDefault(); glisser(0); }
   }, { passive: false });
+})();
+
+// ── OU L'ON EN EST DANS L'ARTICLE (ordinateur) ───────────────────────────────
+// Le trait corail sous le titre de l'article en cours, dans le sommaire, se
+// remplit au fil de la lecture : il remplace la barre de defilement du
+// navigateur, cachee (Ghali, 07/10/2026).
+(function () {
+  var porte = document.querySelector('.v3-porte.r');
+  if (!porte) return;
+  var attente = false;
+  function poser() {
+    attente = false;
+    var b = document.querySelector('.v3-index button[aria-current="true"]');
+    var art = document.querySelector('.dp-art:not([hidden])');
+    if (!b || !art) return;
+    var tete = porte.querySelector('.v3-salle-tete');
+    var haut = porte.getBoundingClientRect().top + (tete ? tete.offsetHeight : 0);
+    var r = art.getBoundingClientRect();
+    var course = r.height - (porte.clientHeight - (tete ? tete.offsetHeight : 0));
+    var lu = course > 0 ? (haut - r.top) / course : (r.top <= haut ? 1 : 0);
+    b.style.setProperty('--lu', Math.max(0, Math.min(1, lu)).toFixed(3));
+  }
+  function demander() { if (!attente) { attente = true; requestAnimationFrame(poser); } }
+  porte.addEventListener('scroll', demander, { passive: true });
+  window.addEventListener('resize', demander);
+  // un autre article choisi : son trait repart de son propre debut
+  document.addEventListener('click', function (e) { if (e.target.closest('.v3-index button, [data-article], [data-a]')) setTimeout(poser, 600); });
 })();
 
 // ── LES FILTRES DE LA SALLE PROJETS (repris) ─────────────────────────────────

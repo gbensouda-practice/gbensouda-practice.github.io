@@ -125,7 +125,11 @@
     .v3-infos > div { display: flex; justify-content: center; align-items: baseline; flex-wrap: wrap; column-gap: 44px; }
     .v3-infos > div > dl { padding-left: 0; padding-right: 0; }
     .v3-infos .footer-version { padding: 0; }
+    .v3-infos dd { white-space: nowrap; }
+    .v3-infos dd .l + .l::before { content: " · "; }
   }
+  .v3-infos dd .l { display: block; }
+  @media (min-width: 901px) { .v3-infos dd .l { display: inline; } }
   .version-pastille { width: 7px; height: 7px; border-radius: 50%; display: inline-block; flex: none; }
 
   /* le volet : les infos pratiques se deroulent au survol (au toucher sur telephone) */
@@ -866,13 +870,13 @@
     <div class="v3-infos"><div>
 <!-- AUTO:DP_VOLET:DEBUT -->
       <dl>
-        <div><dt>Outils</dt><dd>Rhino · Grasshopper · Blender<br>Marvelous Designer · TouchDesigner · MadMapper</dd></div>
-        <div><dt>Studios</dt><dd>Synaptic Garden (France)<br>FenFutures (Maroc)</dd></div>
-        <div><dt>Formation</dt><dd>Architecte DESA, ESA Paris, 2019</dd></div>
+        <div><dt>Outils</dt><dd><span class="l">Rhino · Grasshopper · Blender</span><span class="l">Marvelous Designer · TouchDesigner · MadMapper</span></dd></div>
+        <div><dt>Studios</dt><dd><span class="l">Synaptic Garden (France)</span><span class="l">FenFutures (Maroc)</span></dd></div>
+        <div><dt>Formation</dt><dd><span class="l">Architecte DESA, ESA Paris, 2019</span></dd></div>
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.194</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.195</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>

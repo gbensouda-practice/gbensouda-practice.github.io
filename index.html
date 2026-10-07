@@ -19,7 +19,7 @@
 <title>Ghali Bensouda — Computational designer et fabrication</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
 <!--
   ACCUEIL « DEUX PORTES » — gabarit ecrit a la main (05/10/2026).
   C'EST CE FICHIER QU'ON MODIFIE, JAMAIS index.html : le .bat refait
@@ -494,6 +494,14 @@
   .sp-corps { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 40px; align-items: start; }
   .sp-corps.sans-media { grid-template-columns: minmax(0, 1fr); }
   .sp-texte p { font-size: var(--s-corps); line-height: var(--lh-corps); color: #C4C9C4; margin-bottom: 18px; max-width: 64ch; }
+  /* Recherche a sa voix : les essais en Newsreader, comme une publication ;
+     Projets reste en grotesque, comme un catalogue (critique du 07/10/2026,
+     validee par Ghali). Corps plus grand, lignes d'environ 65 signes. */
+  .dp-art > h3, .dp-art .chapo, .sp-texte p { font-family: var(--f-titre); }
+  .dp-art > h3 { font-weight: 400; letter-spacing: -.015em; }
+  .dp-art .chapo { font-style: italic; }
+  .sp-texte p { font-size: 19px; line-height: 1.6; max-width: 65ch; color: #CDD1CC; }
+  @media (max-width: 900px) { .sp-texte p { font-size: 18px; } }
   .sp-texte .lien-galerie.montre { color: var(--corail-clair); background-size: 100% 2px; }
   .sp-tout {
     font-family: var(--f-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
@@ -800,7 +808,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.183</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.184</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>

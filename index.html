@@ -800,7 +800,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.182</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.183</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>
@@ -4535,9 +4535,10 @@ var suivreLecture = (function () {
     var titres = document.querySelectorAll('.v3-titres button[data-cartes]');
     if (!film || !titres.length) return;
     var ordi = matchMedia('(min-width: 901px)');
-    var attente = null;
+    var attente = null, parAccueil = false;
     function accueil() { return ordi.matches && !portes.classList.contains('dedans'); }
     function allumer(cartes) {
+      parAccueil = !!cartes;
       film.querySelectorAll('button[data-carte]').forEach(function (b) {
         b.classList.toggle('eteinte', !!cartes && cartes.indexOf(b.getAttribute('data-carte')) === -1);
       });
@@ -4560,7 +4561,7 @@ var suivreLecture = (function () {
       });
     });
     var liste = document.querySelector('.v3-titres');
-    liste.addEventListener('mouseleave', function () { clearTimeout(attente); if (accueil()) allumer(null); });
+    liste.addEventListener('mouseleave', function () { clearTimeout(attente); if (accueil() && parAccueil) allumer(null); });
     film.addEventListener('mouseover', function (e) {
       var b = e.target.closest('button[data-carte]');
       if (!b || !accueil()) return;
@@ -4570,9 +4571,11 @@ var suivreLecture = (function () {
       });
     });
     film.addEventListener('mouseleave', function () { titres.forEach(function (t) { t.classList.remove('eteint'); }); });
-    // en entrant dans une porte, plus rien d'eteint par l'accueil
+    // en entrant dans une porte, plus rien d'eteint par l'accueil (le grise
+    // d'une categorie, dans Projets, n'est pas touche)
     window.addEventListener('hashchange', function () {
-      allumer(null);
+      clearTimeout(attente);
+      if (parAccueil) allumer(null);
       titres.forEach(function (t) { t.classList.remove('eteint'); });
     });
   })();

@@ -398,6 +398,12 @@
   .v3-portes:not(.dedans) .v3-porte.r .v3-titres button.cite .n { color: var(--corail); }
   .v3-portes:not(.dedans) .v3-film button { transition: box-shadow .3s ease; }
   .v3-portes:not(.dedans) .v3-film button.allumee { box-shadow: inset 0 -3px 0 var(--corail); }
+  /* survoler le mot « Recherche » deroule tous les articles, vignettes
+     comprises (Ghali, 07/10/2026) ; ils restent ouverts tant que la souris
+     est sur le titre ou la liste */
+  .v3-portes:not(.dedans) .v3-titres.tous button:not([disabled]) .deroule { grid-template-rows: 1fr; opacity: 1; }
+  .v3-portes:not(.dedans) .v3-titres.tous button:not([disabled]) .n { color: var(--corail); }
+  .v3-portes:not(.dedans) .v3-titres.tous .vig { width: 40px; height: 40px; }
   /* survoler une piece ouvre aussi le tiroir des articles qui la citent */
   .v3-portes:not(.dedans) .v3-titres button.cite .deroule { grid-template-rows: 1fr; opacity: 1; }
   .v3-portes:not(.dedans) .v3-film button.eteinte img { opacity: .2; filter: grayscale(1); }
@@ -916,7 +922,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.203</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.204</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>
@@ -4790,6 +4796,18 @@ var suivreLecture = (function () {
       });
     });
     var liste = document.querySelector('.v3-titres');
+    // le mot « Recherche » deroule tous les articles
+    var motR = document.querySelector('.v3-porte.r .v3-seuil h2 button');
+    var seuilR = document.querySelector('.v3-porte.r .v3-seuil');
+    if (motR && seuilR) {
+      motR.addEventListener('mouseenter', function () {
+        if (!accueil()) return;
+        liste.classList.add('tous');
+        titres.forEach(chargerVignettes);
+      });
+      seuilR.addEventListener('mouseleave', function () { liste.classList.remove('tous'); });
+      window.addEventListener('hashchange', function () { liste.classList.remove('tous'); });
+    }
     liste.addEventListener('mouseleave', function () { clearTimeout(attente); if (accueil() && parAccueil) allumer(null); });
     film.addEventListener('mouseover', function (e) {
       var b = e.target.closest('button[data-carte]');

@@ -170,6 +170,9 @@
       background: linear-gradient(to right, var(--nuit) var(--coupe-d, 30%), var(--paper) var(--coupe-p, 40%));
       border-bottom: 0;
     }
+    /* l'en-tete deborde d'un pixel sur les portes : sinon une fente d'un
+       demi-pixel laisse voir le fond clair de la page sous le cote sombre */
+    .v3-bandeau { margin-bottom: -1px; }
     .v3-infos { box-shadow: 0 14px 24px -18px rgba(20,24,26,.35); }
     /* la liste des metiers : une information du cote Projets, plus un titre
        centre a cheval sur la coupe (elle reste le h1 de la page) */
@@ -853,7 +856,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.187</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.188</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>

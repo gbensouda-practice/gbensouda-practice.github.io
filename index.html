@@ -203,9 +203,11 @@
     }
     .v3-bandeau:hover .v3-infos, .v3-bandeau:focus-within .v3-infos, .v3-bandeau.ouvert .v3-infos { transform: none; }
     .v3-infos > div { width: 100%; padding: 0 var(--g); }
-    .v3-infos dl { padding-top: 0; padding-bottom: 0; flex-wrap: wrap; justify-content: flex-start; gap: 3px 26px; }
-    .v3-infos > div { flex-wrap: wrap; gap: 3px 26px; justify-content: flex-start; }
-    .v3-infos dl > div { gap: 8px; }
+    /* une seule ligne, version comprise, centree dans la bande ; sur un
+       ecran plus etroit, elle se coupe en deux, toujours centree */
+    .v3-infos dl { padding-top: 0; padding-bottom: 0; }
+    .v3-infos > div { flex-wrap: wrap; gap: 3px 18px; justify-content: center; padding: 0 20px; }
+    .v3-infos dl > div { gap: 6px; white-space: nowrap; }
     .v3-infos dd { font-size: 12px; }
     /* les colonnes et la version dans un meme flux : la version suit la
        formation, sur la meme ligne */
@@ -924,7 +926,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.205</p>
+      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.206</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>

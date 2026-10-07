@@ -249,6 +249,8 @@
     /* la liste des articles deborde un peu sur le cote sombre de la charniere :
        titre et nombre de pieces tiennent sur une ligne (Ghali, 07/10/2026) */
     .v3-portes:not(.dedans) .v3-porte.r .v3-titres { margin-right: calc(-1 * (var(--g) + var(--l-joint) * .55)); }
+    /* sur l'image, les nombres gardent un halo sombre pour rester lisibles */
+    .v3-portes:not(.dedans) .v3-porte.r .v3-titres .n { color: #C9D3DA; text-shadow: 0 0 2px var(--nuit), 0 0 6px var(--nuit), 0 0 12px var(--nuit); }
     .v3-porte.r { order: 1; }
     .v3-joint { order: 2; }
     .v3-porte.p { order: 3; }
@@ -729,7 +731,7 @@
       <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.177</p>
+      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.178</p>
 <!-- AUTO:VERSION:FIN -->
     </div>
     <div class="v3-infos"><div>

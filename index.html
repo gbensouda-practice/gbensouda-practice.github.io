@@ -853,7 +853,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.186</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.187</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>
@@ -4287,6 +4287,8 @@ var suivreLecture = (function () {
   portes && portes.addEventListener('transitionrun', demanderEntete);
   portes && portes.addEventListener('transitionend', demanderEntete);
   bandeau.addEventListener('mouseenter', demanderEntete);
+  calerEntete();
+  window.addEventListener('load', calerEntete);
 
   // la photo de la charniere, reprise par la tranche qui s'entrouvre
   var charniere = document.querySelector('.v3-joint');

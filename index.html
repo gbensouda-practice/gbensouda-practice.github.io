@@ -179,14 +179,18 @@
   .v3-infos dl > div.sur-nuit dd a { color: var(--nuit-txt); }
   .v3-infos .footer-version.sur-nuit { color: var(--nuit-grey); }
   @media (min-width: 901px) {
-    .v3-bandeau, .v3-infos {
+    .v3-bandeau {
       background: linear-gradient(to right, var(--nuit) var(--coupe-d, 30%), var(--paper) var(--coupe-p, 40%));
       border-bottom: 0;
     }
     /* l'en-tete deborde d'un pixel sur les portes : sinon une fente d'un
        demi-pixel laisse voir le fond clair de la page sous le cote sombre */
     .v3-bandeau { margin-bottom: -1px; }
-    .v3-infos { box-shadow: 0 14px 24px -18px rgba(20,24,26,.35); }
+    /* Le volet prend en entier la couleur de l'endroit d'ou il s'ouvre (le
+       nom) : aucun texte n'y chevauche la limite entre les deux espaces. */
+    .v3-infos { background: var(--paper); border-bottom: 0; box-shadow: 0 14px 24px -18px rgba(20,24,26,.35); }
+    .v3-bandeau.volet-nuit .v3-infos { background: var(--nuit); }
+    .v3-infos dl { padding-top: 6px; padding-bottom: 8px; }
     /* la liste des metiers : une information du cote Projets, plus un titre
        centre a cheval sur la coupe (elle reste le h1 de la page) */
     .v3-bandeau h1 {
@@ -876,7 +880,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.195</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.196</p>
 <!-- AUTO:VERSION:FIN -->
     </div></div>
   </header>
@@ -4309,7 +4313,10 @@ var suivreLecture = (function () {
       var place = coordE.getBoundingClientRect().left - o - 32 - x;
       h1E.classList.toggle('cache', place < h1E.scrollWidth);
     }
-    [quiE, h1E, coordE].concat(voletE).forEach(cote);
+    [quiE, h1E, coordE].forEach(cote);
+    var voletNuit = quiE && quiE.classList.contains('sur-nuit');
+    bandeau.classList.toggle('volet-nuit', !!voletNuit);
+    voletE.forEach(function (el) { el.classList.toggle('sur-nuit', !!voletNuit); });
   }
   function demanderEntete() { if (!enAttenteE) { enAttenteE = true; requestAnimationFrame(calerEntete); } }
   if ('ResizeObserver' in window) {

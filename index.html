@@ -39,7 +39,7 @@
     --blue: #1F3F63;
     --blue-nuit: #7E9DBB;
     --corail: #C7804D;          /* échantillon réel : vortex-vase/PXL_20260321_110027366.jpg */
-    --grey: #6E7570;
+    --grey: #5B615D;
     --line: #C7CBC4;
     --line-nuit: #2E3436;
     --e-out: cubic-bezier(.23, 1, .32, 1);
@@ -87,152 +87,70 @@
   .ico { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex: 0 0 auto; }
   @media (prefers-reduced-motion: reduce) { * { transition-duration: 0s !important; animation-duration: 0s !important; } }
 
-  /* ═══════════ LE BANDEAU ═══════════ */
+  /* ═══════════ L'EN-TETE (refonte du 13/10/2026) ═══════════
+     Une seule ligne de base : a gauche, sur la nuit, le nom et le sous-titre ;
+     a la marge du cote Projets, l'accroche (les metiers, et dessous, plus
+     petit, « Conception et fabrication ») ; a droite, l'e-mail. Plus de volet :
+     ses colonnes sont descendues en bas de la porte Projets (bloc infos).
+     L'en-tete suit toujours la coupe entre les deux portes : chaque moitie a
+     la couleur de l'espace qu'elle surmonte, sans fondu. Le script pose la
+     coupe (--coupe), les marges et la hauteur (--h-tete) ; l'accroche ne se
+     cache jamais : si elle ne tient pas, elle passe a la ligne entre deux
+     metiers, et l'en-tete grandit. */
   .v3 { min-height: 100svh; display: flex; flex-direction: column; }
   @media (min-width: 901px) { .v3 { height: 100svh; } .v3-portes { min-height: 0; } .v3-porte { overflow: hidden; } }
-  .v3-bandeau {
-    display: flex; justify-content: space-between; align-items: center; gap: 40px;
-    /* marges resserrees autour des textes (Ghali, 07/10/2026) */
-    padding: 9px var(--g) 8px; flex-wrap: wrap; border-bottom: 1px solid var(--line);
-    position: relative; z-index: 30; background: var(--paper);
-  }
-  .v3-bandeau .qui { display: flex; flex-direction: column; gap: 3px; }
-  .v3-bandeau .nom { font-weight: var(--w-t); font-size: 27px; line-height: 1.1; letter-spacing: -.015em; white-space: nowrap; cursor: default; }
-  .v3-bandeau .sous-titre { font-size: 13px; line-height: 1.3; color: var(--grey); white-space: nowrap; }
-  @media (hover: hover) { .v3-bandeau .qui { cursor: pointer; } .v3-bandeau .nom { cursor: inherit; } }
-  /* Plus une phrase : trois metiers separes par des points medians, au centre,
-     en gras, dans la police du nom (Ghali, 07/10/2026). */
-  .v3-bandeau h1 {
-    font-weight: 600; font-size: clamp(15px, 1.25vw, 18px); line-height: 1.3;
-    flex: 1; letter-spacing: -.01em; color: var(--ink); cursor: default; text-align: center;
-  }
-  .v3-bandeau .coord {
-    display: flex; flex-direction: column; align-items: flex-end; gap: 0;
-    font-size: 13px; line-height: 1.3; color: var(--grey); white-space: nowrap; text-align: right;
-  }
-  .v3-bandeau .mail { color: var(--ink); }
+  .v3-bandeau { position: relative; z-index: 30; background: var(--paper); }
+  .v3-bandeau .nom { font-weight: 500; font-size: 22px; line-height: 1; letter-spacing: -.02em; white-space: nowrap; cursor: pointer; }
+  .v3-bandeau .sous-titre { font-size: 13px; line-height: 1.2; color: #5B615D; white-space: nowrap; }
+  .v3-bandeau h1 { font-weight: 500; font-size: 26px; line-height: 1.2; letter-spacing: -.01em; color: var(--ink); }
+  .v3-bandeau h1 .l1 { display: block; }
+  .v3-bandeau h1 .l1 > span { white-space: nowrap; }
+  /* la seconde ligne, un cran en dessous : 16 px, sans graisse, en gris */
+  .v3-bandeau h1 .l2 { display: block; font-size: 16px; font-weight: 400; line-height: 1.3; letter-spacing: 0; margin-top: 2px; color: #5B615D; }
+  .v3-bandeau .coord { font-size: 13px; line-height: 1.3; white-space: nowrap; }
+  .v3-bandeau .mail { color: var(--ink); background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; padding-bottom: 2px; }
   .v3-bandeau .mail:hover { color: var(--blue); }
-  /* la version et sa pastille : toujours visibles, en tout petit (section 8.3) */
-  .v3-bandeau .footer-version {
-    display: flex; align-items: center; gap: 6px; margin-top: 3px;
-    font-size: 11px; color: var(--grey); opacity: .6;
-  }
-  /* la version, au bas du volet plutot que dans l'en-tete (Ghali, 07/10/2026) */
-  .v3-infos .footer-version { justify-content: center; margin: 0; padding: 0 var(--g) 10px; }
-  /* sur ordinateur, la version sur la meme ligne que les colonnes du volet,
-     apres la formation : une ligne de moins (Ghali, 07/10/2026) */
+  .v3-bandeau .nom, .v3-bandeau .sous-titre, .v3-bandeau h1, .v3-bandeau h1 .l2, .v3-bandeau .mail { transition: color .45s var(--ease-drawer); }
+  .v3-bandeau .sur-nuit .nom, .v3-bandeau .nom.sur-nuit { color: #fff; }
+  .v3-bandeau .sur-nuit .sous-titre { color: var(--nuit-grey); }
+  .v3-bandeau h1.sur-nuit { color: var(--nuit-txt); }
+  .v3-bandeau h1.sur-nuit .l2 { color: var(--nuit-grey); }
+  .v3-bandeau .coord.sur-nuit .mail { color: var(--nuit-txt); }
   @media (min-width: 901px) {
-    .v3-infos > div { display: flex; justify-content: center; align-items: baseline; flex-wrap: wrap; column-gap: 44px; }
-    .v3-infos > div > dl { padding-left: 0; padding-right: 0; }
-    .v3-infos .footer-version { padding: 0; }
-    .v3-infos dd { white-space: nowrap; }
-    .v3-infos dd .l + .l::before { content: " · "; }
-  }
-  .v3-infos dd .l { display: block; }
-  @media (min-width: 901px) { .v3-infos dd .l { display: inline; } }
-  .version-pastille { width: 7px; height: 7px; border-radius: 50%; display: inline-block; flex: none; }
-
-  /* le volet : les infos pratiques se deroulent au survol (au toucher sur telephone) */
-  .v3-infos {
-    position: absolute; left: 0; right: 0; top: 100%; background: var(--paper); border-bottom: 1px solid var(--line);
-    display: grid; grid-template-rows: 0fr; opacity: 0;
-    transition: grid-template-rows .35s var(--ease-drawer), opacity .25s ease; pointer-events: none;
-  }
-  .v3-infos > div { overflow: hidden; min-height: 0; }
-  .v3-bandeau:hover .v3-infos, .v3-bandeau:focus-within .v3-infos, .v3-bandeau.ouvert .v3-infos {
-    grid-template-rows: 1fr; opacity: 1; pointer-events: auto;
-  }
-  /* Ecran tactile : un toucher laisse un « survol » colle qui empechait de
-     refermer le volet en retouchant le nom (Ghali, 06/10/2026). La, seule
-     compte la classe « ouvert », que chaque toucher ouvre ou ferme. */
-  @media (hover: none) and (pointer: coarse) {
-    .v3-bandeau:not(.ouvert):hover .v3-infos, .v3-bandeau:not(.ouvert):focus-within .v3-infos {
-      grid-template-rows: 0fr; opacity: 0; pointer-events: none;
-    }
-  }
-  /* Le volet prenait trop de hauteur : chaque intitule passe a gauche de son
-     texte, sur la meme ligne, et les marges fondent (Ghali, 07/10/2026). */
-  .v3-infos dl {
-    display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 44px; padding: 10px var(--g) 12px;
-  }
-  .v3-infos dl > div { display: flex; align-items: baseline; gap: 10px; }
-  .v3-infos dt { font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); flex: none; }
-  .v3-infos dd { font-size: 13px; line-height: 1.45; color: var(--ink-2); }
-  .v3-infos dd a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
-
-  /* ── L'EN-TETE SANS BANDEAU (consigne du 07/10/2026, validee par Ghali) ──
-     Plus de bande claire posee sur les deux espaces : chaque moitie de
-     l'en-tete a la couleur de l'espace qu'elle surmonte. La limite (--coupe-d,
-     fin du sombre ; --coupe-p, debut du clair : entre les deux, le fondu de la
-     charniere) est recalculee a chaque image par le script : elle suit les
-     portes quand elles s'ouvrent, grossissent ou s'entrouvrent. Chaque texte
-     prend la couleur du fond sur lequel il se trouve (classe sur-nuit). */
-  .v3-bandeau .qui, .v3-bandeau h1, .v3-bandeau .coord, .v3-bandeau .nom, .v3-bandeau .sous-titre,
-  .v3-bandeau .mail, .v3-infos dt, .v3-infos dd { transition: color .45s var(--ease-drawer), opacity .3s ease; }
-  /* sur le papier, le gris de l'en-tete est fonce pour tenir 4,5:1 (5,4:1) */
-  .v3-bandeau .sous-titre, .v3-bandeau .coord { color: #5B615D; }
-  .v3-bandeau .qui.sur-nuit .nom { color: #fff; }
-  .v3-bandeau .qui.sur-nuit .sous-titre, .v3-bandeau .coord.sur-nuit { color: var(--nuit-grey); }
-  .v3-bandeau h1.sur-nuit, .v3-bandeau .coord.sur-nuit .mail { color: var(--nuit-txt); }
-  .v3-infos dl > div.sur-nuit dt { color: var(--blue-nuit); }
-  .v3-infos dl > div.sur-nuit dd { color: #C4C9C4; }
-  .v3-infos dl > div.sur-nuit dd a { color: var(--nuit-txt); }
-  .v3-infos .footer-version.sur-nuit { color: var(--nuit-grey); }
-  @media (min-width: 901px) {
-    /* au-dessus de la charniere, l'en-tete est transparent : la charniere
-       monte derriere lui jusqu'en haut de l'ecran, comme les deux espaces */
     .v3-bandeau {
-      background: linear-gradient(to right, var(--nuit) var(--coupe-d, 30%), transparent var(--coupe-d, 30%), transparent var(--coupe-p, 40%), var(--paper) var(--coupe-p, 40%));
-      border-bottom: 0;
+      display: flex; align-items: baseline; flex-wrap: nowrap; white-space: nowrap;
+      height: var(--h-tete, 85px); padding: var(--pt-tete, 15px) 0 0 var(--g); overflow: hidden;
+      background: linear-gradient(to right, var(--nuit) var(--coupe, 33.333%), var(--paper) var(--coupe, 33.333%));
     }
+    /* le filet sous l'en-tete, du cote papier seulement */
+    .v3-bandeau::after { content: ""; position: absolute; left: var(--coupe, 33.333%); right: 0; bottom: 0; height: 1px; background: var(--line); }
     /* l'en-tete deborde d'un pixel sur les portes : sinon une fente d'un
        demi-pixel laisse voir le fond clair de la page sous le cote sombre */
     .v3-bandeau { margin-bottom: -1px; }
-    .v3-portes:not(.dedans) .v3-joint { margin-top: calc(-1 * var(--h-entete, 66px)); }
-    /* Le volet prend en entier la couleur de l'endroit d'ou il s'ouvre (le
-       nom) : aucun texte n'y chevauche la limite entre les deux espaces. */
-    /* Le volet ne pend plus sous l'en-tete, en coupant les deux espaces : il
-       descend du haut de l'ecran DANS l'en-tete, de la fin du nom au bord
-       droit, en noir (Ghali, 07/10/2026). Le nom reste visible : c'est lui
-       qu'on survole. */
-    .v3-infos {
-      top: 0; bottom: -1px; left: var(--volet-x, 280px); right: 0; z-index: 2;
-      background: var(--nuit); border-bottom: 0; box-shadow: none;
-      display: flex; align-items: center; grid-template-rows: none;
-      transform: translateY(-100%); transition: transform .35s var(--ease-drawer), opacity .25s ease;
-    }
-    .v3-bandeau:hover .v3-infos, .v3-bandeau:focus-within .v3-infos, .v3-bandeau.ouvert .v3-infos { transform: none; }
-    .v3-infos > div { width: 100%; padding: 0 var(--g); }
-    /* une seule ligne, version comprise, centree dans la bande ; sur un
-       ecran plus etroit, elle se coupe en deux, toujours centree */
-    .v3-infos dl { padding-top: 0; padding-bottom: 0; }
-    .v3-infos > div { flex-wrap: wrap; gap: 3px 16px; justify-content: center; padding: 0 16px; }
-    .v3-infos dl > div { gap: 6px; white-space: nowrap; }
-    /* la version est rangee dans la colonne Formation par le script : si la
-       ligne doit se couper, elles passent ensemble a la ligne */
-    .v3-infos dl > div .footer-version { display: inline-flex; margin-left: 12px; padding: 0; }
-    .v3-infos dd { font-size: 11.5px; }
-    /* les colonnes et la version dans un meme flux : la version suit la
-       formation, sur la meme ligne */
-    .v3-infos > div > dl { display: contents; }
-    .v3-infos dt { color: var(--blue-nuit); }
-    .v3-infos dd { color: #C4C9C4; }
-    .v3-infos dd a { color: var(--nuit-txt); }
-    .v3-infos .footer-version { color: var(--nuit-grey); opacity: .8; }
-    /* la liste des metiers : une information du cote Projets, plus un titre
-       centre a cheval sur la coupe (elle reste le h1 de la page) */
-    .v3-bandeau h1 {
-      position: absolute; left: var(--h1-x, 50%); top: 50%; transform: translateY(-50%);
-      font-weight: 400; font-size: 15px; text-align: left; white-space: nowrap; color: var(--ink-2);
-      /* jamais au-dela du bord droit : cachee, elle elargissait la page */
-      max-width: max(0px, calc(100% - var(--h1-x, 50%))); overflow: hidden;
-    }
-    .v3-bandeau h1.cache { opacity: 0; visibility: hidden; }
+    .v3-bandeau .qui { flex: none; display: flex; align-items: baseline; gap: 12px; }
+    /* trop etroit pour une ligne (la colonne nuit retrecit quand Projets
+       s'elargit au survol) : le sous-titre passe sous le nom */
+    .v3-bandeau .qui.deux { display: block; }
+    .v3-bandeau .qui.deux .sous-titre { display: block; margin-top: 4px; }
+    .v3-bandeau h1 { flex: none; white-space: normal; }
+    .v3-bandeau .coord { flex: none; margin-left: auto; }
   }
-  @media (max-width: 900px) {
-    .v3-infos dl { flex-direction: column; align-items: stretch; gap: 6px; }
-    .v3-infos dt { width: 84px; }
-  }
+
+  /* ═══════════ LE BLOC INFOS, en bas de la porte Projets ═══════════
+     Ce qui etait dans le volet : Outils, Studios (et les villes), Formation,
+     et la version a la fin. Trois colonnes, en 13 px. */
+  .v3-infos { flex: none; margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 13px; line-height: 1.5; }
+  .v3-infos dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 24px; }
+  .v3-infos dt { color: #5B615D; }
+  .v3-infos dd { color: var(--ink); }
+  .v3-infos dd .l { display: block; }
+  .v3-infos dd .villes { color: #5B615D; }
+  .v3-infos dd a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  .v3-infos .footer-version { display: flex; align-items: center; gap: 6px; margin-top: 4px; color: #5B615D; font-family: var(--f); font-size: 13px; }
+  .version-pastille { width: 7px; height: 7px; border-radius: 50%; display: inline-block; flex: none; }
+  /* porte Projets ouverte : le bloc infos s'efface, la bande et les filtres
+     prennent la place */
+  .v3-portes.dedans .v3-infos { display: none; }
 
   /* Les grands titres en Newsreader, a empattements : une voix editoriale a
      cote du texte courant (Ghali, 07/10/2026, essai). Hors du bloc :root,
@@ -387,45 +305,7 @@
   .mention { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
   .deroule { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .35s var(--ease-drawer), opacity .25s ease; }
   .deroule > span { overflow: hidden; min-height: 0; }
-  .v3-titres button:hover .deroule, .v3-titres button:focus-visible .deroule, .v3-titres button.proche .deroule { grid-template-rows: 1fr; opacity: 1; }
-  .v3-titres { margin-top: 28px; font-size: clamp(18px, 1.7vw, 22px); line-height: 1.5; letter-spacing: -.01em; }
-  .v3-titres li { border-top: 1px solid var(--line-nuit); }
-  .v3-titres button { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 16px; align-items: baseline; width: 100%; padding: 6px 0; }
-  .v3-titres .deroule { grid-column: 1 / -1; }
-  .v3-titres button:hover { color: #fff; }
-  /* a l'accueil : un article qui ne cite pas la piece survolee s'efface, et
-     les pieces qu'un article ne cite pas s'eteignent dans la bande */
-  .v3-titres button { transition: opacity .3s ease; }
-  .v3-titres button.eteint { opacity: .3; }
-  .v3-titres .n { transition: color .3s ease; }
-  .v3-portes:not(.dedans) .v3-porte.r .v3-titres button:hover .n,
-  .v3-portes:not(.dedans) .v3-porte.r .v3-titres button.proche .n,
-  .v3-portes:not(.dedans) .v3-porte.r .v3-titres button.cite .n { color: var(--corail); }
-  .v3-portes:not(.dedans) .v3-film button { transition: box-shadow .3s ease; }
-  .v3-portes:not(.dedans) .v3-film button.allumee { box-shadow: inset 0 -3px 0 var(--corail); }
-  /* survoler le mot « Recherche » deroule tous les articles, vignettes
-     comprises (Ghali, 07/10/2026) ; ils restent ouverts tant que la souris
-     est sur le titre ou la liste */
-  .v3-portes:not(.dedans) .v3-titres.tous button:not([disabled]) .deroule { grid-template-rows: 1fr; opacity: 1; }
-  .v3-portes:not(.dedans) .v3-titres.tous button:not([disabled]) .n { color: var(--corail); }
-  .v3-portes:not(.dedans) .v3-titres.tous .vig { width: 40px; height: 40px; }
-  /* tous ouverts : les vignettes seules, sans la phrase, pour tenir dans l'ecran */
-  .v3-portes:not(.dedans) .v3-titres.tous button:not(:hover) .i { display: none; }
-  /* survoler une piece ouvre aussi le tiroir des articles qui la citent */
-  .v3-portes:not(.dedans) .v3-titres button.cite .deroule { grid-template-rows: 1fr; opacity: 1; }
-  .v3-portes:not(.dedans) .v3-film button.eteinte img { opacity: .2; filter: grayscale(1); }
-  .v3-portes:not(.dedans) .v3-film button.eteinte .calque { display: none; }
-  .v3-titres button[disabled] { color: var(--nuit-grey); cursor: default; }
-  .v3-titres button[disabled] .i { color: var(--nuit-grey); }
-  .v3-titres .t { display: block; }
-  .v3-titres .i { display: block; font-style: italic; font-size: 15px; line-height: 1.45; color: var(--line); padding-top: 4px; max-width: 48ch; letter-spacing: 0; }
-  .v3-titres .n { display: block; color: #9BA5AC; white-space: nowrap; }
-  /* une petite vignette par mot souligne de l'article ; un clic ouvre
-     l'article sur ce mot (Ghali, 07/10/2026) */
-  .v3-titres .vigs { display: flex; flex-wrap: wrap; gap: 4px; padding: 2px 0 10px; }
-  .v3-titres .vig { width: 54px; height: 54px; background: var(--line-nuit); overflow: hidden; cursor: pointer; }
-  .v3-titres .vig img { width: 100%; height: 100%; object-fit: cover; opacity: .82; transition: opacity .2s; }
-  .v3-titres .vig:hover img { opacity: 1; outline: 1px solid var(--blue-nuit); outline-offset: -1px; }
+  /* (les regles des titres de l'accueil sont dans le bloc REFONTE, plus bas) */
   @media (prefers-reduced-motion: reduce) { .deroule, .v3-film .calque { transition: opacity .2s ease; } }
 
   /* ouverture : la porte prend l'ecran, l'autre se replie en tranche cliquable */
@@ -826,32 +706,12 @@
     .cites-g { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
   @media (max-width: 900px) {
-    /* Le bandeau tenait un quart de l'ecran (demande de Ghali, 05/10/2026) :
-       le nom et la version sur une ligne, le sous-titre, la phrase en plus
-       petit, l'e-mail seul. Les villes restent sur ordinateur. */
-    .v3-bandeau { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; padding: 9px var(--g) 9px; align-items: start; }
-    .v3-bandeau .qui { grid-column: 1; grid-row: 1; }
-    .v3-bandeau .nom { font-size: 20px; }
-    .v3-bandeau .sous-titre { font-size: 12px; }
-    .v3-bandeau h1 { grid-column: 1 / -1; grid-row: 2; font-size: 15px; font-weight: 400; line-height: 1.35; max-width: none; text-align: left; }
-    /* sur telephone, une seule couleur : celle de l'espace affiche */
-    .v3-bandeau { border-bottom: 0; transition: background-color .45s var(--ease-drawer); }
-    .v3-bandeau.nuit, .v3-bandeau.nuit .v3-infos { background: var(--nuit); }
+    /* sur telephone, l'en-tete prend une seule couleur : celle de l'espace
+       affiche (le reste de l'en-tete telephone est dans le bloc REFONTE) */
+    .v3-bandeau { transition: background-color .45s var(--ease-drawer); }
+    .v3-bandeau.nuit { background: var(--nuit); }
     .v3-bandeau.nuit .nom, .v3-bandeau.nuit h1, .v3-bandeau.nuit .mail { color: var(--nuit-txt); }
     .v3-bandeau.nuit .sous-titre, .v3-bandeau.nuit .coord { color: var(--nuit-grey); }
-    .v3-bandeau.nuit .v3-infos dt { color: var(--blue-nuit); }
-    .v3-bandeau.nuit .v3-infos dd { color: #C4C9C4; }
-    .v3-bandeau .coord { display: contents; }
-    .v3-bandeau .coord > a { grid-column: 1 / -1; grid-row: 3; font-size: 13px; text-align: left; justify-self: start; }
-    .v3-bandeau .coord > span { display: none; }
-
-    /* Une porte ouverte, le bandeau se replie sur une ligne : le nom et la
-       version (qui doit rester visible), pour laisser l'ecran a la lecture.
-       Toucher le nom deroule toujours le volet. (demande de Ghali, 05/10/2026) */
-    .v3.dedans .v3-bandeau { align-items: center; padding: 8px var(--g); }
-    .v3.dedans .v3-bandeau h1, .v3.dedans .v3-bandeau .sous-titre,
-    .v3.dedans .v3-bandeau .coord > a, .v3.dedans .v3-bandeau .coord > span { display: none; }
-    .v3.dedans .v3-bandeau .nom { font-size: 18px; }
 
     .v3-portes { flex-direction: column; }
     .v3-porte { flex: 0 0 auto; }
@@ -927,6 +787,150 @@
     .gal-nav { display: none; }
   }
 
+
+  /* ═══════════ REFONTE DE L'ACCUEIL (13/10/2026) ═══════════
+     Brief : _DIRECTION-PROTOTYPES/BRIEF-REFONTE-EXECUTION.md ; maquette des
+     solutions validee par Ghali : _DIRECTION-PROTOTYPES/refonte-accueil/
+     solutions-13-10.html. Les regles ci-dessous passent apres les anciennes
+     et les remplacent la ou elles se recouvrent. */
+
+  /* -- la charniere disparait : la nuit s'arrete, le papier commence. Son
+        element reste dans la page (sa photo sert encore a la tranche qui
+        s'entrouvre, porte ouverte), mais il ne prend plus de place. -- */
+  .v3-portes { --l-joint: 0px; }
+  .v3-joint { display: none; }
+  @media (min-width: 901px) {
+    .v3-portes:not(.dedans) .v3-porte.r::before { right: 0; -webkit-mask-image: none; mask-image: none; }
+    .v3-portes:not(.dedans) .v3-porte.r .v3-titres { margin-right: 0; }
+    .v3-portes:not(.dedans) .v3-porte.r { overflow: hidden; }
+  }
+
+  /* -- deux titres de la meme taille : « Recherche » et « Projets » (Ghali,
+        13/10/2026), en Newsreader 44 px -- */
+  .v3-seuil h2 button { font-size: 44px; line-height: 1; letter-spacing: -.02em; }
+
+  /* -- la porte Projets a l'accueil : le titre, la bande qui prend la place
+        qui reste, le bloc infos -- */
+  .v3-seuil { padding: 32px var(--g) 26px; }
+  .v3-film { gap: 16px; }
+  .v3-film button { display: flex; flex-direction: column; height: 100%; overflow: visible; }
+  /* des cadres tous pareils, en rectangle haut 3:4 ; la legende dessous a
+     une hauteur fixe (deux lignes de titre, une de client et d'annee) */
+  .v3-film .ph { display: block; position: relative; overflow: hidden; flex: none; height: calc(100% - var(--h-leg, 74px)); aspect-ratio: 3 / 4; background: var(--paper-2); }
+  .v3-film .ph img { height: 100%; width: 100%; object-fit: cover; aspect-ratio: auto; }
+  .v3-film button:hover img { opacity: 1; }
+  .v3-film .leg { display: block; width: 0; min-width: 100%; height: var(--h-leg, 74px); padding-top: 10px; text-align: left; color: var(--ink); transition: color .25s ease, opacity .4s ease; }
+  .v3-film .leg b { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 16px; font-weight: 500; line-height: 1.3; letter-spacing: -.01em; }
+  .v3-film .leg .m { display: block; margin-top: 2px; font-size: 13px; line-height: 1.4; color: #5B615D; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .v3-film .calque { display: none; }
+  @media (min-width: 901px) {
+    .v3-portes:not(.dedans) .v3-porte.p .v3-seuil h2 { order: 0; align-self: flex-start; text-align: left; }
+    /* la bande touche la colonne noire a gauche et le bord de l'ecran a droite */
+    .v3-portes:not(.dedans) .v3-porte.p .v3-seuil .v3-film { order: 1; flex: 1 1 auto; height: auto; min-height: 0; margin: 22px calc(-1 * var(--g)) 0; }
+    .v3-portes:not(.dedans) .v3-porte.p .v3-seuil .v3-infos { order: 5; }
+  }
+  /* la piece citee, au survol d'un article : un filet corail fonce sur sa photo */
+  .v3-film .ph::before { content: ""; position: absolute; inset: 0; z-index: 2; box-shadow: inset 0 0 0 2px transparent; transition: box-shadow .25s ease; pointer-events: none; }
+  .v3-portes:not(.dedans) .v3-film button.allumee .ph::before { box-shadow: inset 0 0 0 2px var(--corail-fonce); }
+  .v3-portes:not(.dedans) .v3-film button.allumee .leg b { color: var(--corail-fonce); }
+  .v3-portes:not(.dedans) .v3-film button.allumee { box-shadow: none; }
+  .v3-portes:not(.dedans) .v3-film button.eteinte img { opacity: 1; filter: none; }
+
+  /* -- le givre (Ghali, 13/10/2026) : ce qui compte reste net, le reste se
+        givre. Un voile couleur papier, un flou leger, la legende qui palit.
+        Jamais pendant le defilement : le script ne le pose que bande arretee. -- */
+  .v3-film .ph::after { content: ""; position: absolute; inset: 0; z-index: 1; background: var(--paper); opacity: 0; transition: opacity .4s ease; pointer-events: none; }
+  .v3-film .ph img { transition: filter .4s ease, opacity .3s ease; }
+  .v3-film button.givre .ph::after { opacity: .55; }
+  .v3-film button.givre .ph img { filter: blur(2px); }
+  .v3-film button.givre .leg { opacity: .4; }
+  @media (prefers-reduced-motion: reduce) {
+    .v3-film button.givre .ph img { filter: none; }
+    .v3-film .ph::after, .v3-film .leg { transition: none; }
+  }
+
+  /* -- la colonne Recherche a l'accueil : chaque titre, et dessous, en
+        corail, les pieces de la bande qu'il cite. Plus de tiroir au survol. -- */
+  .v3-porte.r .v3-seuil { overflow-y: auto; scrollbar-width: none; }
+  .v3-porte.r .v3-seuil::-webkit-scrollbar { display: none; }
+  .v3-seuil-intro { margin-top: 12px; max-width: 34ch; font-size: 16px; line-height: 1.55; color: var(--nuit-grey); }
+  .v3-titres { margin-top: 30px; font-size: inherit; line-height: inherit; letter-spacing: 0; border-bottom: 1px solid var(--line-nuit); }
+  .v3-titres li { border-top: 1px solid var(--line-nuit); transition: opacity .3s ease; }
+  .v3-titres .art-tete { display: block; width: 100%; padding: 16px 0; }
+  .v3-titres .t { display: block; font-size: 28px; line-height: 1.1; letter-spacing: -.015em; transition: color .25s ease; }
+  .v3-titres .c { display: block; margin-top: 7px; font-size: 13px; line-height: 1.5; color: var(--corail); }
+  .v3-titres .c.en-cours { color: var(--nuit-grey); }
+  .v3-titres .art-tete:not([disabled]):hover .t, .v3-titres li.cite .t { color: var(--corail); }
+  .v3-titres.allume li:not(.cite) { opacity: .35; }
+  .v3-titres .art-tete[disabled] { color: var(--nuit-grey); cursor: default; }
+  /* le tiroir : ferme partout, sauf au telephone quand on touche le titre */
+  .v3-titres .deroule { grid-column: auto; }
+  .v3-titres li.ouvert > .deroule { grid-template-rows: 1fr; opacity: 1; }
+  .v3-titres .deroule > div { overflow: hidden; min-height: 0; }
+  .v3-titres .i { display: block; font-family: var(--f-titre); font-style: italic; font-size: 17px; line-height: 1.45; color: #CDD1CC; padding: 0; max-width: 48ch; }
+  .v3-titres .vigs { display: flex; flex-wrap: wrap; padding: 12px 0 0; gap: 6px; }
+  .v3-titres .vig { display: block; flex: none; width: 52px; height: 52px; background: var(--line-nuit); overflow: hidden; cursor: pointer; }
+  .v3-titres .vig img { width: 100%; height: 100%; object-fit: cover; opacity: .85; transition: opacity .2s; }
+  .v3-titres .vig:hover img { opacity: 1; }
+  .v3-titres .lire { display: inline-block; margin: 12px 0 18px; font-size: 13px; color: var(--corail); border-bottom: 1px solid var(--corail); padding-bottom: 1px; }
+  /* un ecran bas : les titres descendent d'un cran pour que les cinq tiennent */
+  @media (min-width: 901px) and (max-height: 800px) {
+    .v3-seuil h2 button { font-size: 36px; }
+    .v3-titres { margin-top: 22px; }
+    .v3-titres .art-tete { padding: 12px 0; }
+    .v3-titres .t { font-size: 22px; }
+    .v3-seuil { padding-top: 26px; }
+  }
+
+  /* -- porte Recherche ouverte : le sommaire porte les tiroirs. Tous ouverts a
+        l'arrivee ; pendant la lecture, seul celui de l'article en cours. -- */
+  .v3-index li { border-top: 1px solid var(--line-nuit); }
+  .v3-index li > button { border-top: 0; }
+  .v3-index .deroule { display: grid; }
+  .v3-index .deroule > div { overflow: hidden; min-height: 0; }
+  .v3-index .i { display: block; font-family: var(--f-titre); font-style: italic; font-size: 15px; line-height: 1.45; color: #C4C9C4; }
+  .v3-index .vigs { display: flex; flex-wrap: wrap; gap: 4px; padding: 10px 0 14px; }
+  .v3-index .vig { width: 40px; height: 40px; background: var(--line-nuit); overflow: hidden; cursor: pointer; }
+  .v3-index .vig img { width: 100%; height: 100%; object-fit: cover; opacity: .82; transition: opacity .2s; }
+  .v3-index .vig:hover img { opacity: 1; outline: 1.5px solid var(--corail); outline-offset: -1.5px; }
+  @media (min-width: 901px) {
+    .v3-index { max-height: calc(100svh - var(--h-tete, 85px) - 120px); overflow-y: auto; scrollbar-width: none; }
+    .v3-index::-webkit-scrollbar { display: none; }
+    .v3-index .deroule { grid-template-rows: 1fr; opacity: 1; }
+    .v3-index.lecture li:not(.courant) .deroule { grid-template-rows: 0fr; opacity: 0; }
+  }
+  .v3-une .an { display: block; font-size: 13px; color: var(--nuit-grey); margin-top: 8px; }
+
+  /* ═══════════ TELEPHONE (refonte du 13/10/2026) ═══════════ */
+  @media (max-width: 900px) {
+    /* l'en-tete : le nom et le sous-titre, l'accroche, l'e-mail */
+    .v3-bandeau { display: block; padding: 16px var(--g) 14px; border-bottom: 1px solid var(--line); }
+    .v3-bandeau .qui { display: block; }
+    .v3-bandeau .nom { font-size: 22px; }
+    .v3-bandeau .sous-titre { display: block; margin-top: 3px; font-size: 13px; }
+    .v3-bandeau h1 { margin-top: 10px; font-size: 26px; text-align: left; }
+    .v3-bandeau .coord { display: block; margin-top: 10px; }
+    .v3-bandeau .coord > a { font-size: 13px; }
+    .v3.dedans .v3-bandeau { padding: 10px var(--g); }
+    .v3.dedans .v3-bandeau h1, .v3.dedans .v3-bandeau .sous-titre, .v3.dedans .v3-bandeau .coord { display: none; }
+    .v3.dedans .v3-bandeau .nom { font-size: 18px; }
+    /* la bande : plus haute, legendes comprises ; elle defile seule et
+       s'arrete au toucher */
+    .v3-seuil { padding: 24px var(--g) 32px; }
+    .v3-portes:not(.dedans) .v3-porte.p .v3-seuil .v3-film { height: min(56svh, 470px); margin: 18px calc(-1 * var(--g)) 0; padding-left: var(--g); }
+    .v3-infos { margin-top: 26px; }
+    .v3-infos dl { grid-template-columns: 1fr; gap: 10px; }
+    .v3-infos dl > div { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 10px; }
+    .v3-infos .footer-version { display: none !important; }
+    /* Recherche : titre et ligne corail toujours visibles ; toucher un titre
+       ouvre son tiroir, un seul a la fois */
+    .v3-titres .t { font-size: 24px; }
+    .v3-seuil h2 button { font-size: 36px; }
+    /* porte ouverte, le sommaire : le tiroir du titre qui passe au milieu */
+    .v3-index li.proche .deroule { grid-template-rows: 1fr; opacity: 1; }
+    .v3-index .deroule { grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .35s var(--ease-drawer), opacity .25s ease; }
+  }
+
   /* ═══════════ OUVERTURE D'UNE PORTE : View Transitions ═══════════ */
   .v3-porte.p { view-transition-name: porte-p; }
   .v3-joint { view-transition-name: joint; }
@@ -959,32 +963,19 @@
   <header class="v3-bandeau">
     <div class="qui"><span class="nom" tabindex="0">Ghali Bensouda</span><span class="sous-titre">
 <!-- AUTO:DP_SOUS_TITRE:DEBUT -->
-      Computational design et fabrication
+      Computational design
 <!-- AUTO:DP_SOUS_TITRE:FIN -->
     </span></div>
     <h1>
 <!-- AUTO:DP_ACCROCHE:DEBUT -->
-      Conception de décors · Dispositifs de scène · Ornements textiles
+      <span class="l1"><span>Décors ·</span> <span>Dispositifs ·</span> <span>Ornements textiles</span></span><span class="l2">Conception et fabrication</span>
 <!-- AUTO:DP_ACCROCHE:FIN -->
     </h1>
     <div class="coord">
 <!-- AUTO:DP_COORD:DEBUT -->
       <a class="mail" href="mailto:gbensouda@gmail.com">gbensouda@gmail.com</a>
-      <span>Marseille · Paris · Casablanca</span>
 <!-- AUTO:DP_COORD:FIN -->
     </div>
-    <div class="v3-infos"><div>
-<!-- AUTO:DP_VOLET:DEBUT -->
-      <dl>
-        <div><dt>Outils</dt><dd><span class="l">Rhino · Grasshopper · Blender</span><span class="l">Marvelous Designer · TouchDesigner · MadMapper</span></dd></div>
-        <div><dt>Studios</dt><dd><span class="l">Synaptic Garden (France)</span><span class="l">FenFutures (Maroc)</span></dd></div>
-        <div><dt>Formation</dt><dd><span class="l">Architecte DESA, ESA Paris, 2019</span></dd></div>
-      </dl>
-<!-- AUTO:DP_VOLET:FIN -->
-<!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.222</p>
-<!-- AUTO:VERSION:FIN -->
-    </div></div>
   </header>
 
   <div class="v3-portes">
@@ -993,18 +984,30 @@
         <h2><button data-entrer="p"><svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M6.5 1.5 3 5l3.5 3.5"/></svg><span class="mot">Projets</span></button></h2>
         <div class="v3-film">
 <!-- AUTO:DP_FILM:DEBUT -->
-          <button data-entrer="p" data-carte="starting-with-the-limbs" aria-label="Dispositifs scéniques · Starting with the Limbs, cie L'Autre Maison, 2025"><img src="images/web/1-commandes/starting-with-the-limbs/scene-gondard-duo-sur-module.jpg" alt="" width="1600" height="1600"><span class="calque" aria-hidden="true"><b>Dispositifs scéniques · <em>Starting with the Limbs</em>, cie L'Autre Maison</b><span class="mention">2025</span></span></button>
-          <button data-entrer="p" data-carte="hermes-holiday-windows" aria-label="Vitrines Hermès France H19, 2019"><img src="images/web/1-commandes/hermes-holiday-windows/vitrine-chateau-alex-jonas.jpg" alt="" width="911" height="911"><span class="calque" aria-hidden="true"><b>Vitrines Hermès France H19</b><span class="mention">2019</span></span></button>
-          <button data-entrer="p" data-carte="photophobia-vr" aria-label="Environnement VR · Photophobia, Sanni Est, 2022"><img src="images/web/1-commandes/photophobia-vr/02_premiere-kampnagel.jpg" alt="" width="568" height="503"><span class="calque" aria-hidden="true"><b>Environnement VR · <em>Photophobia</em>, Sanni Est</b><span class="mention">2022</span></span></button>
-          <button data-entrer="p" data-carte="watches-wonders-mobilier-vip" aria-label="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze, 2020"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-miroir-infini-01.jpg" alt="" width="1600" height="2133"><span class="calque" aria-hidden="true"><b>Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze</b><span class="mention">2020</span></span></button>
-          <button data-entrer="p" data-carte="ornements-imprimes" aria-label="Ornements imprimés · deux pièces pour l'atelier Zaa, 2024"><img src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124238652.jpg" alt="" width="1600" height="2844"><span class="calque" aria-hidden="true"><b>Ornements imprimés · deux pièces pour l'atelier Zaa</b><span class="mention">2024</span></span></button>
-          <button data-entrer="p" data-carte="mass-set-design" aria-label="Set design · Mass, film de Pierre Pauze, 2020"><img src="images/web/1-commandes/mass-set-design/tournage-plante-sculptee.jpg" alt="" width="1600" height="2133"><span class="calque" aria-hidden="true"><b>Set design · <em>Mass</em>, film de Pierre Pauze</b><span class="mention">2020</span></span></button>
-          <button data-entrer="p" data-carte="hermes-wild-wild-quest" aria-label="Vitrines Hermès France H21, 2021"><img src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/vitrine-arbres-02.jpg" alt="" width="849" height="765"><span class="calque" aria-hidden="true"><b>Vitrines Hermès France H21</b><span class="mention">2021</span></span></button>
-          <button data-entrer="p" data-carte="saket-sethi-mobilier-parametrique" aria-label="Collection mobilier paramétrique · Saket Sethi Design, 2023"><img src="images/web/1-commandes/saket-sethi-mobilier-parametrique/01_sofa-rendu.jpg" alt="" width="1248" height="585"><span class="calque" aria-hidden="true"><b>Collection mobilier paramétrique · Saket Sethi Design</b><span class="mention">2023</span></span></button>
-          <button data-entrer="p" data-carte="sabrina-ratte-sculpture-cinetique" aria-label="Sculpture cinétique · Sabrina Ratté × Watches &amp; Wonders, 2022"><img src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/Art-galeriecharlot-3654.jpg" alt="" width="1600" height="1136"><span class="calque" aria-hidden="true"><b>Sculpture cinétique · Sabrina Ratté × Watches &amp; Wonders</b><span class="mention">2022</span></span></button>
-          <button data-entrer="p" data-carte="passementerie-imprimee" aria-label="Passementerie imprimée, 2026"><img src="images/web/2-recherche/projets/boutons/_tenues-finies/PXL_20260704_111244235.jpg" alt="" width="1600" height="2844"><span class="calque" aria-hidden="true"><b>Passementerie imprimée</b><span class="mention">2026</span></span></button>
-          <button data-entrer="p" data-carte="vortex" aria-label="Vortex, 2026"><img src="images/web/2-recherche/projets/mode-vase/PXL_20260424_173227668.MP.jpg" alt="" width="1600" height="2844"><span class="calque" aria-hidden="true"><b>Vortex</b><span class="mention">2026</span></span></button>
+          <button data-entrer="p" data-carte="starting-with-the-limbs" aria-label="Dispositifs scéniques · Starting with the Limbs, cie L'Autre Maison, 2025"><span class="ph"><img src="images/web/1-commandes/starting-with-the-limbs/scene-gondard-duo-sur-module.jpg" alt="" width="1600" height="1600"></span><span class="leg" aria-hidden="true"><b>Dispositifs scéniques · <em>Starting with the Limbs</em>, cie L'Autre Maison</b><span class="m">cie L'Autre Maison · 2025</span></span></button>
+          <button data-entrer="p" data-carte="hermes-holiday-windows" aria-label="Vitrines Hermès France H19, 2019"><span class="ph"><img src="images/web/1-commandes/hermes-holiday-windows/vitrine-chateau-alex-jonas.jpg" alt="" width="911" height="911"></span><span class="leg" aria-hidden="true"><b>Vitrines Hermès France H19</b><span class="m">Hermès · 2019</span></span></button>
+          <button data-entrer="p" data-carte="photophobia-vr" aria-label="Environnement VR · Photophobia, Sanni Est, 2022"><span class="ph"><img src="images/web/1-commandes/photophobia-vr/02_premiere-kampnagel.jpg" alt="" width="568" height="503"></span><span class="leg" aria-hidden="true"><b>Environnement VR · <em>Photophobia</em>, Sanni Est</b><span class="m">Sanni Est · 2022</span></span></button>
+          <button data-entrer="p" data-carte="watches-wonders-mobilier-vip" aria-label="Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze, 2020"><span class="ph"><img src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-miroir-infini-01.jpg" alt="" width="1600" height="2133"></span><span class="leg" aria-hidden="true"><b>Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze</b><span class="m">Watches &amp; Wonders · 2020</span></span></button>
+          <button data-entrer="p" data-carte="ornements-imprimes" aria-label="Ornements imprimés · deux pièces pour l'atelier Zaa, 2024"><span class="ph"><img src="images/web/1-commandes/ornements-imprimes/Gilet/pxl-20240517-124238652.jpg" alt="" width="1600" height="2844"></span><span class="leg" aria-hidden="true"><b>Ornements imprimés · deux pièces pour l'atelier Zaa</b><span class="m">Atelier de couture Zaa · 2024</span></span></button>
+          <button data-entrer="p" data-carte="mass-set-design" aria-label="Set design · Mass, film de Pierre Pauze, 2020"><span class="ph"><img src="images/web/1-commandes/mass-set-design/tournage-plante-sculptee.jpg" alt="" width="1600" height="2133"></span><span class="leg" aria-hidden="true"><b>Set design · <em>Mass</em>, film de Pierre Pauze</b><span class="m">Pierre Pauze · 2020</span></span></button>
+          <button data-entrer="p" data-carte="hermes-wild-wild-quest" aria-label="Vitrines Hermès France H21, 2021"><span class="ph"><img src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/vitrine-arbres-02.jpg" alt="" width="849" height="765"></span><span class="leg" aria-hidden="true"><b>Vitrines Hermès France H21</b><span class="m">Hermès · 2021</span></span></button>
+          <button data-entrer="p" data-carte="saket-sethi-mobilier-parametrique" aria-label="Collection mobilier paramétrique · Saket Sethi Design, 2023"><span class="ph"><img src="images/web/1-commandes/saket-sethi-mobilier-parametrique/01_sofa-rendu.jpg" alt="" width="1248" height="585"></span><span class="leg" aria-hidden="true"><b>Collection mobilier paramétrique · Saket Sethi Design</b><span class="m">Saket Sethi Design · 2023</span></span></button>
+          <button data-entrer="p" data-carte="sabrina-ratte-sculpture-cinetique" aria-label="Sculpture cinétique · Sabrina Ratté × Watches &amp; Wonders, 2022"><span class="ph"><img src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/Art-galeriecharlot-3654.jpg" alt="" width="1600" height="1136"></span><span class="leg" aria-hidden="true"><b>Sculpture cinétique · Sabrina Ratté × Watches &amp; Wonders</b><span class="m">Sabrina Ratté · 2022</span></span></button>
+          <button data-entrer="p" data-carte="passementerie-imprimee" aria-label="Passementerie imprimée, 2026"><span class="ph"><img src="images/web/2-recherche/projets/boutons/_tenues-finies/PXL_20260704_111244235.jpg" alt="" width="1600" height="2844"></span><span class="leg" aria-hidden="true"><b>Passementerie imprimée</b><span class="m">Atelier de couture Zaa · 2026</span></span></button>
+          <button data-entrer="p" data-carte="vortex" aria-label="Vortex, 2026"><span class="ph"><img src="images/web/2-recherche/projets/mode-vase/PXL_20260424_173227668.MP.jpg" alt="" width="1600" height="2844"></span><span class="leg" aria-hidden="true"><b>Vortex</b><span class="m">FenFutures, projet personnel · 2026</span></span></button>
 <!-- AUTO:DP_FILM:FIN -->
+        </div>
+        <div class="v3-infos">
+<!-- AUTO:DP_VOLET:DEBUT -->
+      <dl>
+        <div><dt>Outils</dt><dd><span class="l">Rhino · Grasshopper · Blender</span><span class="l">Marvelous Designer · TouchDesigner · MadMapper</span></dd></div>
+        <div><dt>Studios</dt><dd><span class="l">Synaptic Garden (France)</span><span class="l">FenFutures (Maroc)</span><span class="l villes">Marseille · Paris · Casablanca</span></dd></div>
+        <div><dt>Formation</dt><dd><span class="l">Architecte DESA, ESA Paris, 2019</span></dd></div>
+      </dl>
+<!-- AUTO:DP_VOLET:FIN -->
+<!-- AUTO:VERSION:DEBUT -->
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.223</p>
+<!-- AUTO:VERSION:FIN -->
         </div>
       </div>
       <button class="v3-tranche" data-entrer="p">Projets</button>
@@ -1076,13 +1079,18 @@
     <section class="v3-porte r nuit" data-porte="r">
       <div class="v3-seuil">
         <h2><button data-entrer="r">Recherche</button></h2>
+        <p class="v3-seuil-intro">
+<!-- AUTO:DP_SEUIL_INTRO:DEBUT -->
+          Comment les pièces ont été faites, commandes et recherches personnelles mêlées.
+<!-- AUTO:DP_SEUIL_INTRO:FIN -->
+        </p>
         <ul class="v3-titres">
 <!-- AUTO:DP_TITRES:DEBUT -->
-          <li><button data-article="scene-et-vitrine" data-cartes="starting-with-the-limbs hermes-holiday-windows photophobia-vr watches-wonders-mobilier-vip mass-set-design hermes-wild-wild-quest sabrina-ratte-sculpture-cinetique"><span class="t">Scène et vitrine</span><span class="n mention">8 pièces citées</span><span class="deroule"><span><span class="i">L'idée d'un artiste ou d'une marque, rendue réalisable : les matériaux, les techniques, les plans.</span><span class="vigs"><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-coquillage"><img data-src="images/web/1-commandes/hermes-holiday-windows/vitrine-coquillages-alex-jonas.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-dragon"><img data-src="images/web/1-commandes/hermes-wild-wild-quest/03_modele3d-creature.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-mains"><img data-src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/mains-en-serie-02.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-arbres"><img data-src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/arbre-rendu.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-sculpture"><img data-src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/HERMES_Watches-Wonders_2022.04.02_AliciaDubuis_02_2000.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-montagnes"><img data-src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/03_sculpture-himalaya-plan.png" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-bar"><img data-src="images/web/1-commandes/watches-wonders-mobilier-vip/bar-a-montres-courbe.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-table"><img data-src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-allumee.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-mass"><img data-src="images/web/1-commandes/mass-set-design/tournage-plateau-rouge.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-aire-poids-lourd"><img data-src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-110930503.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-photophobia"><img data-src="images/web/1-commandes/photophobia-vr/01_scene-mangrove.jpg" alt=""></span></span></span></span></button></li>
-          <li><button data-article="assemblage-et-outillage" data-cartes="starting-with-the-limbs watches-wonders-mobilier-vip"><span class="t">Assemblage et outillage</span><span class="n mention">4 pièces citées</span><span class="deroule"><span><span class="i">La pièce imprimée qu'on ne voit pas : le nœud qui assemble une structure, le moule qui sort une série.</span><span class="vigs"><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-bar-courbe"><img data-src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/bar-pieces-imprimees-rendu.png" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs"><img data-src="images/web/2-recherche/projets/limbs/pxl-20250615-162255914.png" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-module"><img data-src="images/web/2-recherche/projets/limbs/pxl-20250613-113842873.png" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-en-scene"><img data-src="images/web/2-recherche/projets/limbs/Repetitions/appui-sur-deux-modules.jpg" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-noeud"><img data-src="images/web/2-recherche/projets/limbs/Assemblage/noeud-insert-et-vis.jpg" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-rates"><img data-src="images/web/2-recherche/projets/limbs/Rates/coude-casse-le-long-des-couches.jpg" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-prototypage"><img data-src="images/web/2-recherche/projets/limbs/Premices/concept-ia-trois-familles.jpg" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-transport"><img data-src="images/web/2-recherche/projets/limbs/Transport/velo-cargo-residence.jpg" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-icebergs"><img data-src="images/web/1-commandes/hermes-holiday-windows/_atelier/vitrine-icebergs-01-recadree.jpg" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-tiflik"><img data-src="images/web/2-recherche/projets/tiflik/PXL_20260504_152604167.MP.jpg" alt=""></span></span></span></span></button></li>
-          <li><button data-article="textile-et-ornement" data-cartes="ornements-imprimes passementerie-imprimee"><span class="t">Textile et ornement</span><span class="n mention">8 pièces citées</span><span class="deroule"><span><span class="i">Imprimer sur l'étoffe, et donner à l'impression une place à côté de la main, jamais à sa place.</span><span class="vigs"><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan"><img data-src="images/web/2-recherche/projets/thalassic-kaftan/01_broderie-generee-ia.png" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-definition"><img data-src="images/web/2-recherche/projets/thalassic-kaftan/Definition/13_definition-image-sampler-01.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee"><img data-src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/20_modele-3d-broderie.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-machine-et-main"><img data-src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/22_parcours-de-buse-01.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-rendu-fixe"><img data-src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/42_thalassic-face.png" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-masques"><img data-src="images/web/2-recherche/projets/masques/01-thalassic-face.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-contour"><img data-src="images/web/2-recherche/projets/re-former-le-textile/Contour/PXL_20240319_205644415.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-fleurs"><img data-src="images/web/2-recherche/projets/re-former-le-textile/Fleurs/PXL_20240506_120020367.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-commandes-zaa"><img data-src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-123440392.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-perlage"><img data-src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260516_194829364.NIGHT.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-boutons"><img data-src="images/web/2-recherche/projets/boutons/PXL_20260704_151248364.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-instruments"><img data-src="images/web/2-recherche/projets/boutons/PXL_20260715_175518889.MP.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-atelier"><img data-src="images/web/2-recherche/projets/atelier/PXL_20260306_094847207.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-motifs-broderie-main"><img data-src="images/web/2-recherche/projets/motifs-broderie-main/pxl-20240420-122646650.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-main"><img data-src="images/web/2-recherche/sujets/textile-et-ornement/photos/PXL_20260723_172001330.MP.jpg" alt=""></span></span></span></span></button></li>
-          <li><button data-article="objets-imprimes" data-cartes="sabrina-ratte-sculpture-cinetique passementerie-imprimee vortex"><span class="t">Objets imprimés</span><span class="n mention">5 pièces citées</span><span class="deroule"><span><span class="i">Quand la pièce imprimée est l'objet lui-même, et que sa surface dit comment il a été fait.</span><span class="vigs"><span class="vig" data-article="objets-imprimes" data-groupe="2-recherche-sujets-objets-imprimes-vases"><img data-src="images/web/2-recherche/projets/mode-vase/Fleuris/image (2).jpg" alt=""></span><span class="vig" data-article="objets-imprimes" data-groupe="2-recherche-sujets-objets-imprimes-soliflore"><img data-src="images/web/2-recherche/projets/mode-vase/Soliflore/PXL_20260715_173250407.MP.jpg" alt=""></span><span class="vig" data-article="objets-imprimes" data-groupe="2-recherche-sujets-objets-imprimes-trio"><img data-src="images/web/2-recherche/projets/mode-vase/Trio/PXL_20260715_173307446.MP.jpg" alt=""></span><span class="vig" data-article="objets-imprimes" data-groupe="2-recherche-sujets-objets-imprimes-relief"><img data-src="images/web/2-recherche/projets/mode-vase/Relief/PXL_20260321_110027366.jpg" alt=""></span><span class="vig" data-article="objets-imprimes" data-groupe="2-recherche-sujets-objets-imprimes-coextrusion"><img data-src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260429_183442768.jpg" alt=""></span><span class="vig" data-article="objets-imprimes" data-groupe="2-recherche-sujets-objets-imprimes-anastomose"><img data-src="images/web/2-recherche/projets/sculptures/anastomose/pxl-20260127-222316950-2.jpg" alt=""></span></span></span></span></button></li>
-          <li><button data-article="outils-parametriques" data-cartes="saket-sethi-mobilier-parametrique"><span class="t">Outils paramétriques</span><span class="n mention">3 pièces citées</span><span class="deroule"><span><span class="i">Écrire les règles d'une pièce plutôt que sa forme : une donnée change, et tout ce qui en dépend se recalcule.</span><span class="vigs"><span class="vig" data-article="outils-parametriques" data-groupe="2-recherche-sujets-outils-parametriques-declinaisons"><img data-src="images/web/1-commandes/saket-sethi-mobilier-parametrique/03_declinaisons-grasshopper.jpg" alt=""></span><span class="vig" data-article="outils-parametriques" data-groupe="2-recherche-sujets-outils-parametriques-mode-vase"><img data-src="images/web/2-recherche/projets/mode-vase/PXL_20260424_173227668.MP.jpg" alt=""></span><span class="vig" data-article="outils-parametriques" data-groupe="2-recherche-sujets-outils-parametriques-hudhud"><img data-src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260427_121018672.MP.jpg" alt=""></span></span></span></span></button></li>
+          <li data-cartes="starting-with-the-limbs hermes-holiday-windows photophobia-vr watches-wonders-mobilier-vip mass-set-design hermes-wild-wild-quest sabrina-ratte-sculpture-cinetique"><button class="art-tete" data-article="scene-et-vitrine"><span class="t">Scène et vitrine</span><span class="c">Starting with the Limbs · Vitrines Hermès France H19 · Photophobia · Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze · Mass · Vitrines Hermès France H21 · Sculpture cinétique · Sabrina Ratté × Watches &amp; Wonders</span></button><div class="deroule"><div><span class="i">L'idée d'un artiste ou d'une marque, rendue réalisable : les matériaux, les techniques, les plans.</span><span class="vigs"><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-coquillage"><img data-src="images/web/1-commandes/hermes-holiday-windows/vitrine-coquillages-alex-jonas.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-dragon"><img data-src="images/web/1-commandes/hermes-wild-wild-quest/03_modele3d-creature.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-mains"><img data-src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/mains-en-serie-02.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-arbres"><img data-src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/arbre-rendu.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-sculpture"><img data-src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/HERMES_Watches-Wonders_2022.04.02_AliciaDubuis_02_2000.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-montagnes"><img data-src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/03_sculpture-himalaya-plan.png" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-bar"><img data-src="images/web/1-commandes/watches-wonders-mobilier-vip/bar-a-montres-courbe.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-table"><img data-src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-allumee.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-mass"><img data-src="images/web/1-commandes/mass-set-design/tournage-plateau-rouge.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-aire-poids-lourd"><img data-src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-110930503.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-photophobia"><img data-src="images/web/1-commandes/photophobia-vr/01_scene-mangrove.jpg" alt=""></span></span><button class="lire" data-article="scene-et-vitrine">Lire l’article →</button></div></div></li>
+          <li data-cartes="starting-with-the-limbs watches-wonders-mobilier-vip"><button class="art-tete" data-article="assemblage-et-outillage"><span class="t">Assemblage et outillage</span><span class="c">Starting with the Limbs · Mobilier lumineux espace VIP · Watches &amp; Wonders / Pierre Pauze</span></button><div class="deroule"><div><span class="i">La pièce imprimée qu'on ne voit pas : le nœud qui assemble une structure, le moule qui sort une série.</span><span class="vigs"><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-bar-courbe"><img data-src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/bar-pieces-imprimees-rendu.png" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs"><img data-src="images/web/2-recherche/projets/limbs/pxl-20250615-162255914.png" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-module"><img data-src="images/web/2-recherche/projets/limbs/pxl-20250613-113842873.png" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-en-scene"><img data-src="images/web/2-recherche/projets/limbs/Repetitions/appui-sur-deux-modules.jpg" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-noeud"><img data-src="images/web/2-recherche/projets/limbs/Assemblage/noeud-insert-et-vis.jpg" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-rates"><img data-src="images/web/2-recherche/projets/limbs/Rates/coude-casse-le-long-des-couches.jpg" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-prototypage"><img data-src="images/web/2-recherche/projets/limbs/Premices/concept-ia-trois-familles.jpg" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-transport"><img data-src="images/web/2-recherche/projets/limbs/Transport/velo-cargo-residence.jpg" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-icebergs"><img data-src="images/web/1-commandes/hermes-holiday-windows/_atelier/vitrine-icebergs-01-recadree.jpg" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-tiflik"><img data-src="images/web/2-recherche/projets/tiflik/PXL_20260504_152604167.MP.jpg" alt=""></span></span><button class="lire" data-article="assemblage-et-outillage">Lire l’article →</button></div></div></li>
+          <li data-cartes="ornements-imprimes passementerie-imprimee"><button class="art-tete" data-article="textile-et-ornement"><span class="t">Textile et ornement</span><span class="c">Ornements imprimés · deux pièces pour l'atelier Zaa · Passementerie imprimée</span></button><div class="deroule"><div><span class="i">Imprimer sur l'étoffe, et donner à l'impression une place à côté de la main, jamais à sa place.</span><span class="vigs"><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan"><img data-src="images/web/2-recherche/projets/thalassic-kaftan/01_broderie-generee-ia.png" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-definition"><img data-src="images/web/2-recherche/projets/thalassic-kaftan/Definition/13_definition-image-sampler-01.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee"><img data-src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/20_modele-3d-broderie.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-machine-et-main"><img data-src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/22_parcours-de-buse-01.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-rendu-fixe"><img data-src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/42_thalassic-face.png" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-masques"><img data-src="images/web/2-recherche/projets/masques/01-thalassic-face.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-contour"><img data-src="images/web/2-recherche/projets/re-former-le-textile/Contour/PXL_20240319_205644415.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-fleurs"><img data-src="images/web/2-recherche/projets/re-former-le-textile/Fleurs/PXL_20240506_120020367.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-commandes-zaa"><img data-src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-123440392.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-perlage"><img data-src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260516_194829364.NIGHT.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-boutons"><img data-src="images/web/2-recherche/projets/boutons/PXL_20260704_151248364.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-instruments"><img data-src="images/web/2-recherche/projets/boutons/PXL_20260715_175518889.MP.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-atelier"><img data-src="images/web/2-recherche/projets/atelier/PXL_20260306_094847207.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-motifs-broderie-main"><img data-src="images/web/2-recherche/projets/motifs-broderie-main/pxl-20240420-122646650.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-main"><img data-src="images/web/2-recherche/sujets/textile-et-ornement/photos/PXL_20260723_172001330.MP.jpg" alt=""></span></span><button class="lire" data-article="textile-et-ornement">Lire l’article →</button></div></div></li>
+          <li data-cartes="sabrina-ratte-sculpture-cinetique passementerie-imprimee vortex"><button class="art-tete" data-article="objets-imprimes"><span class="t">Objets imprimés</span><span class="c">Sculpture cinétique · Sabrina Ratté × Watches &amp; Wonders · Passementerie imprimée · Vortex</span></button><div class="deroule"><div><span class="i">Quand la pièce imprimée est l'objet lui-même, et que sa surface dit comment il a été fait.</span><span class="vigs"><span class="vig" data-article="objets-imprimes" data-groupe="2-recherche-sujets-objets-imprimes-vases"><img data-src="images/web/2-recherche/projets/mode-vase/Fleuris/image (2).jpg" alt=""></span><span class="vig" data-article="objets-imprimes" data-groupe="2-recherche-sujets-objets-imprimes-soliflore"><img data-src="images/web/2-recherche/projets/mode-vase/Soliflore/PXL_20260715_173250407.MP.jpg" alt=""></span><span class="vig" data-article="objets-imprimes" data-groupe="2-recherche-sujets-objets-imprimes-trio"><img data-src="images/web/2-recherche/projets/mode-vase/Trio/PXL_20260715_173307446.MP.jpg" alt=""></span><span class="vig" data-article="objets-imprimes" data-groupe="2-recherche-sujets-objets-imprimes-relief"><img data-src="images/web/2-recherche/projets/mode-vase/Relief/PXL_20260321_110027366.jpg" alt=""></span><span class="vig" data-article="objets-imprimes" data-groupe="2-recherche-sujets-objets-imprimes-coextrusion"><img data-src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260429_183442768.jpg" alt=""></span><span class="vig" data-article="objets-imprimes" data-groupe="2-recherche-sujets-objets-imprimes-anastomose"><img data-src="images/web/2-recherche/projets/sculptures/anastomose/pxl-20260127-222316950-2.jpg" alt=""></span></span><button class="lire" data-article="objets-imprimes">Lire l’article →</button></div></div></li>
+          <li data-cartes="saket-sethi-mobilier-parametrique"><button class="art-tete" data-article="outils-parametriques"><span class="t">Outils paramétriques</span><span class="c">Collection mobilier paramétrique · Saket Sethi Design</span></button><div class="deroule"><div><span class="i">Écrire les règles d'une pièce plutôt que sa forme : une donnée change, et tout ce qui en dépend se recalcule.</span><span class="vigs"><span class="vig" data-article="outils-parametriques" data-groupe="2-recherche-sujets-outils-parametriques-declinaisons"><img data-src="images/web/1-commandes/saket-sethi-mobilier-parametrique/03_declinaisons-grasshopper.jpg" alt=""></span><span class="vig" data-article="outils-parametriques" data-groupe="2-recherche-sujets-outils-parametriques-mode-vase"><img data-src="images/web/2-recherche/projets/mode-vase/PXL_20260424_173227668.MP.jpg" alt=""></span><span class="vig" data-article="outils-parametriques" data-groupe="2-recherche-sujets-outils-parametriques-hudhud"><img data-src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260427_121018672.MP.jpg" alt=""></span></span><button class="lire" data-article="outils-parametriques">Lire l’article →</button></div></div></li>
 <!-- AUTO:DP_TITRES:FIN -->
         </ul>
       </div>
@@ -1095,75 +1103,115 @@
 <!-- AUTO:DP_RECHERCHE_INTRO:FIN -->
         </p>
 <!-- AUTO:DP_UNE:DEBUT -->
-        <div class="v3-une" data-une hidden>
-          <button class="ph" data-go="rpiece-mode-vase" aria-label="Ouvrir Mode vase"><img src="images/web/2-recherche/projets/mode-vase/PXL_20260424_173227668.MP.jpg" alt="" loading="lazy"></button>
+        <div class="v3-une" data-une="scene-et-vitrine" hidden>
+          <button class="ph" data-go="piece-hermes-holiday-windows" aria-label="Ouvrir Vitrines Hermès France H19"><img src="images/web/1-commandes/hermes-holiday-windows/_atelier/coquillage-finition-01.jpg" alt="" loading="lazy"></button>
           <div class="txt">
-            <h3>Mode vase</h3>
-            <span class="mention">2026</span>
-            <p>Des contenants imprimés d'une seule paroi, où la surface est le chemin de la buse.</p>
-            <span class="leg">Les deux parois sur une même photo : cannelures vrillées devant, texture en relief derrière</span>
-            <button class="lire" data-lire-une="objets-imprimes">Lire dans « Objets imprimés »</button>
+            <h3>Vitrines Hermès France H19</h3>
+            <span class="an">2019</span>
+            <p>Un coquillage en trois techniques : polystyrène fraisé, collerette imprimée, ailes thermoformées.</p>
+            <span class="leg">Le coquillage à l'atelier : corps fraisé, collerette imprimée, ailes thermoformées</span>
+            <button class="lire" data-lire-une="scene-et-vitrine">Lire dans « Scène et vitrine »</button>
           </div>
         </div>
-        <div class="v3-une" data-une hidden>
-          <button class="ph" data-go="rpiece-thalassic-kaftan" aria-label="Ouvrir Thalassic Kaftan"><img src="images/web/2-recherche/projets/thalassic-kaftan/01_broderie-generee-ia.png" alt="" loading="lazy"></button>
+        <div class="v3-une" data-une="scene-et-vitrine" hidden>
+          <button class="ph" data-go="piece-hermes-wild-wild-quest" aria-label="Ouvrir Vitrines Hermès France H21"><img src="images/web/1-commandes/hermes-wild-wild-quest/01_vitrine-dragon.jpg" alt="" loading="lazy"></button>
+          <div class="txt">
+            <h3>Vitrines Hermès France H21</h3>
+            <span class="an">2021</span>
+            <p>Un dragon de deux mètres, conçu pour être fraisé et suspendu, tiré en cinq exemplaires.</p>
+            <span class="leg">Vitrine finale : le dragon et ses cavaliers</span>
+            <button class="lire" data-lire-une="scene-et-vitrine">Lire dans « Scène et vitrine »</button>
+          </div>
+        </div>
+        <div class="v3-une" data-une="assemblage-et-outillage" hidden>
+          <button class="ph" data-go="rpiece-limbs" aria-label="Ouvrir Starting with the Limbs · l'atelier"><img src="images/web/2-recherche/projets/limbs/pxl-20250615-162255914.png" alt="" loading="lazy"></button>
+          <div class="txt">
+            <h3>Starting with the Limbs · l'atelier</h3>
+            <span class="an">2025</span>
+            <p>Des coudes imprimés qui relient des tubes : solides sous le poids d'un danseur, légers, et démontables pour partir en tournée.</p>
+            <span class="leg">Un module seul : les coudes imprimés, reliés par des tubes</span>
+            <button class="lire" data-lire-une="assemblage-et-outillage">Lire dans « Assemblage et outillage »</button>
+          </div>
+        </div>
+        <div class="v3-une" data-une="textile-et-ornement" hidden>
+          <button class="ph" data-go="rpiece-thalassic-kaftan" aria-label="Ouvrir Thalassic Kaftan"><img src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/22_parcours-de-buse-01.jpg" alt="" loading="lazy"></button>
           <div class="txt">
             <h3>Thalassic Kaftan</h3>
-            <span class="mention">2023</span>
+            <span class="an">2023</span>
             <p>Un caftan dont la broderie n'est pas dessinée mais calculée.</p>
-            <span class="leg">L'image qui a ouvert la recherche : broderie générée, corail et fil d'or</span>
+            <span class="leg">Ce que la machine sait faire : répéter une trajectoire à l'identique sur toute une surface</span>
             <button class="lire" data-lire-une="textile-et-ornement">Lire dans « Textile et ornement »</button>
           </div>
         </div>
-        <div class="v3-une" data-une hidden>
-          <button class="ph" data-go="rpiece-re-former-le-textile" aria-label="Ouvrir Re-former le textile"><img src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260516_194829364.NIGHT.jpg" alt="" loading="lazy"></button>
-          <div class="txt">
-            <h3>Re-former le textile</h3>
-            <span class="mention">2024 – 2026</span>
-            <p>Le tissu pris entre deux passes de matière : l'impression ne se pose pas sur l'étoffe, elle la saisit.</p>
-            <span class="leg">Porté : sur un tulle chair, le motif tient seul et le tissu s'efface</span>
-            <button class="lire" data-lire-une="textile-et-ornement">Lire dans « Textile et ornement »</button>
-          </div>
-        </div>
-        <div class="v3-une" data-une hidden>
+        <div class="v3-une" data-une="textile-et-ornement" hidden>
           <button class="ph" data-go="rpiece-boutons" aria-label="Ouvrir Boutons"><img src="images/web/2-recherche/projets/boutons/PXL_20260704_151248364.jpg" alt="" loading="lazy"></button>
           <div class="txt">
             <h3>Boutons</h3>
-            <span class="mention">2026</span>
+            <span class="an">2026</span>
             <p>Là où la tradition tresse la soie, une alternative imprimée, dessinée pour une tenue et une seule.</p>
             <span class="leg">Une série sortie de l'imprimante, groupée par motif sur ses socles</span>
             <button class="lire" data-lire-une="textile-et-ornement">Lire dans « Textile et ornement »</button>
           </div>
         </div>
-        <div class="v3-une" data-une hidden>
+        <div class="v3-une" data-une="textile-et-ornement" hidden>
           <button class="ph" data-go="rpiece-atelier" aria-label="Ouvrir L'atelier"><img src="images/web/2-recherche/projets/atelier/PXL_20260306_094847207.jpg" alt="" loading="lazy"></button>
           <div class="txt">
             <h3>L'atelier</h3>
-            <span class="mention">2026</span>
+            <span class="an">2026</span>
             <p>Une ancienne boutique de tissu à Casablanca, à côté de l'atelier de couture partenaire : l'exposition à l'entrée, les machines sur la mezzanine.</p>
             <span class="leg">Avant : la mezzanine vide, son parquet et son lustre</span>
             <button class="lire" data-lire-une="textile-et-ornement">Lire dans « Textile et ornement »</button>
           </div>
         </div>
-        <div class="v3-une" data-une hidden>
+        <div class="v3-une" data-une="textile-et-ornement" hidden>
           <button class="ph" data-go="rpiece-masques" aria-label="Ouvrir Masques · Body Architecture 2.0"><img src="images/web/2-recherche/projets/masques/01-thalassic-face.jpg" alt="" loading="lazy"></button>
           <div class="txt">
             <h3>Masques · Body Architecture 2.0</h3>
-            <span class="mention">2023</span>
+            <span class="an">2023</span>
             <p>Trois logiques génératives posées sur une même tête : des lamelles, une érosion, un empilement de sphères.</p>
             <span class="leg">Thalassic Mask : des lamelles qui suivent le crâne, de face</span>
             <button class="lire" data-lire-une="textile-et-ornement">Lire dans « Textile et ornement »</button>
+          </div>
+        </div>
+        <div class="v3-une" data-une="textile-et-ornement" hidden>
+          <button class="ph" data-go="rpiece-re-former-le-textile" aria-label="Ouvrir Re-former le textile"><img src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260516_194829364.NIGHT.jpg" alt="" loading="lazy"></button>
+          <div class="txt">
+            <h3>Re-former le textile</h3>
+            <span class="an">2024 – 2026</span>
+            <p>Le tissu pris entre deux passes de matière : l'impression ne se pose pas sur l'étoffe, elle la saisit.</p>
+            <span class="leg">Porté : sur un tulle chair, le motif tient seul et le tissu s'efface</span>
+            <button class="lire" data-lire-une="textile-et-ornement">Lire dans « Textile et ornement »</button>
+          </div>
+        </div>
+        <div class="v3-une" data-une="objets-imprimes" hidden>
+          <button class="ph" data-go="rpiece-mode-vase" aria-label="Ouvrir Mode vase"><img src="images/web/2-recherche/projets/mode-vase/PXL_20260424_173227668.MP.jpg" alt="" loading="lazy"></button>
+          <div class="txt">
+            <h3>Mode vase</h3>
+            <span class="an">2026</span>
+            <p>Des contenants imprimés d'une seule paroi, où la surface est le chemin de la buse.</p>
+            <span class="leg">Les deux parois sur une même photo : cannelures vrillées devant, texture en relief derrière</span>
+            <button class="lire" data-lire-une="objets-imprimes">Lire dans « Objets imprimés »</button>
+          </div>
+        </div>
+        <div class="v3-une" data-une="outils-parametriques" hidden>
+          <button class="ph" data-go="rpiece-mode-vase" aria-label="Ouvrir Mode vase"><img src="images/web/2-recherche/projets/mode-vase/PXL_20260424_173227668.MP.jpg" alt="" loading="lazy"></button>
+          <div class="txt">
+            <h3>Mode vase</h3>
+            <span class="an">2026</span>
+            <p>Des contenants imprimés d'une seule paroi, où la surface est le chemin de la buse.</p>
+            <span class="leg">Les deux parois sur une même photo : cannelures vrillées devant, texture en relief derrière</span>
+            <button class="lire" data-lire-une="outils-parametriques">Lire dans « Outils paramétriques »</button>
           </div>
         </div>
 <!-- AUTO:DP_UNE:FIN -->
         <div class="v3-lect">
           <nav aria-label="Articles"><ul class="v3-index">
 <!-- AUTO:DP_INDEX:DEBUT -->
-            <li><button data-a="scene-et-vitrine"><span class="t">Scène et vitrine</span><span class="deroule"><span><span class="i">L'idée d'un artiste ou d'une marque, rendue réalisable : les matériaux, les techniques, les plans.</span></span></span></button></li>
-            <li><button data-a="assemblage-et-outillage"><span class="t">Assemblage et outillage</span><span class="deroule"><span><span class="i">La pièce imprimée qu'on ne voit pas : le nœud qui assemble une structure, le moule qui sort une série.</span></span></span></button></li>
-            <li><button data-a="textile-et-ornement"><span class="t">Textile et ornement</span><span class="deroule"><span><span class="i">Imprimer sur l'étoffe, et donner à l'impression une place à côté de la main, jamais à sa place.</span></span></span></button></li>
-            <li><button data-a="objets-imprimes"><span class="t">Objets imprimés</span><span class="deroule"><span><span class="i">Quand la pièce imprimée est l'objet lui-même, et que sa surface dit comment il a été fait.</span></span></span></button></li>
-            <li><button data-a="outils-parametriques"><span class="t">Outils paramétriques</span><span class="deroule"><span><span class="i">Écrire les règles d'une pièce plutôt que sa forme : une donnée change, et tout ce qui en dépend se recalcule.</span></span></span></button></li>
+            <li data-a-li="scene-et-vitrine"><button data-a="scene-et-vitrine"><span class="t">Scène et vitrine</span></button><div class="deroule"><div><span class="i">L'idée d'un artiste ou d'une marque, rendue réalisable : les matériaux, les techniques, les plans.</span><span class="vigs"><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-coquillage"><img data-src="images/web/1-commandes/hermes-holiday-windows/vitrine-coquillages-alex-jonas.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-dragon"><img data-src="images/web/1-commandes/hermes-wild-wild-quest/03_modele3d-creature.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-mains"><img data-src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/mains-en-serie-02.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-arbres"><img data-src="images/web/1-commandes/hermes-wild-wild-quest/_atelier/arbre-rendu.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-sculpture"><img data-src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/HERMES_Watches-Wonders_2022.04.02_AliciaDubuis_02_2000.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-montagnes"><img data-src="images/web/1-commandes/sabrina-ratte-sculpture-cinetique/03_sculpture-himalaya-plan.png" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-bar"><img data-src="images/web/1-commandes/watches-wonders-mobilier-vip/bar-a-montres-courbe.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-table"><img data-src="images/web/1-commandes/watches-wonders-mobilier-vip/table-vip-allumee.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-mass"><img data-src="images/web/1-commandes/mass-set-design/tournage-plateau-rouge.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-aire-poids-lourd"><img data-src="images/web/2-recherche/projets/aire-poids-lourd/pxl-20241214-110930503.jpg" alt=""></span><span class="vig" data-article="scene-et-vitrine" data-groupe="2-recherche-sujets-scene-et-vitrine-photophobia"><img data-src="images/web/1-commandes/photophobia-vr/01_scene-mangrove.jpg" alt=""></span></span></div></div></li>
+            <li data-a-li="assemblage-et-outillage"><button data-a="assemblage-et-outillage"><span class="t">Assemblage et outillage</span></button><div class="deroule"><div><span class="i">La pièce imprimée qu'on ne voit pas : le nœud qui assemble une structure, le moule qui sort une série.</span><span class="vigs"><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-bar-courbe"><img data-src="images/web/1-commandes/watches-wonders-mobilier-vip/_atelier/bar-pieces-imprimees-rendu.png" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-limbs"><img data-src="images/web/2-recherche/projets/limbs/pxl-20250615-162255914.png" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-module"><img data-src="images/web/2-recherche/projets/limbs/pxl-20250613-113842873.png" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-en-scene"><img data-src="images/web/2-recherche/projets/limbs/Repetitions/appui-sur-deux-modules.jpg" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-noeud"><img data-src="images/web/2-recherche/projets/limbs/Assemblage/noeud-insert-et-vis.jpg" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-rates"><img data-src="images/web/2-recherche/projets/limbs/Rates/coude-casse-le-long-des-couches.jpg" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-prototypage"><img data-src="images/web/2-recherche/projets/limbs/Premices/concept-ia-trois-familles.jpg" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-transport"><img data-src="images/web/2-recherche/projets/limbs/Transport/velo-cargo-residence.jpg" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-icebergs"><img data-src="images/web/1-commandes/hermes-holiday-windows/_atelier/vitrine-icebergs-01-recadree.jpg" alt=""></span><span class="vig" data-article="assemblage-et-outillage" data-groupe="2-recherche-sujets-assemblage-et-outillage-tiflik"><img data-src="images/web/2-recherche/projets/tiflik/PXL_20260504_152604167.MP.jpg" alt=""></span></span></div></div></li>
+            <li data-a-li="textile-et-ornement"><button data-a="textile-et-ornement"><span class="t">Textile et ornement</span></button><div class="deroule"><div><span class="i">Imprimer sur l'étoffe, et donner à l'impression une place à côté de la main, jamais à sa place.</span><span class="vigs"><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-thalassic-kaftan"><img data-src="images/web/2-recherche/projets/thalassic-kaftan/01_broderie-generee-ia.png" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-definition"><img data-src="images/web/2-recherche/projets/thalassic-kaftan/Definition/13_definition-image-sampler-01.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-imprimee"><img data-src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/20_modele-3d-broderie.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-machine-et-main"><img data-src="images/web/2-recherche/projets/thalassic-kaftan/Broderie-imprimee/22_parcours-de-buse-01.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-rendu-fixe"><img data-src="images/web/2-recherche/projets/thalassic-kaftan/Caftan/42_thalassic-face.png" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-masques"><img data-src="images/web/2-recherche/projets/masques/01-thalassic-face.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-contour"><img data-src="images/web/2-recherche/projets/re-former-le-textile/Contour/PXL_20240319_205644415.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-fleurs"><img data-src="images/web/2-recherche/projets/re-former-le-textile/Fleurs/PXL_20240506_120020367.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-commandes-zaa"><img data-src="images/web/1-commandes/ornements-imprimes/Mousseline/pxl-20240517-123440392.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-perlage"><img data-src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260516_194829364.NIGHT.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-boutons"><img data-src="images/web/2-recherche/projets/boutons/PXL_20260704_151248364.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-instruments"><img data-src="images/web/2-recherche/projets/boutons/PXL_20260715_175518889.MP.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-atelier"><img data-src="images/web/2-recherche/projets/atelier/PXL_20260306_094847207.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-motifs-broderie-main"><img data-src="images/web/2-recherche/projets/motifs-broderie-main/pxl-20240420-122646650.jpg" alt=""></span><span class="vig" data-article="textile-et-ornement" data-groupe="2-recherche-sujets-textile-et-ornement-broderie-main"><img data-src="images/web/2-recherche/sujets/textile-et-ornement/photos/PXL_20260723_172001330.MP.jpg" alt=""></span></span></div></div></li>
+            <li data-a-li="objets-imprimes"><button data-a="objets-imprimes"><span class="t">Objets imprimés</span></button><div class="deroule"><div><span class="i">Quand la pièce imprimée est l'objet lui-même, et que sa surface dit comment il a été fait.</span><span class="vigs"><span class="vig" data-article="objets-imprimes" data-groupe="2-recherche-sujets-objets-imprimes-vases"><img data-src="images/web/2-recherche/projets/mode-vase/Fleuris/image (2).jpg" alt=""></span><span class="vig" data-article="objets-imprimes" data-groupe="2-recherche-sujets-objets-imprimes-soliflore"><img data-src="images/web/2-recherche/projets/mode-vase/Soliflore/PXL_20260715_173250407.MP.jpg" alt=""></span><span class="vig" data-article="objets-imprimes" data-groupe="2-recherche-sujets-objets-imprimes-trio"><img data-src="images/web/2-recherche/projets/mode-vase/Trio/PXL_20260715_173307446.MP.jpg" alt=""></span><span class="vig" data-article="objets-imprimes" data-groupe="2-recherche-sujets-objets-imprimes-relief"><img data-src="images/web/2-recherche/projets/mode-vase/Relief/PXL_20260321_110027366.jpg" alt=""></span><span class="vig" data-article="objets-imprimes" data-groupe="2-recherche-sujets-objets-imprimes-coextrusion"><img data-src="images/web/2-recherche/projets/mode-vase/Duo/PXL_20260429_183442768.jpg" alt=""></span><span class="vig" data-article="objets-imprimes" data-groupe="2-recherche-sujets-objets-imprimes-anastomose"><img data-src="images/web/2-recherche/projets/sculptures/anastomose/pxl-20260127-222316950-2.jpg" alt=""></span></span></div></div></li>
+            <li data-a-li="outils-parametriques"><button data-a="outils-parametriques"><span class="t">Outils paramétriques</span></button><div class="deroule"><div><span class="i">Écrire les règles d'une pièce plutôt que sa forme : une donnée change, et tout ce qui en dépend se recalcule.</span><span class="vigs"><span class="vig" data-article="outils-parametriques" data-groupe="2-recherche-sujets-outils-parametriques-declinaisons"><img data-src="images/web/1-commandes/saket-sethi-mobilier-parametrique/03_declinaisons-grasshopper.jpg" alt=""></span><span class="vig" data-article="outils-parametriques" data-groupe="2-recherche-sujets-outils-parametriques-mode-vase"><img data-src="images/web/2-recherche/projets/mode-vase/PXL_20260424_173227668.MP.jpg" alt=""></span><span class="vig" data-article="outils-parametriques" data-groupe="2-recherche-sujets-outils-parametriques-hudhud"><img data-src="images/web/2-recherche/projets/re-former-le-textile/Perlage/PXL_20260427_121018672.MP.jpg" alt=""></span></span></div></div></li>
 <!-- AUTO:DP_INDEX:FIN -->
           </ul></nav>
           <div class="v3-texte" aria-live="polite">
@@ -4326,6 +4374,13 @@ var suivreLecture = (function () {
     if (e.deltaY > 0 && y < s - 4) { e.preventDefault(); glisser(s); }
     else if (e.deltaY < 0 && y > 4 && y <= s + 4) { e.preventDefault(); glisser(0); }
   }, { passive: false });
+  // Le sommaire a tiroirs (13/10/2026) : tous ouverts a hauteur de la vedette ;
+  // une fois dans la lecture, seul celui de l'article en cours.
+  var somm = porte.querySelector('.v3-index');
+  if (somm) porte.addEventListener('scroll', function () {
+    if (!ordi.matches) return;
+    somm.classList.toggle('lecture', porte.scrollTop > seuil() - 60);
+  }, { passive: true });
 })();
 
 // ── OU L'ON EN EST DANS L'ARTICLE (ordinateur) ───────────────────────────────
@@ -4516,81 +4571,142 @@ var suivreLecture = (function () {
 (function () {
   var bandeau = document.querySelector('.v3-bandeau');
   var portes = document.querySelector('.v3-portes');
-  // la version, rangee dans la derniere colonne du volet (Formation) : elle ne
-  // se retrouve jamais seule sur une ligne (Ghali, 08/10/2026)
+  // la version, rangee dans la derniere colonne du bloc infos (Formation) :
+  // elle ne se retrouve jamais seule sur une ligne (Ghali, 08/10/2026)
   (function () {
-    var fv = bandeau.querySelector('.v3-infos .footer-version');
-    var cols = bandeau.querySelectorAll('.v3-infos dl > div');
+    var fv = document.querySelector('.v3-infos .footer-version');
+    var cols = document.querySelectorAll('.v3-infos dl > div');
     if (fv && cols.length) cols[cols.length - 1].appendChild(fv);
   })();
-  // ── l'en-tete suit la coupe entre les deux espaces (voir le CSS) ──
+
+  // ── L'EN-TETE SUIT LA COUPE (refonte du 13/10/2026) ──
+  // Une ligne de base commune. A gauche le nom et le sous-titre, sur la nuit ;
+  // a la marge du cote Projets, l'accroche ; a droite, l'e-mail. Deux temps :
+  //  - figer() decide des formes, une fois par largeur d'ecran et par porte :
+  //    le sous-titre sous le nom ou a cote, la largeur de l'accroche (une
+  //    ligne, ou coupee entre deux metiers), la hauteur de l'en-tete. Rien de
+  //    tout ca ne change pendant un mouvement : c'est calcule pour le cas le
+  //    plus serre (une porte qui s'elargit au survol), la hauteur pour le plus
+  //    haut des trois ecrans — elle ne saute pas quand une porte s'ouvre.
+  //  - calerEntete() suit la coupe a chaque image : le fond, les marges, la
+  //    couleur de chaque texte selon le cote ou il tombe.
   var ordiEntete = matchMedia('(min-width: 901px)');
   var pR = document.querySelector('.v3-porte.r'), pP = document.querySelector('.v3-porte.p');
-  var jointE = document.querySelector('.v3-joint');
   var trR = pR && pR.querySelector('.v3-tranche'), trP = pP && pP.querySelector('.v3-tranche');
   var quiE = bandeau.querySelector('.qui'), h1E = bandeau.querySelector('h1'), coordE = bandeau.querySelector('.coord');
-  var voletE = Array.prototype.slice.call(bandeau.querySelectorAll('.v3-infos dl > div, .v3-infos .footer-version'));
-  var enAttenteE = false;
+  var metiersE = h1E ? Array.prototype.map.call(h1E.querySelectorAll('.l1 > span'), function (s) { return s.textContent.trim(); }) : [];
+  var l2E = h1E && h1E.querySelector('.l2');
+  var mesureE = document.createElement('span');
+  mesureE.setAttribute('aria-hidden', 'true');
+  mesureE.style.cssText = 'position:absolute;left:-9999px;top:0;visibility:hidden;white-space:nowrap';
+  document.body.appendChild(mesureE);
+  function largeurDe(txt, el) {
+    var cs = getComputedStyle(el);
+    mesureE.style.font = cs.font; mesureE.style.letterSpacing = cs.letterSpacing;
+    mesureE.textContent = txt;
+    return mesureE.getBoundingClientRect().width;
+  }
+  // la plus petite forme qui tient dans « place » : une ligne, sinon deux
+  // coupees entre deux metiers, sinon un metier par ligne
+  function formeAccroche(place) {
+    var une = largeurDe(metiersE.join(' '), h1E.querySelector('.l1'));
+    var l2 = l2E ? largeurDe(l2E.textContent, l2E) : 0;
+    if (une <= place || metiersE.length < 2) return { w: Math.ceil(Math.max(une, l2)) + 2, lignes: 1 };
+    var mieux = Infinity;
+    for (var c = 1; c < metiersE.length; c++) {
+      mieux = Math.min(mieux, Math.max(largeurDe(metiersE.slice(0, c).join(' '), h1E.querySelector('.l1')),
+        largeurDe(metiersE.slice(c).join(' '), h1E.querySelector('.l1'))));
+    }
+    if (mieux <= place) return { w: Math.ceil(Math.max(mieux, l2)) + 2, lignes: 2 };
+    var large = Math.max.apply(null, metiersE.map(function (m) { return largeurDe(m, h1E.querySelector('.l1')); }));
+    return { w: Math.ceil(Math.max(large, l2)) + 2, lignes: metiersE.length };
+  }
+  var formesE = null;
+  function etatPorte() { return portes.classList.contains('dedans') ? (pR.classList.contains('ici') ? 'r' : 'p') : ''; }
+  function figer() {
+    if (!quiE || !h1E || !coordE) return;
+    if (!ordiEntete.matches) {
+      formesE = null;
+      h1E.style.width = ''; h1E.style.marginLeft = ''; coordE.style.marginRight = '';
+      bandeau.style.paddingLeft = ''; bandeau.style.removeProperty('--h-tete');
+      quiE.classList.remove('deux');
+      return;
+    }
+    var W = bandeau.clientWidth;
+    var g = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--g')) || 40;
+    quiE.classList.remove('deux');
+    var quiW = quiE.getBoundingClientRect().width, mailW = coordE.getBoundingClientRect().width;
+    // les survols de l'accueil : Recherche × 1,45, Projets × 2,9 (sur 1 et 2)
+    var coupeLarge = W * 1.45 / 3.45, coupeEtroite = W / 3.9;
+    var deux = quiW > coupeEtroite - g - 24;
+    formesE = {
+      '': formeAccroche(W - g - mailW - 32 - (coupeLarge + g)),
+      r: formeAccroche((W - 64 - 24 - mailW - 32) - (g + quiW + 32)),
+      p: formeAccroche(W - g - mailW - 32 - (64 + 24 + quiW + 40))
+    };
+    var e = etatPorte();
+    quiE.classList.toggle('deux', e === '' && deux);
+    h1E.style.width = formesE[e].w + 'px';
+    // la hauteur : celle du plus haut des trois ecrans
+    var px = parseFloat(getComputedStyle(h1E).fontSize) || 26;
+    var hl2 = l2E ? l2E.getBoundingClientRect().height + 2 : 0;
+    var hAcc = Math.max(formesE[''].lignes, formesE.r.lignes, formesE.p.lignes) * px * 1.2 + hl2;
+    var hQui = deux ? 22 + 4 + 16 : 22;
+    var pt = 15;
+    var h = Math.max(68, Math.ceil(pt + Math.max(hAcc, hQui) + 14));
+    bandeau.style.setProperty('--pt-tete', pt + 'px');
+    bandeau.style.setProperty('--h-tete', h + 'px');
+    document.documentElement.style.setProperty('--h-tete', h + 'px');
+    calerEntete();
+  }
   function visible(el) { return el && el.offsetParent !== null && el.getBoundingClientRect().width > 0; }
   function calerEntete() {
-    enAttenteE = false;
-    if (!pR || !pP || !jointE) return;
+    if (!pR || !pP) return;
     if (!ordiEntete.matches) {
       // etat n'existe pas encore au tout premier appel (chargement)
-      bandeau.classList.toggle('nuit', !!etat && etat.porte === 'r');
+      bandeau.classList.toggle('nuit', typeof etat !== 'undefined' && !!etat && etat.porte === 'r');
       return;
     }
     bandeau.classList.remove('nuit');
+    if (!formesE) return;
     var o = bandeau.getBoundingClientRect().left;
-    var r = pR.getBoundingClientRect(), j = jointE.getBoundingClientRect();
-    var d = r.right, p = j.width > 0 ? j.right : r.right;
+    var d = pR.getBoundingClientRect().right;
     var dedans = portes.classList.contains('dedans');
     // une tranche qui s'entrouvre deplace la coupe avec elle
-    if (dedans && visible(trR)) { var rr = trR.getBoundingClientRect().right; d = Math.max(d, rr); p = Math.max(p, rr); }
-    if (dedans && visible(trP)) { var pl = trP.getBoundingClientRect().left; p = Math.min(p, pl); d = Math.min(d, pl); }
-    portes.style.setProperty('--h-entete', Math.ceil(bandeau.getBoundingClientRect().height) + 'px');
-    // 2 px de chevauchement avec la charniere : jamais de fente claire
-    bandeau.style.setProperty('--coupe-d', (Math.ceil(d - o) + 2) + 'px');
-    bandeau.style.setProperty('--coupe-p', Math.max(Math.ceil(d - o) + 2, Math.floor(p - o) - 2) + 'px');
-    // La coupe ne passe jamais au travers du nom ni du contact : s'ils la
-    // chevauchent (une porte ouverte, sa voisine en tranche), ils commencent
-    // juste apres elle, et suivent la tranche quand elle s'entrouvre.
-    var W = bandeau.clientWidth, gE = 40;
-    bandeau.style.paddingLeft = ''; bandeau.style.paddingRight = '';
-    gE = parseFloat(getComputedStyle(bandeau).paddingLeft) || 40;
-    if (quiE && d - o > gE - 16 && d - o < gE + quiE.offsetWidth + 16) bandeau.style.paddingLeft = Math.round(p - o + 24) + 'px';
-    if (coordE && W - (p - o) > gE - 16 && W - (p - o) < gE + coordE.offsetWidth + 16) bandeau.style.paddingRight = Math.round(W - (d - o) + 24) + 'px';
-    var milieu = (d + p) / 2;
-    function cote(el) {
-      if (!el) return;
+    if (dedans && visible(trR)) d = Math.max(d, trR.getBoundingClientRect().right);
+    if (dedans && visible(trP)) d = Math.min(d, trP.getBoundingClientRect().left);
+    var coupe = d - o, W = bandeau.clientWidth, e = etatPorte();
+    var g = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--g')) || 40;
+    bandeau.style.setProperty('--coupe', Math.round(coupe) + 'px');
+    // Projets ouverte : le nom commence juste apres la tranche Recherche
+    var gauche = e === 'p' ? coupe + 24 : g;
+    bandeau.style.paddingLeft = Math.round(gauche) + 'px';
+    var quiD = gauche + quiE.getBoundingClientRect().width;
+    // l'accroche : a la marge du cote Projets ; une porte ouverte, juste apres le nom
+    var x = e === '' ? Math.max(coupe + g, quiD + 32) : quiD + (e === 'r' ? 32 : 40);
+    h1E.style.marginLeft = Math.round(x - quiD) + 'px';
+    // l'e-mail : au bord droit ; Recherche ouverte, avant la tranche Projets
+    coordE.style.marginRight = Math.round(e === 'r' ? W - coupe + 24 : g) + 'px';
+    var milieu = coupe + o;
+    [quiE, h1E, coordE].forEach(function (el) {
       var b = el.getBoundingClientRect();
-      if (!b.width) return;
-      el.classList.toggle('sur-nuit', b.left + b.width / 2 < milieu);
-    }
-    // la liste des metiers : au debut du cote Projets, si la place y est
-    if (h1E && quiE && coordE) {
-      var g = parseFloat(getComputedStyle(bandeau).paddingLeft) || 40;
-      var x = Math.max(p + g, quiE.getBoundingClientRect().right + 40) - o;
-      bandeau.style.setProperty('--h1-x', Math.round(x) + 'px');
-      var place = coordE.getBoundingClientRect().left - o - 32 - x;
-      h1E.classList.toggle('cache', place < h1E.scrollWidth);
-    }
-    [quiE, h1E, coordE].forEach(cote);
-    // le volet s'ouvre dans l'en-tete, juste apres le nom
-    if (quiE) bandeau.style.setProperty('--volet-x', Math.round(quiE.getBoundingClientRect().right - o + 28) + 'px');
+      if (b.width) el.classList.toggle('sur-nuit', b.left + b.width / 2 < milieu);
+    });
   }
-  function demanderEntete() { if (!enAttenteE) { enAttenteE = true; requestAnimationFrame(calerEntete); } }
+  var enAttenteE = false;
+  function demanderEntete() { if (!enAttenteE) { enAttenteE = true; requestAnimationFrame(function () { enAttenteE = false; calerEntete(); }); } }
   if ('ResizeObserver' in window) {
     // dans la meme image que le mouvement des portes (pas une image plus tard)
     var roE = new ResizeObserver(function () { calerEntete(); });
-    [pR, pP, jointE, trR, trP].forEach(function (el) { if (el) roE.observe(el); });
+    [pR, pP, trR, trP].forEach(function (el) { if (el) roE.observe(el); });
   }
-  window.addEventListener('resize', demanderEntete);
+  window.addEventListener('resize', figer);
+  ordiEntete.addEventListener && ordiEntete.addEventListener('change', figer);
   portes && portes.addEventListener('transitionrun', demanderEntete);
   portes && portes.addEventListener('transitionend', demanderEntete);
-  bandeau.addEventListener('mouseenter', demanderEntete);
-  calerEntete();
-  window.addEventListener('load', calerEntete);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(figer);
+  figer();
+  window.addEventListener('load', figer);
 
   // la photo de la charniere, reprise par la tranche qui s'entrouvre
   var charniere = document.querySelector('.v3-joint');
@@ -4605,7 +4721,8 @@ var suivreLecture = (function () {
   var unes = document.querySelectorAll('[data-une]');
   var tour = Math.floor(Date.now() / 900000);
   var etat = { porte: null, page: null, article: null };
-  var premier = true, groupeVoulu = null, ouvreVoulu = null;
+  var premier = true, groupeVoulu = null, ouvreVoulu = null, apercuVoulu = false;
+  var nettoyerAccueil = null;
 
   // Sans support du navigateur, le changement est instantane (section 3).
   // Une transition interrompue (onglet cache, double clic) n'empeche pas la
@@ -4640,16 +4757,24 @@ var suivreLecture = (function () {
     });
   }
 
-  // la piece en grand de Recherche : la suivante a chaque ouverture (7.2)
-  function poserUne() {
-    if (!unes.length) return;
+  // La piece en grand de Recherche : une piece de l'article choisi dans le
+  // sommaire, un apercu de ce qu'on va lire (Ghali, 13/10/2026). Si l'article
+  // en a plusieurs, la suivante a chaque ouverture de la porte.
+  function poserUne(cle) {
+    var siennes = Array.prototype.filter.call(unes, function (u) { return u.getAttribute('data-une') === cle; });
     unes.forEach(function (u) { u.hidden = true; });
-    unes[tour % unes.length].hidden = false;
-    tour++;
+    if (siennes.length) siennes[tour % siennes.length].hidden = false;
   }
   function poserPorte(k) {
     if (etat.porte === k) return;
-    if (k === 'r') poserUne();
+    if (k === 'r') {
+      tour++;
+      if (etat.article) poserUne(etat.article);
+      // a l'arrivee, tous les tiroirs du sommaire sont ouverts
+      var somm = document.querySelector('.v3-index');
+      if (somm) { somm.classList.remove('lecture'); chargerVignettes(somm); }
+    }
+    if (nettoyerAccueil) nettoyerAccueil();
     portes.classList.toggle('dedans', !!k);
     document.querySelector('.v3').classList.toggle('dedans', !!k);
     lesPortes.forEach(function (p) { p.classList.toggle('ici', p.getAttribute('data-porte') === k); });
@@ -4657,7 +4782,8 @@ var suivreLecture = (function () {
     window.scrollTo(0, 0);
     var ici = porteIci();
     if (ici) ici.scrollTop = 0;
-    if (typeof calerEntete === 'function') calerEntete();
+    // les formes de l'en-tete dependent de la porte ouverte
+    if (typeof figer === 'function') figer();
     // le cadre des articles etait cache : il se recale maintenant qu'il a une taille
     window.dispatchEvent(new Event('resize'));
   }
@@ -4668,7 +4794,11 @@ var suivreLecture = (function () {
     // les vignettes des pieces citees, en bas, se chargent des l'ouverture :
     // en chargement differe, certaines restaient vides a la premiere visite
     art.querySelectorAll('.cites img[loading="lazy"]').forEach(function (i) { i.loading = 'eager'; });
-    idx.forEach(function (b) { b.setAttribute('aria-current', b.getAttribute('data-a') === cle ? 'true' : 'false'); });
+    idx.forEach(function (b) {
+      b.setAttribute('aria-current', b.getAttribute('data-a') === cle ? 'true' : 'false');
+      if (b.parentNode) b.parentNode.classList.toggle('courant', b.getAttribute('data-a') === cle);
+    });
+    poserUne(cle);
     window.dispatchEvent(new Event('resize'));
     var voulu = groupe && art.querySelector('.vue[data-groupe="' + groupe + '"]') ? groupe : null;
     montrerArticle(art, voulu);
@@ -4805,14 +4935,23 @@ var suivreLecture = (function () {
     }
     else porte = null;
     premier = false;
-    var groupe = groupeVoulu;
+    var groupe = groupeVoulu, apercu = apercuVoulu;
     groupeVoulu = null;
+    apercuVoulu = false;
     var ouvre = porte !== etat.porte;
     // en refermant une piece, on retrouve l'article la ou on le lisait
     var memeLecture = !!etat.page && !page && article === etat.article && !ouvre;
     function appliquer() {
       poserPorte(porte);
-      if (article && !memeLecture) { lire(article, groupe); defilerVersLecture(ouvre, groupe); }
+      if (article && !memeLecture) {
+        lire(article, groupe);
+        // un article choisi dans le sommaire : on remonte voir sa piece en
+        // vedette, l'apercu ; la molette redescend (Ghali, 13/10/2026)
+        if (apercu && !matchMedia('(max-width: 900px)').matches) {
+          var ici = porteIci();
+          if (ici) ici.scrollTo({ top: 0, behavior: MOINS_DE_MOUVEMENT ? 'auto' : 'smooth' });
+        } else defilerVersLecture(ouvre, groupe);
+      }
     }
     if (porte !== etat.porte) transition(appliquer);
     else appliquer();
@@ -4855,10 +4994,14 @@ var suivreLecture = (function () {
     if ((b = e.target.closest('.ff-nassij-slider .vue'))) { visionneuse.ouvrir(b.closest('.ff-nassij-slider')); return; }
     if ((b = e.target.closest('.vue[data-page]'))) { aller(b.getAttribute('data-page')); return; }
     if ((b = e.target.closest('[data-a]'))) {
-      if (!b.disabled) aller('article-' + b.getAttribute('data-a'), true);
+      if (!b.disabled) { apercuVoulu = true; aller('article-' + b.getAttribute('data-a'), true); }
       return;
     }
-    if ((b = e.target.closest('[data-lire-une]'))) { aller('article-' + b.getAttribute('data-lire-une')); return; }
+    if ((b = e.target.closest('[data-lire-une]'))) {
+      groupeVoulu = b.getAttribute('data-groupe');
+      aller('article-' + b.getAttribute('data-lire-une'));
+      return;
+    }
     if ((b = e.target.closest('.lien-piece'))) {
       e.preventDefault();
       var t = document.querySelector('template[data-id="' + b.getAttribute('data-piece') + '"]');
@@ -4979,58 +5122,84 @@ var suivreLecture = (function () {
     if (gal && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) gal.pas(e.key === 'ArrowRight' ? 1 : -1);
   });
 
-  // le volet du bandeau : au survol (CSS), au toucher du nom ou de la phrase
-  // Avec une souris, le volet s'ouvre deja au survol : un clic sur le nom
-  // ramene a l'accueil, comme le retour d'une porte (Ghali, 06/10/2026). Sur
-  // ecran tactile, le toucher ouvre et ferme le volet, comme avant.
-  var tactile = matchMedia('(hover: none) and (pointer: coarse)');
-  bandeau.querySelectorAll('.qui, h1').forEach(function (el) {
-    el.addEventListener('click', function () {
-      if (!tactile.matches && el.classList.contains('qui')) {
-        bandeau.classList.remove('ouvert');
-        // le nom garde le focus apres le clic, et le focus tient le volet ouvert
-        if (document.activeElement && bandeau.contains(document.activeElement)) document.activeElement.blur();
-        if (etat.porte || etat.page) aller('');
-        return;
-      }
-      bandeau.classList.toggle('ouvert');
-    });
-  });
-
-  // sans survol : l'element qui passe au centre de l'ecran se deroule seul
-  if (!matchMedia('(min-width: 901px)').matches && 'IntersectionObserver' in window) {
-    var centre = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { e.target.classList.toggle('proche', e.isIntersecting); if (e.isIntersecting) chargerVignettes(e.target); });
-    }, { rootMargin: '-42% 0px -42% 0px' });
-    document.querySelectorAll('.v3-titres button, .v3-index button').forEach(function (b) { centre.observe(b); });
-    var film = document.querySelector('.v3-film');
-    if (film) {
-      var milieu = new IntersectionObserver(function (es) {
-        es.forEach(function (e) { e.target.classList.toggle('proche', e.isIntersecting); if (e.isIntersecting) chargerVignettes(e.target); });
-      }, { root: film, rootMargin: '0px -40% 0px -40%' });
-      film.querySelectorAll('button').forEach(function (b) { milieu.observe(b); });
-    }
+  // Le nom ramene a l'accueil, partout : il n'y a plus de volet a ouvrir
+  // (refonte du 13/10/2026 ; ses colonnes sont dans le bloc infos).
+  var nomE = bandeau.querySelector('.nom');
+  function versAccueil() {
+    if (document.activeElement && bandeau.contains(document.activeElement)) document.activeElement.blur();
+    if (etat.porte || etat.page) aller('');
+  }
+  if (nomE) {
+    nomE.addEventListener('click', versAccueil);
+    nomE.addEventListener('keydown', function (e) { if (e.key === 'Enter') versAccueil(); });
   }
 
-  // La bande d'images du seuil defile tres lentement, en boucle (demande de
-  // Ghali, 05/10/2026). Elle s'arrete sous la souris, le temps de lire, et
-  // quand on la fait glisser du doigt. Rien ne bouge seul si le systeme
-  // demande moins de mouvement. Sur ordinateur, on la fait aussi defiler
-  // soi-meme (Ghali, 06/10/2026) : deux doigts de cote sur le trackpad,
-  // partout ; la molette seulement sur l'accueil — porte ouverte, elle sert
-  // a descendre vers la grille.
+  var telE = matchMedia('(max-width: 900px)');
+  // Telephone, porte Recherche ouverte : le tiroir du sommaire qui passe au
+  // milieu de l'ecran se deroule seul.
+  if ('IntersectionObserver' in window) {
+    var centre = new IntersectionObserver(function (es) {
+      if (!telE.matches) return;
+      es.forEach(function (e) { e.target.classList.toggle('proche', e.isIntersecting); if (e.isIntersecting) chargerVignettes(e.target); });
+    }, { rootMargin: '-42% 0px -42% 0px' });
+    document.querySelectorAll('.v3-index li').forEach(function (b) { centre.observe(b); });
+  }
+  // Telephone, a l'accueil : toucher un titre de Recherche ouvre son tiroir
+  // (la phrase, les vignettes, « Lire l'article »), un seul a la fois. Sur
+  // ordinateur, le titre ouvre l'article, comme avant.
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('.v3-titres .art-tete');
+    if (!t || !telE.matches || t.disabled) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    var li = t.closest('li'), deja = li.classList.contains('ouvert');
+    document.querySelectorAll('.v3-titres li.ouvert').forEach(function (x) { x.classList.remove('ouvert'); });
+    li.classList.toggle('ouvert', !deja);
+    if (!deja) chargerVignettes(li);
+  }, true);
+
+  // ── LA BANDE DE PROJETS : elle defile seule, et le givre ──
+  // Lente (28 px par seconde, Ghali, 12/10/2026), en boucle sans fin (la
+  // serie doublee). Elle s'arrete sous la souris, au toucher, a la molette et
+  // au clavier, puis repart seule ; immobile si l'appareil demande moins de
+  // mouvement. Pas de fleches. Sur ordinateur, la molette la fait defiler a
+  // l'accueil ; porte ouverte, elle sert a descendre.
+  // Le givre (Ghali, 13/10/2026) : ce qui compte reste net, le reste se givre.
+  // Bande arretee sous la souris, seule la photo survolee reste nette, et la
+  // nettete la suit ; au doigt, les photos entieres restent nettes, celles
+  // coupees aux bords se givrent ; au survol d'un article, ses pieces restent
+  // nettes. Jamais pendant le defilement : quand la bande repart, tout
+  // redevient net.
+  var film = document.querySelector('.v3-porte.p .v3-film');
+  var givre = { actif: false, attente: null };
+  function givrer(net) {
+    if (!film) return;
+    givre.actif = true;
+    film.querySelectorAll('button[data-carte]').forEach(function (b) { b.classList.toggle('givre', !net(b)); });
+  }
+  function degivrer() {
+    clearTimeout(givre.attente);
+    if (!givre.actif || !film) return;
+    givre.actif = false;
+    film.querySelectorAll('button.givre').forEach(function (b) { b.classList.remove('givre'); });
+  }
+  function armer(fn, ms) { clearTimeout(givre.attente); givre.attente = setTimeout(fn, ms === undefined ? 150 : ms); }
+  var bandeArret = 0;      // date de reprise (performance.now)
+  function pauseBande(ms) { bandeArret = Math.max(bandeArret, performance.now() + ms); }
   (function () {
-    var film = document.querySelector('.v3-film');
     if (!film) return;
     var originaux = Array.prototype.slice.call(film.children);
     if (originaux.length < 2) return;
     var boucle_ok = !MOINS_DE_MOUVEMENT;
     // la moitie : la ou les copies commencent, ecart compris
     function moitie() {
-      return boucle_ok ? film.children[originaux.length].offsetLeft - film.children[0].offsetLeft : 0;
+      return boucle_ok && film.children[originaux.length] ? film.children[originaux.length].offsetLeft - film.children[0].offsetLeft : 0;
     }
+    var mx = 0, my = 0;
+    function sousLaSouris() { var el = document.elementFromPoint(mx, my); return el && el.closest('.v3-film button[data-carte]'); }
+    function accueilOrdi() { return !telE.matches && !portes.classList.contains('dedans'); }
     film.addEventListener('wheel', function (e) {
-      if (!matchMedia('(min-width: 901px)').matches) return;
+      if (telE.matches) return;
       var cote = Math.abs(e.deltaX) > Math.abs(e.deltaY);
       var d = cote ? e.deltaX : (portes.classList.contains('dedans') && etat.porte !== 'p' ? 0 : e.deltaY);
       if (!d) return;
@@ -5040,7 +5209,20 @@ var suivreLecture = (function () {
       var x = film.scrollLeft + d;
       if (demi > 0) { if (x < 0) x += demi; else if (x >= demi) x -= demi; }
       film.scrollLeft = x;
+      pauseBande(4000);
+      // pendant qu'on fait defiler, tout est net ; le givre revient a l'arret
+      if (accueilOrdi()) { degivrer(); armer(function () { var b = sousLaSouris(); if (b) givrer(function (x) { return x === b; }); }, 250); }
     }, { passive: false });
+    // ordinateur : la photo sous la souris reste nette, les autres se givrent
+    film.addEventListener('mousemove', function (e) {
+      mx = e.clientX; my = e.clientY;
+      if (!accueilOrdi() || survolTitre) return;
+      var b = e.target.closest('button[data-carte]');
+      if (!b) return;
+      if (givre.actif) { if (b.classList.contains('givre')) givrer(function (x) { return x === b; }); }
+      else armer(function () { var s = sousLaSouris(); if (s) givrer(function (x) { return x === s; }); });
+    });
+    film.addEventListener('mouseleave', function () { if (!survolTitre) degivrer(); });
     if (!boucle_ok) return;
     originaux.forEach(function (b) {
       var c = b.cloneNode(true);
@@ -5049,22 +5231,37 @@ var suivreLecture = (function () {
       c.tabIndex = -1;
       film.appendChild(c);
     });
-    var VITESSE = 14;               // pixels par seconde : tres lent
-    var pause = false, reprise = 0, avant = null, x = 0;
+    var VITESSE = 28;               // pixels par seconde
+    var pause = false, avant = null, x = 0;
     film.addEventListener('mouseenter', function () { pause = true; });
-    film.addEventListener('mouseleave', function () { pause = false; });
-    film.addEventListener('touchstart', function () { reprise = Date.now() + 4000; }, { passive: true });
-    film.addEventListener('bande-saut', function () { reprise = Date.now() + 2500; });
+    film.addEventListener('mouseleave', function () { pause = false; pauseBande(800); });
+    film.addEventListener('touchstart', function () { pauseBande(4000); degivrer(); }, { passive: true });
+    // telephone : apres un toucher, les photos coupees aux bords se givrent
+    function entiere(b) {
+      var r = b.querySelector('.ph').getBoundingClientRect(), R = film.getBoundingClientRect();
+      return r.left >= R.left - 1 && r.right <= R.right + 1;
+    }
+    film.addEventListener('touchend', function () { armer(function () { if (performance.now() < bandeArret) givrer(entiere); }); }, { passive: true });
+    film.addEventListener('scroll', function () {
+      if (!telE.matches || performance.now() >= bandeArret) return;
+      if (givre.actif) degivrer();
+      armer(function () { if (performance.now() < bandeArret) givrer(entiere); });
+    }, { passive: true });
+    film.addEventListener('focusin', function () { pauseBande(6000); });
+    film.addEventListener('keydown', function () { pauseBande(4000); });
+    film.addEventListener('bande-saut', function () { pauseBande(2500); });
     function boucle(t) {
       var dt = avant === null ? 0 : Math.min(100, t - avant) / 1000;
       avant = t;
       // la bande continue de defiler porte Projets ouverte ; elle s'arrete
-      // quand elle n'est plus affichee (porte Recherche, telephone)
-      var visible = film.offsetParent !== null;
-      if (visible && !pause && Date.now() > reprise) {
-        var demi = moitie();
-        if (Date.now() <= reprise + 50) x = film.scrollLeft;
+      // quand elle n'est plus affichee (porte Recherche ouverte)
+      var visible = film.offsetParent !== null && etat.porte !== 'r';
+      var maintenant = performance.now();
+      if (visible && !pause && !survolTitre && maintenant > bandeArret) {
+        if (givre.actif) degivrer();
+        if (maintenant <= bandeArret + 50) x = film.scrollLeft;
         x += VITESSE * dt;
+        var demi = moitie();
         if (demi > 0 && x >= demi) x -= demi;
         film.scrollLeft = x;
       } else {
@@ -5076,76 +5273,75 @@ var suivreLecture = (function () {
   })();
 
   // ── A L'ACCUEIL, LE LIEN ENTRE LES DEUX ESPACES SE VOIT (ordinateur) ──
-  // Survoler un article allume, dans la bande de Projets, les pieces qu'il
-  // cite (les autres s'eteignent) et fait glisser la bande jusqu'a la
-  // premiere. Survoler une piece eteint les articles qui ne la citent pas
-  // (critique du 07/10/2026, validee par Ghali). Sur telephone, le tiroir de
-  // chaque titre montre deja ce que l'article cite.
+  // Survoler un article allume, dans la bande, les pieces qu'il cite (un
+  // filet corail) ; les autres se givrent, et la bande glisse jusqu'a la
+  // premiere — le givre attend la fin du glisse. Survoler une piece passe en
+  // corail les articles qui la citent, sans ouvrir de tiroir (13/10/2026).
+  var survolTitre = false;
+  nettoyerAccueil = function () {};
   (function () {
-    var film = document.querySelector('.v3-porte.p .v3-film');
-    var titres = document.querySelectorAll('.v3-titres button[data-cartes]');
-    if (!film || !titres.length) return;
-    var ordi = matchMedia('(min-width: 901px)');
+    var lis = document.querySelectorAll('.v3-titres li');
+    if (!film || !lis.length) return;
+    var liste = document.querySelector('.v3-titres');
     var attente = null, parAccueil = false;
-    function accueil() { return ordi.matches && !portes.classList.contains('dedans'); }
+    function accueil() { return !telE.matches && !portes.classList.contains('dedans'); }
     function allumer(cartes) {
       parAccueil = !!cartes;
       film.querySelectorAll('button[data-carte]').forEach(function (b) {
-        var dedans = !!cartes && cartes.indexOf(b.getAttribute('data-carte')) !== -1;
-        b.classList.toggle('eteinte', !!cartes && !dedans);
-        b.classList.toggle('allumee', dedans);
+        b.classList.toggle('allumee', !!cartes && cartes.indexOf(b.getAttribute('data-carte')) !== -1);
       });
     }
-    titres.forEach(function (t) {
-      t.addEventListener('mouseenter', function () {
+    lis.forEach(function (li) {
+      li.addEventListener('mouseenter', function () {
         if (!accueil()) return;
-        var cartes = (t.getAttribute('data-cartes') || '').split(' ').filter(Boolean);
+        var cartes = (li.getAttribute('data-cartes') || '').split(' ').filter(Boolean);
         clearTimeout(attente);
         attente = setTimeout(function () {
+          survolTitre = true;
+          degivrer();
           allumer(cartes);
+          if (!cartes.length) { givrer(function () { return false; }); return; }
           var b = Array.prototype.find.call(film.querySelectorAll('button[data-carte]:not([data-copie])'), function (x) {
             return cartes.indexOf(x.getAttribute('data-carte')) !== -1;
           });
-          if (b) {
-            film.dispatchEvent(new CustomEvent('bande-saut'));
-            film.scrollTo({ left: Math.max(0, b.offsetLeft - film.offsetLeft - 8), behavior: MOINS_DE_MOUVEMENT ? 'auto' : 'smooth' });
-          }
+          if (b) film.scrollTo({ left: Math.max(0, b.offsetLeft - film.offsetLeft), behavior: MOINS_DE_MOUVEMENT ? 'auto' : 'smooth' });
+          armer(function () { givrer(function (x) { return cartes.indexOf(x.getAttribute('data-carte')) !== -1; }); }, MOINS_DE_MOUVEMENT ? 0 : 600);
         }, 160);
       });
     });
-    var liste = document.querySelector('.v3-titres');
-    // le mot « Recherche » deroule tous les articles
-    var motR = document.querySelector('.v3-porte.r .v3-seuil h2 button');
-    var seuilR = document.querySelector('.v3-porte.r .v3-seuil');
-    if (motR && seuilR) {
-      motR.addEventListener('mouseenter', function () {
-        if (!accueil()) return;
-        liste.classList.add('tous');
-        titres.forEach(chargerVignettes);
-      });
-      seuilR.addEventListener('mouseleave', function () { liste.classList.remove('tous'); });
-      window.addEventListener('hashchange', function () { liste.classList.remove('tous'); });
-    }
-    liste.addEventListener('mouseleave', function () { clearTimeout(attente); if (accueil() && parAccueil) allumer(null); });
+    liste.addEventListener('mouseleave', function () {
+      clearTimeout(attente);
+      if (!survolTitre) return;
+      survolTitre = false;
+      pauseBande(2500);
+      degivrer();
+      if (parAccueil) allumer(null);
+    });
     film.addEventListener('mouseover', function (e) {
       var b = e.target.closest('button[data-carte]');
       if (!b || !accueil()) return;
-      var c = b.getAttribute('data-carte');
-      titres.forEach(function (t) {
-        var cite = (' ' + t.getAttribute('data-cartes') + ' ').indexOf(' ' + c + ' ') !== -1;
-        t.classList.toggle('eteint', !cite);
-        t.classList.toggle('cite', cite);
-        if (cite) chargerVignettes(t);
+      var c = b.getAttribute('data-carte'), n = 0;
+      lis.forEach(function (li) {
+        var cite = (' ' + li.getAttribute('data-cartes') + ' ').indexOf(' ' + c + ' ') !== -1;
+        li.classList.toggle('cite', cite);
+        if (cite) n++;
       });
+      liste.classList.toggle('allume', n > 0);
     });
-    film.addEventListener('mouseleave', function () { titres.forEach(function (t) { t.classList.remove('eteint', 'cite'); }); });
-    // en entrant dans une porte, plus rien d'eteint par l'accueil (le grise
-    // d'une categorie, dans Projets, n'est pas touche)
-    window.addEventListener('hashchange', function () {
+    film.addEventListener('mouseleave', function () {
+      liste.classList.remove('allume');
+      lis.forEach(function (li) { li.classList.remove('cite'); });
+    });
+    // en entrant dans une porte, plus rien d'allume ni de givre par l'accueil
+    // (le grise d'une categorie, dans Projets, n'est pas touche)
+    nettoyerAccueil = function () {
       clearTimeout(attente);
+      survolTitre = false;
+      degivrer();
       if (parAccueil) allumer(null);
-      titres.forEach(function (t) { t.classList.remove('eteint', 'cite'); });
-    });
+      liste.classList.remove('allume');
+      lis.forEach(function (li) { li.classList.remove('cite', 'ouvert'); });
+    };
   })();
 
   if (arts.length) lire(arts[0].getAttribute('data-article'), null);

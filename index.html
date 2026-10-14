@@ -33,12 +33,14 @@
 -->
 <style>
   :root {
-    --paper: #EDEEEB;
-    --paper-2: #E4E6E1;
+    --paper: #F5F7F3;
+    --paper-2: #EEEFEB;
     --ink: #14181A;
     --blue: #1F3F63;
     --blue-nuit: #7E9DBB;
-    --corail: #C7804D;          /* échantillon réel : vortex-vase/PXL_20260321_110027366.jpg */
+    --corail: #E1763D;          /* échantillon réel : vortex-vase/PXL_20260321_110027366.jpg */
+    --corail-fonce: #9A5527;    /* le corail sur le papier (côté clair) : liens, titre Projets au survol */
+    --corail-clair: #EDB58C;    /* le corail des survols, côté sombre */
     --grey: #5B615D;
     --line: #C7CBC4;
     --line-nuit: #2E3436;
@@ -79,8 +81,9 @@
   /* Une seule couleur pour « ceci est une citation » : le corail, dans les
      deux espaces. Sur fond clair, un corail plus fonce, lisible en petit
      (contraste 4,9:1 sur le papier ; le corail clair n'y fait que 2,7:1).
-     Hors du bloc :root, que l'onglet Apparence ecrit (Ghali, 07/10/2026). */
-  body { --corail-fonce: #9A5527; --corail-clair: #EDB58C; }
+     --corail-fonce et --corail-clair (le survol, sur la nuit) sont dans le
+     bloc :root depuis le 14/10/2026, pour que l'onglet Apparence les regle
+     (avant : ici, sur body, hors de sa portee). */
   .lien { color: var(--corail-fonce); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
   .nuit .lien { color: var(--corail); }
   .lien:hover { color: var(--corail); }
@@ -1029,7 +1032,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.227</p>
+      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.228</p>
 <!-- AUTO:VERSION:FIN -->
         </div>
       </div>

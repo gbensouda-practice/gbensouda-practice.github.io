@@ -879,7 +879,14 @@
      suffit ici */
   @media (min-width: 901px) {
     .v3-titres .lire { display: none; }
-    .v3-titres .vigs { padding: 12px 0 16px; }
+    /* une seule ligne de vignettes plus grandes (72 px), qui defile a la
+       molette ; le bord droit s'efface quand il en reste (Ghali, 14/10/2026).
+       Une hauteur fixe : le tiroir ne saute plus d'un article a l'autre. */
+    .v3 .v3-titres .vigs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; gap: 6px; padding: 12px 0 16px;
+      overscroll-behavior-x: contain; }
+    .v3 .v3-titres .vigs.reste { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
+    .v3-titres .vigs::-webkit-scrollbar { display: none; }
+    .v3 .v3-titres .vig { flex: none; width: 72px; height: 72px; }
   }
   /* telephone : les vignettes de Recherche defilent sur une ligne, jusqu'au
      bord de l'ecran, au lieu de s'empiler (Ghali, 14/10/2026) */
@@ -1022,7 +1029,7 @@
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille bleu"><span class="version-pastille" style="background:#3C6E9E"></span>v1.226</p>
+      <p class="footer-version mono" title="Version du site — pastille orange"><span class="version-pastille" style="background:#E08A3C"></span>v1.227</p>
 <!-- AUTO:VERSION:FIN -->
         </div>
       </div>
@@ -5181,7 +5188,11 @@ var suivreLecture = (function () {
   var titresE = document.querySelector('.v3-titres'), attenteTiroir = null;
   function ouvrirTiroir(li) {
     titresE.querySelectorAll('li.ouvert').forEach(function (x) { if (x !== li) x.classList.remove('ouvert'); });
-    if (li) { li.classList.add('ouvert'); chargerVignettes(li); }
+    if (li) {
+      li.classList.add('ouvert'); chargerVignettes(li);
+      var v = li.querySelector('.vigs');
+      if (v) v.classList.toggle('reste', v.scrollLeft < v.scrollWidth - v.clientWidth - 2);
+    }
   }
   if (titresE) {
     titresE.addEventListener('mouseover', function (e) {
@@ -5191,6 +5202,22 @@ var suivreLecture = (function () {
       clearTimeout(attenteTiroir);
       attenteTiroir = setTimeout(function () { ouvrirTiroir(li); }, 160);
     });
+    // la molette, sur une ligne de vignettes, la fait defiler de cote ; au
+    // bout de la ligne, elle redonne la main a la colonne
+    titresE.addEventListener('wheel', function (e) {
+      if (telE.matches) return;
+      var v = e.target.closest('.vigs');
+      if (!v || v.scrollWidth <= v.clientWidth) return;
+      var d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      var max = v.scrollWidth - v.clientWidth;
+      if ((d > 0 && v.scrollLeft >= max - 1) || (d < 0 && v.scrollLeft <= 0)) return;
+      e.preventDefault();
+      v.scrollLeft += d;
+    }, { passive: false });
+    titresE.addEventListener('scroll', function (e) {
+      var v = e.target;
+      if (v.classList && v.classList.contains('vigs')) v.classList.toggle('reste', v.scrollLeft < v.scrollWidth - v.clientWidth - 2);
+    }, true);
     titresE.addEventListener('mouseleave', function () {
       if (telE.matches) return;
       clearTimeout(attenteTiroir);

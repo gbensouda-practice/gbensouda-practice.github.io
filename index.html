@@ -874,12 +874,20 @@
   .v3-titres .vig img { width: 100%; height: 100%; object-fit: cover; opacity: .85; transition: opacity .2s; }
   .v3-titres .vig:hover img { opacity: 1; }
   .v3-titres .lire { display: inline-block; margin: 12px 0 18px; font-size: 13px; color: var(--corail); border-bottom: 1px solid var(--corail); padding-bottom: 1px; }
-  /* ordinateur : au survol d'un titre, son tiroir ne montre que les vignettes
-     (Ghali, 13/10/2026 : « les vignettes, ca manque ») ; la phrase et « Lire »
-     restent au telephone */
+  /* ordinateur : au survol d'un titre, son tiroir montre la phrase et les
+     vignettes (Ghali, 13-14/10/2026) ; « Lire » reste au telephone, le titre
+     suffit ici */
   @media (min-width: 901px) {
-    .v3-titres .i, .v3-titres .lire { display: none; }
-    .v3-titres .vigs { padding: 0 0 16px; }
+    .v3-titres .lire { display: none; }
+    .v3-titres .vigs { padding: 12px 0 16px; }
+  }
+  /* telephone : les vignettes de Recherche defilent sur une ligne, jusqu'au
+     bord de l'ecran, au lieu de s'empiler (Ghali, 14/10/2026) */
+  @media (max-width: 900px) {
+    .v3 .v3-titres .vigs, .v3 .v3-index .vigs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+      margin-right: calc(-1 * var(--g, 16px)); padding-right: var(--g, 16px); overscroll-behavior-x: contain; }
+    .v3-titres .vigs::-webkit-scrollbar, .v3-index .vigs::-webkit-scrollbar { display: none; }
+    .v3 .v3-titres .vig, .v3 .v3-index .vig { flex: none; }
   }
   /* un ecran bas : les titres descendent d'un cran pour que les cinq tiennent */
   @media (min-width: 901px) and (max-height: 800px) {
@@ -1010,11 +1018,11 @@
       <dl>
         <div><dt>Outils</dt><dd><span class="l">Rhino · Grasshopper · Blender</span><span class="l">Marvelous Designer · TouchDesigner · MadMapper</span></dd></div>
         <div><dt>Studios</dt><dd><span class="l">Synaptic Garden (France)</span><span class="l">FenFutures (Maroc)</span><span class="l villes">Marseille · Paris · Casablanca</span></dd></div>
-        <div><dt>Formation</dt><dd><span class="l">Architecte DESA, ESA Paris, 2019</span></dd></div>
+        <div><dt>Formation</dt><dd><span class="l">Architecte DESA, ESA Paris, 2015</span></dd></div>
       </dl>
 <!-- AUTO:DP_VOLET:FIN -->
 <!-- AUTO:VERSION:DEBUT -->
-      <p class="footer-version mono" title="Version du site — pastille vert"><span class="version-pastille" style="background:#4C8C5A"></span>v1.224</p>
+      <p class="footer-version mono" title="Version du site — pastille jaune"><span class="version-pastille" style="background:#D8B23C"></span>v1.225</p>
 <!-- AUTO:VERSION:FIN -->
         </div>
       </div>
